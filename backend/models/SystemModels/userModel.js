@@ -5,21 +5,24 @@ const userSchema = mongoose.Schema(
 		username: {
 			type: String,
 			unique: true,
-			required: [true, "Please enter a username"],
+			required: true,
 		},
 		email: {
 			type: String,
-			required: [true, "Please enter a valid email address"],
+			required: true,
 		},
 		firstName: {
 			type: String,
-			required: [true, "Please enter your first name"],
+			required: true,
 		},
 		lastName: {
 			type: String,
-			required: [true, "Please enter your last name"],
+			required: true,
 		},
-		fullName: firstName + " " + lastName,
+		password: {
+			type: String,
+			required: true,
+		},
 		passwordResetOTP: {
 			type: String,
 			default: "",
@@ -29,5 +32,9 @@ const userSchema = mongoose.Schema(
 		timestamps: true,
 	}
 );
+
+userSchema.virtual("fullName").get(function () {
+	return `${this.firstName} ${this.lastName}`;
+});
 
 module.exports = mongoose.model("User", userSchema);
