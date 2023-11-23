@@ -29,6 +29,7 @@
 		"path": "^0.12.7"
 	},
 	"devDependencies": {
+		"concurrently": "^8.2.2",
 		"nodemon": "^3.0.1"
 	}
 }
