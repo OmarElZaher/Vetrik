@@ -2,90 +2,208 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
+const nodemailer = require("nodemailer");
 
 const User = require("../models/SystemModels/userModel");
 const Owner = require("../models/CustomerModels/ownerModel");
 const Pet = require("../models/CustomerModels/petModel");
 
+
+
 // ----------------------------------------------------------------
+// Helper Functions
 
-// @desc Create A New User
-// @route POST /user/createUser
-// @access Public
-const createUser = asyncHandler(async (req, res, next) => {
-	const { username, email, firstName, lastName, password, confirmPassword } =
-		req.body;
+// Generate Token
+const generateToken = (id) => {
+	// TODO Update Token Expiration
+	return jwt.sign({ id }, process.env.JWT_SECRET, {
+		expiresIn: "30d",
+	});
+};
 
-	// Checks if all fields are entered
-	if (
-		!username ||
-		!email ||
-		!firstName ||
-		!lastName ||
-		!password ||
-		!confirmPassword
-	) {
-		res.status(400);
-		throw new Error("Please Enter All Fields");
-	}
-
-	// Validate email format using a regular expression
-	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	if (!emailRegex.test(email)) {
-		res.status(400);
-		throw new Error("Invalid email format");
-	}
-
-	// Password requirements (customize based on your requirements)
+function passwordValidator(password) {
 	const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.{8,})/;
 
 	if (!passwordRegex.test(password)) {
-		res.status(400);
-		throw new Error(
-			"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit"
-		);
-	}
-
-	// Validation Checks
-	const usernameExists = await User.findOne({ username });
-	const emailExists = await User.findOne({ email });
-
-	if (usernameExists) {
-		res.status(400);
-		throw new Error("Username Taken, Please Try Another One");
-	} else if (emailExists) {
-		res.status(400);
-		throw new Error("A User With This Email Already Exists");
-	} else if (password !== confirmPassword) {
-		res.status(400);
-		throw new Error("Passwords Do Not Match");
-	}
-
-	const salt = await bcrypt.genSalt(10);
-	const hashedPassword = await bcrypt.hash(password, salt);
-
-	const user = await User.create({
-		username,
-		email,
-		firstName,
-		lastName,
-		password: hashedPassword,
-	});
-
-	if (user) {
-		res.status(201).json({
-			_id: user.id,
-			username: user.username,
-			email: user.email,
-			firstName: user.firstName,
-			lastName: user.lastName,
-			// token: generateToken(user._id),
-		});
+		return false;
 	} else {
-		res.status(400);
-		throw new Error("Invalid User Data");
+		return true;
+	}
+}
+
+function emailValidator(email) {
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	if (!emailRegex.test(email)) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+function generateOTP() {
+	return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+
+
+// ----------------------------------------------------------------
+// Admin Roles
+
+// @desc Create A New User
+// @route POST /user/createUser
+// @access Private
+const createUser = asyncHandler(async (req, res) => {
+	const user = await User.findById(req.user._id);
+
+	if (!user.isAdmin) {
+		res.status(401);
+		``;
+		throw new Error("Unauthorized: Not An Admin");
+	} else {
+		const {
+			username,
+			email,
+			firstName,
+			lastName,
+			password,
+			confirmPassword,
+			isAdmin,
+		} = req.body;
+
+		// Checks if all fields are entered
+		if (
+			!username ||
+			!email ||
+			!firstName ||
+			!lastName ||
+			!password ||
+			!confirmPassword
+		) {
+			res.status(400);
+			throw new Error("Please Enter All Fields");
+		}
+
+		// Validate email format using a regular expression
+		if (!emailValidator(email)) {
+			res.status(400);
+			throw new Error("Invalid email format");
+		}
+
+		// Password requirements
+		if (!passwordValidator(password)) {
+			res.status(400);
+			throw new Error(
+				"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit"
+			);
+		}
+
+		// Validation Checks
+		const usernameExists = await User.findOne({ username });
+		const emailExists = await User.findOne({ email });
+
+		if (usernameExists) {
+			res.status(400);
+			throw new Error("Username Taken, Please Try Another One");
+		} else if (emailExists) {
+			res.status(400);
+			throw new Error("A User With This Email Already Exists");
+		} else if (password !== confirmPassword) {
+			res.status(400);
+			throw new Error("Passwords Do Not Match");
+		}
+
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(password, salt);
+
+		const user = await User.create({
+			username,
+			email,
+			firstName,
+			lastName,
+			password: hashedPassword,
+			isAdmin,
+		});
+
+		if (user) {
+			res.status(201).json({
+				_id: user.id,
+				username: user.username,
+				email: user.email,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				token: generateToken(user._id),
+			});
+		} else {
+			res.status(400);
+			throw new Error("Invalid User Data");
+		}
 	}
 });
+
+// @desc Create A New Admion
+// @route POST /user/createAdmin
+// @access Private
+const createAdmin = asyncHandler(async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id);
+
+		if (!user.isAdmin) {
+			res.status(401);
+			throw new Error("Unauthorized: Not An Admin");
+		}
+
+		req.body.isAdmin = true;
+
+		// Call the createUser function with isAdmin set to true
+		await createUser(req, res, () => {}, { ...req.body, isAdmin: true });
+
+		// If execution reaches here, the admin is created successfully
+		res.status(200).json({ message: "Admin Created" });
+	} catch (error) {
+		res.status(400);
+		throw new Error(error.stack);
+	}
+});
+
+// @desc Get All Users
+// @route GET /user/getUsers
+// @access Private
+const getUsers = asyncHandler(async (req, res) => {
+	if ((await User.findById(req.user._id)).isAdmin) {
+		const users = await User.find();
+
+		if (users.length > 0) {
+			res.status(200).json(users);
+		} else {
+			res.status(400).json({ message: "No Users Found!" });
+		}
+	} else {
+		res.status(401);
+		throw new Error("Unauthorized: Not An Admin");
+	}
+});
+
+// @desc Delete A User
+// @route GET /user/deleteUser/:id
+// @access Private
+const deleteUser = asyncHandler(async (req, res) => {
+	if ((await User.findById(req.user._id)).isAdmin) {
+		const deleted = await User.findByIdAndDelete(req.params.id);
+
+		if (deleted) {
+			res.status(200).json({ message: "User Deleted" });
+		}
+	} else {
+		res.status(401);
+		throw new Error("Unauthorized: Not An Admin");
+	}
+});
+
+
+
+// ----------------------------------------------------------------
+// General User Roles
 
 // @desc Update User Credentials
 // @route PATCH /user/updateProfile
@@ -133,7 +251,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @route DELETE /user/deleteUser
 // @access Private
 const deleteUserProfile = asyncHandler(async (req, res) => {
-	const confirm = req.body;
+	const { confirm } = req.body;
 
 	if (confirm !== "CONFIRM") {
 		res.status(400);
@@ -363,19 +481,95 @@ const createPet = asyncHandler(async (req, res) => {
 	}
 });
 
-// Generate Token
-const generateToken = (id) => {
-	return jwt.sign({ id }, process.env.JWT_SECRET, {
-		expiresIn: "30d",
-	});
-};
+// @desc Change Password
+// @route POST /user/changePassword
+// @access Private
+const changePassword = asyncHandler(async (req, res) => {
+	const user = await User.findOne({ _id: req.user._id });
+
+	const { oldPassword, newPassword, confirmPassword } = req.body;
+
+	if (!oldPassword || !newPassword || !confirmPassword) {
+		res.status(400).json({ message: "Enter All Fields" });
+	}
+
+	if (!(await bcrypt.compare(oldPassword, user.password))) {
+		res.status(400).json({ message: "Invalid Password" });
+	} else if (await bcrypt.compare(newPassword, user.password)) {
+		res
+			.status(400)
+			.json({ message: "New Password Cannot Be The Same As Old Password" });
+	} else if (newPassword !== confirmPassword) {
+		res.status(400).json({ message: "Passwords Don't Match" });
+	} else if (!passwordValidator(newPassword)) {
+		res.status(400).json({
+			message:
+				"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
+		});
+	} else {
+		user.password = newPassword;
+		await user.save();
+		res.status(200).json({ message: "Password Changed" });
+		req.user = null;
+	}
+});
+
+// @desc Request OTP
+// @route POST /user/requestOTP
+// @access Public
+const requestOTP = asyncHandler(async (req, res) => {
+	const user = await User.findOne({ email: req.body.email });
+
+	if (!user) {
+		res.status(404).json({ message: "User Not Found!" });
+	} else {
+		// TODO Update OTP Expiration
+		const otp = generateOTP();
+		user.passwordResetOTP = otp;
+		await user.save();
+
+		const transporter = nodemailer.createTransport({
+			service: "",
+			auth: {
+				user: "",
+				pass: "",
+			},
+		});
+
+		const mailOptions = {
+			from: "",
+			to: user.email,
+			subject: "[NO REPLY] Your Password Reset Request",
+			html: `<h1>You have requested to reset your password.<h1>
+                <p>Your OTP is ${otp}<p>
+                <p>If you did not request to reset your password, you can safely disregard this message.<p>
+                <p>This Is An Automated Message, Please Do Not Reply.<p>`,
+		};
+
+		transporter.sendMail(mailOptions, (error, info) => {
+			if (error) {
+				res.status(500);
+				throw new Error("Failed to Send OTP Email.");
+			} else {
+				res.status(200).json({ message: "OTP Sent, Please Check Your Email" });
+			}
+		});
+	}
+});
 
 module.exports = {
+	// Admin Functions
+	createAdmin,
 	createUser,
+	getUsers,
+	deleteUser,
+
 	loginUser,
 	getUserInfo,
 	deleteUserProfile,
 	updateUserProfile,
+	changePassword,
+	requestOTP,
 
 	createOwner,
 	getOwnerInfo,
