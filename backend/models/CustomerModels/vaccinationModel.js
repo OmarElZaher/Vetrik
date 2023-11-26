@@ -20,6 +20,7 @@ const vaccinationCardSchema = mongoose.Schema(
 				vaccineGivenDate: {
 					type: Date,
 					required: true,
+					default: Date.now,
 				},
 				vaccineRenewalDate: {
 					type: Date,

@@ -7,13 +7,16 @@ const nodemailer = require("nodemailer");
 const User = require("../models/SystemModels/userModel");
 const Owner = require("../models/CustomerModels/ownerModel");
 const Pet = require("../models/CustomerModels/petModel");
+const VaccinationCard = require("../models/CustomerModels/vaccinationModel");
 
+// ----------------------------------------------------------------
+// Global Variables
 
+let otpExpiry;
 
 // ----------------------------------------------------------------
 // Helper Functions
 
-// Generate Token
 const generateToken = (id) => {
 	// TODO Update Token Expiration
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -45,8 +48,6 @@ function generateOTP() {
 	return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-
-
 // ----------------------------------------------------------------
 // Admin Roles
 
@@ -58,7 +59,6 @@ const createUser = asyncHandler(async (req, res) => {
 
 	if (!user.isAdmin) {
 		res.status(401);
-		``;
 		throw new Error("Unauthorized: Not An Admin");
 	} else {
 		const {
@@ -200,7 +200,19 @@ const deleteUser = asyncHandler(async (req, res) => {
 	}
 });
 
+// TODO decision
+// @desc Admin Sends Notification to All Users
+// @route POST /user/sendNotification
+// @access Private
+const sendNotification = asyncHandler(async (req, res) => {
+	const user = await User.findById(req.user._id);
 
+	if (!user.isAdmin) {
+		res.status(401);
+		throw new Error("Unauthorized: Not An Admin");
+	} else {
+	}
+});
 
 // ----------------------------------------------------------------
 // General User Roles
@@ -293,7 +305,7 @@ const loginUser = asyncHandler(async (req, res) => {
 const getUserInfo = asyncHandler(async (req, res) => {
 	const user = req.user;
 
-	res.json({
+	res.status(200).json({
 		_id: user._id,
 		username: user.username,
 		email: user.email,
@@ -329,12 +341,24 @@ const createOwner = asyncHandler(async (req, res) => {
 	}
 
 	try {
+		// Check if the email or mobileNumber already exist in the database
+		const existingOwner = await Owner.findOne({
+			$or: [{ email }, { mobileNumber }],
+		});
+
+		if (existingOwner) {
+			res.status(400);
+			throw new Error(
+				"An owner with this email or mobile number already exists"
+			);
+		}
+
 		// Create the owner
 		const owner = await Owner.create(req.body);
 
 		if (owner) {
 			// Update the pets associated with the owner
-			const petIds = req.body.pets; // Assuming you have a field 'pets' in the request body
+			const petIds = req.body.pets;
 
 			if (petIds && Array.isArray(petIds)) {
 				for (const petId of petIds) {
@@ -430,10 +454,43 @@ const updateOwnerProfile = asyncHandler(async (req, res) => {
 // @access Private
 const deleteOwnerProfile = asyncHandler(async (req, res) => {
 	try {
-		if (!(await Owner.findByIdAndDelete(req.params.id))) {
+		const ownerId = req.params.id;
+
+		// Find the owner
+		const owner = await Owner.findById(ownerId);
+
+		if (!owner) {
+			res.status(400).json({ message: "Owner Not Found!" });
+			return;
+		}
+
+		// Find all pets that have the owner
+		const pets = await Pet.find({ owners: ownerId });
+
+		// Update each pet's owners array to remove the owner
+		const updatePromises = pets.map(async (pet) => {
+			const index = pet.owners.indexOf(ownerId);
+			if (index !== -1) {
+				pet.owners.splice(index, 1);
+				await pet.save();
+
+				// Check if the pet has no owners after removal
+				if (pet.owners.length === 0) {
+					await Pet.findByIdAndDelete(pet._id);
+				}
+			}
+		});
+
+		// Wait for all updates to complete
+		await Promise.all(updatePromises);
+
+		// Delete the owner
+		const deletedOwner = await Owner.findByIdAndDelete(ownerId);
+
+		if (!deletedOwner) {
 			res.status(400).json({ message: "Owner Not Found!" });
 		} else {
-			res.status(200).json({ message: "Owner Deleted Successfully" });
+			res.status(200).json({ message: "Owner Removed From System" });
 		}
 	} catch (error) {
 		res.status(400);
@@ -481,6 +538,269 @@ const createPet = asyncHandler(async (req, res) => {
 	}
 });
 
+// @desc Get Pet Information
+// @route GET /user/getPetInfo/:id
+// @access Private
+const getPetInfo = asyncHandler(async (req, res) => {
+	const pet = await Pet.findById(req.params.id).populate({
+		path: "owners",
+		select: "firstName lastName -_id",
+	});
+
+	if (!pet) {
+		res.status(400).json({ message: "Pet Not Found!" });
+	} else {
+		res.status(200).json({ pet: pet, petAge: pet.age });
+	}
+});
+
+// @desc Update Pet Information
+// @route PATCH /user/updatePet/:id
+// @access Private
+const updatePetProfile = asyncHandler(async (req, res) => {
+	try {
+		const updatedPet = await Pet.findByIdAndUpdate(req.params.id, req.body);
+
+		if (updatedPet) {
+			res.status(200).json({ message: "Pet Updated Successfully" });
+		}
+	} catch (error) {
+		res.status(400);
+		throw new Error(error);
+	}
+});
+
+// @desc Delete Pet
+// @route DELETE /user/deletePet/:id
+// @access Private
+const deletePetProfile = asyncHandler(async (req, res) => {
+	try {
+		const petId = req.params.id;
+
+		// Find the pet
+		const pet = await Pet.findById(petId);
+
+		if (!pet) {
+			res.status(400).json({ message: "Pet Not Found!" });
+			return;
+		}
+
+		// Find all owners of the pet
+		const owners = await Owner.find({ pets: petId });
+
+		// Update each owner's pets array to remove the pet
+		const updatePromises = owners.map(async (owner) => {
+			const index = owner.pets.indexOf(petId);
+			if (index !== -1) {
+				owner.pets.splice(index, 1);
+				await owner.save();
+
+				// Check if the owner has no pets after removal
+				if (owner.pets.length === 0) {
+					await Owner.findByIdAndDelete(owner._id);
+				}
+			}
+		});
+
+		// Wait for all updates to complete
+		await Promise.all(updatePromises);
+
+		// Delete the pet
+		const deletedPet = await Pet.findByIdAndDelete(petId);
+
+		if (!deletedPet) {
+			res.status(400).json({ message: "Pet Not Found!" });
+		} else {
+			res.status(200).json({ message: "Pet Deleted Successfully" });
+		}
+	} catch (error) {
+		res.status(400);
+		throw new Error(error);
+	}
+});
+
+// @desc Create New Vaccination Card
+// @route POST /user/createVaccinationCard/:id
+// @access Private
+const createVaccinationCard = asyncHandler(async (req, res) => {
+	try {
+		const pet = await Pet.findById(req.params.id);
+
+		const { vaccineName, vaccineBatch, vaccineGivenDate, vaccineRenewalDate } =
+			req.body;
+
+		if (!vaccineName || !vaccineBatch || !vaccineGivenDate) {
+			res.status(400).json({ message: "Please Enter All Fields" });
+		}
+
+		const vaccination = await VaccinationCard.create({
+			pet: pet._id,
+			vaccine: {
+				vaccineName,
+				vaccineBatch,
+				vaccineGivenDate,
+				vaccineRenewalDate,
+			},
+		});
+
+		if (vaccination) {
+			res.status(200).json({ message: "Vaccination Card Created" });
+		} else {
+			res.status(400).json({ message: "Invalid Data" });
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Get Pet Vaccination Card
+// @route GET /user/getVaccinationCard/:id
+// @access Private
+const getVaccinationCard = asyncHandler(async (req, res) => {
+	try {
+		const petId = req.params.id;
+
+		const vaccinationCard = await VaccinationCard.findOne({ pet: petId });
+
+		if (!vaccinationCard) {
+			res.status(400).json({ message: "Pet Does Not Have A Vaccination Card" });
+		} else {
+			res.status(200).json(vaccinationCard);
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Add To Pet Vaccination Card
+// @route POST /user/addVaccination/:id
+// @access Private
+const addVaccination = asyncHandler(async (req, res) => {
+	try {
+		const pet = await Pet.findById(req.params.id);
+		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
+
+		if (!pet) {
+			res.status(400).json({ message: "Pet Not Found" });
+		}
+
+		if (!vaccinationCard) {
+			res.status(400).json({
+				message:
+					"Pet Does Not Have A Vaccination Card, Please Create One First",
+			});
+		}
+
+		const { vaccineName, vaccineBatch, vaccineGivenDate } = req.body;
+
+		if (!vaccineName || !vaccineBatch || !vaccineGivenDate) {
+			res.status(400).json({ message: "Please Enter All Fields" });
+		} else {
+			vaccinationCard.vaccine.push(req.body);
+			await vaccinationCard.save();
+			res.status(200).json({ message: "Vaccination Added" });
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Renew Pet Vaccination
+// @route PUT /user/renewVaccination/:petId/:vaccinationId
+// @access Private
+const renewVaccination = asyncHandler(async (req, res) => {
+	try {
+		const { petId, vaccinationId } = req.params;
+
+		const pet = await Pet.findById(petId);
+
+		if (!pet) {
+			return res.status(404).json({ message: "Pet not found" });
+		}
+
+		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
+
+		if (!vaccinationCard) {
+			return res
+				.status(404)
+				.json({ message: "Vaccination card not found for the pet" });
+		}
+
+		const vaccinationIndex = vaccinationCard.vaccine.findIndex(
+			(vaccine) => vaccine._id.toString() === vaccinationId
+		);
+
+		if (vaccinationIndex === -1) {
+			return res.status(404).json({ message: "Vaccination not found" });
+		}
+
+		// Update the vaccineGivenDate to today's date
+		vaccinationCard.vaccine[vaccinationIndex].vaccineGivenDate = new Date();
+
+		if (!req.body.vaccineRenewalDate) {
+			vaccinationCard.vaccine[vaccinationIndex].vaccineRenewalDate = null;
+		} else {
+			vaccinationCard.vaccine[vaccinationIndex].vaccineRenewalDate =
+				req.body.vaccineRenewalDate;
+		}
+
+		// Save the updated vaccination card
+		await vaccinationCard.save();
+
+		res.status(200).json({ message: "Vaccination renewed successfully" });
+	} catch (error) {
+		res
+			.status(500)
+			.json({ message: "Internal Server Error", error: error.message });
+		throw new Error(error);
+	}
+});
+
+// @desc Delete Pet Vaccination
+// @route DELETE /user/deleteVaccination/:petId/:vaccinationId
+// @access Private
+const deleteVaccination = asyncHandler(async (req, res) => {
+	try {
+		const { petId, vaccinationId } = req.params;
+
+		const pet = await Pet.findById(petId);
+
+		if (!pet) {
+			return res.status(404).json({ message: "Pet not found" });
+		}
+
+		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
+
+		if (!vaccinationCard) {
+			return res
+				.status(404)
+				.json({ message: "Vaccination card not found for the pet" });
+		}
+
+		const vaccinationIndex = vaccinationCard.vaccine.findIndex(
+			(vaccine) => vaccine._id.toString() === vaccinationId
+		);
+
+		if (vaccinationIndex === -1) {
+			return res.status(404).json({ message: "Vaccination not found" });
+		}
+
+		// Remove the vaccination from the array
+		vaccinationCard.vaccine.splice(vaccinationIndex, 1);
+
+		// Save the updated vaccination card
+		await vaccinationCard.save();
+
+		res.status(200).json({ message: "Vaccination deleted successfully" });
+	} catch (error) {
+		res.status(500).json({ message: "Internal Server Error" });
+		throw new Error(error);
+	}
+});
+
 // @desc Change Password
 // @route POST /user/changePassword
 // @access Private
@@ -507,7 +827,11 @@ const changePassword = asyncHandler(async (req, res) => {
 				"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
 		});
 	} else {
-		user.password = newPassword;
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+		user.password = hashedPassword;
+		user.tokenVersion += 1;
 		await user.save();
 		res.status(200).json({ message: "Password Changed" });
 		req.user = null;
@@ -523,10 +847,12 @@ const requestOTP = asyncHandler(async (req, res) => {
 	if (!user) {
 		res.status(404).json({ message: "User Not Found!" });
 	} else {
-		// TODO Update OTP Expiration
 		const otp = generateOTP();
 		user.passwordResetOTP = otp;
 		await user.save();
+		otpExpiry = new Date();
+		otpExpiry.setMinutes(otpExpiry.getMinutes() + 5);
+		console.log(otpExpiry);
 
 		const transporter = nodemailer.createTransport({
 			service: "",
@@ -557,6 +883,57 @@ const requestOTP = asyncHandler(async (req, res) => {
 	}
 });
 
+// @desc Verify OTP
+// @route POST /user/verifyOTP
+// @access Public
+const verifyOTP = asyncHandler(async (req, res) => {
+	const user = await User.findOne({ email: req.body.email });
+	const otp = req.body.otp;
+
+	if (!otp) {
+		res.status(400).json({ message: "Please Enter OTP" });
+	} else {
+		if (Date.now() > otpExpiry) {
+			res.status(400).json({ message: "OTP Expired, Please Try Again" });
+		} else {
+			if (user.passwordResetOTP === otp) {
+				user.passwordResetOTP = "";
+				await user.save();
+				otpExpiry = null;
+				res.status(200).json({ message: "OTP Verified" });
+			} else {
+				res.status(400).json({ message: "Invalid OTP" });
+			}
+		}
+	}
+});
+
+// @desc Reset Password
+// @route POST /user/resetPassword
+// @access Public
+const resetPassword = asyncHandler(async (req, res) => {
+	const user = await User.findOne({ email: req.body.email });
+	const { newPassword, confirmPassword } = req.body;
+
+	if (!newPassword || !confirmPassword) {
+		res.status(400).json({ message: "Enter All Fields" });
+	} else if (newPassword !== confirmPassword) {
+		res.status(400).json({ message: "Passwords Don't Match" });
+	} else if (!passwordValidator(newPassword)) {
+		res.status(400).json({
+			message:
+				"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
+		});
+	} else {
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+		user.password = hashedPassword;
+		await user.save();
+		res.status(200).json({ message: "Password Has Been Reset" });
+	}
+});
+
 module.exports = {
 	// Admin Functions
 	createAdmin,
@@ -570,6 +947,16 @@ module.exports = {
 	updateUserProfile,
 	changePassword,
 	requestOTP,
+	verifyOTP,
+	resetPassword,
+	getPetInfo,
+	updatePetProfile,
+	deletePetProfile,
+	createVaccinationCard,
+	getVaccinationCard,
+	addVaccination,
+	renewVaccination,
+	deleteVaccination,
 
 	createOwner,
 	getOwnerInfo,
