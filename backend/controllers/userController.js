@@ -200,20 +200,6 @@ const deleteUser = asyncHandler(async (req, res) => {
 	}
 });
 
-// TODO decision
-// @desc Admin Sends Notification to All Users
-// @route POST /user/sendNotification
-// @access Private
-const sendNotification = asyncHandler(async (req, res) => {
-	const user = await User.findById(req.user._id);
-
-	if (!user.isAdmin) {
-		res.status(401);
-		throw new Error("Unauthorized: Not An Admin");
-	} else {
-	}
-});
-
 // ----------------------------------------------------------------
 // General User Roles
 
