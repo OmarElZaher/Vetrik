@@ -366,14 +366,14 @@ const createOwner = asyncHandler(async (req, res) => {
 });
 
 // @desc Get Owner Information
-// @route GET /user/getOwnerInfo/:id
+// @route GET /user/getOwnerInfo/:ownerId
 // @access Private
 const getOwnerInfo = asyncHandler(async (req, res) => {
 	try {
-		const owner = await Owner.findById(req.params.id);
+		const owner = await Owner.findById(req.params.ownerId);
 
 		if (owner) {
-			res.status(400).json(owner);
+			res.status(200).json(owner);
 		}
 	} catch (error) {
 		res.status(400);
@@ -398,11 +398,11 @@ const getOwner = asyncHandler(async (req, res) => {
 });
 
 // @desc Get Owner Pets
-// @route GET /user/getOwnerPets/:id
+// @route GET /user/getOwnerPets/:ownerId
 // @access Private
 const getOwnerPets = asyncHandler(async (req, res) => {
 	try {
-		const owner = await Owner.findById(req.params.id).populate("pets");
+		const owner = await Owner.findById(req.params.ownerId).populate("pets");
 
 		if (owner.pets.length > 0) {
 			res.status(200).json(owner.pets);
@@ -416,12 +416,12 @@ const getOwnerPets = asyncHandler(async (req, res) => {
 });
 
 // @desc Update Owner Information
-// @route PATCH /users/updateOwner/:id
+// @route PATCH /users/updateOwner/:ownerId
 // @access Private
 const updateOwnerProfile = asyncHandler(async (req, res) => {
 	try {
 		const updatedOwner = await Owner.findByIdAndUpdate(
-			req.params.id,
+			req.params.ownerId,
 			req.body,
 			{ new: true }
 		);
@@ -436,11 +436,11 @@ const updateOwnerProfile = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete Owner
-// @route DELETE /user/deleteOwner/:id
+// @route DELETE /user/deleteOwner/:ownerId
 // @access Private
 const deleteOwnerProfile = asyncHandler(async (req, res) => {
 	try {
-		const ownerId = req.params.id;
+		const ownerId = req.params.ownerId;
 
 		// Find the owner
 		const owner = await Owner.findById(ownerId);
@@ -525,10 +525,10 @@ const createPet = asyncHandler(async (req, res) => {
 });
 
 // @desc Get Pet Information
-// @route GET /user/getPetInfo/:id
+// @route GET /user/getPetInfo/:petId
 // @access Private
 const getPetInfo = asyncHandler(async (req, res) => {
-	const pet = await Pet.findById(req.params.id).populate({
+	const pet = await Pet.findById(req.params.petId).populate({
 		path: "owners",
 		select: "firstName lastName -_id",
 	});
@@ -541,11 +541,11 @@ const getPetInfo = asyncHandler(async (req, res) => {
 });
 
 // @desc Update Pet Information
-// @route PATCH /user/updatePet/:id
+// @route PATCH /user/updatePet/:petId
 // @access Private
 const updatePetProfile = asyncHandler(async (req, res) => {
 	try {
-		const updatedPet = await Pet.findByIdAndUpdate(req.params.id, req.body);
+		const updatedPet = await Pet.findByIdAndUpdate(req.params.petId, req.body);
 
 		if (updatedPet) {
 			res.status(200).json({ message: "Pet Updated Successfully" });
@@ -557,11 +557,11 @@ const updatePetProfile = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete Pet
-// @route DELETE /user/deletePet/:id
+// @route DELETE /user/deletePet/:petId
 // @access Private
 const deletePetProfile = asyncHandler(async (req, res) => {
 	try {
-		const petId = req.params.id;
+		const petId = req.params.petId;
 
 		// Find the pet
 		const pet = await Pet.findById(petId);
@@ -606,11 +606,11 @@ const deletePetProfile = asyncHandler(async (req, res) => {
 });
 
 // @desc Create New Vaccination Card
-// @route POST /user/createVaccinationCard/:id
+// @route POST /user/createVaccinationCard/:petId
 // @access Private
 const createVaccinationCard = asyncHandler(async (req, res) => {
 	try {
-		const pet = await Pet.findById(req.params.id);
+		const pet = await Pet.findById(req.params.petId);
 
 		const { vaccineName, vaccineBatch, vaccineGivenDate, vaccineRenewalDate } =
 			req.body;
@@ -641,11 +641,11 @@ const createVaccinationCard = asyncHandler(async (req, res) => {
 });
 
 // @desc Get Pet Vaccination Card
-// @route GET /user/getVaccinationCard/:id
+// @route GET /user/getVaccinationCard/:petId
 // @access Private
 const getVaccinationCard = asyncHandler(async (req, res) => {
 	try {
-		const petId = req.params.id;
+		const petId = req.params.petId;
 
 		const vaccinationCard = await VaccinationCard.findOne({ pet: petId });
 
@@ -661,11 +661,11 @@ const getVaccinationCard = asyncHandler(async (req, res) => {
 });
 
 // @desc Add To Pet Vaccination Card
-// @route POST /user/addVaccination/:id
+// @route POST /user/addVaccination/:petId
 // @access Private
 const addVaccination = asyncHandler(async (req, res) => {
 	try {
-		const pet = await Pet.findById(req.params.id);
+		const pet = await Pet.findById(req.params.petId);
 		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
 
 		if (!pet) {

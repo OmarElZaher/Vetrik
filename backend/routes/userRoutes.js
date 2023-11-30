@@ -41,12 +41,12 @@ const { authenticate } = require("../middleware/authMiddleware");
 
 // GET methods for /user
 router.get("/getUserInfo", authenticate, getUserInfo); // COMPLETE
-router.get("/getOwnerInfo/:id", authenticate, getOwnerInfo); // COMPLETE
+router.get("/getOwnerInfo/:ownerId", authenticate, getOwnerInfo); // COMPLETE
 router.get("/getOwner", authenticate, getOwner); // COMPLETE
-router.get("/getOwnerPets/:id", authenticate, getOwnerPets); // COMPLETE
+router.get("/getOwnerPets/:ownerId", authenticate, getOwnerPets); // COMPLETE
 router.get("/getUsers", authenticate, getUsers); // COMPLETE
-router.get("/getPetInfo/:id", authenticate, getPetInfo); // COMPLETE
-router.get("/getVaccinationCard/:id", authenticate, getVaccinationCard); // COMPLETE
+router.get("/getPetInfo/:petId", authenticate, getPetInfo); // COMPLETE
+router.get("/getVaccinationCard/:petId", authenticate, getVaccinationCard); // COMPLETE
 
 // POST methods for /user
 router.post("/createAdmin", authenticate, createAdmin); // COMPLETE
@@ -61,23 +61,31 @@ router.post("/resetPassword", resetPassword); // COMPLETE
 router.post("/createOwner", authenticate, createOwner); // COMPLETE
 
 router.post("/createPet", authenticate, createPet); // COMPLETE
-router.post("/createVaccinationCard/:id", authenticate, createVaccinationCard); // COMPLETE
-router.post("/addVaccination/:id", authenticate, addVaccination); //
+router.post("/createVaccinationCard/:petId", authenticate, createVaccinationCard); // COMPLETE
+router.post("/addVaccination/:petId", authenticate, addVaccination); //
 
 // PATCH methods for /user
 router.patch("/updateProfile", authenticate, updateUserProfile); // COMPLETE
-router.patch("/updateOwner/:id", authenticate, updateOwnerProfile); // COMPLETE
-router.patch("/updatePet/:id", authenticate, updatePetProfile); // COMPLETE
+router.patch("/updateOwner/:ownerId", authenticate, updateOwnerProfile); // COMPLETE
+router.patch("/updatePet/:petId", authenticate, updatePetProfile); // COMPLETE
 
 // PUT methods for /user
-router.put("/renewVaccination/:petId/:vaccinationId",authenticate,renewVaccination); // COMPLETE
+router.put(
+	"/renewVaccination/:petId/:vaccinationId",
+	authenticate,
+	renewVaccination
+); // COMPLETE
 
 // DELETE methods for /user
 router.delete("/deleteUser", authenticate, deleteUserProfile); // COMPLETE
 router.delete("/deleteUser/:id", authenticate, deleteUser); // COMPLETE
-router.delete("/deleteOwner/:id", authenticate, deleteOwnerProfile); // COMPLETE
-router.delete("/deletePet/:id", authenticate, deletePetProfile); // COMPLETE
-router.delete("/deleteVaccination/:petId/:vaccinationId", authenticate, deleteVaccination); // COMPLETE
+router.delete("/deleteOwner/:ownerId", authenticate, deleteOwnerProfile); // COMPLETE
+router.delete("/deletePet/:petd", authenticate, deletePetProfile); // COMPLETE
+router.delete(
+	"/deleteVaccination/:petId/:vaccinationId",
+	authenticate,
+	deleteVaccination
+); // COMPLETE
 
 // ----------------------------------------------------------------
 
