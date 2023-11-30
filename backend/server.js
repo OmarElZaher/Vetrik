@@ -20,7 +20,6 @@ app.use(morgan("dev"));
 app.use(helmet());
 
 app.use("/user", require("./routes/userRoutes"));
-app.use("/files", require("./routes/filesRoutes"));
 
 app.use(errorHandler);
 

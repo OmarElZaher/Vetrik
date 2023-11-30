@@ -40,7 +40,7 @@ const { authenticate } = require("../middleware/authMiddleware");
 // ----------------------------------------------------------------
 
 // GET methods for /user
-router.get("/getUserInfo", authenticate, getUserInfo); // COMPLETE
+router.get("/getUserInfo", authenticate, getUserInfo); //
 router.get("/getOwnerInfo/:ownerId", authenticate, getOwnerInfo); // COMPLETE
 router.get("/getOwner", authenticate, getOwner); // COMPLETE
 router.get("/getOwnerPets/:ownerId", authenticate, getOwnerPets); // COMPLETE
@@ -61,8 +61,12 @@ router.post("/resetPassword", resetPassword); // COMPLETE
 router.post("/createOwner", authenticate, createOwner); // COMPLETE
 
 router.post("/createPet", authenticate, createPet); // COMPLETE
-router.post("/createVaccinationCard/:petId", authenticate, createVaccinationCard); // COMPLETE
-router.post("/addVaccination/:petId", authenticate, addVaccination); //
+router.post(
+	"/createVaccinationCard/:petId",
+	authenticate,
+	createVaccinationCard
+); // COMPLETE
+router.post("/addVaccination/:petId", authenticate, addVaccination); // COMPLETE
 
 // PATCH methods for /user
 router.patch("/updateProfile", authenticate, updateUserProfile); // COMPLETE
@@ -78,9 +82,9 @@ router.put(
 
 // DELETE methods for /user
 router.delete("/deleteUser", authenticate, deleteUserProfile); // COMPLETE
-router.delete("/deleteUser/:id", authenticate, deleteUser); // COMPLETE
+router.delete("/deleteUser/:userId", authenticate, deleteUser); // COMPLETE
 router.delete("/deleteOwner/:ownerId", authenticate, deleteOwnerProfile); // COMPLETE
-router.delete("/deletePet/:petd", authenticate, deletePetProfile); // COMPLETE
+router.delete("/deletePet/:petId", authenticate, deletePetProfile); // COMPLETE
 router.delete(
 	"/deleteVaccination/:petId/:vaccinationId",
 	authenticate,

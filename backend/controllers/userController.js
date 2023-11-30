@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
 const nodemailer = require("nodemailer");
+const mongoose = require("mongoose");
 
 const User = require("../models/SystemModels/userModel");
 const Owner = require("../models/CustomerModels/ownerModel");
@@ -55,89 +56,99 @@ function generateOTP() {
 // @route POST /user/createUser
 // @access Private
 const createUser = asyncHandler(async (req, res) => {
-	const user = await User.findById(req.user._id);
+	try {
+		const user = req.user;
 
-	if (!user.isAdmin) {
-		res.status(401);
-		throw new Error("Unauthorized: Not An Admin");
-	} else {
-		const {
-			username,
-			email,
-			firstName,
-			lastName,
-			password,
-			confirmPassword,
-			isAdmin,
-		} = req.body;
-
-		// Checks if all fields are entered
-		if (
-			!username ||
-			!email ||
-			!firstName ||
-			!lastName ||
-			!password ||
-			!confirmPassword
-		) {
-			res.status(400);
-			throw new Error("Please Enter All Fields");
-		}
-
-		// Validate email format using a regular expression
-		if (!emailValidator(email)) {
-			res.status(400);
-			throw new Error("Invalid email format");
-		}
-
-		// Password requirements
-		if (!passwordValidator(password)) {
-			res.status(400);
-			throw new Error(
-				"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit"
-			);
-		}
-
-		// Validation Checks
-		const usernameExists = await User.findOne({ username });
-		const emailExists = await User.findOne({ email });
-
-		if (usernameExists) {
-			res.status(400);
-			throw new Error("Username Taken, Please Try Another One");
-		} else if (emailExists) {
-			res.status(400);
-			throw new Error("A User With This Email Already Exists");
-		} else if (password !== confirmPassword) {
-			res.status(400);
-			throw new Error("Passwords Do Not Match");
-		}
-
-		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(password, salt);
-
-		const user = await User.create({
-			username,
-			email,
-			firstName,
-			lastName,
-			password: hashedPassword,
-			isAdmin,
-		});
-
-		if (user) {
-			res.status(201).json({
-				_id: user.id,
-				username: user.username,
-				email: user.email,
-				firstName: user.firstName,
-				lastName: user.lastName,
-				token: generateToken(user._id),
-			});
+		if (!user.isAdmin) {
+			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			return;
 		} else {
-			res.status(400);
-			throw new Error("Invalid User Data");
+			const {
+				username,
+				email,
+				firstName,
+				lastName,
+				password,
+				confirmPassword,
+				isAdmin,
+			} = req.body;
+
+			// Checks if all fields are entered
+			if (
+				!username ||
+				!email ||
+				!firstName ||
+				!lastName ||
+				!password ||
+				!confirmPassword
+			) {
+				res.status(400).json({ message: "Please Enter All Fields" });
+				return;
+			}
+
+			// Validate email format using a regular expression
+			if (!emailValidator(email)) {
+				res.status(400).json({ message: "Invalid email format" });
+				return;
+			}
+
+			// Password requirements
+			if (!passwordValidator(password)) {
+				res.status(400).json({
+					message:
+						"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
+				});
+				return;
+			}
+
+			// Validation Checks
+			const usernameExists = await User.findOne({ username });
+			const emailExists = await User.findOne({ email });
+
+			if (usernameExists) {
+				res
+					.status(400)
+					.json({ message: "Username Taken, Please Try Another One" });
+				return;
+			} else if (emailExists) {
+				res
+					.status(400)
+					.json({ message: "A User With This Email Already Exists" });
+				return;
+			} else if (password !== confirmPassword) {
+				res.status(400).json({ message: "Passwords Do Not Match" });
+				return;
+			}
+
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash(password, salt);
+
+			const user = await User.create({
+				username,
+				email,
+				firstName,
+				lastName,
+				password: hashedPassword,
+				isAdmin,
+			});
+
+			if (user) {
+				res.status(200).json({
+					message: "User Created Successfully",
+					_id: user.id,
+					username: user.username,
+					email: user.email,
+					firstName: user.firstName,
+					lastName: user.lastName,
+				});
+			} else {
+				res.status(400).json({ message: "Invalid User Data" });
+				return;
+			}
 		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -146,57 +157,80 @@ const createUser = asyncHandler(async (req, res) => {
 // @access Private
 const createAdmin = asyncHandler(async (req, res) => {
 	try {
-		const user = await User.findById(req.user._id);
-
-		if (!user.isAdmin) {
-			res.status(401);
-			throw new Error("Unauthorized: Not An Admin");
+		if (!req.user.isAdmin) {
+			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			return;
 		}
 
 		req.body.isAdmin = true;
 
 		// Call the createUser function with isAdmin set to true
-		await createUser(req, res, () => {}, { ...req.body, isAdmin: true });
-
-		// If execution reaches here, the admin is created successfully
-		res.status(200).json({ message: "Admin Created" });
+		await createUser(req, res, () => {}, {
+			...req.body,
+			isAdmin: true,
+		});
 	} catch (error) {
-		res.status(400);
-		throw new Error(error.stack);
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
-// @desc Get All Users
+// @desc Get All Users (Except Logged In User)
 // @route GET /user/getUsers
 // @access Private
 const getUsers = asyncHandler(async (req, res) => {
-	if ((await User.findById(req.user._id)).isAdmin) {
-		const users = await User.find();
+	try {
+		if (req.user.isAdmin) {
+			const users = await User.find({ username: { $ne: req.user.username } });
 
-		if (users.length > 0) {
-			res.status(200).json(users);
+			if (users.length > 0) {
+				res.status(200).json({
+					message: "Gotten All Users Successfuly",
+					users,
+				});
+			} else {
+				res.status(400).json({ message: "No Users Found!" });
+			}
 		} else {
-			res.status(400).json({ message: "No Users Found!" });
+			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			return;
 		}
-	} else {
-		res.status(401);
-		throw new Error("Unauthorized: Not An Admin");
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
 // @desc Delete A User
-// @route GET /user/deleteUser/:id
+// @route GET /user/deleteUser/:userId
 // @access Private
 const deleteUser = asyncHandler(async (req, res) => {
-	if ((await User.findById(req.user._id)).isAdmin) {
-		const deleted = await User.findByIdAndDelete(req.params.id);
+	try {
+		if (req.user.isAdmin) {
+			const userId = req.params.userId;
 
-		if (deleted) {
-			res.status(200).json({ message: "User Deleted" });
+			if (!mongoose.Types.ObjectId.isValid(userId)) {
+				res.status(400).json({ message: "Invalid User ID" });
+				return;
+			}
+
+			const deleted = await User.findByIdAndDelete(userId);
+
+			if (deleted) {
+				res.status(200).json({ message: "User Deleted Successfuly" });
+			} else {
+				res
+					.status(400)
+					.json({ message: "User Not Found, Please Check User ID Provided" });
+				return;
+			}
+		} else {
+			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			return;
 		}
-	} else {
-		res.status(401);
-		throw new Error("Unauthorized: Not An Admin");
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -208,14 +242,20 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @access Private
 const updateUserProfile = asyncHandler(async (req, res) => {
 	try {
-		const { username, email } = req.body;
+		const { username, email, password, passwordResetOTP, isAdmin } = req.body;
+
+		if (password || passwordResetOTP || isAdmin) {
+			res.status(400).json({ message: "Cannot Do That, Nice Try Though ;)" });
+			return;
+		}
 
 		// Check if the updated username is already taken by another user
 		if (username) {
 			const usernameExists = await User.findOne({
-				username,
 				_id: { $ne: req.user._id }, // Exclude the current user from the search
+				username,
 			});
+
 			if (usernameExists) {
 				res.status(400).json({ message: "Username is already taken" });
 				return;
@@ -225,9 +265,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 		// Check if the updated email is already taken by another user
 		if (email) {
 			const emailExists = await User.findOne({
-				email,
 				_id: { $ne: req.user._id }, // Exclude the current user from the search
+				email,
 			});
+
 			if (emailExists) {
 				res.status(400).json({ message: "Email is already in use" });
 				return;
@@ -240,7 +281,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 			res.status(200).json({ message: "User Updated Successfully" });
 		}
 	} catch (error) {
-		res.status(400);
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -249,14 +290,24 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @route DELETE /user/deleteUser
 // @access Private
 const deleteUserProfile = asyncHandler(async (req, res) => {
-	const { confirm } = req.body;
+	try {
+		const { confirm } = req.body;
 
-	if (confirm !== "CONFIRM") {
-		res.status(400);
-		throw new Error("Please Enter CONFIRM");
-	} else {
-		await User.findByIdAndDelete(req.user._id);
-		res.json({ message: "User Removed" });
+		if (confirm !== "CONFIRM") {
+			res.status(400).json({ message: "Please Enter 'CONFIRM'" });
+		} else {
+			const deleted = await User.findByIdAndDelete(req.user._id);
+
+			if (deleted) {
+				res.status(200).json({ message: "User Removed" });
+			} else {
+				res.status(400).json({ message: "User Not Found" });
+				return;
+			}
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -264,24 +315,30 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 // @route POST /user/login
 // @access Public
 const loginUser = asyncHandler(async (req, res) => {
-	const { username, password } = req.body;
+	try {
+		const { username, password } = req.body;
 
-	if (!username || !password) {
-		res.status(400).json({ message: "Please Enter All Fields" });
-	}
-
-	const user = await User.findOne({ username: username });
-
-	if (!user) {
-		res.status(400).json({ message: "Invalid Username" });
-	} else {
-		if (await bcrypt.compare(password, user.password)) {
-			res
-				.status(200)
-				.json({ message: "Login Success", token: generateToken(user._id) });
-		} else {
-			res.status(400).json({ message: "Invalid Credentials" });
+		if (!username || !password) {
+			res.status(400).json({ message: "Please Enter All Fields" });
 		}
+
+		const user = await User.findOne({ username: username });
+
+		if (!user) {
+			res.status(400).json({ message: "Invalid Username" });
+		} else {
+			if (await bcrypt.compare(password, user.password)) {
+				res.status(200).json({
+					message: "Login Successful",
+					token: generateToken(user._id),
+				});
+			} else {
+				res.status(400).json({ message: "Invalid Credentials" });
+			}
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -289,14 +346,24 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route GET /user/getUserInfo
 // @access Private
 const getUserInfo = asyncHandler(async (req, res) => {
-	const user = req.user;
+	try {
+		const user = req.user;
 
-	res.status(200).json({
-		_id: user._id,
-		username: user.username,
-		email: user.email,
-		name: user.fullName,
-	});
+		if (user) {
+			res.status(200).json({
+				message: "User Retrieved Successfully",
+				_id: user._id,
+				username: user.username,
+				email: user.email,
+				name: user.fullName,
+			});
+		} else {
+			res.status(400).json({ message: "User Not Found" });
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
 });
 
 // @desc Create New Owner
@@ -322,8 +389,8 @@ const createOwner = asyncHandler(async (req, res) => {
 		!preferredContactMethod ||
 		!receiveNotifications
 	) {
-		res.status(400);
-		throw new Error("Please Enter All Fields");
+		res.status(400).json({ message: "Please Enter All Fields" });
+		return;
 	}
 
 	try {
@@ -333,10 +400,10 @@ const createOwner = asyncHandler(async (req, res) => {
 		});
 
 		if (existingOwner) {
-			res.status(400);
-			throw new Error(
-				"An owner with this email or mobile number already exists"
-			);
+			res.status(400).json({
+				message: "An owner with this email or mobile number already exists",
+			});
+			return;
 		}
 
 		// Create the owner
@@ -360,7 +427,7 @@ const createOwner = asyncHandler(async (req, res) => {
 			res.status(200).json({ message: "Owner Created Successfully" });
 		}
 	} catch (error) {
-		res.status(400);
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -370,14 +437,24 @@ const createOwner = asyncHandler(async (req, res) => {
 // @access Private
 const getOwnerInfo = asyncHandler(async (req, res) => {
 	try {
-		const owner = await Owner.findById(req.params.ownerId);
+		const ownerId = req.params.ownerId;
+
+		if (!mongoose.Types.ObjectId.isValid(ownerId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
+		const owner = await Owner.findById(ownerId).populate("pets");
 
 		if (owner) {
 			res.status(200).json(owner);
+		} else {
+			res.status(400).json({ message: "Owner Not Found!" });
+			return;
 		}
 	} catch (error) {
-		res.status(400);
-		throw new Error("Owner Not Found");
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -388,11 +465,13 @@ const getOwner = asyncHandler(async (req, res) => {
 	try {
 		const owner = await Owner.find(req.body);
 
-		if (owner) {
+		if (owner.length > 0) {
 			res.status(200).json(owner);
+		} else {
+			res.status(400).json({ message: "No Owners Found!" });
 		}
 	} catch (error) {
-		res.status(400);
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -402,15 +481,28 @@ const getOwner = asyncHandler(async (req, res) => {
 // @access Private
 const getOwnerPets = asyncHandler(async (req, res) => {
 	try {
-		const owner = await Owner.findById(req.params.ownerId).populate("pets");
+		const ownerId = req.params.ownerId;
 
-		if (owner.pets.length > 0) {
-			res.status(200).json(owner.pets);
+		if (!mongoose.Types.ObjectId.isValid(ownerId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
+		const owner = await Owner.findById(ownerId).populate("pets");
+
+		if (!owner) {
+			res.status(400).json({ message: "Owner Not Found!" });
+			return;
+		} else if (owner.pets.length > 0) {
+			res.status(200).json({
+				message: "Retrieved Owner Pets Successfuly",
+				pets: owner.pets,
+			});
 		} else {
 			res.status(400).json({ message: "No Pets Found!" });
 		}
 	} catch (error) {
-		res.status(400);
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -420,17 +512,47 @@ const getOwnerPets = asyncHandler(async (req, res) => {
 // @access Private
 const updateOwnerProfile = asyncHandler(async (req, res) => {
 	try {
-		const updatedOwner = await Owner.findByIdAndUpdate(
-			req.params.ownerId,
-			req.body,
-			{ new: true }
-		);
+		const ownerId = req.params.ownerId;
+
+		if (!mongoose.Types.ObjectId.isValid(ownerId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
+		const {
+			firstName,
+			lastName,
+			mobileNumber,
+			email,
+			gender,
+			preferredContactMethod,
+			receiveNotifications,
+		} = req.body;
+
+		// Check if there was no data entered
+		if (
+			!firstName &&
+			!lastName &&
+			!mobileNumber &&
+			!email &&
+			!gender &&
+			!preferredContactMethod &&
+			!receiveNotifications
+		) {
+			res.status(400).json({ message: "Enter Any Data To Update" });
+			return;
+		}
+
+		const updatedOwner = await Owner.findByIdAndUpdate(ownerId, req.body);
 
 		if (updatedOwner) {
 			res.status(200).json({ message: "Owner Updated Successfully" });
+		} else {
+			res.status(400).json({ message: "Owner Not Found!" });
+			return;
 		}
 	} catch (error) {
-		res.status(400);
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -441,6 +563,11 @@ const updateOwnerProfile = asyncHandler(async (req, res) => {
 const deleteOwnerProfile = asyncHandler(async (req, res) => {
 	try {
 		const ownerId = req.params.ownerId;
+
+		if (!mongoose.Types.ObjectId.isValid(ownerId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
 
 		// Find the owner
 		const owner = await Owner.findById(ownerId);
@@ -473,13 +600,11 @@ const deleteOwnerProfile = asyncHandler(async (req, res) => {
 		// Delete the owner
 		const deletedOwner = await Owner.findByIdAndDelete(ownerId);
 
-		if (!deletedOwner) {
-			res.status(400).json({ message: "Owner Not Found!" });
-		} else {
+		if (deletedOwner) {
 			res.status(200).json({ message: "Owner Removed From System" });
 		}
 	} catch (error) {
-		res.status(400);
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -518,9 +643,8 @@ const createPet = asyncHandler(async (req, res) => {
 
 		res.status(200).json({ message: "Pet Created Successfully" });
 	} catch (error) {
-		res
-			.status(400)
-			.json({ message: "Error creating pet", error: error.message });
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -528,15 +652,30 @@ const createPet = asyncHandler(async (req, res) => {
 // @route GET /user/getPetInfo/:petId
 // @access Private
 const getPetInfo = asyncHandler(async (req, res) => {
-	const pet = await Pet.findById(req.params.petId).populate({
-		path: "owners",
-		select: "firstName lastName -_id",
-	});
+	try {
+		const petId = req.params.petId;
 
-	if (!pet) {
-		res.status(400).json({ message: "Pet Not Found!" });
-	} else {
-		res.status(200).json({ pet: pet, petAge: pet.age });
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
+		const pet = await Pet.findById(petId).populate({
+			path: "owners",
+			select: "firstName lastName mobileNumber email",
+		});
+
+		if (!pet) {
+			res.status(400).json({ message: "Pet Not Found!" });
+			return;
+		} else {
+			res
+				.status(200)
+				.json({ message: "Gotten Pet Successfuly", pet: pet, petAge: pet.age });
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -545,13 +684,23 @@ const getPetInfo = asyncHandler(async (req, res) => {
 // @access Private
 const updatePetProfile = asyncHandler(async (req, res) => {
 	try {
-		const updatedPet = await Pet.findByIdAndUpdate(req.params.petId, req.body);
+		const petId = req.params.petId;
+
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
+		const updatedPet = await Pet.findByIdAndUpdate(petId, req.body);
 
 		if (updatedPet) {
 			res.status(200).json({ message: "Pet Updated Successfully" });
+		} else {
+			res.status(400).json({ message: "Pet Not Found!" });
+			return;
 		}
 	} catch (error) {
-		res.status(400);
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -562,6 +711,11 @@ const updatePetProfile = asyncHandler(async (req, res) => {
 const deletePetProfile = asyncHandler(async (req, res) => {
 	try {
 		const petId = req.params.petId;
+
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
 
 		// Find the pet
 		const pet = await Pet.findById(petId);
@@ -600,7 +754,7 @@ const deletePetProfile = asyncHandler(async (req, res) => {
 			res.status(200).json({ message: "Pet Deleted Successfully" });
 		}
 	} catch (error) {
-		res.status(400);
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -610,16 +764,38 @@ const deletePetProfile = asyncHandler(async (req, res) => {
 // @access Private
 const createVaccinationCard = asyncHandler(async (req, res) => {
 	try {
-		const pet = await Pet.findById(req.params.petId);
+		const petId = req.params.petId;
+
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
+		const pet = await Pet.findById(petId);
+
+		if (!pet) {
+			res.status(400).json({ message: "Pet Not Found" });
+			return;
+		}
+
+		const vaccinationCardExists = await VaccinationCard.findOne({
+			pet: pet._id,
+		});
+
+		if (vaccinationCardExists) {
+			res.status(400).json({ message: "Pet Already Has A Vaccination Card" });
+			return;
+		}
 
 		const { vaccineName, vaccineBatch, vaccineGivenDate, vaccineRenewalDate } =
 			req.body;
 
 		if (!vaccineName || !vaccineBatch || !vaccineGivenDate) {
 			res.status(400).json({ message: "Please Enter All Fields" });
+			return;
 		}
 
-		const vaccination = await VaccinationCard.create({
+		const vaccinationCard = await VaccinationCard.create({
 			pet: pet._id,
 			vaccine: {
 				vaccineName,
@@ -629,10 +805,11 @@ const createVaccinationCard = asyncHandler(async (req, res) => {
 			},
 		});
 
-		if (vaccination) {
+		if (vaccinationCard) {
 			res.status(200).json({ message: "Vaccination Card Created" });
 		} else {
 			res.status(400).json({ message: "Invalid Data" });
+			return;
 		}
 	} catch (error) {
 		res.status(500);
@@ -647,12 +824,28 @@ const getVaccinationCard = asyncHandler(async (req, res) => {
 	try {
 		const petId = req.params.petId;
 
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
+		const pet = await Pet.findById(petId);
+
+		if (!pet) {
+			res.status(400).json({ message: "Pet Not Found" });
+			return;
+		}
+
 		const vaccinationCard = await VaccinationCard.findOne({ pet: petId });
 
 		if (!vaccinationCard) {
 			res.status(400).json({ message: "Pet Does Not Have A Vaccination Card" });
+			return;
 		} else {
-			res.status(200).json(vaccinationCard);
+			res.status(200).json({
+				message: "Retrieved Vaccination Card Successfuly",
+				vaccinationCard,
+			});
 		}
 	} catch (error) {
 		res.status(500);
@@ -665,12 +858,21 @@ const getVaccinationCard = asyncHandler(async (req, res) => {
 // @access Private
 const addVaccination = asyncHandler(async (req, res) => {
 	try {
+		const petId = req.params.petId;
+
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
 		const pet = await Pet.findById(req.params.petId);
-		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
 
 		if (!pet) {
 			res.status(400).json({ message: "Pet Not Found" });
+			return;
 		}
+
+		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
 
 		if (!vaccinationCard) {
 			res.status(400).json({
@@ -683,6 +885,7 @@ const addVaccination = asyncHandler(async (req, res) => {
 
 		if (!vaccineName || !vaccineBatch || !vaccineGivenDate) {
 			res.status(400).json({ message: "Please Enter All Fields" });
+			return;
 		} else {
 			vaccinationCard.vaccine.push(req.body);
 			await vaccinationCard.save();
@@ -699,20 +902,34 @@ const addVaccination = asyncHandler(async (req, res) => {
 // @access Private
 const renewVaccination = asyncHandler(async (req, res) => {
 	try {
-		const { petId, vaccinationId } = req.params;
+		const petId = req.params.petId;
+
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid Pet ID" });
+			return;
+		}
+
+		const vaccinationId = req.params.vaccinationId;
+
+		if (!mongoose.Types.ObjectId.isValid(vaccinationId)) {
+			res.status(400).json({ message: "Invalid Vaccination ID" });
+			return;
+		}
 
 		const pet = await Pet.findById(petId);
 
 		if (!pet) {
-			return res.status(404).json({ message: "Pet not found" });
+			res.status(400).json({ message: "Pet not found" });
+			return;
 		}
 
 		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
 
 		if (!vaccinationCard) {
-			return res
-				.status(404)
+			res
+				.status(400)
 				.json({ message: "Vaccination card not found for the pet" });
+			return;
 		}
 
 		const vaccinationIndex = vaccinationCard.vaccine.findIndex(
@@ -720,7 +937,8 @@ const renewVaccination = asyncHandler(async (req, res) => {
 		);
 
 		if (vaccinationIndex === -1) {
-			return res.status(404).json({ message: "Vaccination not found" });
+			res.status(400).json({ message: "Vaccination not found" });
+			return;
 		}
 
 		// Update the vaccineGivenDate to today's date
@@ -735,12 +953,11 @@ const renewVaccination = asyncHandler(async (req, res) => {
 
 		// Save the updated vaccination card
 		await vaccinationCard.save();
+		console.log("KHALASNA DIH");
 
 		res.status(200).json({ message: "Vaccination renewed successfully" });
 	} catch (error) {
-		res
-			.status(500)
-			.json({ message: "Internal Server Error", error: error.message });
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -750,20 +967,34 @@ const renewVaccination = asyncHandler(async (req, res) => {
 // @access Private
 const deleteVaccination = asyncHandler(async (req, res) => {
 	try {
-		const { petId, vaccinationId } = req.params;
+		const petId = req.params.petId;
+
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid Pet ID" });
+			return;
+		}
+
+		const vaccinationId = req.params.vaccinationId;
+
+		if (!mongoose.Types.ObjectId.isValid(vaccinationId)) {
+			res.status(400).json({ message: "Invalid Vaccination ID" });
+			return;
+		}
 
 		const pet = await Pet.findById(petId);
 
 		if (!pet) {
-			return res.status(404).json({ message: "Pet not found" });
+			res.status(400).json({ message: "Pet not found" });
+			return;
 		}
 
 		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
 
 		if (!vaccinationCard) {
-			return res
-				.status(404)
+			res
+				.status(400)
 				.json({ message: "Vaccination card not found for the pet" });
+			return;
 		}
 
 		const vaccinationIndex = vaccinationCard.vaccine.findIndex(
@@ -771,7 +1002,8 @@ const deleteVaccination = asyncHandler(async (req, res) => {
 		);
 
 		if (vaccinationIndex === -1) {
-			return res.status(404).json({ message: "Vaccination not found" });
+			res.status(400).json({ message: "Vaccination not found" });
+			return;
 		}
 
 		// Remove the vaccination from the array
@@ -782,7 +1014,7 @@ const deleteVaccination = asyncHandler(async (req, res) => {
 
 		res.status(200).json({ message: "Vaccination deleted successfully" });
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error" });
+		res.status(500);
 		throw new Error(error);
 	}
 });
@@ -791,36 +1023,45 @@ const deleteVaccination = asyncHandler(async (req, res) => {
 // @route POST /user/changePassword
 // @access Private
 const changePassword = asyncHandler(async (req, res) => {
-	const user = await User.findOne({ _id: req.user._id });
+	try {
+		const user = await User.findById(req.user._id);
 
-	const { oldPassword, newPassword, confirmPassword } = req.body;
+		const { oldPassword, newPassword, confirmPassword } = req.body;
 
-	if (!oldPassword || !newPassword || !confirmPassword) {
-		res.status(400).json({ message: "Enter All Fields" });
-	}
+		if (!oldPassword || !newPassword || !confirmPassword) {
+			res.status(400).json({ message: "Enter All Fields" });
+			return;
+		}
 
-	if (!(await bcrypt.compare(oldPassword, user.password))) {
-		res.status(400).json({ message: "Invalid Password" });
-	} else if (await bcrypt.compare(newPassword, user.password)) {
-		res
-			.status(400)
-			.json({ message: "New Password Cannot Be The Same As Old Password" });
-	} else if (newPassword !== confirmPassword) {
-		res.status(400).json({ message: "Passwords Don't Match" });
-	} else if (!passwordValidator(newPassword)) {
-		res.status(400).json({
-			message:
-				"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
-		});
-	} else {
-		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(newPassword, salt);
+		if (!(await bcrypt.compare(oldPassword, user.password))) {
+			res.status(400).json({ message: "Invalid Password" });
+			return;
+		} else if (await bcrypt.compare(newPassword, user.password)) {
+			res
+				.status(400)
+				.json({ message: "New Password Cannot Be The Same As Old Password" });
+			return;
+		} else if (newPassword !== confirmPassword) {
+			res.status(400).json({ message: "Passwords Don't Match" });
+			return;
+		} else if (!passwordValidator(newPassword)) {
+			res.status(400).json({
+				message:
+					"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
+			});
+			return;
+		} else {
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-		user.password = hashedPassword;
-		user.tokenVersion += 1;
-		await user.save();
-		res.status(200).json({ message: "Password Changed" });
-		req.user = null;
+			user.password = hashedPassword;
+			await user.save();
+			res.status(200).json({ message: "Password Changed" });
+			req.user = null;
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -828,44 +1069,52 @@ const changePassword = asyncHandler(async (req, res) => {
 // @route POST /user/requestOTP
 // @access Public
 const requestOTP = asyncHandler(async (req, res) => {
-	const user = await User.findOne({ email: req.body.email });
+	try {
+		const user = await User.findOne({ email: req.body.email });
 
-	if (!user) {
-		res.status(404).json({ message: "User Not Found!" });
-	} else {
-		const otp = generateOTP();
-		user.passwordResetOTP = otp;
-		await user.save();
-		otpExpiry = new Date();
-		otpExpiry.setMinutes(otpExpiry.getMinutes() + 5);
-		console.log(otpExpiry);
+		if (!user) {
+			res.status(400).json({ message: "User Not Found!" });
+			return;
+		} else {
+			const otp = generateOTP();
+			user.passwordResetOTP = otp;
+			await user.save();
+			otpExpiry = new Date();
+			otpExpiry.setMinutes(otpExpiry.getMinutes() + 5);
+			console.log(otpExpiry);
 
-		const transporter = nodemailer.createTransport({
-			service: "",
-			auth: {
-				user: "",
-				pass: "",
-			},
-		});
+			const transporter = nodemailer.createTransport({
+				service: "",
+				auth: {
+					user: "",
+					pass: "",
+				},
+			});
 
-		const mailOptions = {
-			from: "",
-			to: user.email,
-			subject: "[NO REPLY] Your Password Reset Request",
-			html: `<h1>You have requested to reset your password.<h1>
+			const mailOptions = {
+				from: "",
+				to: user.email,
+				subject: "[NO REPLY] Your Password Reset Request",
+				html: `<h1>You have requested to reset your password.<h1>
                 <p>Your OTP is ${otp}<p>
                 <p>If you did not request to reset your password, you can safely disregard this message.<p>
                 <p>This Is An Automated Message, Please Do Not Reply.<p>`,
-		};
+			};
 
-		transporter.sendMail(mailOptions, (error, info) => {
-			if (error) {
-				res.status(500);
-				throw new Error("Failed to Send OTP Email.");
-			} else {
-				res.status(200).json({ message: "OTP Sent, Please Check Your Email" });
-			}
-		});
+			transporter.sendMail(mailOptions, (error, info) => {
+				if (error) {
+					res.status(500);
+					throw new Error("Failed to Send OTP Email.");
+				} else {
+					res
+						.status(200)
+						.json({ message: "OTP Sent, Please Check Your Email" });
+				}
+			});
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -873,24 +1122,32 @@ const requestOTP = asyncHandler(async (req, res) => {
 // @route POST /user/verifyOTP
 // @access Public
 const verifyOTP = asyncHandler(async (req, res) => {
-	const user = await User.findOne({ email: req.body.email });
-	const otp = req.body.otp;
+	try {
+		const user = await User.findOne({ email: req.body.email });
+		const otp = req.body.otp;
 
-	if (!otp) {
-		res.status(400).json({ message: "Please Enter OTP" });
-	} else {
-		if (Date.now() > otpExpiry) {
-			res.status(400).json({ message: "OTP Expired, Please Try Again" });
+		if (!otp) {
+			res.status(400).json({ message: "Please Enter OTP" });
+			return;
 		} else {
-			if (user.passwordResetOTP === otp) {
-				user.passwordResetOTP = "";
-				await user.save();
-				otpExpiry = null;
-				res.status(200).json({ message: "OTP Verified" });
+			if (Date.now() > otpExpiry) {
+				res.status(400).json({ message: "OTP Expired, Please Try Again" });
+				return;
 			} else {
-				res.status(400).json({ message: "Invalid OTP" });
+				if (user.passwordResetOTP === otp) {
+					user.passwordResetOTP = "";
+					await user.save();
+					otpExpiry = null;
+					res.status(200).json({ message: "OTP Verified" });
+				} else {
+					res.status(400).json({ message: "Invalid OTP" });
+					return;
+				}
 			}
 		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
@@ -898,25 +1155,33 @@ const verifyOTP = asyncHandler(async (req, res) => {
 // @route POST /user/resetPassword
 // @access Public
 const resetPassword = asyncHandler(async (req, res) => {
-	const user = await User.findOne({ email: req.body.email });
-	const { newPassword, confirmPassword } = req.body;
+	try {
+		const user = await User.findOne({ email: req.body.email });
+		const { newPassword, confirmPassword } = req.body;
 
-	if (!newPassword || !confirmPassword) {
-		res.status(400).json({ message: "Enter All Fields" });
-	} else if (newPassword !== confirmPassword) {
-		res.status(400).json({ message: "Passwords Don't Match" });
-	} else if (!passwordValidator(newPassword)) {
-		res.status(400).json({
-			message:
-				"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
-		});
-	} else {
-		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(newPassword, salt);
+		if (!newPassword || !confirmPassword) {
+			res.status(400).json({ message: "Enter All Fields" });
+			return;
+		} else if (newPassword !== confirmPassword) {
+			res.status(400).json({ message: "Passwords Don't Match" });
+			return;
+		} else if (!passwordValidator(newPassword)) {
+			res.status(400).json({
+				message:
+					"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
+			});
+			return;
+		} else {
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-		user.password = hashedPassword;
-		await user.save();
-		res.status(200).json({ message: "Password Has Been Reset" });
+			user.password = hashedPassword;
+			await user.save();
+			res.status(200).json({ message: "Password Has Been Reset" });
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
 	}
 });
 
