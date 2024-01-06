@@ -73,7 +73,7 @@ export default function MyDrawer() {
 				ref={btnRef}
 				variant='transparent'
 				size='xxl'
-				_hover={{ color: "#508991" }}
+				_hover={{ color: "#D4F500" }}
 				width='50px'
 				height='50px'
 			/>
