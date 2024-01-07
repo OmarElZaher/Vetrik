@@ -21,7 +21,7 @@ let otpExpiry;
 const generateToken = (id) => {
 	// TODO Update Token Expiration
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
-		expiresIn: "30d",
+		expiresIn: "1h",
 	});
 };
 
@@ -328,14 +328,35 @@ const loginUser = asyncHandler(async (req, res) => {
 			res.status(400).json({ message: "Invalid Username" });
 		} else {
 			if (await bcrypt.compare(password, user.password)) {
-				res.status(200).json({
-					message: "Login Successful",
-					token: generateToken(user._id),
+				let token = generateToken(user._id);
+				res.cookie("token", token, {
+					httpOnly: true,
 				});
+				res
+					.status(200)
+					.json({
+						message: "Logged In Successfully",
+						token: token,
+					});
 			} else {
-				res.status(400).json({ message: "Invalid Credentials" });
+				res.status(400).json({ message: "Invalid Password" });
 			}
 		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Logout User
+// @route POST /user/logout
+// @access Private
+const logoutUser = asyncHandler(async (req, res) => {
+	try {
+		res
+			.clearCookie("token")
+			.status(200)
+			.json({ message: "Logged Out Successfully" });
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
@@ -1065,6 +1086,46 @@ const changePassword = asyncHandler(async (req, res) => {
 	}
 });
 
+// @desc Forgot Username
+// @route POST /user/forgotUsername
+// @access Public
+const forgotUsername = asyncHandler(async (req, res) => {
+	const user = await User.findOne({ email: req.body.email });
+
+	if (!user) {
+		res.status(400).json({ message: "User Not Found!" });
+		return;
+	} else {
+		const transporter = nodemailer.createTransport({
+			service: "",
+			auth: {
+				user: "",
+				pass: "",
+			},
+		});
+
+		const mailOptions = {
+			from: "",
+			to: user.email,
+			subject: "[NO REPLY] Your Username",
+			html: `<h1>Your username is ${user.username}<h1>
+			<p>If you did not request to retrieve your username, you can safely disregard this message.<p>
+			<p>This Is An Automated Message, Please Do Not Reply.<p>`,
+		};
+
+		transporter.sendMail(mailOptions, (error, info) => {
+			if (error) {
+				res.status(500);
+				throw new Error("Failed to Send Username Email.");
+			} else {
+				res
+					.status(200)
+					.json({ message: "Username Sent, Please Check Your Email" });
+			}
+		});
+	}
+});
+
 // @desc Request OTP
 // @route POST /user/requestOTP
 // @access Public
@@ -1193,10 +1254,12 @@ module.exports = {
 	deleteUser,
 
 	loginUser,
+	logoutUser,
 	getUserInfo,
 	deleteUserProfile,
 	updateUserProfile,
 	changePassword,
+	forgotUsername,
 	requestOTP,
 	verifyOTP,
 	resetPassword,

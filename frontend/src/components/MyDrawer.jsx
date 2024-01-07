@@ -38,7 +38,7 @@ export default function MyDrawer() {
 	const [isAddHovered, setIsAddHovered] = useState(false);
 	const [isEditHovered, setIsEditHovered] = useState(false);
 
-	const [isSearchOpen, setIsSearchOpen] = useState(false);
+	const [isSearchOpen, setIsSearchOpen] = useState(true);
 	const [isAddOpen, setIsAddOpen] = useState(false);
 
 	const handleHover = (type) => {
@@ -121,6 +121,9 @@ export default function MyDrawer() {
 								>
 									<Button
 										onClick={() => {
+											if (isAddOpen) {
+												setIsAddOpen(!isAddOpen);
+											}
 											setIsSearchOpen(!isSearchOpen);
 										}}
 										_hover={{
@@ -209,6 +212,10 @@ export default function MyDrawer() {
 								>
 									<Button
 										onClick={() => {
+											if (isSearchOpen) {
+												setIsSearchOpen(!isSearchOpen);
+											}
+
 											setIsAddOpen(!isAddOpen);
 										}}
 										_hover={{

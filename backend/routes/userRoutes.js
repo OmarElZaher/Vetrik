@@ -9,9 +9,11 @@ const {
 	deleteUser,
 
 	loginUser,
+	logoutUser,
 	deleteUserProfile,
 	getUserInfo,
 	updateUserProfile,
+	forgotUsername,
 	changePassword,
 	requestOTP,
 	verifyOTP,
@@ -53,6 +55,8 @@ router.post("/createAdmin", authenticate, createAdmin); // COMPLETE
 router.post("/createUser", authenticate, createUser); // COMPLETE
 router.post("/login", loginUser); // COMPLETE
 router.post("/changePassword", authenticate, changePassword); // COMPLETE
+router.post("/forgotUsername", forgotUsername); // COMPLETE
+router.post("/logout", authenticate, logoutUser); // COMPLETE
 
 router.post("/requestOTP", requestOTP); // COMPLETE
 router.post("/verifyOTP", verifyOTP); // COMPLETE
