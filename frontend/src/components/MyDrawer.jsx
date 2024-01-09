@@ -38,7 +38,7 @@ export default function MyDrawer() {
 	const [isAddHovered, setIsAddHovered] = useState(false);
 	const [isEditHovered, setIsEditHovered] = useState(false);
 
-	const [isSearchOpen, setIsSearchOpen] = useState(true);
+	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isAddOpen, setIsAddOpen] = useState(false);
 
 	const handleHover = (type) => {

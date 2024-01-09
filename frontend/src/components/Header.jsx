@@ -30,15 +30,18 @@ export default function Header() {
 				navigate("/login");
 			}
 		} catch (error) {
-			setError(error);
-			toast({
-				title: "Error",
-				description: error.response.data.message,
-				status: "error",
-				duration: 2000,
-				position: "top",
-				isClosable: true,
-			});
+			setError(error.response.data.message);
+			if (error.response.data.message === "Not Logged In") {
+				navigate("/login");
+			} else {
+				toast({
+					title: error.response.data.message,
+					status: "error",
+					duration: 2000,
+					position: "top",
+					isClosable: true,
+				});
+			}
 		} finally {
 			setIsLoading(false);
 		}

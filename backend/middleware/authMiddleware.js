@@ -36,7 +36,7 @@ const authenticate = asyncHandler(async (req, res, next) => {
 
 	if (!token) {
 		res.status(401);
-		throw new Error("No Token");
+		throw new Error("Not Logged In");
 	}
 });
 
