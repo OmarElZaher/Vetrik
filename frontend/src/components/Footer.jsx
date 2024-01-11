@@ -5,7 +5,11 @@ export default function Footer() {
 		<Box
 			bg={useColorModeValue("gray.50", "gray.900")}
 			color={useColorModeValue("gray.700", "gray.200")}
+			minHeight={"100vh"}
+			display={"flex"}
+			flexDirection={"column"}
 		>
+			<Box flex={"1"}></Box>
 			<Container
 				as={Box}
 				maxW={"26vw"}

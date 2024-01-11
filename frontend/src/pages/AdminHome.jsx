@@ -5,12 +5,12 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-export default function HomePage() {
+export default function AdminHomePage() {
 	return (
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Home | Modern Vet</title>
+					<title>Admin Home | Modern Vet</title>
 				</Helmet>
 			</HelmetProvider>
 

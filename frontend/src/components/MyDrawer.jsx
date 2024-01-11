@@ -142,11 +142,13 @@ export default function MyDrawer() {
 										onMouseOut={() => {
 											handleMouseOut("search");
 										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
 										transition='all 0.15s ease'
 										bg='#121211'
 										color='#8F8F8F'
+										width='272px'
 										fontSize='20px'
-										pr='55%'
 										leftIcon={
 											<Icon
 												as={IoMdSearch}
@@ -184,7 +186,7 @@ export default function MyDrawer() {
 													text={"Search For An Owner"}
 													to={"/search-owner"}
 													justifyContent='flex-end'
-													alignItems='flex-start'
+													alignItems='center'
 												/>
 
 												<NavigationLinkDrawer
@@ -192,7 +194,7 @@ export default function MyDrawer() {
 													text={"Search For A Pet"}
 													to={"/search-pet"}
 													justifyContent='flex-end'
-													alignItems='flex-start'
+													alignItems='center'
 												/>
 											</Box>
 										</Flex>
@@ -234,11 +236,13 @@ export default function MyDrawer() {
 										onMouseOut={() => {
 											handleMouseOut("add");
 										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
 										transition='all 0.15s ease'
 										bg='#121211'
 										color='#8F8F8F'
 										fontSize='20px'
-										pr='65%'
+										width='272px'
 										leftIcon={
 											<Icon
 												as={IoAdd}
@@ -319,12 +323,13 @@ export default function MyDrawer() {
 												transform: "scale(0.98)",
 												opacity: "0.5",
 											}}
+											justifyContent={"flex-start"}
+											alignItems={"center"}
 											transition='all 0.15s ease'
 											bg='#121211'
 											color='#8F8F8F'
 											fontSize='18px'
-											pr='54%'
-											width='33.5vh'
+											width='272px'
 											leftIcon={
 												<Icon
 													as={CiEdit}

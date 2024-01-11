@@ -332,12 +332,11 @@ const loginUser = asyncHandler(async (req, res) => {
 				res.cookie("token", token, {
 					httpOnly: true,
 				});
-				res
-					.status(200)
-					.json({
-						message: "Logged In Successfully",
-						token: token,
-					});
+				res.status(200).json({
+					message: "Logged In Successfully",
+					token: token,
+					isAdmin: user.isAdmin,
+				});
 			} else {
 				res.status(400).json({ message: "Invalid Password" });
 			}
@@ -1247,7 +1246,6 @@ const resetPassword = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-	// Admin Functions
 	createAdmin,
 	createUser,
 	getUsers,
