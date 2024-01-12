@@ -2,11 +2,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { ChakraProvider } from "@chakra-ui/react";
 
-import AdminHomePage from "./pages/AdminHome";
-import HomePage from "./pages/Home";
-import LoginPage from "./pages/Login";
-import SearchOwnerPage from "./pages/SearchOwner";
-import OwnerTablePage from "./pages/OwnerTable";
+import AdminHomePage from "./pages/Home/AdminHome";
+import HomePage from "./pages/Home/Home";
+import LoginPage from "./pages/General/Login";
+import SearchOwnerPage from "./pages/Owner/SearchOwner";
+import OwnerTablePage from "./pages/Owner/OwnerTable";
 
 import theme from "./theme";
 
