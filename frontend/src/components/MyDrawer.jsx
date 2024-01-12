@@ -26,6 +26,7 @@ import { FaPerson } from "react-icons/fa6";
 import { MdOutlinePets } from "react-icons/md";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
+import { GoHome } from "react-icons/go";
 
 import NavigationLinkDrawer from "./NavigationLinkDrawer";
 
@@ -37,6 +38,7 @@ export default function MyDrawer() {
 	const [isSearchHovered, setIsSearchHovered] = useState(false);
 	const [isAddHovered, setIsAddHovered] = useState(false);
 	const [isEditHovered, setIsEditHovered] = useState(false);
+	const [isHomeHovered, setIsHomeHovered] = useState(false);
 
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isAddOpen, setIsAddOpen] = useState(false);
@@ -50,6 +52,8 @@ export default function MyDrawer() {
 			setIsAddHovered(true);
 		} else if (type === "edit") {
 			setIsEditHovered(true);
+		} else if (type === "home") {
+			setIsHomeHovered(true);
 		}
 	};
 
@@ -62,6 +66,8 @@ export default function MyDrawer() {
 			setIsAddHovered(false);
 		} else if (type === "edit") {
 			setIsEditHovered(false);
+		} else if (type === "home") {
+			setIsHomeHovered(false);
 		}
 	};
 
@@ -111,6 +117,51 @@ export default function MyDrawer() {
 
 					<DrawerBody>
 						<Flex gap='middle' vertical>
+							{/* Home Button */}
+							<Box>
+								<Box
+									display={"flex"}
+									justifyContent={"flex-start"}
+									alignItems={"center"}
+								>
+									<Link to={"/"}>
+										<Button
+											_hover={{
+												bg: "#D4F500",
+												borderColor: "#D4F500",
+												color: "#000",
+												transform: "scale(1.05)",
+											}}
+											onMouseOver={() => {
+												handleHover("home");
+											}}
+											onMouseOut={() => {
+												handleMouseOut("home");
+											}}
+											_active={{
+												transform: "scale(0.98)",
+												opacity: "0.5",
+											}}
+											justifyContent={"flex-start"}
+											alignItems={"center"}
+											transition='all 0.15s ease'
+											bg='#121211'
+											color='#8F8F8F'
+											fontSize='18px'
+											width='272px'
+											leftIcon={
+												<Icon
+													as={GoHome}
+													color={isHomeHovered ? "#000" : "#8F8F8F"}
+												/>
+											}
+										>
+											Home
+										</Button>
+									</Link>
+								</Box>
+							</Box>
+
 							{/* Search Accordion */}
 							<Box>
 								{/* Search Button */}

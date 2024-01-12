@@ -28,7 +28,7 @@ export default function NavigationLinkDrawer({
 					transition='all 0.15s ease'
 					color='#8F8F8F'
 					borderColor='#8F8F8F'
-					width={"215px"}
+					width={"230px"}
 					ml={10}
 					justifyContent={"flex-start"}
 					mt={2}

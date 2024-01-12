@@ -21,7 +21,7 @@ let otpExpiry;
 const generateToken = (id) => {
 	// TODO Update Token Expiration
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
-		expiresIn: "1h",
+		expiresIn: "30d",
 	});
 };
 
@@ -482,8 +482,24 @@ const getOwnerInfo = asyncHandler(async (req, res) => {
 // @route GET /user/getOwner/
 // @access Private
 const getOwner = asyncHandler(async (req, res) => {
+	const { firstName, lastName, mobileNumber, email } = req.body;
 	try {
-		const owner = await Owner.find(req.body);
+		let query = {}
+
+		if (firstName) {
+			query.firstName = new RegExp(firstName, "i");
+		}
+		if (lastName) {
+			query.lastName = new RegExp(lastName, "i");
+		}
+		if (mobileNumber) {
+			query.mobileNumber = new RegExp(mobileNumber, "i");
+		}
+		if (email) {
+			query.email = new RegExp(email, "i");
+		}
+
+		const owner = await Owner.find(query).populate("pets");
 
 		if (owner.length > 0) {
 			res.status(200).json(owner);

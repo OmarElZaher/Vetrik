@@ -12,7 +12,6 @@ import Spinner from "./Spinner";
 export default function Header() {
 	const navigate = useNavigate();
 	const toast = useToast();
-	const [error, setError] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleLogout = async () => {
@@ -30,7 +29,6 @@ export default function Header() {
 				navigate("/login");
 			}
 		} catch (error) {
-			setError(error.response.data.message);
 			if (error.response.data.message === "Not Logged In") {
 				navigate("/login");
 			} else {
@@ -80,7 +78,7 @@ export default function Header() {
 					alignItems='center'
 					key={2}
 				>
-					Hello
+					LOGO PLACEMENT
 				</Box>
 				<Box
 					width='33vw'

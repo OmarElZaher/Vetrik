@@ -26,7 +26,7 @@ const authenticate = asyncHandler(async (req, res, next) => {
 		} catch (error) {
 			if (error.name === "TokenExpiredError") {
 				res.status(401);
-				throw new Error("Token has expired");
+				throw new Error("Token has expired, please login again");
 			} else {
 				res.status(401);
 				throw new Error("Error: Unauthorized");
