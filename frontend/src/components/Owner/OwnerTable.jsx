@@ -15,7 +15,7 @@ import {
 	Text,
 } from "@chakra-ui/react";
 
-import Footer from "./Footer";
+import Footer from "../General/Footer";
 
 function titleCase(str) {
 	return str
@@ -86,6 +86,7 @@ export default function OwnerTable() {
 									<Th>Full Name</Th>
 									<Th>Email</Th>
 									<Th>Mobile Number</Th>
+									<Th>View Details</Th>
 								</Tr>
 							</Thead>
 							<Tbody>
@@ -96,6 +97,25 @@ export default function OwnerTable() {
 										)}`}</Td>
 										<Td>{row.email}</Td>
 										<Td>{row.mobileNumber}</Td>
+										<Td>
+											<Button
+												onClick={() => {
+													localStorage.setItem("ownerId", row._id);
+													navigate("/owner-details");
+												}}
+												_hover={{
+													bg: "yellowgreen",
+													color: "#000",
+													transform: "scale(1.01)",
+												}}
+												_active={{
+													transform: "scale(0.99)",
+													opacity: "0.5",
+												}}
+											>
+												View
+											</Button>
+										</Td>
 									</Tr>
 								))}
 							</Tbody>

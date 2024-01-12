@@ -2,7 +2,7 @@ import React from "react";
 
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
-import LoginCard from "../components/LoginCard";
+import LoginCard from "../components/General/LoginCard";
 
 export default function LoginPage() {
 	return (

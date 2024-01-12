@@ -2,8 +2,8 @@ import React from "react";
 
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
-import Header from "../components/Header";
-import OwnerTable from "../components/OwnerTable";
+import Header from "../components/General/Header";
+import OwnerTable from "../components/Owner/OwnerTable";
 
 export default function OwnerTablePage() {
 	return (

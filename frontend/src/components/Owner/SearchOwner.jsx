@@ -31,8 +31,8 @@ import {
 import { MdSettings } from "react-icons/md";
 import { FaPerson } from "react-icons/fa6";
 
-import Spinner from "./Spinner";
-import Footer from "./Footer";
+import Spinner from "../General/Spinner";
+import Footer from "../General/Footer";
 import axios from "axios";
 
 // TODO: Gender filter, navigate to different page when table is shown
