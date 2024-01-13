@@ -7,6 +7,7 @@ import HomePage from "./pages/Home/Home";
 import LoginPage from "./pages/General/Login";
 import SearchOwnerPage from "./pages/Owner/SearchOwner";
 import OwnerTablePage from "./pages/Owner/OwnerTable";
+import OwnerDetailsPage from "./pages/Owner/OwnerDetails";
 
 import theme from "./theme";
 
@@ -21,6 +22,7 @@ function App() {
 						<Route path='/admin' element={<AdminHomePage />} />
 						<Route path='/search-owner' element={<SearchOwnerPage />} />
 						<Route path='/owner-table' element={<OwnerTablePage />} />
+						<Route path='/owner-details' element={<OwnerDetailsPage />} />
 					</Routes>
 				</Router>
 			</ChakraProvider>

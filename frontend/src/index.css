@@ -29,3 +29,8 @@
 		transform: rotate(360deg);
 	}
 }
+
+::selection {
+	background-color: yellowgreen;
+	color: #000;
+}

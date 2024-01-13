@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -12,17 +12,9 @@ import {
 	Input,
 	InputGroup,
 	InputLeftAddon,
-	Select,
-	Table,
-	Thead,
-	Tbody,
-	Tr,
-	Th,
-	Td,
 	Icon,
-	TableCaption,
-	TableContainer,
 	List,
+	Text,
 	ListItem,
 	ListIcon,
 	useToast,
@@ -30,12 +22,11 @@ import {
 
 import { MdSettings } from "react-icons/md";
 import { FaPerson } from "react-icons/fa6";
+import { IoMdSearch } from "react-icons/io";
 
 import Spinner from "../General/Spinner";
 import Footer from "../General/Footer";
 import axios from "axios";
-
-// TODO: Gender filter, navigate to different page when table is shown
 
 export default function SearchOwner() {
 	const toast = useToast();
@@ -131,29 +122,43 @@ export default function SearchOwner() {
 						width={"100%"}
 						height={"100vh"}
 					>
-						<Card width='50vw' height='65vh'>
-							<Box px={5} pt={5} display={"flex"} justifyContent={"center"}>
+						<Card width='50%' height='75%'>
+							<Box
+								px={5}
+								pt={5}
+								display={"flex"}
+								justifyContent={"center"}
+								alignItems={"center"}
+								flexDirection={"column"}
+								height={"20%"}
+							>
 								<Icon as={FaPerson} fontSize={"60px"} />
+
+								<Heading size='lg' mt={2}>
+									Search For An Owner
+								</Heading>
 							</Box>
-							<Box px={5} pt={5} display={"flex"} justifyContent={"center"}>
-								<Heading size='lg'>Search For An Owner</Heading>
-							</Box>
-							<Box ml={10} mt={5}>
+
+							<Box ml={10} my={7} height={"10%"}>
 								<List>
 									<ListItem>
-										<ListIcon as={MdSettings} color='green.500' />
+										<ListIcon as={MdSettings} color='yellowgreen' />
 										Enter one or more details to find desired owner.
 									</ListItem>
 									<ListItem>
-										<ListIcon as={MdSettings} color='green.500' />
-										To get all owners, press search with no details entered.
+										<ListIcon as={MdSettings} color='yellowgreen' />
+										To get all owners, press{" "}
+										<Text display={"inline"} color={"yellowgreen"}>
+											search
+										</Text>{" "}
+										with no inputed details.
 									</ListItem>
 								</List>
 							</Box>
-							<br />
-							<hr style={{ fontWeight: "bolder" }} />
 
-							<CardBody>
+							<hr />
+
+							<Box p={10} height={"50%"}>
 								{/* Search Form */}
 								<FormControl
 									id='fullName'
@@ -205,25 +210,31 @@ export default function SearchOwner() {
 										/>
 									</InputGroup>
 								</FormControl>
-							</CardBody>
 
-							<CardFooter display={"flex"} justifyContent={"center"}>
-								<Button
-									onClick={handleSubmit}
-									_hover={{
-										bg: "yellowgreen",
-										color: "#000",
-										transform: "scale(1.01)",
-									}}
-									_active={{
-										transform: "scale(0.99)",
-										opacity: "0.5",
-									}}
-									width={"50vw"}
+								<FormControl
+									display={"flex"}
+									justifyContent={"center"}
+									alignItems={"center"}
 								>
-									Search
-								</Button>
-							</CardFooter>
+									<Button
+										onClick={handleSubmit}
+										_hover={{
+											bg: "yellowgreen",
+											color: "#000",
+											transform: "scale(1.01)",
+										}}
+										_active={{
+											transform: "scale(0.99)",
+											opacity: "0.5",
+										}}
+										mt={10}
+										width={"50%"}
+										leftIcon={<Icon as={IoMdSearch} />}
+									>
+										Search
+									</Button>
+								</FormControl>
+							</Box>
 						</Card>
 					</Box>
 					<Footer />
