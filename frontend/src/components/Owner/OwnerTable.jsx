@@ -16,6 +16,7 @@ import {
 	Th,
 	Td,
 	TableContainer,
+	Select,
 	Text,
 	useToast,
 } from "@chakra-ui/react";
@@ -127,6 +128,10 @@ export default function OwnerTable() {
 						isClosable: true,
 						position: "top",
 					});
+					setOwnerData((prev) => ({
+						...prev,
+						pets: prev.pets.concat(response.data.pet),
+					}));
 				} else {
 					toast({
 						title: response.data.message,
@@ -150,6 +155,58 @@ export default function OwnerTable() {
 		}
 	};
 
+	const handleDeletePet = async (petId) => {
+		const confirmDelete = window.confirm(
+			"Are you sure you want to delete this pet?"
+		);
+
+		if (confirmDelete) {
+			try {
+				setIsLoading(true);
+
+				const response = await axios.delete(
+					`http://localhost:1234/user/deletePet/${petId}`,
+					{
+						withCredentials: true,
+					}
+				);
+
+				if (response.status === 200) {
+					toast({
+						title: response.data.message,
+						status: "success",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+
+					setOwnerData((prev) => ({
+						...prev,
+						pets: prev.pets.filter((pet) => pet._id !== response.data.petId),
+					}));
+				} else {
+					toast({
+						title: response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} catch (error) {
+				toast({
+					title: error.response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			} finally {
+				setIsLoading(false);
+			}
+		}
+	};
+
 	const handleNameChange = (e) => {
 		setName(e.target.value);
 	};
@@ -164,6 +221,7 @@ export default function OwnerTable() {
 
 	const handleGenderChange = (e) => {
 		setGender(e.target.value);
+		console.log("GENDER ==>", gender);
 	};
 
 	const handleDobChange = (e) => {
@@ -305,6 +363,9 @@ export default function OwnerTable() {
 													<Td textAlign={"center"}>{pet.gender}</Td>
 													<Td textAlign={"center"}>
 														<Button
+															onClick={() => {
+																navigate(`/pet-details/${pet._id}`);
+															}}
 															_hover={{
 																bg: "yellowgreen",
 																color: "#000",
@@ -323,6 +384,9 @@ export default function OwnerTable() {
 														<Button
 															variant={"outline"}
 															borderColor={"#EF5350"}
+															onClick={() => {
+																handleDeletePet(pet._id);
+															}}
 															_hover={{
 																bg: "#EF5350",
 																color: "#000",
@@ -392,13 +456,23 @@ export default function OwnerTable() {
 							</Box>
 							<Box
 								display={"flex"}
+								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
 								height={"15%"}
 							>
 								<Text fontSize={"20px"} textAlign={"center"}>
-									To register a pet to this owner, please enter all details of
-									the pet.
+									To register a{" "}
+									<Text
+										fontSize={"20px"}
+										display={"inline"}
+										textDecoration={"underline"}
+										fontWeight={"bold"}
+									>
+										NEW
+									</Text>
+									{"* (not already registered) "}
+									pet to this owner, please enter all details of the pet.
 								</Text>
 							</Box>
 							<Box
@@ -427,14 +501,23 @@ export default function OwnerTable() {
 									justifyContent={"space-evenly"}
 									mb={5}
 								>
-									<Input
-										type='text'
+									<Select
 										name='type'
+										cursor={"pointer"}
 										placeholder='Type of Animal'
 										value={type}
 										onChange={handleTypeChange}
 										mr={2}
-									/>
+									>
+										<option value='Dog'>Dog</option>
+										<option value='Cat'>Cat</option>
+										<option value='Bird'>Bird</option>
+										<option value='Turtle'>Turtle</option>
+										<option value='Monkey'>Monkey</option>
+										<option value='HamsterFish'>Hamster</option>
+										<option value='Fish'>Fish</option>
+									</Select>
+
 									<Input
 										type='text'
 										name='breed'
@@ -445,13 +528,16 @@ export default function OwnerTable() {
 									/>
 								</FormControl>
 								<FormControl id='gender' mb={5}>
-									<Input
-										type='text'
+									<Select
 										name='gender'
-										placeholder='Gender'
+										cursor={"pointer"}
+										placeholder='Select Gender'
 										value={gender}
 										onChange={handleGenderChange}
-									/>
+									>
+										<option value='Male'>Male</option>
+										<option value='Female'>Female</option>
+									</Select>
 								</FormControl>
 								<FormControl id='dob'>
 									<Input

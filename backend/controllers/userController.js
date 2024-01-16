@@ -484,7 +484,7 @@ const getOwnerInfo = asyncHandler(async (req, res) => {
 const getOwner = asyncHandler(async (req, res) => {
 	const { firstName, lastName, mobileNumber, email } = req.body;
 	try {
-		let query = {}
+		let query = {};
 
 		if (firstName) {
 			query.firstName = new RegExp(firstName, "i");
@@ -677,7 +677,41 @@ const createPet = asyncHandler(async (req, res) => {
 			await owner.save();
 		}
 
-		res.status(200).json({ message: "Pet Created Successfully" });
+		res.status(200).json({ message: "Pet Created Successfully", pet: pet });
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Get Pet
+// @route GET /user/getPet
+// @access Private
+const getPet = asyncHandler(async (req, res) => {
+	const { name, type, breed, gender } = req.body;
+	try {
+		let query = {};
+
+		if (name) {
+			query.name = new RegExp(name, "i");
+		}
+		if (type) {
+			query.type = new RegExp(type, "i");
+		}
+		if (breed) {
+			query.breed = new RegExp(breed, "i");
+		}
+		if (gender) {
+			query.gender = new RegExp(gender, "i");
+		}
+
+		const pet = await Pet.find(query).populate("owners");
+
+		if (pet.length > 0) {
+			res.status(200).json(pet);
+		} else {
+			res.status(400).json({ message: "No Pets Found!" });
+		}
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
@@ -787,7 +821,9 @@ const deletePetProfile = asyncHandler(async (req, res) => {
 		if (!deletedPet) {
 			res.status(400).json({ message: "Pet Not Found!" });
 		} else {
-			res.status(200).json({ message: "Pet Deleted Successfully" });
+			res
+				.status(200)
+				.json({ message: "Pet Deleted Successfully", petId: pet._id });
 		}
 	} catch (error) {
 		res.status(500);
@@ -1277,6 +1313,7 @@ module.exports = {
 	requestOTP,
 	verifyOTP,
 	resetPassword,
+	getPet,
 	getPetInfo,
 	updatePetProfile,
 	deletePetProfile,

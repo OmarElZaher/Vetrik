@@ -18,6 +18,7 @@ const {
 	requestOTP,
 	verifyOTP,
 	resetPassword,
+	getPet,
 	getPetInfo,
 	updatePetProfile,
 	deletePetProfile,
@@ -46,7 +47,7 @@ router.get("/getUserInfo", authenticate, getUserInfo); //
 router.get("/getOwnerInfo/:ownerId", authenticate, getOwnerInfo); // COMPLETE
 router.get("/getOwnerPets/:ownerId", authenticate, getOwnerPets); // COMPLETE
 router.get("/getUsers", authenticate, getUsers); // COMPLETE
-router.get("/getPetInfo/:petId", authenticate, getPetInfo); // COMPLETE
+router.get("/getPetInfo/:petId", getPetInfo); // COMPLETE
 router.get("/getVaccinationCard/:petId", authenticate, getVaccinationCard); // COMPLETE
 
 // POST methods for /user
@@ -55,7 +56,7 @@ router.post("/createUser", authenticate, createUser); // COMPLETE
 router.post("/login", loginUser); // COMPLETE
 router.post("/changePassword", authenticate, changePassword); // COMPLETE
 router.post("/forgotUsername", forgotUsername); // COMPLETE
-router.post("/logout", logoutUser); // COMPLETE
+router.post("/logout", authenticate, logoutUser); // COMPLETE
 
 router.post("/requestOTP", requestOTP); // COMPLETE
 router.post("/verifyOTP", verifyOTP); // COMPLETE
@@ -64,6 +65,7 @@ router.post("/resetPassword", resetPassword); // COMPLETE
 router.post("/createOwner", authenticate, createOwner); // COMPLETE
 router.post("/getOwner", authenticate, getOwner); // COMPLETE
 
+router.post("/getPet", getPet); // COMPLETE
 router.post("/createPet", authenticate, createPet); // COMPLETE
 router.post(
 	"/createVaccinationCard/:petId",

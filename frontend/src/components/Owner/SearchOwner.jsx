@@ -5,8 +5,6 @@ import {
 	Box,
 	Button,
 	Card,
-	CardBody,
-	CardFooter,
 	FormControl,
 	Heading,
 	Input,
@@ -143,7 +141,7 @@ export default function SearchOwner() {
 								<List>
 									<ListItem>
 										<ListIcon as={MdSettings} color='yellowgreen' />
-										Enter one or more details to find desired owner.
+										Enter one, or more details to find desired owner.
 									</ListItem>
 									<ListItem>
 										<ListIcon as={MdSettings} color='yellowgreen' />
@@ -151,7 +149,7 @@ export default function SearchOwner() {
 										<Text display={"inline"} color={"yellowgreen"}>
 											search
 										</Text>{" "}
-										with no inputed details.
+										without any inputs.
 									</ListItem>
 								</List>
 							</Box>
