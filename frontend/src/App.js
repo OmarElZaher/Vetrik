@@ -8,7 +8,9 @@ import LoginPage from "./pages/General/Login";
 import SearchOwnerPage from "./pages/Owner/SearchOwner";
 import OwnerTablePage from "./pages/Owner/OwnerTable";
 import PetDetailsPage from "./pages/Pet/PetDetails";
+
 import SearchPetPage from "./pages/Pet/SearchPet";
+import PetTablePage from "./pages/Pet/PetTable";
 
 import theme from "./theme";
 
@@ -24,6 +26,7 @@ function App() {
 						<Route path='/search-owner' element={<SearchOwnerPage />} />
 						<Route path='/search-pet' element={<SearchPetPage />} />
 						<Route path='/owner-table' element={<OwnerTablePage />} />
+						<Route path='/pet-table' element={<PetTablePage />} />
 						<Route path='/pet-details/:petId' element={<PetDetailsPage />} />
 					</Routes>
 				</Router>

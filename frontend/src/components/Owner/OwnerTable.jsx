@@ -84,7 +84,6 @@ export default function OwnerTable() {
 	};
 
 	const handleAddPet = async () => {
-		// TODO: rerender page with new pet added
 		try {
 			setIsLoading(true);
 
@@ -132,6 +131,11 @@ export default function OwnerTable() {
 						...prev,
 						pets: prev.pets.concat(response.data.pet),
 					}));
+					setName("");
+					setType("");
+					setBreed("");
+					setGender("");
+					setDob(null);
 				} else {
 					toast({
 						title: response.data.message,
@@ -184,6 +188,53 @@ export default function OwnerTable() {
 						...prev,
 						pets: prev.pets.filter((pet) => pet._id !== response.data.petId),
 					}));
+				} else {
+					toast({
+						title: response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} catch (error) {
+				toast({
+					title: error.response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			} finally {
+				setIsLoading(false);
+			}
+		}
+	};
+
+	const handleDeleteOwner = async (ownerId) => {
+		const confirmDelete = window.confirm(
+			"Are you sure you want to delete this owner?"
+		);
+
+		if (confirmDelete) {
+			try {
+				setIsLoading(true);
+				const response = await axios.delete(
+					`http://localhost:1234/user/deleteOwner/${ownerId}`,
+					{
+						withCredentials: true,
+					}
+				);
+
+				if (response.status === 200) {
+					toast({
+						title: response.data.message,
+						status: "success",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+					navigate("/search-owner");
 				} else {
 					toast({
 						title: response.data.message,
@@ -289,6 +340,7 @@ export default function OwnerTable() {
 								height={"15%"}
 								display={"flex"}
 								justifyContent={"center"}
+								alignItems={"center"}
 							>
 								<Text
 									fontSize={"30px"}
@@ -298,7 +350,7 @@ export default function OwnerTable() {
 									ownerData.lastName
 								)}`}</Text>
 							</Box>
-
+							<hr />
 							<Box
 								height={"15%"}
 								mb={2}
@@ -338,9 +390,13 @@ export default function OwnerTable() {
 							<Box
 								height={"60%"}
 								display={"flex"}
+								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
 							>
+								<Text fontSize={"24px"} fontWeight={"bold"}>
+									Pets
+								</Text>
 								<TableContainer
 									width={"92%"}
 									maxHeight={"30vh"}
@@ -418,6 +474,7 @@ export default function OwnerTable() {
 							>
 								<Button
 									width={"25%"}
+									mr={2.5}
 									onClick={() => {
 										window.location.reload();
 									}}
@@ -433,6 +490,27 @@ export default function OwnerTable() {
 									leftIcon={<IoMdArrowRoundBack />}
 								>
 									Back To Filter
+								</Button>
+								<Button
+									width={"25%"}
+									variant={"outline"}
+									borderColor={"#EF5350"}
+									ml={2.5}
+									onClick={() => {
+										handleDeleteOwner(ownerData._id);
+									}}
+									_hover={{
+										bg: "#EF5350",
+										color: "#000",
+										transform: "scale(1.01)",
+									}}
+									_active={{
+										transform: "scale(0.99)",
+										opacity: "0.5",
+									}}
+									leftIcon={<TbTrashXFilled />}
+								>
+									Delete Owner Profile
 								</Button>
 							</Box>
 						</CardBody>
@@ -514,7 +592,7 @@ export default function OwnerTable() {
 										<option value='Bird'>Bird</option>
 										<option value='Turtle'>Turtle</option>
 										<option value='Monkey'>Monkey</option>
-										<option value='HamsterFish'>Hamster</option>
+										<option value='Hamster'>Hamster</option>
 										<option value='Fish'>Fish</option>
 									</Select>
 

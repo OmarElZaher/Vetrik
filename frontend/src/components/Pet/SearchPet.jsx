@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import {
 	Box,
@@ -218,6 +218,7 @@ export default function SearchPet() {
 
 						<FormControl
 							display={"flex"}
+							flexDirection={"column"}
 							justifyContent={"center"}
 							alignItems={"center"}
 						>
@@ -238,6 +239,16 @@ export default function SearchPet() {
 							>
 								Search
 							</Button>
+							<Text
+								_hover={{
+									color: "yellowgreen",
+									cursor: "pointer",
+								}}
+								textDecoration={"underline"}
+								mt={10}
+							>
+								<Link to={"/search-owner"}>Search Owner</Link>
+							</Text>
 						</FormControl>
 					</Box>
 				</Card>

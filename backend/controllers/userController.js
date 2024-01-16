@@ -593,6 +593,120 @@ const updateOwnerProfile = asyncHandler(async (req, res) => {
 	}
 });
 
+// @desc Add Pet To Owner
+// @route POST /user/addPetToOwner/:ownerId/:petId
+// @access Private
+const addPetToOwner = asyncHandler(async (req, res) => {
+	try {
+		const ownerId = req.params.ownerId;
+
+		if (!mongoose.Types.ObjectId.isValid(ownerId)) {
+			res.status(400).json({ message: "Invalid Owner ID" });
+			return;
+		}
+
+		const petId = req.params.petId;
+
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid Pet ID" });
+			return;
+		}
+
+		const owner = await Owner.findById(ownerId);
+
+		if (!owner) {
+			res.status(400).json({ message: "Owner Not Found!" });
+			return;
+		}
+
+		const pet = await Pet.findById(petId);
+
+		if (!pet) {
+			res.status(400).json({ message: "Pet Not Found!" });
+			return;
+		}
+
+		// Check if the pet is already associated with the owner
+		if (owner.pets.includes(petId)) {
+			res.status(400).json({ message: "Pet Already Associated With Owner" });
+			return;
+		}
+
+		owner.pets.push(petId);
+		await owner.save();
+
+		pet.owners.push(ownerId);
+		await pet.save();
+
+		res.status(200).json({ message: "Pet Added To Owner", owner: owner });
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Remove Pet From Owner
+// @route DELETE /user/removePetFromOwner/:ownerId/:petId
+// @access Private
+const removePetFromOwner = asyncHandler(async (req, res) => {
+	try {
+		const ownerId = req.params.ownerId;
+
+		if (!mongoose.Types.ObjectId.isValid(ownerId)) {
+			res.status(400).json({ message: "Invalid Owner ID" });
+			return;
+		}
+
+		const petId = req.params.petId;
+
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid Pet ID" });
+			return;
+		}
+
+		const owner = await Owner.findById(ownerId);
+
+		if (!owner) {
+			res.status(400).json({ message: "Owner Not Found!" });
+			return;
+		}
+
+		const pet = await Pet.findById(petId);
+
+		if (!pet) {
+			res.status(400).json({ message: "Pet Not Found!" });
+			return;
+		}
+
+		// Check if the pet is associated with the owner
+		if (!owner.pets.includes(petId)) {
+			res.status(400).json({ message: "Pet Not Associated With Owner" });
+			return;
+		}
+
+		// Remove the pet from the owner's pets array
+		const index = owner.pets.indexOf(petId);
+		if (index !== -1) {
+			owner.pets.splice(index, 1);
+			await owner.save();
+		}
+
+		// Remove the owner from the pet's owners array
+		const ownerIndex = pet.owners.indexOf(ownerId);
+		if (ownerIndex !== -1) {
+			pet.owners.splice(ownerIndex, 1);
+			await pet.save();
+		}
+
+		res
+			.status(200)
+			.json({ message: "Pet Removed From Owner", ownerId: owner._id });
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
 // @desc Delete Owner
 // @route DELETE /user/deleteOwner/:ownerId
 // @access Private
@@ -1314,10 +1428,12 @@ module.exports = {
 	verifyOTP,
 	resetPassword,
 	getPet,
+	addPetToOwner,
 	getPetInfo,
 	updatePetProfile,
 	deletePetProfile,
 	createVaccinationCard,
+	removePetFromOwner,
 	getVaccinationCard,
 	addVaccination,
 	renewVaccination,

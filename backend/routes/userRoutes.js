@@ -18,9 +18,11 @@ const {
 	requestOTP,
 	verifyOTP,
 	resetPassword,
+	addPetToOwner,
 	getPet,
 	getPetInfo,
 	updatePetProfile,
+	removePetFromOwner,
 	deletePetProfile,
 	createVaccinationCard,
 	getVaccinationCard,
@@ -64,6 +66,7 @@ router.post("/resetPassword", resetPassword); // COMPLETE
 
 router.post("/createOwner", authenticate, createOwner); // COMPLETE
 router.post("/getOwner", authenticate, getOwner); // COMPLETE
+router.post("/addPetToOwner/:ownerId/:petId", addPetToOwner); // COMPLETE
 
 router.post("/getPet", getPet); // COMPLETE
 router.post("/createPet", authenticate, createPet); // COMPLETE
@@ -91,6 +94,11 @@ router.delete("/deleteUser", authenticate, deleteUserProfile); // COMPLETE
 router.delete("/deleteUser/:userId", authenticate, deleteUser); // COMPLETE
 router.delete("/deleteOwner/:ownerId", authenticate, deleteOwnerProfile); // COMPLETE
 router.delete("/deletePet/:petId", authenticate, deletePetProfile); // COMPLETE
+router.delete(
+	"/removePetFromOwner/:ownerId/:petId",
+	authenticate,
+	removePetFromOwner
+); // COMPLETE
 router.delete(
 	"/deleteVaccination/:petId/:vaccinationId",
 	authenticate,
