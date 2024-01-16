@@ -418,7 +418,7 @@ export default function PetTable() {
 																transform: "scale(0.99)",
 																opacity: "0.5",
 															}}
-															mr={1.5}
+															mr={2.5}
 															leftIcon={<IoMdEye />}
 														>
 															View
@@ -448,7 +448,7 @@ export default function PetTable() {
 																		petData._id
 																	);
 																}}
-																mr={1.5}
+																mr={2.5}
 																leftIcon={<MdDelete />}
 															>
 																Remove
@@ -484,7 +484,7 @@ export default function PetTable() {
 										opacity: "0.5",
 									}}
 									leftIcon={<IoMdArrowRoundBack />}
-									mr={2.5}
+									mr={1.5}
 								>
 									Back To Filter
 								</Button>
@@ -512,7 +512,7 @@ export default function PetTable() {
 											handleDeletePet(petData._id);
 										}}
 										leftIcon={<MdDelete />}
-										ml={2.5}
+										ml={1.5}
 									>
 										Delete
 									</Button>
@@ -520,7 +520,7 @@ export default function PetTable() {
 							</Box>
 						</CardBody>
 					</Card>
-					<Card width={"30vw"} height={"80vh"} mt={15} mr={1}>
+					<Card width={"25vw"} height={"80vh"} mt={15} ml={1}>
 						<CardBody
 							display={"flex"}
 							flexDirection={"column"}

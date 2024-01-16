@@ -15,6 +15,7 @@ import {
 	Tr,
 	Th,
 	Td,
+	Tooltip,
 	TableContainer,
 	Select,
 	Text,
@@ -159,7 +160,7 @@ export default function OwnerTable() {
 		}
 	};
 
-	const handleDeletePet = async (petId) => {
+	const handleRemovePet = async (petId) => {
 		const confirmDelete = window.confirm(
 			"Are you sure you want to delete this pet?"
 		);
@@ -169,7 +170,7 @@ export default function OwnerTable() {
 				setIsLoading(true);
 
 				const response = await axios.delete(
-					`http://localhost:1234/user/deletePet/${petId}`,
+					`http://localhost:1234/user/removePetFromOwner/${ownerData._id}/${petId}`,
 					{
 						withCredentials: true,
 					}
@@ -431,32 +432,40 @@ export default function OwnerTable() {
 																transform: "scale(0.99)",
 																opacity: "0.5",
 															}}
-															mr={1.5}
+															mr={2.5}
 															leftIcon={<IoMdEye />}
 														>
 															View
 														</Button>
 
-														<Button
-															variant={"outline"}
-															borderColor={"#EF5350"}
-															onClick={() => {
-																handleDeletePet(pet._id);
-															}}
-															_hover={{
-																bg: "#EF5350",
-																color: "#000",
-																transform: "scale(1.01)",
-															}}
-															_active={{
-																transform: "scale(0.99)",
-																opacity: "0.5",
-															}}
-															ml={1.5}
-															leftIcon={<TbTrashXFilled />}
+														<Tooltip
+															hasArrow
+															label='Removes Pet from Owner Profile'
+															bg={"#EF5350"}
+															placement='top'
+															openDelay={75}
 														>
-															Delete
-														</Button>
+															<Button
+																variant={"outline"}
+																borderColor={"#EF5350"}
+																onClick={() => {
+																	handleRemovePet(pet._id);
+																}}
+																_hover={{
+																	bg: "#EF5350",
+																	color: "#000",
+																	transform: "scale(1.01)",
+																}}
+																_active={{
+																	transform: "scale(0.99)",
+																	opacity: "0.5",
+																}}
+																ml={2.5}
+																leftIcon={<TbTrashXFilled />}
+															>
+																Remove
+															</Button>
+														</Tooltip>
 													</Td>
 												</Tr>
 											))}
@@ -491,27 +500,35 @@ export default function OwnerTable() {
 								>
 									Back To Filter
 								</Button>
-								<Button
-									width={"25%"}
-									variant={"outline"}
-									borderColor={"#EF5350"}
-									ml={2.5}
-									onClick={() => {
-										handleDeleteOwner(ownerData._id);
-									}}
-									_hover={{
-										bg: "#EF5350",
-										color: "#000",
-										transform: "scale(1.01)",
-									}}
-									_active={{
-										transform: "scale(0.99)",
-										opacity: "0.5",
-									}}
-									leftIcon={<TbTrashXFilled />}
+								<Tooltip
+									hasArrow
+									label='Deletes Owner From System'
+									bg={"#EF5350"}
+									placement='top'
+									openDelay={75}
 								>
-									Delete Owner Profile
-								</Button>
+									<Button
+										width={"25%"}
+										variant={"outline"}
+										borderColor={"#EF5350"}
+										ml={2.5}
+										onClick={() => {
+											handleDeleteOwner(ownerData._id);
+										}}
+										_hover={{
+											bg: "#EF5350",
+											color: "#000",
+											transform: "scale(1.01)",
+										}}
+										_active={{
+											transform: "scale(0.99)",
+											opacity: "0.5",
+										}}
+										leftIcon={<TbTrashXFilled />}
+									>
+										Delete
+									</Button>
+								</Tooltip>
 							</Box>
 						</CardBody>
 					</Card>

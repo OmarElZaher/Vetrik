@@ -700,7 +700,11 @@ const removePetFromOwner = asyncHandler(async (req, res) => {
 
 		res
 			.status(200)
-			.json({ message: "Pet Removed From Owner", ownerId: owner._id });
+			.json({
+				message: "Pet Removed From Owner",
+				ownerId: owner._id,
+				petId: pet._id,
+			});
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
