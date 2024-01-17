@@ -3,21 +3,19 @@ import React from "react";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
 import Header from "../../components/General/Header";
-import Home from "../../components/General/Home";
-import Footer from "../../components/General/Footer";
+import AddPet from "../../components/Pet/AddPet";
 
-export default function HomePage() {
+export default function AddPetPage() {
 	return (
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Home | Modern Vet</title>
+					<title>Add Pet | Modern Vet</title>
 				</Helmet>
 			</HelmetProvider>
 
 			<Header />
-			<Home />
-			<Footer />
+			<AddPet />
 		</>
 	);
 }

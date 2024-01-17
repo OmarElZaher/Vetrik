@@ -396,7 +396,6 @@ const createOwner = asyncHandler(async (req, res) => {
 		mobileNumber,
 		email,
 		gender,
-		preferredContactMethod,
 		receiveNotifications,
 	} = req.body;
 
@@ -406,7 +405,6 @@ const createOwner = asyncHandler(async (req, res) => {
 		!mobileNumber ||
 		!email ||
 		!gender ||
-		!preferredContactMethod ||
 		!receiveNotifications
 	) {
 		res.status(400).json({ message: "Please Enter All Fields" });
@@ -479,7 +477,7 @@ const getOwnerInfo = asyncHandler(async (req, res) => {
 });
 
 // @desc Get Owner
-// @route GET /user/getOwner/
+// @route POST /user/getOwner/
 // @access Private
 const getOwner = asyncHandler(async (req, res) => {
 	const { firstName, lastName, mobileNumber, email } = req.body;

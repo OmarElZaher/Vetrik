@@ -12,6 +12,9 @@ import PetDetailsPage from "./pages/Pet/PetDetails";
 import SearchPetPage from "./pages/Pet/SearchPet";
 import PetTablePage from "./pages/Pet/PetTable";
 
+import AddOwnerPage from "./pages/Owner/AddOwner";
+import AddPetPage from "./pages/Pet/AddPet";
+
 import theme from "./theme";
 
 function App() {
@@ -28,6 +31,9 @@ function App() {
 						<Route path='/owner-table' element={<OwnerTablePage />} />
 						<Route path='/pet-table' element={<PetTablePage />} />
 						<Route path='/pet-details/:petId' element={<PetDetailsPage />} />
+
+						<Route path='/add-owner' element={<AddOwnerPage />} />
+						<Route path='/add-pet' element={<AddPetPage />} />
 					</Routes>
 				</Router>
 			</ChakraProvider>

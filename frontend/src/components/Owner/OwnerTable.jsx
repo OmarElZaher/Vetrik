@@ -273,7 +273,6 @@ export default function OwnerTable() {
 
 	const handleGenderChange = (e) => {
 		setGender(e.target.value);
-		console.log("GENDER ==>", gender);
 	};
 
 	const handleDobChange = (e) => {
@@ -354,7 +353,7 @@ export default function OwnerTable() {
 							<hr />
 							<Box
 								height={"15%"}
-								mb={2}
+								my={2}
 								display={"flex"}
 								justifyContent={"space-evenly"}
 							>
@@ -384,6 +383,27 @@ export default function OwnerTable() {
 										Mobile Number
 									</Text>
 									<Text fontSize={"20px"}>{ownerData.mobileNumber}</Text>
+								</Box>
+
+								<Box
+									width={"33%"}
+									m={2}
+									p={2}
+									display={"flex"}
+									flexDirection={"column"}
+									justifyContent={"center"}
+									alignItems={"center"}
+								>
+									<Text fontSize={"24px"} fontWeight={"bold"}>
+										Contact Method
+									</Text>
+									<Text fontSize={"20px"}>
+										{ownerData.preferredContactMethod === "Both"
+											? "Phone & Email"
+											: ownerData.preferredContactMethod === "Neither"
+											? "None"
+											: ownerData.preferredContactMethod}
+									</Text>
 								</Box>
 							</Box>
 

@@ -118,9 +118,10 @@ export default function SearchOwner() {
 						justifyContent={"space-around"}
 						alignItems={"center"}
 						width={"100%"}
-						height={"100vh"}
+						height={"87vh"}
+						bg={"#F3F3F3"}
 					>
-						<Card width='50%' height='75%'>
+						<Card width='80%' height='80%'>
 							<Box
 								px={5}
 								pt={5}
@@ -232,17 +233,6 @@ export default function SearchOwner() {
 									>
 										Search
 									</Button>
-
-									<Text
-										_hover={{
-											color: "yellowgreen",
-											cursor: "pointer",
-										}}
-										textDecoration={"underline"}
-										mt={10}
-									>
-										<Link to={"/search-pet"}>Search Pet</Link>
-									</Text>
 								</FormControl>
 							</Box>
 						</Card>

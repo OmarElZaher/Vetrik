@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { Box, Button, Icon, useToast } from "@chakra-ui/react";
@@ -78,7 +78,7 @@ export default function Header() {
 					alignItems='center'
 					key={2}
 				>
-					LOGO PLACEMENT
+					<Link to={"/"}>LOGO PLACEMENT</Link>
 				</Box>
 				<Box
 					width='33vw'
