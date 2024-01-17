@@ -7,6 +7,7 @@ export default function Footer() {
 			color={"#F3F3F3"}
 			display={"flex"}
 			flexDirection={"column"}
+			height={"8vh"}
 		>
 			<Box flex={"1"}></Box>
 			<Container

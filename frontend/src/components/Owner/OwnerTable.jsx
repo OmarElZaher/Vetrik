@@ -326,7 +326,7 @@ export default function OwnerTable() {
 					justifyContent={"center"}
 					alignItems={"center"}
 					width={"100vw"}
-					height={"100vh"}
+					height={"87vh"}
 				>
 					{/* Owner Information */}
 					<Card width='60vw' height='80vh' mt={15} mr={2}>
@@ -691,10 +691,11 @@ export default function OwnerTable() {
 						</CardBody>
 					</Card>
 				</Box>
+				<Footer />
 			</>
 		) : (
 			<>
-				<Box width={"100%"} height={"90vh"}>
+				<Box width={"100%"} height={"87vh"}>
 					<Box
 						display={"flex"}
 						justifyContent={"center"}
@@ -763,7 +764,12 @@ export default function OwnerTable() {
 							</Table>
 						</TableContainer>
 					</Box>
-					<Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+					<Box
+						display={"flex"}
+						justifyContent={"center"}
+						alignItems={"center"}
+						height={"10%"}
+					>
 						<Button
 							onClick={() => {
 								localStorage.removeItem("ownerFilterData");
@@ -778,7 +784,6 @@ export default function OwnerTable() {
 								transform: "scale(0.99)",
 								opacity: "0.5",
 							}}
-							my={10}
 							width={"25vw"}
 							leftIcon={<IoMdArrowRoundBack />}
 						>
