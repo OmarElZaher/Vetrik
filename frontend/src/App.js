@@ -8,12 +8,15 @@ import LoginPage from "./pages/General/Login";
 import SearchOwnerPage from "./pages/Owner/SearchOwner";
 import OwnerTablePage from "./pages/Owner/OwnerTable";
 import PetDetailsPage from "./pages/Pet/PetDetails";
+import OwnerDetailsPage from "./pages/Owner/OwnerDetails";
 
 import SearchPetPage from "./pages/Pet/SearchPet";
 import PetTablePage from "./pages/Pet/PetTable";
 
 import AddOwnerPage from "./pages/Owner/AddOwner";
 import AddPetPage from "./pages/Pet/AddPet";
+
+import EditProfilePage from "./pages/User/EditProfile";
 
 import theme from "./theme";
 
@@ -31,9 +34,14 @@ function App() {
 						<Route path='/owner-table' element={<OwnerTablePage />} />
 						<Route path='/pet-table' element={<PetTablePage />} />
 						<Route path='/pet-details/:petId' element={<PetDetailsPage />} />
+						<Route
+							path='/owner-details/:ownerId'
+							element={<OwnerDetailsPage />}
+						/>
 
 						<Route path='/add-owner' element={<AddOwnerPage />} />
 						<Route path='/add-pet' element={<AddPetPage />} />
+						<Route path='/edit-user' element={<EditProfilePage />} />
 					</Routes>
 				</Router>
 			</ChakraProvider>

@@ -373,9 +373,11 @@ const getUserInfo = asyncHandler(async (req, res) => {
 			res.status(200).json({
 				message: "User Retrieved Successfully",
 				_id: user._id,
-				username: user.username,
+				firstName: user.firstName,
+				lastName: user.lastName,
 				email: user.email,
-				name: user.fullName,
+				username: user.username,
+				isAdmin: user.isAdmin,
 			});
 		} else {
 			res.status(400).json({ message: "User Not Found" });
@@ -458,7 +460,7 @@ const getOwnerInfo = asyncHandler(async (req, res) => {
 		const ownerId = req.params.ownerId;
 
 		if (!mongoose.Types.ObjectId.isValid(ownerId)) {
-			res.status(400).json({ message: "Invalid User ID" });
+			res.status(400).json({ message: "Invalid Owner ID" });
 			return;
 		}
 
@@ -696,13 +698,11 @@ const removePetFromOwner = asyncHandler(async (req, res) => {
 			await pet.save();
 		}
 
-		res
-			.status(200)
-			.json({
-				message: "Pet Removed From Owner",
-				ownerId: owner._id,
-				petId: pet._id,
-			});
+		res.status(200).json({
+			message: "Pet Removed From Owner",
+			ownerId: owner._id,
+			petId: pet._id,
+		});
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
@@ -842,7 +842,7 @@ const getPetInfo = asyncHandler(async (req, res) => {
 		const petId = req.params.petId;
 
 		if (!mongoose.Types.ObjectId.isValid(petId)) {
-			res.status(400).json({ message: "Invalid User ID" });
+			res.status(400).json({ message: "Invalid Pet ID" });
 			return;
 		}
 

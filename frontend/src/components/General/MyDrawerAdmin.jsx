@@ -30,7 +30,7 @@ import { GoHome } from "react-icons/go";
 
 import NavigationLinkDrawer from "./NavigationLinkDrawer";
 
-export default function MyDrawer() {
+export default function MyDrawerAdmin() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const btnRef = useRef();
 
@@ -218,7 +218,7 @@ export default function MyDrawer() {
 											/>
 										}
 									>
-										Search
+										Search Users
 									</Button>
 								</Box>
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, Grid } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 
 export default function Home() {
 	return (
