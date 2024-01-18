@@ -90,12 +90,7 @@ export default function AddPet() {
 							isClosable: true,
 							position: "top",
 						});
-						setName("");
-						setType("");
-						setBreed("");
-						setGender("");
-						setDob(null);
-						setOwnerEmail("");
+						navigate(`/pet-details/${response.data.pet._id}`);
 					} else {
 						toast({
 							title: response.data.message,

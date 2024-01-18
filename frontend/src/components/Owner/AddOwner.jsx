@@ -96,7 +96,7 @@ export default function AddOwner() {
 						isClosable: true,
 						position: "top",
 					});
-					navigate("/search-owner");
+					navigate(`/owner-details/${response.data.ownerId}`);
 				} else {
 					toast({
 						title: response.data.message,

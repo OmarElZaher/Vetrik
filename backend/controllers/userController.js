@@ -444,7 +444,9 @@ const createOwner = asyncHandler(async (req, res) => {
 				}
 			}
 
-			res.status(200).json({ message: "Owner Created Successfully" });
+			res
+				.status(200)
+				.json({ message: "Owner Created Successfully", ownerId: owner._id });
 		}
 	} catch (error) {
 		res.status(500);
