@@ -45,6 +45,7 @@ export default function OwnerDetails() {
 	const [owner, setOwner] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [gotData, setGotData] = useState(false);
+	const [error, setError] = useState(null);
 
 	// Add Pet Details
 	const [name, setName] = useState("");
@@ -63,9 +64,10 @@ export default function OwnerDetails() {
 				}
 			);
 			if (response.status === 200) {
-				console.log("RESPONSE ==> ", response.data);
 				setOwner(response.data);
+				setGotData(true);
 			} else {
+				setError(response.data.message);
 				toast({
 					title: response.data.message,
 					status: "error",
@@ -75,6 +77,7 @@ export default function OwnerDetails() {
 				});
 			}
 		} catch (error) {
+			setError(error.response.data.message);
 			toast({
 				title: error.response.data.message,
 				status: "error",
@@ -264,12 +267,49 @@ export default function OwnerDetails() {
 
 	useEffect(() => {
 		fetchData();
-		setGotData(true);
 	}, []);
 
-	return isLoading || !gotData ? (
+	return isLoading ? (
 		<Spinner />
-	) : (
+	) : error ? (
+		<>
+			<Box
+				display={"flex"}
+				justifyContent={"center"}
+				alignItems={"center"}
+				flexDirection={"column"}
+				height={"87vh"}
+				bg={"#F3F3F3"}
+			>
+				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
+					ERROR
+				</Text>
+				<Text fontSize={"40px"} textDecoration={"underline"}>
+					{error}
+				</Text>
+				<Button
+					onClick={() => {
+						navigate("/search-owner");
+					}}
+					_hover={{
+						bg: "yellowgreen",
+						color: "#000",
+						transform: "scale(1.01)",
+					}}
+					_active={{
+						transform: "scale(0.99)",
+						opacity: "0.5",
+					}}
+					bg={"#FFF"}
+					mt={10}
+					width={"25vw"}
+				>
+					Go Back To Search
+				</Button>
+			</Box>
+			<Footer />
+		</>
+	) : gotData ? (
 		<>
 			<Box
 				display={"flex"}
@@ -632,5 +672,7 @@ export default function OwnerDetails() {
 			</Box>
 			<Footer />
 		</>
+	) : (
+		<></>
 	);
 }

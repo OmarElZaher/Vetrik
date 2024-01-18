@@ -66,6 +66,7 @@ export default function PetDetails() {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [gotData, setGotData] = useState(false);
+	const [isError, setIsError] = useState(null);
 
 	const fetchData = async () => {
 		try {
@@ -78,21 +79,26 @@ export default function PetDetails() {
 			);
 			if (response.status === 200) {
 				setPetAge(response.data.petAge);
-				return setPet(response.data.pet);
+				setPet(response.data.pet);
+				setGotData(true);
 			} else {
+				setIsError(response.data.message);
 				toast({
 					title: response.data.message,
 					status: "error",
 					duration: 2500,
 					isClosable: true,
+					position: "top",
 				});
 			}
 		} catch (error) {
+			setIsError(error.response.data.message);
 			toast({
 				title: error.response.data.message,
 				status: "error",
 				duration: 2500,
 				isClosable: true,
+				position: "top",
 			});
 		} finally {
 			setIsLoading(false);
@@ -101,7 +107,6 @@ export default function PetDetails() {
 
 	useEffect(() => {
 		fetchData();
-		setGotData(true);
 	}, []);
 
 	const handleRemovePetFromOwner = async (ownerId, petId) => {
@@ -243,9 +248,47 @@ export default function PetDetails() {
 		}
 	};
 
-	return isLoading || !gotData ? (
+	return isLoading ? (
 		<Spinner />
-	) : (
+	) : isError ? (
+		<>
+			<Box
+				display={"flex"}
+				justifyContent={"center"}
+				alignItems={"center"}
+				flexDirection={"column"}
+				height={"87vh"}
+				bg={"#F3F3F3"}
+			>
+				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
+					ERROR
+				</Text>
+				<Text fontSize={"40px"} textDecoration={"underline"}>
+					{isError}
+				</Text>
+				<Button
+					onClick={() => {
+						navigate("/search-pet");
+					}}
+					_hover={{
+						bg: "yellowgreen",
+						color: "#000",
+						transform: "scale(1.01)",
+					}}
+					_active={{
+						transform: "scale(0.99)",
+						opacity: "0.5",
+					}}
+					bg={"#FFF"}
+					mt={10}
+					width={"25vw"}
+				>
+					Go Back To Search
+				</Button>
+			</Box>
+			<Footer />
+		</>
+	) : gotData ? (
 		<>
 			<>
 				<Box
@@ -680,5 +723,7 @@ export default function PetDetails() {
 				<Footer />
 			</>
 		</>
+	) : (
+		<></>
 	);
 }
