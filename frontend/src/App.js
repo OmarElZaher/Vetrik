@@ -18,6 +18,8 @@ import AddPetPage from "./pages/Pet/AddPet";
 
 import EditProfilePage from "./pages/User/EditProfile";
 
+import NotFoundPage from "./pages/General/NotFound";
+
 import theme from "./theme";
 
 function App() {
@@ -42,6 +44,8 @@ function App() {
 						<Route path='/add-owner' element={<AddOwnerPage />} />
 						<Route path='/add-pet' element={<AddPetPage />} />
 						<Route path='/edit-user' element={<EditProfilePage />} />
+
+						<Route path='*' element={<NotFoundPage />} />
 					</Routes>
 				</Router>
 			</ChakraProvider>
