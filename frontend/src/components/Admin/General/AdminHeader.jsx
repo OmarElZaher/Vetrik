@@ -7,7 +7,7 @@ import { Box, Button, Icon, useToast } from "@chakra-ui/react";
 import { IoMdLogOut } from "react-icons/io";
 
 import MyDrawerAdmin from "./MyDrawerAdmin";
-import Spinner from "./Spinner";
+import Spinner from "../../General/Spinner";
 
 export default function AdminHeader() {
 	const navigate = useNavigate();

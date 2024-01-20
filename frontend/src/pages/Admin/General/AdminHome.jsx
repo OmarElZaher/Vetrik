@@ -2,8 +2,10 @@ import React from "react";
 
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
-import AdminHeader from "../../components/General/AdminHeader";
-import Footer from "../../components/General/Footer";
+import { Box } from "@chakra-ui/react";
+
+import AdminHeader from "../../../components/Admin/General/AdminHeader";
+import Footer from "../../../components/General/Footer";
 
 export default function AdminHomePage() {
 	return (
@@ -15,6 +17,13 @@ export default function AdminHomePage() {
 			</HelmetProvider>
 
 			<AdminHeader />
+			<Box
+				display={"flex"}
+				justifyContent={"center"}
+				alignItems={"center"}
+				height={"87vh"}
+				bg={"#F3F3F3"}
+			/>
 			<Footer />
 		</>
 	);
