@@ -214,18 +214,33 @@ const setAdmin = asyncHandler(async (req, res) => {
 	}
 });
 
-// @desc Get All Users (Except Logged In User)
-// @route GET /user/getUsers
+// @desc Get Users (Except Logged In User)
+// @route POST /user/getUsers
 // @access Private
-// TODO: Fix get users to filter, not just get all users
 const getUsers = asyncHandler(async (req, res) => {
 	try {
 		if (req.user.isAdmin) {
-			const users = await User.find({ username: { $ne: req.user.username } });
+			const { firstName, lastName, username, email } = req.body;
+			let query = { username: { $ne: req.user.username } };
+
+			if (firstName) {
+				query.firstName = new RegExp(firstName, "i");
+			}
+			if (lastName) {
+				query.lastName = new RegExp(lastName, "i");
+			}
+			if (username) {
+				query.username = new RegExp(username, "i");
+			}
+			if (email) {
+				query.email = new RegExp(email, "i");
+			}
+
+			const users = await User.find(query);
 
 			if (users.length > 0) {
 				res.status(200).json({
-					message: "Gotten All Users Successfuly",
+					message: "Users Retrieved",
 					users,
 				});
 			} else {
@@ -233,11 +248,10 @@ const getUsers = asyncHandler(async (req, res) => {
 			}
 		} else {
 			res.status(400).json({ message: "Unauthorized: Not An Admin" });
-			return;
 		}
 	} catch (error) {
 		res.status(500);
-		throw new Error(error);
+		throw new Error(error.message);
 	}
 });
 

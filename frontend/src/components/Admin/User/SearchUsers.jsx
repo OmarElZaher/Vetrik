@@ -31,18 +31,32 @@ export default function SearchUsers() {
 	const toast = useToast();
 
 	const [isLoading, setIsLoading] = useState(false);
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
 	const [username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 
 	const handleSearch = async () => {
 		try {
 			setIsLoading(true);
-			const response = await axios.get("http://localhost:1234/user/getUsers", {
-				withCredentials: true,
-			});
+			const response = await axios.post(
+				"http://localhost:1234/user/getUsers",
+				{
+					firstName: firstName,
+					lastName: lastName,
+					username: username,
+					email: email,
+				},
+				{
+					withCredentials: true,
+				}
+			);
 
 			if (response.status === 200) {
-				localStorage.setItem("users", JSON.stringify(response.data.users));
+				localStorage.setItem(
+					"usersFilterData",
+					JSON.stringify(response.data.users)
+				);
 				navigate("/admin/users-table");
 			} else {
 				toast({
@@ -118,6 +132,34 @@ export default function SearchUsers() {
 
 							<Box p={10} height={"50%"}>
 								{/* Search Form */}
+								<FormControl
+									id='name'
+									display={"flex"}
+									justifyContent={"space-evenly"}
+									mb={5}
+								>
+									<Input
+										type='text'
+										name='firstName'
+										placeholder='First Name'
+										value={firstName}
+										onChange={(e) => {
+											setFirstName(e.target.value);
+										}}
+										mr={2.5}
+									/>
+									<Input
+										type='text'
+										name='lastName'
+										placeholder='Last Name'
+										value={lastName}
+										onChange={(e) => {
+											setLastName(e.target.value);
+										}}
+										ml={2.5}
+									/>
+								</FormControl>
+
 								<FormControl
 									id='username'
 									display={"flex"}

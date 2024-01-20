@@ -23,6 +23,7 @@ import NotFoundPage from "./pages/General/NotFound";
 import ChangePasswordPage from "./pages/User/ChangePassword";
 
 import SearchUsersPage from "./pages/Admin/User/SearchUsers";
+import UsersTablePage from "./pages/Admin/User/UsersTable";
 
 import theme from "./theme";
 
@@ -52,6 +53,7 @@ function App() {
 						<Route path='/edit-user' element={<EditProfilePage />} />
 
 						<Route path='/admin/search-users' element={<SearchUsersPage />} />
+						<Route path='/admin/users-table' element={<UsersTablePage />} />
 
 						<Route path='*' element={<NotFoundPage />} />
 					</Routes>

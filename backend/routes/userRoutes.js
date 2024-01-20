@@ -49,11 +49,11 @@ const { authenticate } = require("../middleware/authMiddleware");
 router.get("/getUserInfo", authenticate, getUserInfo); //
 router.get("/getOwnerInfo/:ownerId", authenticate, getOwnerInfo); // COMPLETE
 router.get("/getOwnerPets/:ownerId", authenticate, getOwnerPets); // COMPLETE
-router.get("/getUsers", authenticate, getUsers); // COMPLETE
-router.get("/getPetInfo/:petId", getPetInfo); // COMPLETE
+router.get("/getPetInfo/:petId", authenticate, getPetInfo); // COMPLETE
 router.get("/getVaccinationCard/:petId", authenticate, getVaccinationCard); // COMPLETE
 
 // POST methods for /user
+router.post("/getUsers", authenticate, getUsers); // COMPLETE
 router.post("/createAdmin", authenticate, createAdmin); // COMPLETE
 router.post("/createUser", authenticate, createUser); // COMPLETE
 router.post("/login", loginUser); // COMPLETE
