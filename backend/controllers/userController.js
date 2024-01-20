@@ -217,6 +217,7 @@ const setAdmin = asyncHandler(async (req, res) => {
 // @desc Get All Users (Except Logged In User)
 // @route GET /user/getUsers
 // @access Private
+// TODO: Fix get users to filter, not just get all users
 const getUsers = asyncHandler(async (req, res) => {
 	try {
 		if (req.user.isAdmin) {

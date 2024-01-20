@@ -161,7 +161,7 @@ export default function MyDrawerAdmin() {
 									justifyContent='flex-start'
 									alignItems='center'
 								>
-									<Link to={"/search-users"}>
+									<Link to={"/admin/search-users"}>
 										<Button
 											_hover={{
 												bg: "#D4F500",

@@ -22,6 +22,8 @@ import NotFoundPage from "./pages/General/NotFound";
 
 import ChangePasswordPage from "./pages/User/ChangePassword";
 
+import SearchUsersPage from "./pages/Admin/User/SearchUsers";
+
 import theme from "./theme";
 
 function App() {
@@ -48,6 +50,8 @@ function App() {
 						<Route path='/add-owner' element={<AddOwnerPage />} />
 						<Route path='/add-pet' element={<AddPetPage />} />
 						<Route path='/edit-user' element={<EditProfilePage />} />
+
+						<Route path='/admin/search-users' element={<SearchUsersPage />} />
 
 						<Route path='*' element={<NotFoundPage />} />
 					</Routes>
