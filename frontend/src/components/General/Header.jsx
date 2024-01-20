@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -46,6 +46,46 @@ export default function Header() {
 		}
 	};
 
+	const [isAdmin, setIsAdmin] = useState(false);
+
+	const fetchData = async () => {
+		try {
+			setIsLoading(true);
+			const response = await axios.get(
+				"http://localhost:1234/user/getUserInfo",
+				{
+					withCredentials: true,
+				}
+			);
+
+			if (response.status === 200) {
+				setIsAdmin(response.data.isAdmin);
+			} else {
+				toast({
+					title: response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			}
+		} catch (error) {
+			toast({
+				title: error.response.data.message,
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, []);
+
 	return isLoading ? (
 		<Spinner />
 	) : (
@@ -79,7 +119,7 @@ export default function Header() {
 					alignItems='center'
 					key={2}
 				>
-					<Link to={"/"}>LOGO PLACEMENT</Link>
+					<Link to={isAdmin ? "/admin" : "/"}>LOGO PLACEMENT</Link>
 				</Box>
 				<Box
 					width='33vw'

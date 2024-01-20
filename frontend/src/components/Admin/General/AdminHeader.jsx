@@ -78,7 +78,7 @@ export default function AdminHeader() {
 					alignItems='center'
 					key={2}
 				>
-					<Link to={"/"}>LOGO PLACEMENT</Link>
+					<Link to={"/admin"}>LOGO PLACEMENT</Link>
 				</Box>
 				<Box
 					width='33vw'
