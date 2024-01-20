@@ -1,13 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Button, Icon, Text } from "@chakra-ui/react";
+
+import { IoMdHome } from "react-icons/io";
 
 import Footer from "./Footer";
 
 export default function NotFound() {
 	const navigate = useNavigate();
-    
+
 	return (
 		<>
 			<Box
@@ -19,7 +21,7 @@ export default function NotFound() {
 				bg={"#F3F3F3"}
 			>
 				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-					ERROR 404
+					404 ERROR
 				</Text>
 				<Text fontSize={"40px"} textDecoration={"underline"}>
 					PAGE NOT FOUND
@@ -39,6 +41,7 @@ export default function NotFound() {
 					}}
 					bg={"#FFF"}
 					mt={10}
+					leftIcon={<Icon as={IoMdHome} />}
 					width={"25vw"}
 				>
 					Home

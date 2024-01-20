@@ -27,6 +27,7 @@ import { MdOutlinePets } from "react-icons/md";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { GoHome } from "react-icons/go";
+import { MdOutlinePassword } from "react-icons/md";
 
 import NavigationLinkDrawer from "./NavigationLinkDrawer";
 
@@ -39,6 +40,7 @@ export default function MyDrawerAdmin() {
 	const [isAddHovered, setIsAddHovered] = useState(false);
 	const [isEditHovered, setIsEditHovered] = useState(false);
 	const [isHomeHovered, setIsHomeHovered] = useState(false);
+	const [isChangePasswordHovered, setIsChangePasswordHovered] = useState(false);
 
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isAddOpen, setIsAddOpen] = useState(false);
@@ -54,6 +56,8 @@ export default function MyDrawerAdmin() {
 			setIsEditHovered(true);
 		} else if (type === "home") {
 			setIsHomeHovered(true);
+		} else if (type === "changePassword") {
+			setIsChangePasswordHovered(true);
 		}
 	};
 
@@ -68,6 +72,8 @@ export default function MyDrawerAdmin() {
 			setIsEditHovered(false);
 		} else if (type === "home") {
 			setIsHomeHovered(false);
+		} else if (type === "changePassword") {
+			setIsChangePasswordHovered(false);
 		}
 	};
 
@@ -389,6 +395,51 @@ export default function MyDrawerAdmin() {
 											}
 										>
 											Edit Profile
+										</Button>
+									</Link>
+								</Box>
+							</Box>
+
+							{/* Change Password Button */}
+							<Box>
+								<Box
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
+								>
+									<Link to={"/change-password"}>
+										<Button
+											_hover={{
+												bg: "#D4F500",
+												borderColor: "#D4F500",
+												color: "#000",
+												transform: "scale(1.05)",
+											}}
+											onMouseOver={() => {
+												handleHover("changePassword");
+											}}
+											onMouseOut={() => {
+												handleMouseOut("changePassword");
+											}}
+											_active={{
+												transform: "scale(0.98)",
+												opacity: "0.5",
+											}}
+											justifyContent={"flex-start"}
+											alignItems={"center"}
+											transition='all 0.15s ease'
+											bg='#121211'
+											color='#8F8F8F'
+											fontSize='18px'
+											width='272px'
+											leftIcon={
+												<Icon
+													as={MdOutlinePassword}
+													color={isChangePasswordHovered ? "#000" : "#8F8F8F"}
+												/>
+											}
+										>
+											Change Password
 										</Button>
 									</Link>
 								</Box>
