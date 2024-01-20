@@ -20,6 +20,8 @@ import EditProfilePage from "./pages/User/EditProfile";
 
 import NotFoundPage from "./pages/General/NotFound";
 
+import ChangePasswordPage from "./pages/User/ChangePassword";
+
 import theme from "./theme";
 
 function App() {
@@ -40,6 +42,8 @@ function App() {
 							path='/owner-details/:ownerId'
 							element={<OwnerDetailsPage />}
 						/>
+
+						<Route path='/change-password' element={<ChangePasswordPage />} />
 
 						<Route path='/add-owner' element={<AddOwnerPage />} />
 						<Route path='/add-pet' element={<AddPetPage />} />

@@ -1,0 +1,81 @@
+BACKEND
+When updating user email, send confirmation message with OTP etc same for when creating a new user
+Lessa lazem a3mel hewar el upload healthrecords w keda dih mohema mot actually bas other wise supposedly the backend is complete
+
+FRONTEND
+fix change password input boxes
+
+
+
+Revoking a token typically involves changing some property of the user (like the password or a token-related field) to invalidate the existing token. Here's a general outline of how you might approach token revocation:
+
+1. **Add a `tokenVersion` Field to the User Schema:**
+   - In your `User` schema, add a field like `tokenVersion`. This field will be used to track the version of the authentication token.
+
+   ```javascript
+   const userSchema = new mongoose.Schema(
+     {
+       // ... other fields ...
+       password: { type: String, required: true },
+       tokenVersion: { type: Number, default: 0 }, // Add this field
+     },
+     { timestamps: true }
+   );
+   ```
+
+2. **Increment `tokenVersion` on Password Change:**
+   - When the user changes their password, increment the `tokenVersion`.
+
+   ```javascript
+   const changePassword = asyncHandler(async (req, res) => {
+     // ... existing code ...
+
+     try {
+       // ... existing code ...
+
+       // Change the password and increment the tokenVersion
+       user.password = newPassword;
+       user.tokenVersion += 1;
+       await user.save();
+
+       // ... existing code ...
+
+       return res.status(200).json({ message: "Password changed", status: 200 });
+     } catch (error) {
+       // ... existing code ...
+     }
+   });
+   ```
+
+3. **Include `tokenVersion` in JWT Payload:**
+   - When signing the JWT token during user login or registration, include the `tokenVersion` in the payload.
+
+   ```javascript
+   const jwtPayload = {
+     user: {
+       _id: user._id,
+       username: user.username,
+       // ... other fields ...
+       tokenVersion: user.tokenVersion,
+     },
+   };
+
+   const token = jwt.sign(jwtPayload, secretKey, { expiresIn: "1h" });
+   ```
+
+4. **Verify Token Against `tokenVersion`:**
+   - When verifying the JWT token during each authenticated request, check if the `tokenVersion` in the token matches the `tokenVersion` stored in the user document.
+
+   ```javascript
+   const decodedToken = jwt.verify(token, secretKey);
+
+   const user = await User.findOne({
+     _id: decodedToken.user._id,
+     tokenVersion: decodedToken.user.tokenVersion,
+   });
+   ```
+
+5. **Handle Token Validation Errors:**
+   - If the `tokenVersion` doesn't match or if the user logs out, you might want to handle these cases by denying access, forcing a reauthentication, or other actions based on your application's requirements.
+
+By incrementing `tokenVersion` on each password change, you essentially invalidate all existing tokens because the version in the token won't match the version in the user document. Users will need to log in again to obtain a new token with the updated version.
