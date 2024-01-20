@@ -66,7 +66,7 @@ export default function PetDetails() {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [gotData, setGotData] = useState(false);
-	const [isError, setIsError] = useState(null);
+	const [error, setIsError] = useState(null);
 
 	const fetchData = async () => {
 		try {
@@ -250,7 +250,7 @@ export default function PetDetails() {
 
 	return isLoading ? (
 		<Spinner />
-	) : isError ? (
+	) : error ? (
 		<>
 			<Box
 				display={"flex"}
@@ -264,7 +264,7 @@ export default function PetDetails() {
 					ERROR
 				</Text>
 				<Text fontSize={"40px"} textDecoration={"underline"}>
-					{isError}
+					{error}
 				</Text>
 				<Button
 					onClick={() => {
@@ -478,6 +478,30 @@ export default function PetDetails() {
 								alignItems={"center"}
 								height={"10%"}
 							>
+								<Button
+									width={"40%"}
+									onClick={() => {
+										if (localStorage.getItem("petFilterData")) {
+											navigate("/pet-table");
+										} else {
+											navigate("/search-pet");
+										}
+									}}
+									_hover={{
+										bg: "yellowgreen",
+										color: "#000",
+										transform: "scale(1.01)",
+									}}
+									_active={{
+										transform: "scale(0.99)",
+										opacity: "0.5",
+									}}
+									leftIcon={<IoMdArrowRoundBack />}
+									mr={2.5}
+								>
+									Filtered Pets Table
+								</Button>
+
 								<Tooltip
 									hasArrow
 									label='Deletes Pet From System'

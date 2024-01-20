@@ -484,13 +484,36 @@ export default function OwnerDetails() {
 							</TableContainer>
 						</Box>
 
-						{/* Back Button */}
+						{/* Back, Delete Button */}
 						<Box
 							display={"flex"}
 							justifyContent={"center"}
 							alignItems={"center"}
 							height={"10%"}
 						>
+							<Button
+								width={"40%"}
+								mr={2.5}
+								onClick={() => {
+									if (localStorage.getItem("ownerFilterData")) {
+										navigate("/owner-table");
+									} else {
+										navigate("/search-owner");
+									}
+								}}
+								_hover={{
+									bg: "yellowgreen",
+									color: "#000",
+									transform: "scale(1.01)",
+								}}
+								_active={{
+									transform: "scale(0.99)",
+									opacity: "0.5",
+								}}
+								leftIcon={<IoMdArrowRoundBack />}
+							>
+								Filtered Owners Table
+							</Button>
 							<Tooltip
 								hasArrow
 								label='Deletes Owner From System'

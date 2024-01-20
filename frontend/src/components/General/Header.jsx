@@ -15,6 +15,7 @@ export default function Header() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleLogout = async () => {
+		localStorage.clear();
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
