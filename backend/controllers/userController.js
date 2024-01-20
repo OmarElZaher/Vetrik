@@ -175,6 +175,45 @@ const createAdmin = asyncHandler(async (req, res) => {
 	}
 });
 
+// @desc Set user as admin
+// @route PATCH /user/setAdmin/:userId
+// @access Private
+const setAdmin = asyncHandler(async (req, res) => {
+	try {
+		if (!req.user.isAdmin) {
+			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			return;
+		}
+
+		const { userId } = req.params;
+
+		if (!mongoose.Types.ObjectId.isValid(userId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
+		const user = await User.findById(userId);
+
+		if (!user) {
+			res.status(400).json({ message: "User Not Found" });
+			return;
+		}
+
+		if (user.isAdmin) {
+			res.status(400).json({ message: "User Is Already An Admin" });
+			return;
+		}
+
+		user.isAdmin = true;
+		await user.save();
+
+		res.status(200).json({ message: "User Role Changed To Admin" });
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
 // @desc Get All Users (Except Logged In User)
 // @route GET /user/getUsers
 // @access Private
@@ -1419,6 +1458,7 @@ module.exports = {
 	createAdmin,
 	createUser,
 	getUsers,
+	setAdmin,
 	deleteUser,
 
 	loginUser,

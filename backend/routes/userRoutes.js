@@ -6,6 +6,7 @@ const {
 	createAdmin,
 	createUser,
 	getUsers,
+	setAdmin,
 	deleteUser,
 
 	loginUser,
@@ -81,6 +82,7 @@ router.post("/addVaccination/:petId", authenticate, addVaccination); // COMPLETE
 router.patch("/updateProfile", authenticate, updateUserProfile); // COMPLETE
 router.patch("/updateOwner/:ownerId", authenticate, updateOwnerProfile); // COMPLETE
 router.patch("/updatePet/:petId", authenticate, updatePetProfile); // COMPLETE
+router.patch("/setAdmin/:userId", authenticate, setAdmin); // COMPLETE
 
 // PUT methods for /user
 router.put(
