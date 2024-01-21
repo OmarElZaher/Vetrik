@@ -21,9 +21,15 @@ import { Flex } from "antd";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
 import { IoMdSearch } from "react-icons/io";
+import { IoAdd } from "react-icons/io5";
+import { FaPerson } from "react-icons/fa6";
+import { IoIosArrowDropdown } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { GoHome } from "react-icons/go";
 import { MdOutlinePassword } from "react-icons/md";
+import { MdAdminPanelSettings } from "react-icons/md";
+
+import NavigationLinkDrawer from "../../General/NavigationLinkDrawer";
 
 export default function MyDrawerAdmin() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,6 +40,9 @@ export default function MyDrawerAdmin() {
 	const [isEditHovered, setIsEditHovered] = useState(false);
 	const [isHomeHovered, setIsHomeHovered] = useState(false);
 	const [isChangePasswordHovered, setIsChangePasswordHovered] = useState(false);
+	const [isAddHovered, setIsAddHovered] = useState(false);
+
+	const [isAddOpen, setIsAddOpen] = useState(false);
 
 	const handleHover = (type) => {
 		if (type === "close") {
@@ -46,6 +55,8 @@ export default function MyDrawerAdmin() {
 			setIsHomeHovered(true);
 		} else if (type === "changePassword") {
 			setIsChangePasswordHovered(true);
+		} else if (type === "add") {
+			setIsAddHovered(true);
 		}
 	};
 
@@ -60,6 +71,8 @@ export default function MyDrawerAdmin() {
 			setIsHomeHovered(false);
 		} else if (type === "changePassword") {
 			setIsChangePasswordHovered(false);
+		} else if (type === "add") {
+			setIsAddHovered(false);
 		}
 	};
 
@@ -193,9 +206,99 @@ export default function MyDrawerAdmin() {
 												/>
 											}
 										>
-											Search Users
+											Manage Users
 										</Button>
 									</Link>
+								</Box>
+							</Box>
+
+							{/* Add User Button */}
+							<Box>
+								{/* Add Button */}
+								<Box
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
+								>
+									<Button
+										onClick={() => {
+											setIsAddOpen(!isAddOpen);
+										}}
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onMouseOver={() => {
+											handleHover("add");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("add");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='20px'
+										width='272px'
+										leftIcon={
+											<Icon
+												as={IoAdd}
+												color={isAddHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+										rightIcon={
+											<Icon
+												as={IoIosArrowDropdown}
+												fontSize='18px'
+												color={isAddHovered ? "#000" : "#8F8F8F"}
+												transform={
+													isAddOpen ? "rotate(-180deg)" : "rotate(0deg)"
+												}
+												transition='transform 0.15s ease'
+											/>
+										}
+									>
+										Add
+									</Button>
+								</Box>
+
+								{/* Additional Buttons For Add */}
+								<Box>
+									{isAddOpen ? (
+										<Flex gap='middle' vertical align='center'>
+											<Box
+												display='flex'
+												flexDirection='column'
+												alignItems='flex-start'
+												justifyContent='flex-start'
+											>
+												<NavigationLinkDrawer
+													icon={FaPerson}
+													text={"Create A User"}
+													to={"/admin/create-user"}
+													justifyContent='flex-end'
+													alignItems='flex-start'
+												/>
+
+												<NavigationLinkDrawer
+													icon={MdAdminPanelSettings}
+													text={"Create An Admin"}
+													to={"/admin/create-admin"}
+													justifyContent='flex-end'
+													alignItems='flex-start'
+												/>
+											</Box>
+										</Flex>
+									) : (
+										<></>
+									)}
 								</Box>
 							</Box>
 

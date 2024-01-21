@@ -2,7 +2,6 @@ import React from "react";
 
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
-import Header from "../../components/General/Header";
 import NotFound from "../../components/General/NotFound";
 
 export default function NotFoundPage() {
@@ -14,7 +13,6 @@ export default function NotFoundPage() {
 				</Helmet>
 			</HelmetProvider>
 
-			<Header />
 			<NotFound />
 		</>
 	);

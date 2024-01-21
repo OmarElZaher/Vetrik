@@ -6,6 +6,8 @@ import { Box, Button, Icon, Text, useToast } from "@chakra-ui/react";
 import { IoMdHome } from "react-icons/io";
 
 import Footer from "./Footer";
+import Header from "./Header";
+import AdminHeader from "../Admin/General/AdminHeader";
 import Spinner from "./Spinner";
 import axios from "axios";
 
@@ -58,6 +60,7 @@ export default function NotFound() {
 		<Spinner />
 	) : (
 		<>
+			{isAdmin ? <AdminHeader /> : <Header />}
 			<Box
 				display={"flex"}
 				justifyContent={"center"}
