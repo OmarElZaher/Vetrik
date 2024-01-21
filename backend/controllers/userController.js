@@ -256,7 +256,7 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete A User
-// @route GET /user/deleteUser/:userId
+// @route DELETE /user/deleteUser/:userId
 // @access Private
 const deleteUser = asyncHandler(async (req, res) => {
 	try {
@@ -276,6 +276,40 @@ const deleteUser = asyncHandler(async (req, res) => {
 				res
 					.status(400)
 					.json({ message: "User Not Found, Please Check User ID Provided" });
+				return;
+			}
+		} else {
+			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			return;
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Get User Info
+// @route GET /user/getUserInfo/:userId
+// @access Private
+const getUserInfoById = asyncHandler(async (req, res) => {
+	try {
+		if (req.user.isAdmin) {
+			const userId = req.params.userId;
+
+			if (!mongoose.Types.ObjectId.isValid(userId)) {
+				res.status(400).json({ message: "Invalid User ID" });
+				return;
+			}
+
+			const user = await User.findById(userId).select("-password");
+
+			if (user) {
+				res.status(200).json({
+					message: "User Retrieved Successfully",
+					user: user,
+				});
+			} else {
+				res.status(400).json({ message: "User Not Found" });
 				return;
 			}
 		} else {
@@ -1474,6 +1508,7 @@ module.exports = {
 	createUser,
 	getUsers,
 	setAdmin,
+	getUserInfoById,
 	deleteUser,
 
 	loginUser,

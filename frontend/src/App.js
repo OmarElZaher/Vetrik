@@ -24,6 +24,7 @@ import ChangePasswordPage from "./pages/User/ChangePassword";
 
 import SearchUsersPage from "./pages/Admin/User/SearchUsers";
 import UsersTablePage from "./pages/Admin/User/UsersTable";
+import UserDetailsPage from "./pages/Admin/User/UserDetails";
 
 import theme from "./theme";
 
@@ -54,6 +55,10 @@ function App() {
 
 						<Route path='/admin/search-users' element={<SearchUsersPage />} />
 						<Route path='/admin/users-table' element={<UsersTablePage />} />
+						<Route
+							path='/admin/user-details/:userId'
+							element={<UserDetailsPage />}
+						/>
 
 						<Route path='*' element={<NotFoundPage />} />
 					</Routes>

@@ -6,6 +6,7 @@ const {
 	createAdmin,
 	createUser,
 	getUsers,
+	getUserInfoById,
 	setAdmin,
 	deleteUser,
 
@@ -47,6 +48,7 @@ const { authenticate } = require("../middleware/authMiddleware");
 
 // GET methods for /user
 router.get("/getUserInfo", authenticate, getUserInfo); //
+router.get("/getUserInfo/:userId", authenticate, getUserInfoById); //
 router.get("/getOwnerInfo/:ownerId", authenticate, getOwnerInfo); // COMPLETE
 router.get("/getOwnerPets/:ownerId", authenticate, getOwnerPets); // COMPLETE
 router.get("/getPetInfo/:petId", authenticate, getPetInfo); // COMPLETE
