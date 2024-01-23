@@ -209,6 +209,7 @@ export default function CreateUser() {
 										onChange={(e) => {
 											setConfirmPassword(e.target.value);
 										}}
+										ml={2.5}
 									/>
 								</FormControl>
 							</Box>
