@@ -33,6 +33,7 @@ import {
 	IoMdSearch,
 } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { RiHealthBookFill } from "react-icons/ri";
 
 // Custom Component Imports
 import Spinner from "../General/Spinner";
@@ -362,131 +363,155 @@ export default function PetDetails() {
 					display={"flex"}
 					justifyContent={"center"}
 					alignItems={"center"}
+					bg={"#F3F3F3"}
 					width={"100vw"}
 					height={"87vh"}
 				>
 					{/* Pet Information */}
-					<Card width='70%' height='90%' mt={15} mr={1}>
-						<CardBody
+					<Card width='70%' height='90%' mr={1.5}>
+						<Box
 							display={"flex"}
-							flexDirection={"column"}
 							justifyContent={"center"}
+							alignItems={"center"}
+							height={"15%"}
 						>
-							<Box
-								display={"flex"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								height={"15%"}
+							<Text
+								fontSize={"30px"}
+								fontWeight={"bold"}
+								textDecoration={"underline"}
 							>
-								<Text
-									fontSize={"30px"}
-									fontWeight={"bold"}
-									textDecoration={"underline"}
-								>
-									{pet.name}
-								</Text>
-							</Box>
-							<hr />
-							<Box
-								display={"flex"}
-								justifyContent={"space-evenly"}
-								height={"15%"}
-								marginTop={"5%"}
-								mb={2}
-							>
-								<Box
-									display={"flex"}
-									flexDirection={"column"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									width={"25%"}
-									m={2}
-									p={2}
-								>
-									<Text fontSize={"24px"} fontWeight={"bold"}>
-										Type of Animal
-									</Text>
-									<Text fontSize={"20px"}>{pet.type}</Text>
-								</Box>
+								{pet.name}
+							</Text>
+						</Box>
 
-								<Box
-									display={"flex"}
-									flexDirection={"column"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									width={"25%"}
-									m={2}
-								>
-									<Text fontSize={"24px"} fontWeight={"bold"}>
-										Breed
-									</Text>
-									<Text fontSize={"20px"}>{pet.breed}</Text>
-								</Box>
+						<hr />
 
-								<Box
-									display={"flex"}
-									flexDirection={"column"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									width={"25%"}
-									m={2}
-								>
-									<Text fontSize={"24px"} fontWeight={"bold"}>
-										Date of Birth
-									</Text>
-									<Text fontSize={"20px"}>{formatDate(pet.dob)}</Text>
-								</Box>
-
-								<Box
-									display={"flex"}
-									flexDirection={"column"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									width={"25%"}
-									m={2}
-								>
-									<Text fontSize={"24px"} fontWeight={"bold"}>
-										Age
-									</Text>
-									<Text fontSize={"20px"}>{petAge}</Text>
-								</Box>
-							</Box>
-
-							{/* Pets Table */}
+						<Box
+							display={"flex"}
+							justifyContent={"space-evenly"}
+							height={"15%"}
+							mt={5}
+							mb={2}
+						>
 							<Box
 								display={"flex"}
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								height={"60%"}
+								width={"25%"}
+								m={2}
+								p={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
-									Owners
+									Type of Animal
 								</Text>
-								<TableContainer
-									width={"92%"}
-									maxHeight={"30vh"}
-									overflowY={"auto"}
-								>
-									<Table variant='simple' size='md'>
-										<Thead>
-											<Th textAlign={"left"}>Full Name</Th>
-											<Th textAlign={"center"}>Email</Th>
-											<Th textAlign={"center"}>Mobile Number</Th>
-											<Th textAlign={"center"}>View Details</Th>
-										</Thead>
-										<Tbody>
-											{pet.owners.map((owner) => (
-												<Tr key={owner._id}>
-													<Td textAlign={"left"}>{`${titleCase(
-														owner.firstName
-													)} ${titleCase(owner.lastName)}`}</Td>
-													<Td textAlign={"center"}>{owner.email}</Td>
-													<Td textAlign={"center"}>{owner.mobileNumber}</Td>
-													<Td textAlign={"center"}>
+								<Text fontSize={"20px"}>{pet.type}</Text>
+							</Box>
+
+							<Box
+								display={"flex"}
+								flexDirection={"column"}
+								justifyContent={"center"}
+								alignItems={"center"}
+								width={"25%"}
+								m={2}
+							>
+								<Text fontSize={"24px"} fontWeight={"bold"}>
+									Breed
+								</Text>
+								<Text fontSize={"20px"}>{pet.breed}</Text>
+							</Box>
+
+							<Box
+								display={"flex"}
+								flexDirection={"column"}
+								justifyContent={"center"}
+								alignItems={"center"}
+								width={"25%"}
+								m={2}
+							>
+								<Text fontSize={"24px"} fontWeight={"bold"}>
+									Date of Birth
+								</Text>
+								<Text fontSize={"20px"}>{formatDate(pet.dob)}</Text>
+							</Box>
+
+							<Box
+								display={"flex"}
+								flexDirection={"column"}
+								justifyContent={"center"}
+								alignItems={"center"}
+								width={"25%"}
+								m={2}
+							>
+								<Text fontSize={"24px"} fontWeight={"bold"}>
+									Age
+								</Text>
+								<Text fontSize={"20px"}>{petAge}</Text>
+							</Box>
+						</Box>
+						<hr />
+
+						{/* Pets Table */}
+						<Box
+							display={"flex"}
+							flexDirection={"column"}
+							justifyContent={"center"}
+							alignItems={"center"}
+							height={"50%"}
+						>
+							<Text fontSize={"24px"} fontWeight={"bold"}>
+								Owners
+							</Text>
+							<TableContainer
+								width={"92%"}
+								maxHeight={"30vh"}
+								overflowY={"auto"}
+							>
+								<Table variant='simple' size='md'>
+									<Thead>
+										<Th textAlign={"left"}>Full Name</Th>
+										<Th textAlign={"center"}>Email</Th>
+										<Th textAlign={"center"}>Mobile Number</Th>
+										<Th textAlign={"center"}>View Details</Th>
+									</Thead>
+									<Tbody>
+										{pet.owners.map((owner) => (
+											<Tr key={owner._id}>
+												<Td textAlign={"left"}>{`${titleCase(
+													owner.firstName
+												)} ${titleCase(owner.lastName)}`}</Td>
+												<Td textAlign={"center"}>{owner.email}</Td>
+												<Td textAlign={"center"}>{owner.mobileNumber}</Td>
+												<Td textAlign={"center"}>
+													<Button
+														_hover={{
+															bg: "yellowgreen",
+															color: "#000",
+															transform: "scale(1.01)",
+														}}
+														_active={{
+															transform: "scale(0.99)",
+															opacity: "0.5",
+														}}
+														onClick={() => {
+															navigate(`/owner-details/${owner._id}`);
+														}}
+														leftIcon={<IoMdEye />}
+														mr={2.5}
+													>
+														View
+													</Button>
+													<Tooltip
+														hasArrow
+														label='Removes Owner from Pet Profile'
+														bg={"#EF5350"}
+														placement='top'
+														openDelay={75}
+													>
 														<Button
 															_hover={{
-																bg: "yellowgreen",
+																bg: "#EF5350",
 																color: "#000",
 																transform: "scale(1.01)",
 															}}
@@ -495,66 +520,85 @@ export default function PetDetails() {
 																opacity: "0.5",
 															}}
 															onClick={() => {
-																navigate(`/owner-details/${owner._id}`);
+																handleRemovePetFromOwner(owner._id, pet._id);
 															}}
-															leftIcon={<IoMdEye />}
+															variant={"outline"}
+															borderColor={"#EF5350"}
+															leftIcon={<MdDelete />}
 															mr={2.5}
 														>
-															View
+															Remove
 														</Button>
-														<Tooltip
-															hasArrow
-															label='Removes Owner from Pet Profile'
-															bg={"#EF5350"}
-															placement='top'
-															openDelay={75}
-														>
-															<Button
-																_hover={{
-																	bg: "#EF5350",
-																	color: "#000",
-																	transform: "scale(1.01)",
-																}}
-																_active={{
-																	transform: "scale(0.99)",
-																	opacity: "0.5",
-																}}
-																onClick={() => {
-																	handleRemovePetFromOwner(owner._id, pet._id);
-																}}
-																variant={"outline"}
-																borderColor={"#EF5350"}
-																leftIcon={<MdDelete />}
-																mr={2.5}
-															>
-																Remove
-															</Button>
-														</Tooltip>
-													</Td>
-												</Tr>
-											))}
-										</Tbody>
-									</Table>
-								</TableContainer>
-							</Box>
+													</Tooltip>
+												</Td>
+											</Tr>
+										))}
+									</Tbody>
+								</Table>
+							</TableContainer>
+						</Box>
 
-							{/* Back Button */}
-							<Box
-								display={"flex"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								height={"10%"}
+						{/* Back Button */}
+						<Box
+							display={"flex"}
+							justifyContent={"center"}
+							alignItems={"center"}
+							height={"10%"}
+						>
+							<Button
+								onClick={() => {
+									if (localStorage.getItem("petFilterData")) {
+										navigate("/pet-table");
+									} else {
+										navigate("/search-pet");
+									}
+								}}
+								_hover={{
+									bg: "yellowgreen",
+									color: "#000",
+									transform: "scale(1.01)",
+								}}
+								_active={{
+									transform: "scale(0.99)",
+									opacity: "0.5",
+								}}
+								leftIcon={<IoMdArrowRoundBack />}
+								width={"20%"}
+								mr={2.5}
+							>
+								Filtered Pets Table
+							</Button>
+
+							<Button
+								_hover={{
+									bg: "yellowgreen",
+									color: "#000",
+									transform: "scale(1.01)",
+								}}
+								_active={{
+									transform: "scale(0.99)",
+									opacity: "0.5",
+								}}
+								onClick={() => {
+									navigate(`/pet-vaccination/${pet._id}`);
+								}}
+								leftIcon={<RiHealthBookFill />}
+								width={"35%"}
+								mx={2.5}
+							>
+								Vaccination Card
+							</Button>
+
+							<Tooltip
+								hasArrow
+								label='Deletes Pet From System'
+								bg={"#EF5350"}
+								placement='top'
+								openDelay={75}
 							>
 								<Button
-									onClick={() => {
-										if (localStorage.getItem("petFilterData")) {
-											navigate("/pet-table");
-										} else {
-											navigate("/search-pet");
-										}
-									}}
 									_hover={{
-										bg: "yellowgreen",
+										bg: "#EF5350",
 										color: "#000",
 										transform: "scale(1.01)",
 									}}
@@ -562,46 +606,21 @@ export default function PetDetails() {
 										transform: "scale(0.99)",
 										opacity: "0.5",
 									}}
-									leftIcon={<IoMdArrowRoundBack />}
-									width={"40%"}
-									mr={2.5}
+									onClick={() => {
+										handleDeletePet(pet._id);
+									}}
+									variant={"outline"}
+									leftIcon={<MdDelete />}
+									borderColor={"#EF5350"}
+									width={"20%"}
+									ml={2.5}
 								>
-									Filtered Pets Table
+									Delete
 								</Button>
-
-								<Tooltip
-									hasArrow
-									label='Deletes Pet From System'
-									bg={"#EF5350"}
-									placement='top'
-									openDelay={75}
-								>
-									<Button
-										_hover={{
-											bg: "#EF5350",
-											color: "#000",
-											transform: "scale(1.01)",
-										}}
-										_active={{
-											transform: "scale(0.99)",
-											opacity: "0.5",
-										}}
-										onClick={() => {
-											handleDeletePet(pet._id);
-										}}
-										variant={"outline"}
-										leftIcon={<MdDelete />}
-										borderColor={"#EF5350"}
-										width={"25%"}
-										ml={1.5}
-									>
-										Delete
-									</Button>
-								</Tooltip>
-							</Box>
-						</CardBody>
+							</Tooltip>
+						</Box>
 					</Card>
-					<Card width={"25vw"} height={"80vh"} mt={15} ml={1}>
+					<Card width={"25vw"} height={"90%"} ml={1.5}>
 						<CardBody
 							display={"flex"}
 							flexDirection={"column"}

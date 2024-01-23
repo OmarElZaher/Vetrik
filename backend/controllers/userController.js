@@ -1133,6 +1133,7 @@ const getVaccinationCard = asyncHandler(async (req, res) => {
 			res.status(200).json({
 				message: "Retrieved Vaccination Card Successfuly",
 				vaccinationCard,
+				pet,
 			});
 		}
 	} catch (error) {

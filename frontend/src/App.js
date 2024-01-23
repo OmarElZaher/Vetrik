@@ -38,6 +38,8 @@ import SearchPetPage from "./pages/Pet/SearchPet";
 import PetTablePage from "./pages/Pet/PetTable";
 
 import AddPetPage from "./pages/Pet/AddPet";
+
+import PetVaccinationPage from "./pages/Pet/PetVaccination";
 // }
 
 import theme from "./theme";
@@ -65,6 +67,11 @@ function App() {
 						<Route
 							path='/owner-details/:ownerId'
 							element={<OwnerDetailsPage />}
+						/>
+
+						<Route
+							path='/pet-vaccination/:petId'
+							element={<PetVaccinationPage />}
 						/>
 
 						<Route path='/add-owner' element={<AddOwnerPage />} />
