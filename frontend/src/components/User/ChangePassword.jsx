@@ -113,7 +113,13 @@ export default function ChangePassword() {
 				height={"87vh"}
 				bg={"#F3F3F3"}
 			>
-				<Card width={"80%"} height={"80%"}>
+				<Card
+					width={"80%"}
+					height={"80%"}
+					display={"flex"}
+					justify={"center"}
+					alignItems={"center"}
+				>
 					{/* Header */}
 					<Box
 						display={"flex"}
