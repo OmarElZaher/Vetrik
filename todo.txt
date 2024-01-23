@@ -7,6 +7,20 @@ prettier code
 fix lowercase handling 
 README.md file
 
+updateOwnerProfile
+updatePetProfile
+
+createVaccinationCard
+getVaccinationCard
+addVaccination
+renewVaccination
+deleteVaccination
+
+forgotUsername
+requestOTP
+verifyOTP
+resetPassword
+
 
 Revoking a token typically involves changing some property of the user (like the password or a token-related field) to invalidate the existing token. Here's a general outline of how you might approach token revocation:
 
