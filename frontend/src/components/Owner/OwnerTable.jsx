@@ -1,21 +1,25 @@
+// React Imports
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// Chakra UI Imports
 import {
 	Box,
 	Button,
 	Table,
+	TableContainer,
 	Thead,
 	Tbody,
 	Tr,
 	Th,
 	Td,
-	TableContainer,
 	Text,
 } from "@chakra-ui/react";
 
+// React Icon Imports
 import { IoMdEye, IoMdArrowRoundBack } from "react-icons/io";
 
+// Custom Component Imports
 import Footer from "../General/Footer";
 
 function titleCase(str) {
@@ -49,9 +53,6 @@ export default function OwnerTable() {
 						Please Search For An Owner Before Accessing This Page
 					</Text>
 					<Button
-						onClick={() => {
-							navigate("/search-owner");
-						}}
 						_hover={{
 							bg: "yellowgreen",
 							color: "#000",
@@ -61,8 +62,12 @@ export default function OwnerTable() {
 							transform: "scale(0.99)",
 							opacity: "0.5",
 						}}
-						mt={10}
+						onClick={() => {
+							navigate("/search-owner");
+						}}
+						leftIcon={<IoMdArrowRoundBack />}
 						width={"25vw"}
+						mt={10}
 					>
 						Go Back To Search
 					</Button>
@@ -75,11 +80,11 @@ export default function OwnerTable() {
 				<Box width={"100%"} height={"87vh"}>
 					<Box
 						display={"flex"}
+						flexDirection={"column"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						flexDirection={"column"}
-						my={5}
 						height={"15%"}
+						my={5}
 					>
 						<Text
 							fontSize={"35px"}
@@ -118,9 +123,6 @@ export default function OwnerTable() {
 											<Td textAlign={"center"}>{row.mobileNumber}</Td>
 											<Td textAlign={"right"}>
 												<Button
-													onClick={() => {
-														navigate(`/owner-details/${row._id}`);
-													}}
 													_hover={{
 														bg: "yellowgreen",
 														color: "#000",
@@ -129,6 +131,9 @@ export default function OwnerTable() {
 													_active={{
 														transform: "scale(0.99)",
 														opacity: "0.5",
+													}}
+													onClick={() => {
+														navigate(`/owner-details/${row._id}`);
 													}}
 													leftIcon={<IoMdEye />}
 												>
@@ -148,10 +153,6 @@ export default function OwnerTable() {
 						height={"10%"}
 					>
 						<Button
-							onClick={() => {
-								localStorage.removeItem("ownerFilterData");
-								navigate("/search-owner");
-							}}
 							_hover={{
 								bg: "yellowgreen",
 								color: "#000",
@@ -161,8 +162,12 @@ export default function OwnerTable() {
 								transform: "scale(0.99)",
 								opacity: "0.5",
 							}}
-							width={"25vw"}
+							onClick={() => {
+								localStorage.removeItem("ownerFilterData");
+								navigate("/search-owner");
+							}}
 							leftIcon={<IoMdArrowRoundBack />}
+							width={"25vw"}
 						>
 							Back To Search
 						</Button>

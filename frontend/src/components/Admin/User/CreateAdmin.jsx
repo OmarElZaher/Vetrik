@@ -1,7 +1,11 @@
+// React Imports
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
+// ChakraUI Imports
 import {
 	Box,
 	Button,
@@ -12,6 +16,7 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 
+// Custom Component Imports
 import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
@@ -19,14 +24,16 @@ export default function CreateUser() {
 	const navigate = useNavigate();
 	const toast = useToast();
 
-	const [isLoading, setIsLoading] = React.useState(false);
-
+	// Form useStates
 	const [firstName, setFirstName] = React.useState("");
 	const [lastName, setLastName] = React.useState("");
 	const [username, setUsername] = React.useState("");
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [confirmPassword, setConfirmPassword] = React.useState("");
+
+	// Misc useStates
+	const [isLoading, setIsLoading] = React.useState(false);
 
 	const handleAdd = async () => {
 		try {
@@ -85,15 +92,15 @@ export default function CreateUser() {
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						height={"87vh"}
 						bg={"#F3F3F3"}
+						height={"87vh"}
 					>
 						<Card
-							width={"80%"}
-							height={"90%"}
 							display={"flex"}
 							justify={"center"}
 							alignItems={"center"}
+							width={"80%"}
+							height={"90%"}
 						>
 							<Box
 								display={"flex"}
@@ -127,8 +134,8 @@ export default function CreateUser() {
 									mb={5}
 								>
 									<Input
-										type='text'
 										id='firstName'
+										type='text'
 										name='firstName'
 										placeholder='First Name'
 										value={firstName}
@@ -139,8 +146,8 @@ export default function CreateUser() {
 									/>
 
 									<Input
-										type='text'
 										id='lastName'
+										type='text'
 										name='lastName'
 										placeholder='Last Name'
 										value={lastName}
@@ -153,8 +160,8 @@ export default function CreateUser() {
 
 								<FormControl id='email' mb={5}>
 									<Input
-										type='email'
 										id='email'
+										type='email'
 										name='email'
 										placeholder='Email'
 										value={email}
@@ -166,8 +173,8 @@ export default function CreateUser() {
 
 								<FormControl id='username' mb={5}>
 									<Input
-										type='text'
 										id='username'
+										type='text'
 										name='username'
 										placeholder='Username'
 										value={username}
@@ -183,8 +190,8 @@ export default function CreateUser() {
 									justifyContent={"space-evenly"}
 								>
 									<Input
-										type='password'
 										id='password'
+										type='password'
 										name='password'
 										placeholder='Password'
 										value={password}
@@ -194,8 +201,8 @@ export default function CreateUser() {
 										mr={2.5}
 									/>
 									<Input
-										type='password'
 										id='confirmPassword'
+										type='password'
 										name='confirmPassword'
 										placeholder='Confirm Password'
 										value={confirmPassword}
@@ -214,7 +221,6 @@ export default function CreateUser() {
 								width={"90%"}
 							>
 								<Button
-									onClick={handleAdd}
 									_hover={{
 										bg: "yellowgreen",
 										color: "#000",
@@ -224,6 +230,7 @@ export default function CreateUser() {
 										transform: "scale(0.99)",
 										opacity: "0.5",
 									}}
+									onClick={handleAdd}
 									width={"25%"}
 								>
 									Add

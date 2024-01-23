@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from "react";
+// React Imports
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// Chakra UI Imports
 import {
 	Box,
 	Button,
 	Table,
+	TableContainer,
 	Thead,
 	Tbody,
 	Tr,
 	Th,
 	Td,
-	TableContainer,
 	Text,
-	useToast,
 } from "@chakra-ui/react";
 
+// React Icons Imports
 import { IoMdEye, IoMdArrowRoundBack } from "react-icons/io";
 
-import Spinner from "../General/Spinner";
+// Custom Components Imports
 import Footer from "../General/Footer";
 
 function titleCase(str) {
@@ -33,7 +35,6 @@ function titleCase(str) {
 export default function UsersTable() {
 	const navigate = useNavigate();
 	const data = localStorage.getItem("usersFilterData");
-	const toast = useToast();
 
 	if (data === null) {
 		return (
@@ -52,9 +53,6 @@ export default function UsersTable() {
 						Please Search For A User Before Accessing This Page
 					</Text>
 					<Button
-						onClick={() => {
-							navigate("/admin/search-users");
-						}}
 						_hover={{
 							bg: "yellowgreen",
 							color: "#000",
@@ -64,8 +62,12 @@ export default function UsersTable() {
 							transform: "scale(0.99)",
 							opacity: "0.5",
 						}}
-						mt={10}
+						onClick={() => {
+							navigate("/admin/search-users");
+						}}
+						leftIcon={<IoMdArrowRoundBack />}
 						width={"25vw"}
+						mt={10}
 					>
 						Go Back To Search
 					</Button>
@@ -78,11 +80,11 @@ export default function UsersTable() {
 				<Box width={"100%"} height={"87vh"}>
 					<Box
 						display={"flex"}
+						flexDirection={"column"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						flexDirection={"column"}
-						my={5}
 						height={"15%"}
+						my={5}
 					>
 						<Text
 							fontSize={"35px"}
@@ -151,10 +153,6 @@ export default function UsersTable() {
 						height={"10%"}
 					>
 						<Button
-							onClick={() => {
-								localStorage.removeItem("usersFilterData");
-								navigate("/admin/search-users");
-							}}
 							_hover={{
 								bg: "yellowgreen",
 								color: "#000",
@@ -164,8 +162,12 @@ export default function UsersTable() {
 								transform: "scale(0.99)",
 								opacity: "0.5",
 							}}
-							width={"25vw"}
+							onClick={() => {
+								localStorage.removeItem("usersFilterData");
+								navigate("/admin/search-users");
+							}}
 							leftIcon={<IoMdArrowRoundBack />}
+							width={"25vw"}
 						>
 							Back To Search
 						</Button>

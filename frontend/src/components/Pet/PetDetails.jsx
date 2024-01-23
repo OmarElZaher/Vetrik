@@ -1,13 +1,18 @@
+// React Imports
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
+// Chakra-UI Imports
 import {
 	Box,
 	Button,
 	Card,
 	CardBody,
-	Tooltip,
+	FormControl,
+	Input,
 	Table,
 	TableContainer,
 	Thead,
@@ -16,15 +21,20 @@ import {
 	Td,
 	Tr,
 	Text,
-	FormControl,
-	Input,
+	Tooltip,
 	useToast,
 } from "@chakra-ui/react";
 
-import { IoMdEye, IoMdArrowRoundBack, IoMdAdd } from "react-icons/io";
-import { IoMdSearch } from "react-icons/io";
+// React Icons Imports
+import {
+	IoMdEye,
+	IoMdArrowRoundBack,
+	IoMdAdd,
+	IoMdSearch,
+} from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 
+// Custom Component Imports
 import Spinner from "../General/Spinner";
 import Footer from "../General/Footer";
 
@@ -59,11 +69,16 @@ export default function PetDetails() {
 	const { petId } = useParams();
 	const navigate = useNavigate();
 	const toast = useToast();
+
+	// Pet useStates
 	const [pet, setPet] = useState({});
 	const [petAge, setPetAge] = useState("");
+
+	// Owner useStates
 	const [owner, setOwner] = useState(null);
 	const [ownerEmail, setOwnerEmail] = useState(null);
 
+	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
 	const [gotData, setGotData] = useState(false);
 	const [error, setIsError] = useState(null);
@@ -248,17 +263,68 @@ export default function PetDetails() {
 		}
 	};
 
+	const handleSearchOwner = async () => {
+		if (ownerEmail === null || ownerEmail === "") {
+			toast({
+				title: "Please Enter an Email Address",
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} else if (!isValidEmail(ownerEmail)) {
+			toast({
+				title: "Please Enter a Valid Email Address",
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} else {
+			try {
+				setIsLoading(true);
+				const response = await axios.post(
+					"http://localhost:1234/user/getOwner",
+					{ email: ownerEmail },
+					{ withCredentials: true }
+				);
+
+				if (response.status === 200) {
+					setOwner(response.data);
+				} else {
+					toast({
+						title: response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} catch (error) {
+				toast({
+					title: error.response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			} finally {
+				setIsLoading(false);
+			}
+		}
+	};
+
 	return isLoading ? (
 		<Spinner />
 	) : error ? (
 		<>
 			<Box
 				display={"flex"}
+				flexDirection={"column"}
 				justifyContent={"center"}
 				alignItems={"center"}
-				flexDirection={"column"}
-				height={"87vh"}
 				bg={"#F3F3F3"}
+				height={"87vh"}
 			>
 				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
 					ERROR
@@ -267,9 +333,6 @@ export default function PetDetails() {
 					{error}
 				</Text>
 				<Button
-					onClick={() => {
-						navigate("/search-pet");
-					}}
 					_hover={{
 						bg: "yellowgreen",
 						color: "#000",
@@ -279,9 +342,13 @@ export default function PetDetails() {
 						transform: "scale(0.99)",
 						opacity: "0.5",
 					}}
+					onClick={() => {
+						navigate("/search-pet");
+					}}
+					leftIcon={<IoMdArrowRoundBack />}
 					bg={"#FFF"}
-					mt={10}
 					width={"25vw"}
+					mt={10}
 				>
 					Go Back To Search
 				</Button>
@@ -296,20 +363,20 @@ export default function PetDetails() {
 					justifyContent={"center"}
 					alignItems={"center"}
 					width={"100vw"}
-					height={"100vh"}
+					height={"87vh"}
 				>
 					{/* Pet Information */}
-					<Card width='70vw' height='80vh' mt={15} mr={1}>
+					<Card width='70%' height='90%' mt={15} mr={1}>
 						<CardBody
 							display={"flex"}
 							flexDirection={"column"}
 							justifyContent={"center"}
 						>
 							<Box
-								height={"15%"}
 								display={"flex"}
 								justifyContent={"center"}
 								alignItems={"center"}
+								height={"15%"}
 							>
 								<Text
 									fontSize={"30px"}
@@ -321,20 +388,20 @@ export default function PetDetails() {
 							</Box>
 							<hr />
 							<Box
+								display={"flex"}
+								justifyContent={"space-evenly"}
 								height={"15%"}
 								marginTop={"5%"}
 								mb={2}
-								display={"flex"}
-								justifyContent={"space-evenly"}
 							>
 								<Box
-									width={"25%"}
-									m={2}
-									p={2}
 									display={"flex"}
 									flexDirection={"column"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									width={"25%"}
+									m={2}
+									p={2}
 								>
 									<Text fontSize={"24px"} fontWeight={"bold"}>
 										Type of Animal
@@ -343,12 +410,12 @@ export default function PetDetails() {
 								</Box>
 
 								<Box
-									width={"25%"}
-									m={2}
 									display={"flex"}
 									flexDirection={"column"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									width={"25%"}
+									m={2}
 								>
 									<Text fontSize={"24px"} fontWeight={"bold"}>
 										Breed
@@ -357,12 +424,12 @@ export default function PetDetails() {
 								</Box>
 
 								<Box
-									width={"25%"}
-									m={2}
 									display={"flex"}
 									flexDirection={"column"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									width={"25%"}
+									m={2}
 								>
 									<Text fontSize={"24px"} fontWeight={"bold"}>
 										Date of Birth
@@ -371,12 +438,12 @@ export default function PetDetails() {
 								</Box>
 
 								<Box
-									width={"25%"}
-									m={2}
 									display={"flex"}
 									flexDirection={"column"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									width={"25%"}
+									m={2}
 								>
 									<Text fontSize={"24px"} fontWeight={"bold"}>
 										Age
@@ -387,11 +454,11 @@ export default function PetDetails() {
 
 							{/* Pets Table */}
 							<Box
-								height={"60%"}
 								display={"flex"}
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
+								height={"60%"}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
 									Owners
@@ -418,9 +485,6 @@ export default function PetDetails() {
 													<Td textAlign={"center"}>{owner.mobileNumber}</Td>
 													<Td textAlign={"center"}>
 														<Button
-															onClick={() => {
-																navigate(`/owner-details/${owner._id}`);
-															}}
 															_hover={{
 																bg: "yellowgreen",
 																color: "#000",
@@ -430,8 +494,11 @@ export default function PetDetails() {
 																transform: "scale(0.99)",
 																opacity: "0.5",
 															}}
-															mr={2.5}
+															onClick={() => {
+																navigate(`/owner-details/${owner._id}`);
+															}}
 															leftIcon={<IoMdEye />}
+															mr={2.5}
 														>
 															View
 														</Button>
@@ -443,8 +510,6 @@ export default function PetDetails() {
 															openDelay={75}
 														>
 															<Button
-																variant={"outline"}
-																borderColor={"#EF5350"}
 																_hover={{
 																	bg: "#EF5350",
 																	color: "#000",
@@ -457,8 +522,10 @@ export default function PetDetails() {
 																onClick={() => {
 																	handleRemovePetFromOwner(owner._id, pet._id);
 																}}
-																mr={2.5}
+																variant={"outline"}
+																borderColor={"#EF5350"}
 																leftIcon={<MdDelete />}
+																mr={2.5}
 															>
 																Remove
 															</Button>
@@ -479,7 +546,6 @@ export default function PetDetails() {
 								height={"10%"}
 							>
 								<Button
-									width={"40%"}
 									onClick={() => {
 										if (localStorage.getItem("petFilterData")) {
 											navigate("/pet-table");
@@ -497,6 +563,7 @@ export default function PetDetails() {
 										opacity: "0.5",
 									}}
 									leftIcon={<IoMdArrowRoundBack />}
+									width={"40%"}
 									mr={2.5}
 								>
 									Filtered Pets Table
@@ -510,9 +577,6 @@ export default function PetDetails() {
 									openDelay={75}
 								>
 									<Button
-										width={"25%"}
-										variant={"outline"}
-										borderColor={"#EF5350"}
 										_hover={{
 											bg: "#EF5350",
 											color: "#000",
@@ -525,7 +589,10 @@ export default function PetDetails() {
 										onClick={() => {
 											handleDeletePet(pet._id);
 										}}
+										variant={"outline"}
 										leftIcon={<MdDelete />}
+										borderColor={"#EF5350"}
+										width={"25%"}
 										ml={1.5}
 									>
 										Delete
@@ -541,10 +608,10 @@ export default function PetDetails() {
 							justifyContent={"center"}
 						>
 							<Box
-								height={"15%"}
 								display={"flex"}
 								justifyContent={"center"}
 								alignItems={"center"}
+								height={"15%"}
 							>
 								<Text
 									fontSize={"30px"}
@@ -571,13 +638,13 @@ export default function PetDetails() {
 							{owner !== null ? (
 								<>
 									<Box
-										height={"60%"}
-										p={2}
-										mb={2}
 										display={"flex"}
 										flexDirection={"column"}
 										justifyContent={"center"}
 										alignItems={"center"}
+										height={"60%"}
+										p={2}
+										mb={2}
 									>
 										<Text fontSize={"20px"} fontWeight={"bold"}>
 											Owner Name
@@ -603,8 +670,6 @@ export default function PetDetails() {
 										height={"10%"}
 									>
 										<Button
-											leftIcon={<IoMdAdd />}
-											mr={2.5}
 											_hover={{
 												bg: "yellowgreen",
 												color: "#000",
@@ -617,13 +682,13 @@ export default function PetDetails() {
 											onClick={() => {
 												handleAddOwnerToPet(owner[0]._id, pet._id);
 											}}
+											leftIcon={<IoMdAdd />}
+											mr={2.5}
 										>
 											Add
 										</Button>
 
 										<Button
-											leftIcon={<IoMdSearch />}
-											ml={2.5}
 											_hover={{
 												bg: "yellowgreen",
 												color: "#000",
@@ -637,6 +702,8 @@ export default function PetDetails() {
 												setOwner(null);
 												setOwnerEmail(null);
 											}}
+											leftIcon={<IoMdSearch />}
+											ml={2.5}
 										>
 											Search Again
 										</Button>
@@ -646,16 +713,17 @@ export default function PetDetails() {
 								// No owner
 								<>
 									<Box
-										height={"60%"}
-										p={2}
-										mb={2}
 										display={"flex"}
 										flexDirection={"column"}
 										justifyContent={"center"}
 										alignItems={"center"}
+										height={"60%"}
+										p={2}
+										mb={2}
 									>
 										<FormControl id='email'>
 											<Input
+												id='email'
 												type='email'
 												name='email'
 												placeholder='Owner Email'
@@ -673,7 +741,6 @@ export default function PetDetails() {
 										height={"10%"}
 									>
 										<Button
-											leftIcon={<IoMdSearch />}
 											_hover={{
 												bg: "yellowgreen",
 												color: "#000",
@@ -683,58 +750,8 @@ export default function PetDetails() {
 												transform: "scale(0.99)",
 												opacity: "0.5",
 											}}
-											onClick={async () => {
-												if (ownerEmail === null || ownerEmail === "") {
-													toast({
-														title: "Please Enter an Email",
-														status: "error",
-														duration: 2500,
-														isClosable: true,
-														position: "top",
-													});
-												} else if (!isValidEmail(ownerEmail)) {
-													toast({
-														title: "Please Enter an Email",
-														status: "error",
-														duration: 2500,
-														isClosable: true,
-														position: "top",
-													});
-												} else {
-													try {
-														setIsLoading(true);
-														const response = await axios.post(
-															"http://localhost:1234/user/getOwner",
-															{ email: ownerEmail },
-															{ withCredentials: true }
-														);
-
-														if (response.status === 200) {
-															console.log("RESPONSE ==> ", response.data);
-															console.log("OWNER ==> ", response.data);
-															setOwner(response.data);
-														} else {
-															toast({
-																title: response.data.message,
-																status: "error",
-																duration: 2500,
-																isClosable: true,
-																position: "top",
-															});
-														}
-													} catch (error) {
-														toast({
-															title: error.response.data.message,
-															status: "error",
-															duration: 2500,
-															isClosable: true,
-															position: "top",
-														});
-													} finally {
-														setIsLoading(false);
-													}
-												}
-											}}
+											onClick={handleSearchOwner}
+											leftIcon={<IoMdSearch />}
 										>
 											Search
 										</Button>

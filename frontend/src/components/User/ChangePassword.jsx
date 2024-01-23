@@ -1,43 +1,50 @@
-// TODO: Fix input boxes
-
+// React Imports
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
+// Chakra UI Imports
 import {
 	Box,
 	Button,
 	Card,
 	FormControl,
+	Icon,
+	IconButton,
 	Input,
 	InputGroup,
 	InputRightElement,
-	Icon,
-	IconButton,
 	Text,
 	useToast,
 } from "@chakra-ui/react";
 
+// React Icons Imports
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdOutlinePassword } from "react-icons/md";
 import { PiPasswordBold } from "react-icons/pi";
-import { FaEye } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa";
 
-import Footer from "../General/Footer";
+// Custom Component Imports
 import Spinner from "../General/Spinner";
+import Footer from "../General/Footer";
 
 export default function ChangePassword() {
 	const navigate = useNavigate();
 	const toast = useToast();
 
-	const [isLoading, setIsLoading] = useState(false);
-
+	// Form useStates
 	const [oldPassword, setOldPassword] = useState("");
-	const [showOldPassword, setShowOldPassword] = useState(false);
 	const [newPassword, setNewPassword] = useState("");
-	const [showNewPassword, setShowNewPassword] = useState(false);
 	const [confirmPassword, setConfirmPassword] = useState("");
+
+	// Show Password useStates
+	const [showOldPassword, setShowOldPassword] = useState(false);
+	const [showNewPassword, setShowNewPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+	// Misc useStates
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleChangePassword = async () => {
 		try {
@@ -110,21 +117,21 @@ export default function ChangePassword() {
 				display={"flex"}
 				justifyContent={"center"}
 				alignItems={"center"}
-				height={"87vh"}
 				bg={"#F3F3F3"}
+				height={"87vh"}
 			>
 				<Card
+					display={"flex"}
+					justifyContent={"center"}
+					alignItems={"center"}
 					width={"80%"}
 					height={"80%"}
-					display={"flex"}
-					justify={"center"}
-					alignItems={"center"}
 				>
 					{/* Header */}
 					<Box
 						display={"flex"}
-						justifyContent={"center"}
 						flexDirection={"column"}
+						justifyContent={"center"}
 						alignItems={"center"}
 						height={"15%"}
 						mt={5}
@@ -138,8 +145,8 @@ export default function ChangePassword() {
 					{/* Body */}
 					<Box
 						display={"flex"}
-						justifyContent={"center"}
 						flexDirection={"column"}
+						justifyContent={"center"}
 						alignItems={"center"}
 						height={"70%"}
 						width={"90%"}
@@ -155,15 +162,15 @@ export default function ChangePassword() {
 									<InputRightElement
 										children={
 											<IconButton
-												bg={"#FFF"}
-												as={FaEye}
-												size={"xs"}
-												cursor={"pointer"}
 												_hover={{}}
 												_active={{}}
 												onClick={() => {
 													setShowOldPassword(!showOldPassword);
 												}}
+												as={FaEye}
+												cursor={"pointer"}
+												bg={"#FFF"}
+												size={"xs"}
 											/>
 										}
 									/>
@@ -171,20 +178,21 @@ export default function ChangePassword() {
 									<InputRightElement
 										children={
 											<IconButton
-												bg={"#FFF"}
-												as={FaEyeSlash}
-												size={"xs"}
-												cursor={"pointer"}
 												_hover={{}}
 												_active={{}}
 												onClick={() => {
 													setShowOldPassword(!showOldPassword);
 												}}
+												as={FaEyeSlash}
+												cursor={"pointer"}
+												bg={"#FFF"}
+												size={"xs"}
 											/>
 										}
 									/>
 								)}
 								<Input
+									id='oldPassword'
 									type={showOldPassword ? "text" : "password"}
 									value={oldPassword}
 									placeholder='Old Password'
@@ -206,15 +214,15 @@ export default function ChangePassword() {
 									<InputRightElement
 										children={
 											<IconButton
-												bg={"#FFF"}
-												as={FaEye}
-												size={"xs"}
-												cursor={"pointer"}
 												_hover={{}}
 												_active={{}}
 												onClick={() => {
 													setShowNewPassword(!showNewPassword);
 												}}
+												as={FaEye}
+												cursor={"pointer"}
+												bg={"#FFF"}
+												size={"xs"}
 											/>
 										}
 									/>
@@ -222,20 +230,21 @@ export default function ChangePassword() {
 									<InputRightElement
 										children={
 											<IconButton
-												bg={"#FFF"}
-												as={FaEyeSlash}
-												size={"xs"}
-												cursor={"pointer"}
 												_hover={{}}
 												_active={{}}
 												onClick={() => {
 													setShowNewPassword(!showNewPassword);
 												}}
+												as={FaEyeSlash}
+												cursor={"pointer"}
+												bg={"#FFF"}
+												size={"xs"}
 											/>
 										}
 									/>
 								)}
 								<Input
+									id='newPassword'
 									type={showNewPassword ? "text" : "password"}
 									value={newPassword}
 									placeholder='New Password'
@@ -256,15 +265,15 @@ export default function ChangePassword() {
 									<InputRightElement
 										children={
 											<IconButton
-												bg={"#FFF"}
-												as={FaEye}
-												size={"xs"}
-												cursor={"pointer"}
 												_hover={{}}
 												_active={{}}
 												onClick={() => {
 													setShowConfirmPassword(!showConfirmPassword);
 												}}
+												as={FaEye}
+												cursor={"pointer"}
+												bg={"#FFF"}
+												size={"xs"}
 											/>
 										}
 									/>
@@ -272,20 +281,21 @@ export default function ChangePassword() {
 									<InputRightElement
 										children={
 											<IconButton
-												bg={"#FFF"}
-												as={FaEyeSlash}
-												size={"xs"}
-												cursor={"pointer"}
 												_hover={{}}
 												_active={{}}
 												onClick={() => {
 													setShowConfirmPassword(!showConfirmPassword);
 												}}
+												as={FaEyeSlash}
+												cursor={"pointer"}
+												bg={"#FFF"}
+												size={"xs"}
 											/>
 										}
 									/>
 								)}
 								<Input
+									id='confirmPassword'
 									type={showConfirmPassword ? "text" : "password"}
 									value={confirmPassword}
 									placeholder='Confirm Password'
@@ -305,7 +315,6 @@ export default function ChangePassword() {
 						height={"15%"}
 					>
 						<Button
-							onClick={handleChangePassword}
 							_hover={{
 								bg: "yellowgreen",
 								color: "#000",
@@ -315,6 +324,7 @@ export default function ChangePassword() {
 								transform: "scale(0.99)",
 								opacity: "0.5",
 							}}
+							onClick={handleChangePassword}
 							leftIcon={<Icon as={PiPasswordBold} />}
 						>
 							{" "}

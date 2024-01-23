@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+// React Imports
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// Chakra UI Imports
 import {
 	Box,
 	Button,
 	Table,
+	TableContainer,
 	Thead,
 	Tbody,
 	Tr,
 	Th,
 	Td,
-	TableContainer,
 	Text,
 } from "@chakra-ui/react";
 
+// React Icons Imports
 import { IoMdEye, IoMdArrowRoundBack } from "react-icons/io";
 
+// Component Imports
 import Footer from "../General/Footer";
 
 function titleCase(str) {
@@ -49,9 +53,6 @@ export default function PetTable() {
 						Please Search For A Pet Before Accessing This Page
 					</Text>
 					<Button
-						onClick={() => {
-							navigate("/search-pet");
-						}}
 						_hover={{
 							bg: "yellowgreen",
 							color: "#000",
@@ -61,8 +62,12 @@ export default function PetTable() {
 							transform: "scale(0.99)",
 							opacity: "0.5",
 						}}
-						mt={10}
+						onClick={() => {
+							navigate("/search-pet");
+						}}
+						leftIcon={<IoMdArrowRoundBack />}
 						width={"25vw"}
+						mt={10}
 					>
 						Go Back To Search
 					</Button>
@@ -75,11 +80,11 @@ export default function PetTable() {
 				<Box width={"100%"} height={"90vh"}>
 					<Box
 						display={"flex"}
+						flexDirection={"column"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						flexDirection={"column"}
-						my={5}
 						height={"15%"}
+						my={5}
 					>
 						<Text
 							fontSize={"35px"}
@@ -118,9 +123,6 @@ export default function PetTable() {
 											<Td textAlign={"center"}>{row.gender}</Td>
 											<Td textAlign={"right"}>
 												<Button
-													onClick={() => {
-														navigate(`/pet-details/${row._id}`);
-													}}
 													_hover={{
 														bg: "yellowgreen",
 														color: "#000",
@@ -129,6 +131,9 @@ export default function PetTable() {
 													_active={{
 														transform: "scale(0.99)",
 														opacity: "0.5",
+													}}
+													onClick={() => {
+														navigate(`/pet-details/${row._id}`);
 													}}
 													leftIcon={<IoMdEye />}
 												>
@@ -143,10 +148,6 @@ export default function PetTable() {
 					</Box>
 					<Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
 						<Button
-							onClick={() => {
-								localStorage.removeItem("petFilterData");
-								navigate("/search-pet");
-							}}
 							_hover={{
 								bg: "yellowgreen",
 								color: "#000",
@@ -156,9 +157,13 @@ export default function PetTable() {
 								transform: "scale(0.99)",
 								opacity: "0.5",
 							}}
-							my={10}
-							width={"25vw"}
+							onClick={() => {
+								localStorage.removeItem("petFilterData");
+								navigate("/search-pet");
+							}}
 							leftIcon={<IoMdArrowRoundBack />}
+							width={"25vw"}
+							my={10}
 						>
 							Back To Search
 						</Button>

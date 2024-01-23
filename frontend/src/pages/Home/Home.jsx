@@ -1,7 +1,8 @@
+// React Imports
 import React from "react";
-
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
+// Custom Component Imports
 import Header from "../../components/General/Header";
 import Home from "../../components/General/Home";
 import Footer from "../../components/General/Footer";

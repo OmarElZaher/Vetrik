@@ -1,17 +1,23 @@
+// React Imports
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
+// Axios Import
+import axios from "axios";
+
+// Chakra-UI Imports
 import { useToast } from "@chakra-ui/react";
 
-import Header from "../../components/General/Header";
+// Custom Component Imports
 import AdminHeader from "../../components/Admin/General/AdminHeader";
 import ChangePassword from "../../components/User/ChangePassword";
+import Header from "../../components/General/Header";
 import Spinner from "../../components/General/Spinner";
 
 export default function ChangePasswordPage() {
 	const toast = useToast();
+
+	// Misc useStates
 	const [isAdmin, setIsAdmin] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 

@@ -1,17 +1,25 @@
+// React Imports
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
-import { Box, Button, Icon, useToast } from "@chakra-ui/react";
+// ChakraUI Imports
+import { Box, IconButton, useToast } from "@chakra-ui/react";
 
+// React Icons Imports
 import { IoMdLogOut } from "react-icons/io";
 
+// Custom Component Imports
 import MyDrawerAdmin from "./MyDrawerAdmin";
 import Spinner from "../../General/Spinner";
 
 export default function AdminHeader() {
 	const navigate = useNavigate();
 	const toast = useToast();
+
+	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleLogout = async () => {
@@ -49,61 +57,56 @@ export default function AdminHeader() {
 		<Spinner />
 	) : (
 		<Box
-			as='nav'
 			bg='#121211'
-			width='100%'
-			height='50px'
 			position='sticky'
 			top={0}
-			color='#FFFFFF'
 			zIndex={10}
+			color='#FFFFFF'
+			width='100%'
+			height='50px'
 		>
 			<Box display='flex' justifyContent='center' alignItems='center'>
 				<Box
-					width='33vw'
-					height='50px'
 					display='flex'
 					justifyContent='flex-start'
 					alignItems='center'
-					key={1}
 					fontSize='25px'
+					width='33vw'
+					height='50px'
 				>
 					<MyDrawerAdmin />
 				</Box>
 				<Box
-					width='33vw'
-					height='50px'
 					display='flex'
 					justifyContent='center'
 					alignItems='center'
-					key={2}
+					width='33vw'
+					height='50px'
 				>
 					<Link to={"/admin"}>LOGO PLACEMENT</Link>
 				</Box>
 				<Box
-					width='33vw'
-					height='50px'
 					display='flex'
 					justifyContent='flex-end'
 					alignItems='center'
-					key={3}
+					width='33vw'
+					height='50px'
 				>
-					<Button
-						fontSize='26px'
-						bg='#121211'
-						color='FFF'
-						variant='link'
-						onClick={handleLogout}
+					<IconButton
 						_hover={{
 							color: "#D4F500",
 						}}
 						_active={{
 							opacity: "0.5",
 						}}
+						onClick={handleLogout}
+						as={IoMdLogOut}
+						size={"sm"}
+						bg='#121211'
+						color='FFF'
+						cursor={"pointer"}
 						transition='all 0.05s ease'
-					>
-						<Icon as={IoMdLogOut} />
-					</Button>
+					/>
 				</Box>
 			</Box>
 		</Box>

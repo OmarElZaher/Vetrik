@@ -1,6 +1,11 @@
+// React Imports
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Axios Import
+import axios from "axios";
+
+// Chakra UI Imports
 import {
 	Badge,
 	Box,
@@ -13,26 +18,26 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 
+// React Icons Imports
 import { IoMdHome } from "react-icons/io";
-import { FaSave } from "react-icons/fa";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaSave } from "react-icons/fa";
 
-import Spinner from "../General/Spinner";
+// Custom Component Imports
 import Footer from "../General/Footer";
-import axios from "axios";
+import Spinner from "../General/Spinner";
 
 export default function EditProfile() {
 	const navigate = useNavigate();
 	const toast = useToast();
 
+	// Form useStates
+	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
+
+	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
 	const [gotData, setGotData] = useState(false);
 	const [error, setError] = useState("");
-
-	const [user, setUser] = useState({});
-
-	const [email, setEmail] = useState("");
-	const [username, setUsername] = useState("");
 	const [isAdmin, setIsAdmin] = useState(false);
 
 	const fetchData = async () => {
@@ -50,7 +55,6 @@ export default function EditProfile() {
 				setEmail(response.data.email);
 				setUsername(response.data.username);
 				setIsAdmin(response.data.isAdmin);
-				setUser(response.data);
 				setGotData(true);
 			} else {
 				setError(response.data.message);
@@ -75,10 +79,6 @@ export default function EditProfile() {
 			setIsLoading(false);
 		}
 	};
-
-	useEffect(() => {
-		fetchData();
-	}, []);
 
 	const handleSubmit = async () => {
 		try {
@@ -125,6 +125,10 @@ export default function EditProfile() {
 		}
 	};
 
+	useEffect(() => {
+		fetchData();
+	}, []);
+
 	return (
 		<>
 			{isLoading ? (
@@ -133,11 +137,11 @@ export default function EditProfile() {
 				<>
 					<Box
 						display={"flex"}
+						flexDirection={"column"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						flexDirection={"column"}
-						height={"87vh"}
 						bg={"#F3F3F3"}
+						height={"87vh"}
 					>
 						<Card
 							display={"flex"}
@@ -153,9 +157,6 @@ export default function EditProfile() {
 								{error}
 							</Text>
 							<Button
-								onClick={() => {
-									navigate("/");
-								}}
 								_hover={{
 									bg: "yellowgreen",
 									color: "#000",
@@ -165,10 +166,13 @@ export default function EditProfile() {
 									transform: "scale(0.99)",
 									opacity: "0.5",
 								}}
-								bg={"#FFF"}
-								mt={10}
-								width={"25vw"}
+								onClick={() => {
+									navigate("/");
+								}}
 								leftIcon={<Icon as={IoMdHome} />}
+								bg={"#FFF"}
+								width={"25vw"}
+								mt={10}
 							>
 								Home
 							</Button>
@@ -182,8 +186,8 @@ export default function EditProfile() {
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						height={"87vh"}
 						bg={"#F3F3F3"}
+						height={"87vh"}
 					>
 						<Card
 							display={"flex"}
@@ -195,11 +199,11 @@ export default function EditProfile() {
 							{/* Header */}
 							<Box
 								display={"flex"}
+								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								flexDirection={"column"}
-								height={"15%"}
 								width={"90%"}
+								height={"15%"}
 								mt={5}
 							>
 								<Icon as={FaRegEdit} fontSize={"40px"} mr={5} />
@@ -216,23 +220,26 @@ export default function EditProfile() {
 							{/* Body */}
 							<Box
 								display={"flex"}
+								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								flexDirection={"column"}
-								height={"70%"}
 								width={"90%"}
+								height={"70%"}
 							>
 								<FormControl
 									display={"flex"}
+									flexDirection={"column"}
 									justifyContent={"center"}
 									alignItems={"flex-start"}
-									flexDirection={"column"}
 									mb={5}
 								>
-									<Text ml={1.5} mb={1} fontSize={"16px"} color={"#7F7F7F"}>
+									<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
 										Username
 									</Text>
 									<Input
+										id='username'
+										type='text'
+										name='username'
 										value={username}
 										placeholder='Username'
 										onChange={(e) => {
@@ -248,11 +255,13 @@ export default function EditProfile() {
 									alignItems={"flex-start"}
 									mb={5}
 								>
-									<Text ml={1.5} mb={1} fontSize={"16px"} color={"#7F7F7F"}>
+									<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
 										Email
 									</Text>
 									<Input
-										width={"100%"}
+										id='email'
+										type='email'
+										name='email'
 										value={email}
 										placeholder='Email'
 										onChange={(e) => {
@@ -272,7 +281,7 @@ export default function EditProfile() {
 											<Text fontWeight={"bold"} fontSize={"12px"}>
 												Is Admin:{" "}
 											</Text>
-											<Badge colorScheme='green' ml={3} fontSize={"12px"}>
+											<Badge colorScheme='green' fontSize={"12px"} ml={3}>
 												True
 											</Badge>
 										</>
@@ -282,9 +291,9 @@ export default function EditProfile() {
 											<Badge
 												variant='outline'
 												colorScheme='red'
+												fontSize={"12px"}
 												ml={3}
 												mt={0.5}
-												fontSize={"12px"}
 											>
 												False
 											</Badge>
@@ -298,11 +307,10 @@ export default function EditProfile() {
 								display={"flex"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								height={"15%"}
 								width={"90%"}
+								height={"15%"}
 							>
 								<Button
-									onClick={handleSubmit}
 									_hover={{
 										bg: "yellowgreen",
 										color: "#000",
@@ -312,6 +320,7 @@ export default function EditProfile() {
 										transform: "scale(0.99)",
 										opacity: "0.5",
 									}}
+									onClick={handleSubmit}
 									leftIcon={<Icon as={FaSave} />}
 									width={"50%"}
 								>

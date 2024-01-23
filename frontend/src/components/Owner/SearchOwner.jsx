@@ -1,6 +1,11 @@
+// React Imports
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+// Axios Import
+import axios from "axios";
+
+// Chakra UI Imports
 import {
 	Box,
 	Button,
@@ -18,22 +23,27 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 
-import { MdSettings } from "react-icons/md";
-import { FaPerson } from "react-icons/fa6";
+// React Icons Imports
 import { IoMdSearch } from "react-icons/io";
+import { FaPerson } from "react-icons/fa6";
+import { MdSettings } from "react-icons/md";
 
-import Spinner from "../General/Spinner";
+// Custom Components Imports
 import Footer from "../General/Footer";
-import axios from "axios";
+import Spinner from "../General/Spinner";
 
 export default function SearchOwner() {
 	const toast = useToast();
 	const navigate = useNavigate();
-	const [isLoading, setIsLoading] = useState(false);
+
+	// Form useStates
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [mobileNumber, setMobileNumber] = useState("");
 	const [email, setEmail] = useState("");
+
+	// Misc useStates
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSearch = async () => {
 		try {
@@ -117,19 +127,19 @@ export default function SearchOwner() {
 						display={"flex"}
 						justifyContent={"space-around"}
 						alignItems={"center"}
+						bg={"#F3F3F3"}
 						width={"100%"}
 						height={"87vh"}
-						bg={"#F3F3F3"}
 					>
 						<Card width='80%' height='80%'>
 							<Box
-								px={5}
-								pt={5}
 								display={"flex"}
+								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								flexDirection={"column"}
 								height={"20%"}
+								px={5}
+								pt={5}
 							>
 								<Icon as={FaPerson} fontSize={"60px"} />
 
@@ -138,7 +148,7 @@ export default function SearchOwner() {
 								</Heading>
 							</Box>
 
-							<Box ml={10} my={7} height={"10%"}>
+							<Box height={"10%"} ml={10} my={7}>
 								<List>
 									<ListItem>
 										<ListIcon as={MdSettings} color='yellowgreen' />
@@ -157,50 +167,50 @@ export default function SearchOwner() {
 
 							<hr />
 
-							<Box p={10} height={"50%"}>
+							<Box height={"50%"} p={10}>
 								{/* Search Form */}
 								<FormControl
 									id='fullName'
 									display={"flex"}
 									justifyContent={"space-evenly"}
 								>
-									<InputGroup>
-										<Input
-											type='text'
-											name='firstName'
-											placeholder='First Name'
-											value={firstName}
-											onChange={handleFirstNameChange}
-											mr={2.5}
-										/>
-										<Input
-											type='text'
-											name='lastName'
-											placeholder='Last Name'
-											value={lastName}
-											onChange={handleLastNameChange}
-											ml={2.5}
-										/>
-									</InputGroup>
+									<Input
+										id='firstName'
+										type='text'
+										name='firstName'
+										placeholder='First Name'
+										value={firstName}
+										onChange={handleFirstNameChange}
+										mr={2.5}
+									/>
+									<Input
+										id='lastName'
+										type='text'
+										name='lastName'
+										placeholder='Last Name'
+										value={lastName}
+										onChange={handleLastNameChange}
+										ml={2.5}
+									/>
 								</FormControl>
 
 								<FormControl id='email'>
-									<InputGroup>
-										<Input
-											type='email'
-											name='email'
-											placeholder='Email'
-											value={email}
-											onChange={handleEmailChange}
-											mt={5}
-										/>
-									</InputGroup>
+									<Input
+										id='email'
+										type='email'
+										name='email'
+										placeholder='Email'
+										value={email}
+										onChange={handleEmailChange}
+										mt={5}
+									/>
 								</FormControl>
 
 								<FormControl id='mobileNumber' mt={5}>
 									<InputGroup>
-										<InputLeftAddon>+20</InputLeftAddon>
+										<InputLeftAddon>+2</InputLeftAddon>
 										<Input
+											id='mobileNumber'
 											type='tel'
 											name='mobileNumber'
 											placeholder='Mobile Number'
@@ -217,7 +227,6 @@ export default function SearchOwner() {
 									alignItems={"center"}
 								>
 									<Button
-										onClick={handleSubmit}
 										_hover={{
 											bg: "yellowgreen",
 											color: "#000",
@@ -227,9 +236,10 @@ export default function SearchOwner() {
 											transform: "scale(0.99)",
 											opacity: "0.5",
 										}}
-										mt={10}
-										width={"50%"}
+										onClick={handleSubmit}
 										leftIcon={<Icon as={IoMdSearch} />}
+										width={"50%"}
+										mt={10}
 									>
 										Search
 									</Button>

@@ -9,9 +9,9 @@ export default function Home() {
 				display={"flex"}
 				justifyContent={"center"}
 				alignItems={"center"}
-				height={"87vh"}
 				bg={"#F3F3F3"}
-			></Grid>
+				height={"87vh"}
+			/>
 		</>
 	);
 }

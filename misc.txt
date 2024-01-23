@@ -3,8 +3,9 @@ When updating user email, send confirmation message with OTP etc same for when c
 Lessa lazem a3mel hewar el upload healthrecords w keda dih mohema mot actually bas other wise supposedly the backend is complete
 
 FRONTEND
-fix change password input boxes
-
+prettier code
+fix lowercase handling 
+README.md file
 
 
 Revoking a token typically involves changing some property of the user (like the password or a token-related field) to invalidate the existing token. Here's a general outline of how you might approach token revocation:

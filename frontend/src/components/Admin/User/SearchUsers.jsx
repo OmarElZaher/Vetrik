@@ -1,40 +1,48 @@
+// React Imports
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
+// ChakraUI Imports
 import {
 	Box,
 	Button,
 	Card,
 	FormControl,
 	Heading,
+	Icon,
 	Input,
 	InputGroup,
-	InputLeftAddon,
-	Icon,
 	List,
-	Text,
-	ListItem,
 	ListIcon,
+	ListItem,
+	Text,
 	useToast,
 } from "@chakra-ui/react";
 
-import { MdSettings } from "react-icons/md";
+// React Icons Imports
 import { FaPerson } from "react-icons/fa6";
 import { IoMdSearch } from "react-icons/io";
+import { MdSettings } from "react-icons/md";
 
-import Spinner from "../General/Spinner";
+// Custom Component Imports
 import Footer from "../General/Footer";
+import Spinner from "../General/Spinner";
 
 export default function SearchUsers() {
 	const navigate = useNavigate();
 	const toast = useToast();
 
-	const [isLoading, setIsLoading] = useState(false);
+	// Form useStates
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
+
+	// Misc useStates
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSearch = async () => {
 		try {
@@ -90,19 +98,19 @@ export default function SearchUsers() {
 						display={"flex"}
 						justifyContent={"space-around"}
 						alignItems={"center"}
+						bg={"#F3F3F3"}
 						width={"100%"}
 						height={"87vh"}
-						bg={"#F3F3F3"}
 					>
 						<Card width='80%' height='80%'>
 							<Box
-								px={5}
-								pt={5}
 								display={"flex"}
+								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								flexDirection={"column"}
 								height={"20%"}
+								px={5}
+								pt={5}
 							>
 								<Icon as={FaPerson} fontSize={"60px"} />
 
@@ -130,7 +138,7 @@ export default function SearchUsers() {
 
 							<hr />
 
-							<Box p={10} height={"50%"}>
+							<Box p={10} height={"50%"} width={"100%"}>
 								{/* Search Form */}
 								<FormControl
 									id='name'
@@ -139,6 +147,7 @@ export default function SearchUsers() {
 									mb={5}
 								>
 									<Input
+										id='firstName'
 										type='text'
 										name='firstName'
 										placeholder='First Name'
@@ -149,6 +158,7 @@ export default function SearchUsers() {
 										mr={2.5}
 									/>
 									<Input
+										id='lastName'
 										type='text'
 										name='lastName'
 										placeholder='Last Name'
@@ -165,42 +175,40 @@ export default function SearchUsers() {
 									display={"flex"}
 									justifyContent={"space-evenly"}
 								>
-									<InputGroup>
-										<Input
-											type='text'
-											name='username'
-											placeholder='Username'
-											value={username}
-											onChange={(e) => {
-												setUsername(e.target.value);
-											}}
-										/>
-									</InputGroup>
+									<Input
+										id='username'
+										type='text'
+										name='username'
+										placeholder='Username'
+										value={username}
+										onChange={(e) => {
+											setUsername(e.target.value);
+										}}
+									/>
 								</FormControl>
 
 								<FormControl id='email'>
-									<InputGroup>
-										<Input
-											type='email'
-											name='email'
-											placeholder='Email'
-											value={email}
-											onChange={(e) => {
-												setEmail(e.target.value);
-											}}
-											mt={5}
-										/>
-									</InputGroup>
+									<Input
+										id='email'
+										type='email'
+										name='email'
+										placeholder='Email'
+										value={email}
+										onChange={(e) => {
+											setEmail(e.target.value);
+										}}
+										mt={5}
+									/>
 								</FormControl>
 
 								<FormControl
+									id='submit'
 									display={"flex"}
 									flexDirection={"column"}
 									justifyContent={"center"}
 									alignItems={"center"}
 								>
 									<Button
-										onClick={handleSearch}
 										_hover={{
 											bg: "yellowgreen",
 											color: "#000",
@@ -210,9 +218,10 @@ export default function SearchUsers() {
 											transform: "scale(0.99)",
 											opacity: "0.5",
 										}}
-										mt={10}
-										width={"50%"}
+										onClick={handleSearch}
 										leftIcon={<Icon as={IoMdSearch} />}
+										width={"50%"}
+										mt={10}
 									>
 										Search
 									</Button>

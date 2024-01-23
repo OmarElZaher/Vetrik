@@ -1,6 +1,11 @@
+// React Imports
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+// Axios Import
+import axios from "axios";
+
+// Chakra UI Imports
 import {
 	Box,
 	Button,
@@ -11,29 +16,33 @@ import {
 	InputGroup,
 	Icon,
 	List,
-	Select,
-	Text,
 	ListItem,
 	ListIcon,
+	Select,
+	Text,
 	useToast,
 } from "@chakra-ui/react";
 
-import { MdSettings } from "react-icons/md";
-import { MdOutlinePets } from "react-icons/md";
+// React Icons Imports
 import { IoMdSearch } from "react-icons/io";
+import { MdOutlinePets, MdSettings } from "react-icons/md";
 
+// Component Imports
 import Spinner from "../General/Spinner";
 import Footer from "../General/Footer";
-import axios from "axios";
 
 export default function SearchPet() {
 	const toast = useToast();
 	const navigate = useNavigate();
-	const [isLoading, setIsLoading] = useState(false);
+
+	// Form useStates
 	const [name, setName] = useState("");
 	const [type, setType] = useState("");
 	const [breed, setBreed] = useState("");
 	const [gender, setGender] = useState("");
+
+	// Misc useStates
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSearch = async () => {
 		try {
@@ -113,19 +122,19 @@ export default function SearchPet() {
 				display={"flex"}
 				justifyContent={"space-around"}
 				alignItems={"center"}
+				bg={"#F3F3F3"}
 				width={"100%"}
 				height={"87vh"}
-				bg={"#F3F3F3"}
 			>
 				<Card width='80%' height='80%'>
 					<Box
-						px={5}
-						pt={5}
 						display={"flex"}
+						flexDirection={"column"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						flexDirection={"column"}
 						height={"20%"}
+						px={5}
+						pt={5}
 					>
 						<Icon as={MdOutlinePets} fontSize={"60px"} />
 
@@ -134,7 +143,7 @@ export default function SearchPet() {
 						</Heading>
 					</Box>
 
-					<Box ml={10} my={7} height={"10%"}>
+					<Box height={"10%"} ml={10} my={7}>
 						<List>
 							<ListItem>
 								<ListIcon as={MdSettings} color='yellowgreen' />
@@ -153,68 +162,71 @@ export default function SearchPet() {
 
 					<hr />
 
-					<Box p={10} height={"50%"}>
+					<Box height={"50%"} p={10}>
 						{/* Search Form */}
 						<FormControl
 							id='name'
 							display={"flex"}
 							justifyContent={"space-evenly"}
 						>
-							<InputGroup>
-								<Input
-									type='text'
-									name='name'
-									placeholder='Name'
-									value={name}
-									onChange={handleNameChange}
-								/>
-							</InputGroup>
+							<Input
+								id='name'
+								type='text'
+								name='name'
+								placeholder='Name'
+								value={name}
+								onChange={handleNameChange}
+							/>
 						</FormControl>
 
-						<FormControl id='type'>
-							<InputGroup>
-								<Select
-									name='type'
-									placeholder='Select Type of Animal'
-									value={type}
-									onChange={handleTypeChange}
-									cursor={"pointer"}
-									mt={5}
-									mr={2.5}
-								>
-									<option value='Dog'>Dog</option>
-									<option value='Cat'>Cat</option>
-									<option value='Bird'>Bird</option>
-									<option value='Turtle'>Turtle</option>
-									<option value='Monkey'>Monkey</option>
-									<option value='HamsterFish'>Hamster</option>
-									<option value='Fish'>Fish</option>
-								</Select>
-								<Input
-									type='text'
-									name='breed'
-									placeholder='Breed of Animal'
-									value={breed}
-									onChange={handleBreedChange}
-									mt={5}
-									ml={2.5}
-								/>
-							</InputGroup>
+						<FormControl
+							id='type'
+							display={"flex"}
+							justifyContent={"space-evenly"}
+							alignItems={"center"}
+						>
+							<Select
+								id='type'
+								name='type'
+								placeholder='Select Type of Animal'
+								cursor={"pointer"}
+								value={type}
+								onChange={handleTypeChange}
+								mt={5}
+								mr={2.5}
+							>
+								<option value='Dog'>Dog</option>
+								<option value='Cat'>Cat</option>
+								<option value='Bird'>Bird</option>
+								<option value='Turtle'>Turtle</option>
+								<option value='Monkey'>Monkey</option>
+								<option value='HamsterFish'>Hamster</option>
+								<option value='Fish'>Fish</option>
+							</Select>
+							<Input
+								id='breed'
+								type='text'
+								name='breed'
+								placeholder='Breed of Animal'
+								value={breed}
+								onChange={handleBreedChange}
+								mt={5}
+								ml={2.5}
+							/>
 						</FormControl>
 
 						<FormControl id='gender' mt={5}>
-							<InputGroup>
-								<Select
-									name='gender'
-									placeholder='Select Gender'
-									value={gender}
-									onChange={handleGenderChange}
-									cursor={"pointer"}
-								>
-									<option value='Male'>Male</option>
-									<option value='Female'>Female</option>
-								</Select>
-							</InputGroup>
+							<Select
+								id='gender'
+								name='gender'
+								placeholder='Select Gender'
+								cursor={"pointer"}
+								value={gender}
+								onChange={handleGenderChange}
+							>
+								<option value='Male'>Male</option>
+								<option value='Female'>Female</option>
+							</Select>
 						</FormControl>
 
 						<FormControl
@@ -224,7 +236,6 @@ export default function SearchPet() {
 							alignItems={"center"}
 						>
 							<Button
-								onClick={handleSubmit}
 								_hover={{
 									bg: "yellowgreen",
 									color: "#000",
@@ -234,9 +245,10 @@ export default function SearchPet() {
 									transform: "scale(0.99)",
 									opacity: "0.5",
 								}}
-								mt={10}
-								width={"50%"}
+								onClick={handleSubmit}
 								leftIcon={<Icon as={IoMdSearch} />}
+								width={"50%"}
+								mt={10}
 							>
 								Search
 							</Button>

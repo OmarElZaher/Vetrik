@@ -1,34 +1,27 @@
+// React Imports
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
+// ChakraUI Imports
 import {
 	Box,
 	Button,
 	Card,
-	CardBody,
-	FormControl,
-	Icon,
-	Input,
 	Tooltip,
-	Table,
-	TableContainer,
-	Th,
-	Thead,
-	Tr,
-	Td,
-	Tbody,
 	Text,
-	Select,
 	useToast,
 	Badge,
 } from "@chakra-ui/react";
 
-import { IoMdEye, IoMdAdd, IoMdArrowRoundBack } from "react-icons/io";
+// React Icons Imports
 import { TbTrashXFilled } from "react-icons/tb";
 
-import Spinner from "../General/Spinner";
+// Custom Component Imports
 import Footer from "../General/Footer";
+import Spinner from "../General/Spinner";
 
 function titleCase(str) {
 	return str
@@ -45,12 +38,14 @@ export default function UserDetails() {
 	const navigate = useNavigate();
 	const toast = useToast();
 
-	const [isLoading, setIsLoading] = useState(false);
-
+	// User useStates
 	const [user, setUser] = useState(null);
+	const [isAdmin, setIsAdmin] = useState(false);
+
+	// Misc useStates
+	const [isLoading, setIsLoading] = useState(false);
 	const [gotData, setGotData] = useState(false);
 	const [error, setError] = useState(null);
-	const [isAdmin, setIsAdmin] = useState(false);
 
 	const handleDeleteUser = async () => {
 		const confirmDelete = window.confirm(
@@ -190,11 +185,11 @@ export default function UserDetails() {
 		<>
 			<Box
 				display={"flex"}
+				flexDirection={"column"}
 				justifyContent={"center"}
 				alignItems={"center"}
-				flexDirection={"column"}
-				height={"87vh"}
 				bg={"#F3F3F3"}
+				height={"87vh"}
 			>
 				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
 					ERROR
@@ -203,9 +198,6 @@ export default function UserDetails() {
 					{error}
 				</Text>
 				<Button
-					onClick={() => {
-						navigate("/admin/search-users");
-					}}
 					_hover={{
 						bg: "yellowgreen",
 						color: "#000",
@@ -215,9 +207,12 @@ export default function UserDetails() {
 						transform: "scale(0.99)",
 						opacity: "0.5",
 					}}
+					onClick={() => {
+						navigate("/admin/search-users");
+					}}
 					bg={"#FFF"}
-					mt={10}
 					width={"25vw"}
+					mt={10}
 				>
 					Go Back To Search
 				</Button>
@@ -230,26 +225,26 @@ export default function UserDetails() {
 				display={"flex"}
 				justifyContent={"center"}
 				alignItems={"center"}
+				bg={"#F3F3F3"}
 				width={"100vw"}
 				height={"87vh"}
-				bg={"#F3F3F3"}
 			>
 				{/* User Information */}
 				<Card
-					width='80%'
-					height='95%'
 					justifyContent={"center"}
 					alignItems={"center"}
+					width='80%'
+					height='95%'
 				>
 					<Box
 						display={"flex"}
+						flexDirection={"column"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						flexDirection={"column"}
+						bg={"#CCC"}
+						borderTopRadius={"10px"}
 						width={"90%"}
 						height={"15%"}
-						borderTopRadius={"10px"}
-						bg={"#CCC"}
 					>
 						<Text
 							fontSize={"30px"}
@@ -267,15 +262,15 @@ export default function UserDetails() {
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
+						border={"2px solid #CCC"}
 						width={"90%"}
 						height={"60%"}
-						border={"2px solid #CCC"}
 					>
 						<Box
 							display={"flex"}
+							flexDirection={"column"}
 							justifyContent={"center"}
 							alignItems={"center"}
-							flexDirection={"column"}
 							width={"40%"}
 							height={"80%"}
 						>
@@ -287,12 +282,12 @@ export default function UserDetails() {
 
 						<Box
 							display={"flex"}
+							flexDirection={"column"}
 							justifyContent={"center"}
 							alignItems={"center"}
-							flexDirection={"column"}
+							borderLeft={"1px solid #CCC"}
 							width={"40%"}
 							height={"80%"}
-							borderLeft={"1px solid #CCC"}
 						>
 							<Text fontSize={"30px"} fontWeight={"bold"}>
 								Email
@@ -305,9 +300,9 @@ export default function UserDetails() {
 							flexDirection={"column"}
 							justifyContent={"center"}
 							alignItems={"center"}
+							borderLeft={"1px solid #CCC"}
 							width={"20%"}
 							height={"80%"}
-							borderLeft={"1px solid #CCC"}
 						>
 							<Text fontWeight={"bold"}>
 								Is Admin:{" "}
@@ -324,10 +319,10 @@ export default function UserDetails() {
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						width={"90%"}
-						height={"10%"}
 						bg={"#CCC"}
 						borderBottomRadius={"10px"}
+						width={"90%"}
+						height={"10%"}
 					>
 						<Tooltip
 							hasArrow
@@ -337,7 +332,6 @@ export default function UserDetails() {
 							bg={"yellowgreen"}
 						>
 							<Button
-								onClick={handleSetAdmin}
 								_hover={{
 									bg: "yellowgreen",
 									color: "#000",
@@ -347,6 +341,7 @@ export default function UserDetails() {
 									transform: "scale(0.99)",
 									opacity: "0.5",
 								}}
+								onClick={handleSetAdmin}
 								mx={1.5}
 							>
 								Set As Admin
@@ -360,7 +355,6 @@ export default function UserDetails() {
 							bg={"#EF5350"}
 						>
 							<Button
-								onClick={handleDeleteUser}
 								_hover={{
 									bg: "#EF5350",
 									color: "#000",
@@ -370,6 +364,7 @@ export default function UserDetails() {
 									transform: "scale(0.99)",
 									opacity: "0.5",
 								}}
+								onClick={handleDeleteUser}
 								variant={"outline"}
 								borderColor={"#EF5350"}
 								leftIcon={<TbTrashXFilled />}

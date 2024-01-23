@@ -1,7 +1,11 @@
+// React Imports
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
+// Chakra UI Imports
 import {
 	Box,
 	Button,
@@ -9,7 +13,6 @@ import {
 	CardBody,
 	FormControl,
 	Input,
-	Tooltip,
 	Table,
 	TableContainer,
 	Th,
@@ -18,15 +21,18 @@ import {
 	Td,
 	Tbody,
 	Text,
+	Tooltip,
 	Select,
 	useToast,
 } from "@chakra-ui/react";
 
+// React Icons Imports
 import { IoMdEye, IoMdAdd, IoMdArrowRoundBack } from "react-icons/io";
 import { TbTrashXFilled } from "react-icons/tb";
 
-import Spinner from "../General/Spinner";
+// Custom Component Imports
 import Footer from "../General/Footer";
+import Spinner from "../General/Spinner";
 
 function titleCase(str) {
 	return str
@@ -42,12 +48,16 @@ export default function OwnerDetails() {
 	const { ownerId } = useParams();
 	const toast = useToast();
 	const navigate = useNavigate();
+
+	// Owner useState
 	const [owner, setOwner] = useState({});
+
+	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
 	const [gotData, setGotData] = useState(false);
 	const [error, setError] = useState(null);
 
-	// Add Pet Details
+	// Add Pet Form useStates
 	const [name, setName] = useState("");
 	const [type, setType] = useState("");
 	const [breed, setBreed] = useState("");
@@ -275,11 +285,11 @@ export default function OwnerDetails() {
 		<>
 			<Box
 				display={"flex"}
+				flexDirection={"column"}
 				justifyContent={"center"}
 				alignItems={"center"}
-				flexDirection={"column"}
-				height={"87vh"}
 				bg={"#F3F3F3"}
+				height={"87vh"}
 			>
 				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
 					ERROR
@@ -288,9 +298,6 @@ export default function OwnerDetails() {
 					{error}
 				</Text>
 				<Button
-					onClick={() => {
-						navigate("/search-owner");
-					}}
 					_hover={{
 						bg: "yellowgreen",
 						color: "#000",
@@ -300,9 +307,13 @@ export default function OwnerDetails() {
 						transform: "scale(0.99)",
 						opacity: "0.5",
 					}}
+					onClick={() => {
+						navigate("/search-owner");
+					}}
+					leftIcon={<IoMdArrowRoundBack />}
 					bg={"#FFF"}
-					mt={10}
 					width={"25vw"}
+					mt={10}
 				>
 					Go Back To Search
 				</Button>
@@ -326,11 +337,11 @@ export default function OwnerDetails() {
 						justifyContent={"center"}
 					>
 						<Box
-							mb={2}
-							height={"15%"}
 							display={"flex"}
 							justifyContent={"center"}
 							alignItems={"center"}
+							height={"15%"}
+							mb={2}
 						>
 							<Text
 								fontSize={"30px"}
@@ -342,19 +353,19 @@ export default function OwnerDetails() {
 						</Box>
 						<hr />
 						<Box
-							height={"15%"}
-							my={2}
 							display={"flex"}
 							justifyContent={"space-evenly"}
+							height={"15%"}
+							my={2}
 						>
 							<Box
-								width={"33%"}
-								m={2}
-								p={2}
 								display={"flex"}
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
+								width={"33%"}
+								m={2}
+								p={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
 									Email
@@ -362,12 +373,12 @@ export default function OwnerDetails() {
 								<Text fontSize={"20px"}>{owner.email}</Text>
 							</Box>
 							<Box
-								width={"33%"}
-								m={2}
 								display={"flex"}
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
+								width={"33%"}
+								m={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
 									Mobile Number
@@ -376,13 +387,13 @@ export default function OwnerDetails() {
 							</Box>
 
 							<Box
-								width={"33%"}
-								m={2}
-								p={2}
 								display={"flex"}
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
+								width={"33%"}
+								m={2}
+								p={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
 									Contact Method
@@ -399,11 +410,11 @@ export default function OwnerDetails() {
 
 						{/* Pets Table */}
 						<Box
-							height={"60%"}
 							display={"flex"}
 							flexDirection={"column"}
 							justifyContent={"center"}
 							alignItems={"center"}
+							height={"60%"}
 						>
 							<Text fontSize={"24px"} fontWeight={"bold"}>
 								Pets
@@ -430,9 +441,6 @@ export default function OwnerDetails() {
 												<Td textAlign={"center"}>{pet.gender}</Td>
 												<Td textAlign={"center"}>
 													<Button
-														onClick={() => {
-															navigate(`/pet-details/${pet._id}`);
-														}}
 														_hover={{
 															bg: "yellowgreen",
 															color: "#000",
@@ -442,8 +450,11 @@ export default function OwnerDetails() {
 															transform: "scale(0.99)",
 															opacity: "0.5",
 														}}
-														mr={2.5}
+														onClick={() => {
+															navigate(`/pet-details/${pet._id}`);
+														}}
 														leftIcon={<IoMdEye />}
+														mr={2.5}
 													>
 														View
 													</Button>
@@ -456,11 +467,6 @@ export default function OwnerDetails() {
 														openDelay={75}
 													>
 														<Button
-															variant={"outline"}
-															borderColor={"#EF5350"}
-															onClick={() => {
-																handleRemovePet(pet._id);
-															}}
 															_hover={{
 																bg: "#EF5350",
 																color: "#000",
@@ -470,8 +476,13 @@ export default function OwnerDetails() {
 																transform: "scale(0.99)",
 																opacity: "0.5",
 															}}
-															ml={2.5}
+															onClick={() => {
+																handleRemovePet(pet._id);
+															}}
+															variant={"outline"}
+															borderColor={"#EF5350"}
 															leftIcon={<TbTrashXFilled />}
+															ml={2.5}
 														>
 															Remove
 														</Button>
@@ -492,8 +503,6 @@ export default function OwnerDetails() {
 							height={"10%"}
 						>
 							<Button
-								width={"40%"}
-								mr={2.5}
 								onClick={() => {
 									if (localStorage.getItem("ownerFilterData")) {
 										navigate("/owner-table");
@@ -511,6 +520,8 @@ export default function OwnerDetails() {
 									opacity: "0.5",
 								}}
 								leftIcon={<IoMdArrowRoundBack />}
+								width={"40%"}
+								mr={2.5}
 							>
 								Filtered Owners Table
 							</Button>
@@ -522,11 +533,6 @@ export default function OwnerDetails() {
 								openDelay={75}
 							>
 								<Button
-									width={"25%"}
-									variant={"outline"}
-									borderColor={"#EF5350"}
-									ml={2.5}
-									onClick={handleDeleteOwner}
 									_hover={{
 										bg: "#EF5350",
 										color: "#000",
@@ -536,7 +542,12 @@ export default function OwnerDetails() {
 										transform: "scale(0.99)",
 										opacity: "0.5",
 									}}
+									onClick={handleDeleteOwner}
 									leftIcon={<TbTrashXFilled />}
+									variant={"outline"}
+									borderColor={"#EF5350"}
+									width={"25%"}
+									ml={2.5}
 								>
 									Delete
 								</Button>
@@ -552,7 +563,7 @@ export default function OwnerDetails() {
 						flexDirection={"column"}
 						justifyContent={"center"}
 					>
-						<Box height={"15%"} display={"flex"} justifyContent={"center"}>
+						<Box display={"flex"} justifyContent={"center"} height={"15%"}>
 							<Text
 								fontSize={"30px"}
 								fontWeight={"bold"}
@@ -583,16 +594,17 @@ export default function OwnerDetails() {
 							</Text>
 						</Box>
 						<Box
-							height={"60%"}
-							p={2}
-							mb={2}
 							display={"flex"}
 							flexDirection={"column"}
 							justifyContent={"center"}
 							alignItems={"center"}
+							height={"60%"}
+							p={2}
+							mb={2}
 						>
 							<FormControl id='name' mb={5}>
 								<Input
+									id='name'
 									type='text'
 									name='name'
 									placeholder='Pet Name'
@@ -611,9 +623,10 @@ export default function OwnerDetails() {
 								mb={5}
 							>
 								<Select
+									id='type'
 									name='type'
-									cursor={"pointer"}
 									placeholder='Type of Animal'
+									cursor={"pointer"}
 									value={type}
 									onChange={(e) => {
 										setType(e.target.value);
@@ -630,6 +643,7 @@ export default function OwnerDetails() {
 								</Select>
 
 								<Input
+									id='breed'
 									type='text'
 									name='breed'
 									placeholder='Breed of Animal'
@@ -642,9 +656,10 @@ export default function OwnerDetails() {
 							</FormControl>
 							<FormControl id='gender' mb={5}>
 								<Select
+									id='gender'
 									name='gender'
-									cursor={"pointer"}
 									placeholder='Select Gender'
+									cursor={"pointer"}
 									value={gender}
 									onChange={(e) => {
 										setGender(e.target.value);
@@ -656,6 +671,7 @@ export default function OwnerDetails() {
 							</FormControl>
 							<FormControl id='dob'>
 								<Input
+									id='dob'
 									type='date'
 									name='dob'
 									placeholder='Date of Birth'
@@ -674,7 +690,6 @@ export default function OwnerDetails() {
 							height={"10%"}
 						>
 							<Button
-								onClick={handleAddPet}
 								_hover={{
 									bg: "yellowgreen",
 									color: "#000",
@@ -684,8 +699,9 @@ export default function OwnerDetails() {
 									transform: "scale(0.99)",
 									opacity: "0.5",
 								}}
-								width={"25%"}
+								onClick={handleAddPet}
 								leftIcon={<IoMdAdd />}
+								width={"25%"}
 							>
 								Add
 							</Button>

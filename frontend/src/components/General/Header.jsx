@@ -1,18 +1,27 @@
+// React Imports
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
-import { Box, Button, Icon, useToast } from "@chakra-ui/react";
+// Chakra UI Imports
+import { Box, IconButton, useToast } from "@chakra-ui/react";
 
+// React Icons Imports
 import { IoMdLogOut } from "react-icons/io";
 
+// Custom Component Imports
 import MyDrawer from "./MyDrawer";
 import Spinner from "./Spinner";
 
 export default function Header() {
 	const navigate = useNavigate();
 	const toast = useToast();
+
+	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
+	const [isAdmin, setIsAdmin] = useState(false);
 
 	const handleLogout = async () => {
 		localStorage.clear();
@@ -45,8 +54,6 @@ export default function Header() {
 			setIsLoading(false);
 		}
 	};
-
-	const [isAdmin, setIsAdmin] = useState(false);
 
 	const fetchData = async () => {
 		try {
@@ -129,12 +136,13 @@ export default function Header() {
 					alignItems='center'
 					key={3}
 				>
-					<Button
-						fontSize='26px'
+					<IconButton
+						as={IoMdLogOut}
+						size={"sm"}
 						bg='#121211'
 						color='FFF'
-						variant='link'
 						onClick={handleLogout}
+						cursor={"pointer"}
 						_hover={{
 							color: "#D4F500",
 						}}
@@ -142,9 +150,7 @@ export default function Header() {
 							opacity: "0.5",
 						}}
 						transition='all 0.05s ease'
-					>
-						<Icon as={IoMdLogOut} />
-					</Button>
+					/>
 				</Box>
 			</Box>
 		</Box>

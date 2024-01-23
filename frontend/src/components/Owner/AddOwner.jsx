@@ -1,7 +1,11 @@
+// React Imports
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
+// Chakra UI Imports
 import {
 	Box,
 	Button,
@@ -17,9 +21,11 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 
-import { FaPerson } from "react-icons/fa6";
+// React Icons Imports
 import { IoMdAdd } from "react-icons/io";
+import { FaPerson } from "react-icons/fa6";
 
+// Custom Component Imports
 import Spinner from "../General/Spinner";
 import Footer from "../General/Footer";
 
@@ -27,7 +33,7 @@ export default function AddOwner() {
 	const navigate = useNavigate();
 	const toast = useToast();
 
-	// Owner Data
+	// Form useStates
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [mobileNumber, setMobileNumber] = useState("");
@@ -138,15 +144,15 @@ export default function AddOwner() {
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						height={"87vh"}
 						bg={"#F3F3F3"}
+						height={"87vh"}
 					>
 						<Card
-							width={"80%"}
-							height={"80%"}
 							display={"flex"}
 							justifyContent={"center"}
 							alignItems={"center"}
+							width={"80%"}
+							height={"80%"}
 						>
 							<CardBody
 								display={"flex"}
@@ -155,19 +161,19 @@ export default function AddOwner() {
 								width={"80%"}
 							>
 								<Box
-									height={"5%"}
-									mt={5}
 									display={"flex"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									height={"5%"}
+									mt={5}
 								>
 									<Icon as={FaPerson} fontSize={"60px"} />
 								</Box>
 								<Box
-									height={"15%"}
 									display={"flex"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									height={"15%"}
 									mt={5}
 								>
 									<Text fontSize={"3xl"} fontWeight={"bold"}>
@@ -176,11 +182,11 @@ export default function AddOwner() {
 								</Box>
 
 								<Box
-									height={"60%"}
 									display={"flex"}
+									flexDirection={"column"}
 									justifyContent={"center"}
 									alignItems={"center"}
-									flexDirection={"column"}
+									height={"60%"}
 								>
 									<FormControl
 										id='name'
@@ -188,7 +194,7 @@ export default function AddOwner() {
 										justifyContent={"space-evenly"}
 									>
 										<Input
-											mr={2.5}
+											id='firstName'
 											type='text'
 											name='firstName'
 											placeholder='First Name'
@@ -196,8 +202,10 @@ export default function AddOwner() {
 											onChange={(e) => {
 												setFirstName(e.target.value);
 											}}
+											mr={2.5}
 										/>
 										<Input
+											id='lastName'
 											type='text'
 											name='lastName'
 											placeholder='Last Name'
@@ -209,13 +217,14 @@ export default function AddOwner() {
 											mr={2.5}
 										/>
 										<Select
+											id='gender'
 											name='gender'
 											placeholder='Select Gender'
+											cursor={"pointer"}
 											value={gender}
 											onChange={(e) => {
 												setGender(e.target.value);
 											}}
-											cursor={"pointer"}
 											ml={2.5}
 										>
 											<option value='Male'>Male</option>
@@ -225,6 +234,7 @@ export default function AddOwner() {
 
 									<FormControl id='email'>
 										<Input
+											id='email'
 											type='email'
 											name='email'
 											placeholder='Email'
@@ -238,8 +248,9 @@ export default function AddOwner() {
 
 									<FormControl id='mobileNumber' mt={5}>
 										<InputGroup>
-											<InputLeftAddon>+20</InputLeftAddon>
+											<InputLeftAddon>+2</InputLeftAddon>
 											<Input
+												id='mobileNumber'
 												type='tel'
 												name='mobileNumber'
 												placeholder='Mobile Number'
@@ -253,13 +264,14 @@ export default function AddOwner() {
 
 									<FormControl id='notifications' mt={5} display={"flex"}>
 										<Select
+											id='receiveNotifications'
 											name='receiveNotifications'
 											placeholder='Receive Notifications?'
+											cursor={"pointer"}
 											value={receiveNotifications}
 											onChange={(e) => {
 												setReceiveNotifications(e.target.value);
 											}}
-											cursor={"pointer"}
 											mr={2.5}
 										>
 											<option value='true'>Yes</option>
@@ -267,14 +279,14 @@ export default function AddOwner() {
 										</Select>
 
 										<Select
+											id='preferredContactMethod'
 											name='preferredContactMethod'
 											placeholder='Select Preferred Contact Method'
+											cursor={"pointer"}
 											value={preferredContactMethod}
 											onChange={(e) => {
 												setPreferredContactMethod(e.target.value);
 											}}
-											cursor={"pointer"}
-											ml={2.5}
 											disabled={
 												receiveNotifications === "false" ||
 												receiveNotifications === null ||
@@ -283,6 +295,7 @@ export default function AddOwner() {
 											{...(receiveNotifications === "false"
 												? { disabled: true }
 												: {})}
+											ml={2.5}
 										>
 											<option value='Email'>Email</option>
 											<option value='Phone'>Phone</option>
@@ -293,10 +306,10 @@ export default function AddOwner() {
 								</Box>
 
 								<Box
-									height={"10%"}
 									display={"flex"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									height={"10%"}
 								>
 									<Button
 										_hover={{
@@ -309,8 +322,8 @@ export default function AddOwner() {
 											opacity: "0.5",
 										}}
 										onClick={handleAdd}
-										width={"25%"}
 										leftIcon={<IoMdAdd />}
+										width={"25%"}
 									>
 										{" "}
 										Add{" "}

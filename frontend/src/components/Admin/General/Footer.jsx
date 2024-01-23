@@ -1,12 +1,12 @@
-import { Box, Container, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, Container, Text } from "@chakra-ui/react";
 
 export default function Footer() {
 	return (
 		<Box
-			bg={"#121211"}
-			color={"#F3F3F3"}
 			display={"flex"}
 			flexDirection={"column"}
+			bg={"#121211"}
+			color={"#F3F3F3"}
 			height={"8vh"}
 		>
 			<Box flex={"1"}></Box>

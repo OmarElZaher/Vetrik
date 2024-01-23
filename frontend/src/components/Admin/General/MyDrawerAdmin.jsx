@@ -1,6 +1,8 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+// React Imports
+import React, { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
+// ChakraUI Imports
 import {
 	Box,
 	Button,
@@ -11,30 +13,33 @@ import {
 	DrawerOverlay,
 	DrawerContent,
 	DrawerCloseButton,
+	Icon,
 	IconButton,
 	useDisclosure,
-	Icon,
 } from "@chakra-ui/react";
-
-import { Flex } from "antd";
 
 import { HamburgerIcon } from "@chakra-ui/icons";
 
-import { IoMdSearch } from "react-icons/io";
-import { IoAdd } from "react-icons/io5";
-import { FaPerson } from "react-icons/fa6";
-import { IoIosArrowDropdown } from "react-icons/io";
-import { CiEdit } from "react-icons/ci";
-import { GoHome } from "react-icons/go";
-import { MdOutlinePassword } from "react-icons/md";
-import { MdAdminPanelSettings } from "react-icons/md";
+// Antd Imports
+import { Flex } from "antd";
 
+// React Icons Imports
+import { CiEdit } from "react-icons/ci";
+import { FaPerson } from "react-icons/fa6";
+import { GoHome } from "react-icons/go";
+import { IoMdSearch, IoIosArrowDropdown } from "react-icons/io";
+import { IoAdd } from "react-icons/io5";
+import { MdOutlinePassword, MdAdminPanelSettings } from "react-icons/md";
+
+// Custom Component Imports
 import NavigationLinkDrawer from "../../General/NavigationLinkDrawer";
 
 export default function MyDrawerAdmin() {
+	const navigate = useNavigate();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const btnRef = useRef();
 
+	// Hovered States
 	const [isCloseHovered, setIsCloseHovered] = useState(false);
 	const [isSearchHovered, setIsSearchHovered] = useState(false);
 	const [isEditHovered, setIsEditHovered] = useState(false);
@@ -42,6 +47,7 @@ export default function MyDrawerAdmin() {
 	const [isChangePasswordHovered, setIsChangePasswordHovered] = useState(false);
 	const [isAddHovered, setIsAddHovered] = useState(false);
 
+	// Open States
 	const [isAddOpen, setIsAddOpen] = useState(false);
 
 	const handleHover = (type) => {
@@ -79,12 +85,12 @@ export default function MyDrawerAdmin() {
 	return (
 		<>
 			<IconButton
-				icon={<HamburgerIcon />}
+				_hover={{ color: "#D4F500" }}
 				onClick={onOpen}
+				icon={<HamburgerIcon />}
 				ref={btnRef}
 				variant='transparent'
 				size='xxl'
-				_hover={{ color: "#D4F500" }}
 				width='50px'
 				height='50px'
 			/>
@@ -98,7 +104,6 @@ export default function MyDrawerAdmin() {
 				<DrawerOverlay />
 				<DrawerContent bg='#121211'>
 					<DrawerCloseButton
-						color='#8F8F8F'
 						_hover={{
 							color: "#D4F500",
 							transform: isCloseHovered ? "rotate(90deg)" : "rotate(0deg)",
@@ -110,12 +115,12 @@ export default function MyDrawerAdmin() {
 						onMouseOut={() => {
 							handleMouseOut("close");
 						}}
+						color='#8F8F8F'
 					/>
 					<DrawerHeader
 						color='#8F8F8F'
 						fontSize='20px'
 						textDecoration='underline'
-						pl='20px'
 					>
 						Menu
 					</DrawerHeader>
@@ -129,86 +134,88 @@ export default function MyDrawerAdmin() {
 									justifyContent={"flex-start"}
 									alignItems={"center"}
 								>
-									<Link to={"/admin"}>
-										<Button
-											_hover={{
-												bg: "#D4F500",
-												borderColor: "#D4F500",
-												color: "#000",
-												transform: "scale(1.05)",
-											}}
-											onMouseOver={() => {
-												handleHover("home");
-											}}
-											onMouseOut={() => {
-												handleMouseOut("home");
-											}}
-											_active={{
-												transform: "scale(0.98)",
-												opacity: "0.5",
-											}}
-											justifyContent={"flex-start"}
-											alignItems={"center"}
-											transition='all 0.15s ease'
-											bg='#121211'
-											color='#8F8F8F'
-											fontSize='18px'
-											width='272px'
-											leftIcon={
-												<Icon
-													as={GoHome}
-													color={isHomeHovered ? "#000" : "#8F8F8F"}
-												/>
-											}
-										>
-											Home
-										</Button>
-									</Link>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										onMouseOver={() => {
+											handleHover("home");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("home");
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate("/admin");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
+										leftIcon={
+											<Icon
+												as={GoHome}
+												color={isHomeHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+									>
+										Home
+									</Button>
 								</Box>
 							</Box>
 
-							{/* Search Users Button */}
+							{/* Manage Users Button */}
 							<Box>
 								<Box
 									display='flex'
 									justifyContent='flex-start'
 									alignItems='center'
 								>
-									<Link to={"/admin/search-users"}>
-										<Button
-											_hover={{
-												bg: "#D4F500",
-												borderColor: "#D4F500",
-												color: "#000",
-												transform: "scale(1.05)",
-											}}
-											onMouseOver={() => {
-												handleHover("search");
-											}}
-											onMouseOut={() => {
-												handleMouseOut("search");
-											}}
-											_active={{
-												transform: "scale(0.98)",
-												opacity: "0.5",
-											}}
-											justifyContent={"flex-start"}
-											alignItems={"center"}
-											transition='all 0.15s ease'
-											bg='#121211'
-											color='#8F8F8F'
-											fontSize='18px'
-											width='272px'
-											leftIcon={
-												<Icon
-													as={IoMdSearch}
-													color={isSearchHovered ? "#000" : "#8F8F8F"}
-												/>
-											}
-										>
-											Manage Users
-										</Button>
-									</Link>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										onMouseOver={() => {
+											handleHover("search");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("search");
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate("/admin/search-users");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
+										leftIcon={
+											<Icon
+												as={IoMdSearch}
+												color={isSearchHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+									>
+										Manage Users
+									</Button>
 								</Box>
 							</Box>
 
@@ -221,9 +228,6 @@ export default function MyDrawerAdmin() {
 									alignItems='center'
 								>
 									<Button
-										onClick={() => {
-											setIsAddOpen(!isAddOpen);
-										}}
 										_hover={{
 											bg: "#D4F500",
 											borderColor: "#D4F500",
@@ -240,13 +244,16 @@ export default function MyDrawerAdmin() {
 										onMouseOut={() => {
 											handleMouseOut("add");
 										}}
+										onClick={() => {
+											setIsAddOpen(!isAddOpen);
+										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
 										transition='all 0.15s ease'
 										bg='#121211'
 										color='#8F8F8F'
 										fontSize='20px'
-										width='272px'
+										width='100%'
 										leftIcon={
 											<Icon
 												as={IoAdd}
@@ -309,41 +316,42 @@ export default function MyDrawerAdmin() {
 									justifyContent='flex-start'
 									alignItems='center'
 								>
-									<Link to={"/edit-user"}>
-										<Button
-											_hover={{
-												bg: "#D4F500",
-												borderColor: "#D4F500",
-												color: "#000",
-												transform: "scale(1.05)",
-											}}
-											onMouseOver={() => {
-												handleHover("edit");
-											}}
-											onMouseOut={() => {
-												handleMouseOut("edit");
-											}}
-											_active={{
-												transform: "scale(0.98)",
-												opacity: "0.5",
-											}}
-											justifyContent={"flex-start"}
-											alignItems={"center"}
-											transition='all 0.15s ease'
-											bg='#121211'
-											color='#8F8F8F'
-											fontSize='18px'
-											width='272px'
-											leftIcon={
-												<Icon
-													as={CiEdit}
-													color={isEditHovered ? "#000" : "#8F8F8F"}
-												/>
-											}
-										>
-											Edit Profile
-										</Button>
-									</Link>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										onMouseOver={() => {
+											handleHover("edit");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("edit");
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate("/edit-user");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
+										leftIcon={
+											<Icon
+												as={CiEdit}
+												color={isEditHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+									>
+										Edit Profile
+									</Button>
 								</Box>
 							</Box>
 
@@ -354,41 +362,42 @@ export default function MyDrawerAdmin() {
 									justifyContent='flex-start'
 									alignItems='center'
 								>
-									<Link to={"/change-password"}>
-										<Button
-											_hover={{
-												bg: "#D4F500",
-												borderColor: "#D4F500",
-												color: "#000",
-												transform: "scale(1.05)",
-											}}
-											onMouseOver={() => {
-												handleHover("changePassword");
-											}}
-											onMouseOut={() => {
-												handleMouseOut("changePassword");
-											}}
-											_active={{
-												transform: "scale(0.98)",
-												opacity: "0.5",
-											}}
-											justifyContent={"flex-start"}
-											alignItems={"center"}
-											transition='all 0.15s ease'
-											bg='#121211'
-											color='#8F8F8F'
-											fontSize='18px'
-											width='272px'
-											leftIcon={
-												<Icon
-													as={MdOutlinePassword}
-													color={isChangePasswordHovered ? "#000" : "#8F8F8F"}
-												/>
-											}
-										>
-											Change Password
-										</Button>
-									</Link>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										onMouseOver={() => {
+											handleHover("changePassword");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("changePassword");
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate("/change-password");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='272px'
+										leftIcon={
+											<Icon
+												as={MdOutlinePassword}
+												color={isChangePasswordHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+									>
+										Change Password
+									</Button>
 								</Box>
 							</Box>
 						</Flex>

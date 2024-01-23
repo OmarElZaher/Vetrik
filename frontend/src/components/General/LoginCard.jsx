@@ -1,37 +1,43 @@
+// React Imports
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
+// Chakra UI Imports
 import {
-	Alert,
-	AlertIcon,
-	AlertTitle,
-	Flex,
 	Box,
+	Button,
+	Flex,
 	FormControl,
 	FormLabel,
+	Heading,
+	Icon,
 	Input,
 	Stack,
-	Button,
-	Heading,
 	Text,
-	Icon,
 	useToast,
 } from "@chakra-ui/react";
 
+// React Icons Imports
 import { FiLogIn } from "react-icons/fi";
 
-import Spinner from "./Spinner";
+// Custom Component Imports
 import Footer from "./Footer";
+import Spinner from "./Spinner";
 
 export default function LoginCard() {
 	const navigate = useNavigate();
 	const toast = useToast();
+
+	// Form useState
 	const [formData, setFormData] = useState({
 		username: "",
 		password: "",
 	});
 
+	// Misc useState
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleLogin = async () => {

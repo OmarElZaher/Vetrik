@@ -1,6 +1,8 @@
+// React Imports
 import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
+// Chakra UI Imports
 import {
 	Box,
 	Button,
@@ -11,30 +13,33 @@ import {
 	DrawerOverlay,
 	DrawerContent,
 	DrawerCloseButton,
+	Icon,
 	IconButton,
 	useDisclosure,
-	Icon,
 } from "@chakra-ui/react";
-
-import { Flex } from "antd";
 
 import { HamburgerIcon } from "@chakra-ui/icons";
 
-import { IoMdSearch } from "react-icons/io";
-import { IoAdd } from "react-icons/io5";
-import { FaPerson } from "react-icons/fa6";
-import { MdOutlinePets } from "react-icons/md";
-import { IoIosArrowDropdown } from "react-icons/io";
-import { CiEdit } from "react-icons/ci";
-import { GoHome } from "react-icons/go";
-import { MdOutlinePassword } from "react-icons/md";
+// Ant Design Imports
+import { Flex } from "antd";
 
+// React Icons Imports
+import { CiEdit } from "react-icons/ci";
+import { FaPerson } from "react-icons/fa6";
+import { GoHome } from "react-icons/go";
+import { IoMdSearch, IoIosArrowDropdown } from "react-icons/io";
+import { IoAdd } from "react-icons/io5";
+import { MdOutlinePets, MdOutlinePassword } from "react-icons/md";
+
+// Custom Component Imports
 import NavigationLinkDrawer from "./NavigationLinkDrawer";
 
 export default function MyDrawer() {
+	const navigate = useNavigate();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const btnRef = useRef();
 
+	// Hovered useStates
 	const [isCloseHovered, setIsCloseHovered] = useState(false);
 	const [isSearchHovered, setIsSearchHovered] = useState(false);
 	const [isAddHovered, setIsAddHovered] = useState(false);
@@ -42,6 +47,7 @@ export default function MyDrawer() {
 	const [isHomeHovered, setIsHomeHovered] = useState(false);
 	const [isChangePasswordHovered, setIsChangePasswordHovered] = useState(false);
 
+	// Open useStates
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isAddOpen, setIsAddOpen] = useState(false);
 
@@ -80,12 +86,12 @@ export default function MyDrawer() {
 	return (
 		<>
 			<IconButton
-				icon={<HamburgerIcon />}
+				_hover={{ color: "#D4F500" }}
 				onClick={onOpen}
+				icon={<HamburgerIcon />}
 				ref={btnRef}
 				variant='transparent'
 				size='xxl'
-				_hover={{ color: "#D4F500" }}
 				width='50px'
 				height='50px'
 			/>
@@ -98,9 +104,7 @@ export default function MyDrawer() {
 			>
 				<DrawerOverlay />
 				<DrawerContent bg='#121211'>
-					
 					<DrawerCloseButton
-						color='#8F8F8F'
 						_hover={{
 							color: "#D4F500",
 							transform: isCloseHovered ? "rotate(90deg)" : "rotate(0deg)",
@@ -112,6 +116,7 @@ export default function MyDrawer() {
 						onMouseOut={() => {
 							handleMouseOut("close");
 						}}
+						color='#8F8F8F'
 					/>
 
 					<DrawerHeader
@@ -132,41 +137,42 @@ export default function MyDrawer() {
 									justifyContent={"flex-start"}
 									alignItems={"center"}
 								>
-									<Link to={"/"}>
-										<Button
-											_hover={{
-												bg: "#D4F500",
-												borderColor: "#D4F500",
-												color: "#000",
-												transform: "scale(1.05)",
-											}}
-											onMouseOver={() => {
-												handleHover("home");
-											}}
-											onMouseOut={() => {
-												handleMouseOut("home");
-											}}
-											_active={{
-												transform: "scale(0.98)",
-												opacity: "0.5",
-											}}
-											justifyContent={"flex-start"}
-											alignItems={"center"}
-											transition='all 0.15s ease'
-											bg='#121211'
-											color='#8F8F8F'
-											fontSize='18px'
-											width='272px'
-											leftIcon={
-												<Icon
-													as={GoHome}
-													color={isHomeHovered ? "#000" : "#8F8F8F"}
-												/>
-											}
-										>
-											Home
-										</Button>
-									</Link>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										onMouseOver={() => {
+											handleHover("home");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("home");
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate("/");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
+										leftIcon={
+											<Icon
+												as={GoHome}
+												color={isHomeHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+									>
+										Home
+									</Button>
 								</Box>
 							</Box>
 
@@ -179,12 +185,6 @@ export default function MyDrawer() {
 									alignItems='center'
 								>
 									<Button
-										onClick={() => {
-											if (isAddOpen) {
-												setIsAddOpen(!isAddOpen);
-											}
-											setIsSearchOpen(!isSearchOpen);
-										}}
 										_hover={{
 											bg: "#D4F500",
 											borderColor: "#D4F500",
@@ -201,12 +201,18 @@ export default function MyDrawer() {
 										onMouseOut={() => {
 											handleMouseOut("search");
 										}}
+										onClick={() => {
+											if (isAddOpen) {
+												setIsAddOpen(!isAddOpen);
+											}
+											setIsSearchOpen(!isSearchOpen);
+										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
 										transition='all 0.15s ease'
 										bg='#121211'
 										color='#8F8F8F'
-										width='272px'
+										width='100%'
 										fontSize='20px'
 										leftIcon={
 											<Icon
@@ -272,13 +278,6 @@ export default function MyDrawer() {
 									alignItems='center'
 								>
 									<Button
-										onClick={() => {
-											if (isSearchOpen) {
-												setIsSearchOpen(!isSearchOpen);
-											}
-
-											setIsAddOpen(!isAddOpen);
-										}}
 										_hover={{
 											bg: "#D4F500",
 											borderColor: "#D4F500",
@@ -295,13 +294,20 @@ export default function MyDrawer() {
 										onMouseOut={() => {
 											handleMouseOut("add");
 										}}
+										onClick={() => {
+											if (isSearchOpen) {
+												setIsSearchOpen(!isSearchOpen);
+											}
+
+											setIsAddOpen(!isAddOpen);
+										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
 										transition='all 0.15s ease'
 										bg='#121211'
 										color='#8F8F8F'
 										fontSize='20px'
-										width='272px'
+										width='100%'
 										leftIcon={
 											<Icon
 												as={IoAdd}
@@ -364,41 +370,42 @@ export default function MyDrawer() {
 									justifyContent='flex-start'
 									alignItems='center'
 								>
-									<Link to={"/edit-user"}>
-										<Button
-											_hover={{
-												bg: "#D4F500",
-												borderColor: "#D4F500",
-												color: "#000",
-												transform: "scale(1.05)",
-											}}
-											onMouseOver={() => {
-												handleHover("edit");
-											}}
-											onMouseOut={() => {
-												handleMouseOut("edit");
-											}}
-											_active={{
-												transform: "scale(0.98)",
-												opacity: "0.5",
-											}}
-											justifyContent={"flex-start"}
-											alignItems={"center"}
-											transition='all 0.15s ease'
-											bg='#121211'
-											color='#8F8F8F'
-											fontSize='18px'
-											width='272px'
-											leftIcon={
-												<Icon
-													as={CiEdit}
-													color={isEditHovered ? "#000" : "#8F8F8F"}
-												/>
-											}
-										>
-											Edit Profile
-										</Button>
-									</Link>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										onMouseOver={() => {
+											handleHover("edit");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("edit");
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate("/edit-user");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
+										leftIcon={
+											<Icon
+												as={CiEdit}
+												color={isEditHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+									>
+										Edit Profile
+									</Button>
 								</Box>
 							</Box>
 
@@ -409,41 +416,42 @@ export default function MyDrawer() {
 									justifyContent='flex-start'
 									alignItems='center'
 								>
-									<Link to={"/change-password"}>
-										<Button
-											_hover={{
-												bg: "#D4F500",
-												borderColor: "#D4F500",
-												color: "#000",
-												transform: "scale(1.05)",
-											}}
-											onMouseOver={() => {
-												handleHover("changePassword");
-											}}
-											onMouseOut={() => {
-												handleMouseOut("changePassword");
-											}}
-											_active={{
-												transform: "scale(0.98)",
-												opacity: "0.5",
-											}}
-											justifyContent={"flex-start"}
-											alignItems={"center"}
-											transition='all 0.15s ease'
-											bg='#121211'
-											color='#8F8F8F'
-											fontSize='18px'
-											width='272px'
-											leftIcon={
-												<Icon
-													as={MdOutlinePassword}
-													color={isChangePasswordHovered ? "#000" : "#8F8F8F"}
-												/>
-											}
-										>
-											Change Password
-										</Button>
-									</Link>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										onMouseOver={() => {
+											handleHover("changePassword");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("changePassword");
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate("/change-password");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
+										leftIcon={
+											<Icon
+												as={MdOutlinePassword}
+												color={isChangePasswordHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+									>
+										Change Password
+									</Button>
 								</Box>
 							</Box>
 						</Flex>

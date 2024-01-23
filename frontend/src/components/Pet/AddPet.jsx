@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+// React Imports
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Axios Import
 import axios from "axios";
 
+// Chakra UI Imports
 import {
 	Box,
 	Button,
@@ -10,24 +14,24 @@ import {
 	FormControl,
 	Icon,
 	Input,
-	InputGroup,
-	InputLeftAddon,
 	Select,
 	Text,
 	useToast,
 } from "@chakra-ui/react";
 
-import { MdOutlinePets } from "react-icons/md";
+// React Icons Imports
 import { IoMdAdd } from "react-icons/io";
+import { MdOutlinePets } from "react-icons/md";
 
-import Spinner from "../General/Spinner";
+// Custom Components Imports
 import Footer from "../General/Footer";
+import Spinner from "../General/Spinner";
 
 export default function AddPet() {
 	const navigate = useNavigate();
 	const toast = useToast();
 
-	// Pet Data
+	// Form useStates
 	const [name, setName] = useState("");
 	const [type, setType] = useState("");
 	const [breed, setBreed] = useState("");
@@ -133,15 +137,15 @@ export default function AddPet() {
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
-						height={"87vh"}
 						bg={"#F3F3F3"}
+						height={"87vh"}
 					>
 						<Card
-							width={"80%"}
-							height={"80%"}
 							display={"flex"}
 							justifyContent={"center"}
 							alignItems={"center"}
+							width={"80%"}
+							height={"80%"}
 						>
 							<CardBody
 								display={"flex"}
@@ -150,20 +154,20 @@ export default function AddPet() {
 								width={"80%"}
 							>
 								<Box
-									height={"5%"}
-									mt={5}
 									display={"flex"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									height={"5%"}
+									mt={5}
 								>
 									<Icon as={MdOutlinePets} fontSize={"60px"} />
 								</Box>
 
 								<Box
-									height={"15%"}
 									display={"flex"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									height={"15%"}
 									mt={5}
 								>
 									<Text fontSize={"3xl"} fontWeight={"bold"}>
@@ -171,14 +175,15 @@ export default function AddPet() {
 									</Text>
 								</Box>
 								<Box
-									height={"60%"}
 									display={"flex"}
+									flexDirection={"column"}
 									justifyContent={"center"}
 									alignItems={"center"}
-									flexDirection={"column"}
+									height={"60%"}
 								>
 									<FormControl id='name' mb={5}>
 										<Input
+											id='name'
 											type='text'
 											name='name'
 											placeholder='Pet Name'
@@ -197,9 +202,10 @@ export default function AddPet() {
 										mb={5}
 									>
 										<Select
+											id='type'
 											name='type'
-											cursor={"pointer"}
 											placeholder='Type of Animal'
+											cursor={"pointer"}
 											value={type}
 											onChange={(e) => {
 												setType(e.target.value);
@@ -216,6 +222,7 @@ export default function AddPet() {
 										</Select>
 
 										<Input
+											id='breed'
 											type='text'
 											name='breed'
 											placeholder='Breed of Animal'
@@ -226,11 +233,13 @@ export default function AddPet() {
 											ml={2}
 										/>
 									</FormControl>
+
 									<FormControl id='gender' mb={5}>
 										<Select
+											id='gender'
 											name='gender'
-											cursor={"pointer"}
 											placeholder='Select Gender'
+											cursor={"pointer"}
 											value={gender}
 											onChange={(e) => {
 												setGender(e.target.value);
@@ -240,8 +249,10 @@ export default function AddPet() {
 											<option value='Female'>Female</option>
 										</Select>
 									</FormControl>
+
 									<FormControl id='dob' mb={5}>
 										<Input
+											id='dob'
 											type='date'
 											name='dob'
 											placeholder='Date of Birth'
@@ -252,8 +263,9 @@ export default function AddPet() {
 										/>
 									</FormControl>
 
-									<FormControl>
+									<FormControl id='ownerEmail'>
 										<Input
+											id='ownerEmail'
 											type='text'
 											name='owner'
 											placeholder='Owner Email'
@@ -264,14 +276,14 @@ export default function AddPet() {
 										/>
 									</FormControl>
 								</Box>
+
 								<Box
-									height={"10%"}
 									display={"flex"}
 									justifyContent={"center"}
 									alignItems={"center"}
+									height={"10%"}
 								>
 									<Button
-										onClick={handleAdd}
 										_hover={{
 											bg: "yellowgreen",
 											color: "#000",
@@ -281,8 +293,9 @@ export default function AddPet() {
 											transform: "scale(0.99)",
 											opacity: "0.5",
 										}}
-										width={"25%"}
+										onClick={handleAdd}
 										leftIcon={<IoMdAdd />}
+										width={"25%"}
 									>
 										Add
 									</Button>
