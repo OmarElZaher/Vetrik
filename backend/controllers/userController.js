@@ -337,6 +337,16 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 			return;
 		}
 
+		if (!emailValidator(email)) {
+			res.status(400).json({ message: "Invalid Email" });
+			return;
+		}
+
+		if (username === "") {
+			res.status(400).json({ message: "Username Cannot Be Empty" });
+			return;
+		}
+
 		// Check if the updated username is already taken by another user
 		if (username) {
 			const usernameExists = await User.findOne({
