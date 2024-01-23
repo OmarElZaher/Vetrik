@@ -10,11 +10,16 @@ import {
 	Box,
 	Button,
 	Card,
+	CardBody,
 	FormControl,
+	Icon,
 	Input,
 	Text,
 	useToast,
 } from "@chakra-ui/react";
+
+// React Icons Imports
+import { FaPerson } from "react-icons/fa6";
 
 // Custom Components Imports
 import Footer from "../General/Footer";
@@ -107,16 +112,28 @@ export default function CreateUser() {
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								height={"15%"}
 								width={"90%"}
 							>
-								<Text
-									fontSize={"40px"}
-									fontWeight={"bold"}
-									textDecoration={"underline"}
+								<Box
+									display={"flex"}
+									justifyContent={"center"}
+									alignItems={"center"}
+									height={"5%"}
+									mb={10}
 								>
-									Add A User
-								</Text>
+									<Icon as={FaPerson} fontSize={"60px"} />
+								</Box>
+								<Box
+									display={"flex"}
+									justifyContent={"center"}
+									alignItems={"center"}
+									height={"10%"}
+									mt={5}
+								>
+									<Text fontSize={"3xl"} fontWeight={"bold"}>
+										Add An Owner
+									</Text>
+								</Box>
 							</Box>
 
 							<Box
@@ -124,7 +141,7 @@ export default function CreateUser() {
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								height={"70%"}
+								height={"50%"}
 								width={"90%"}
 							>
 								<FormControl

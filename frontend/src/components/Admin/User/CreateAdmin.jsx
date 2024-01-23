@@ -11,10 +11,14 @@ import {
 	Button,
 	Card,
 	FormControl,
+	Icon,
 	Input,
 	Text,
 	useToast,
 } from "@chakra-ui/react";
+
+// React Icons Imports
+import { MdAdminPanelSettings } from "react-icons/md";
 
 // Custom Component Imports
 import Footer from "../General/Footer";
@@ -110,13 +114,30 @@ export default function CreateUser() {
 								height={"15%"}
 								width={"90%"}
 							>
-								<Text
-									fontSize={"40px"}
-									fontWeight={"bold"}
-									textDecoration={"underline"}
+								<Box
+									display={"flex"}
+									justifyContent={"center"}
+									alignItems={"center"}
+									height={"5%"}
+									mb={10}
 								>
-									Add An Admin
-								</Text>
+									<Icon as={MdAdminPanelSettings} fontSize={"60px"} />
+								</Box>
+								<Box
+									display={"flex"}
+									justifyContent={"center"}
+									alignItems={"center"}
+									height={"10%"}
+									mt={5}
+								>
+									<Text
+										fontSize={"40px"}
+										fontWeight={"bold"}
+										textDecoration={"underline"}
+									>
+										Add An Admin
+									</Text>
+								</Box>
 							</Box>
 
 							<Box
@@ -124,7 +145,7 @@ export default function CreateUser() {
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								height={"70%"}
+								height={"60%"}
 								width={"90%"}
 							>
 								<FormControl
