@@ -40,6 +40,7 @@ import PetTablePage from "./pages/Pet/PetTable";
 import AddPetPage from "./pages/Pet/AddPet";
 
 import PetVaccinationPage from "./pages/Pet/PetVaccination";
+import PetHealthRecordsPage from "./pages/Pet/PetHealthRecords";
 // }
 
 import theme from "./theme";
@@ -72,6 +73,10 @@ function App() {
 						<Route
 							path='/pet-vaccination/:petId'
 							element={<PetVaccinationPage />}
+						/>
+						<Route
+							path='/pet-records/:petId'
+							element={<PetHealthRecordsPage />}
 						/>
 
 						<Route path='/add-owner' element={<AddOwnerPage />} />
