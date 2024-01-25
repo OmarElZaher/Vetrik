@@ -33,6 +33,7 @@ const {
 	removePetFromOwner,
 	deletePetProfile,
 	createVaccinationCard,
+	deleteVaccinationCard,
 	getVaccinationCard,
 	addVaccination,
 	renewVaccination,
@@ -125,6 +126,11 @@ router.delete(
 	"/deleteVaccination/:petId/:vaccinationId",
 	authenticate,
 	deleteVaccination
+); // COMPLETE
+router.delete(
+	"/deleteVaccinationCard/:petId",
+	authenticate,
+	deleteVaccinationCard
 ); // COMPLETE
 
 router.delete("/deleteHealthRecord/:healthRecordId", deleteHealthRecord);

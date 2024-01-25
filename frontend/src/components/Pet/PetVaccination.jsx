@@ -13,6 +13,13 @@ import {
 	FormControl,
 	Icon,
 	Input,
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalFooter,
+	ModalBody,
+	ModalCloseButton,
 	Table,
 	TableContainer,
 	Thead,
@@ -22,12 +29,14 @@ import {
 	Td,
 	Text,
 	Tooltip,
+	useDisclosure,
 	useToast,
 } from "@chakra-ui/react";
 
 // React Icon Imports
-import { IoMdAdd, IoMdArrowRoundBack } from "react-icons/io";
-import { MdDelete } from "react-icons/md";
+import { FaCheckCircle } from "react-icons/fa";
+import { IoIosRemoveCircle, IoMdAdd, IoMdArrowRoundBack } from "react-icons/io";
+import { MdAutorenew, MdDelete } from "react-icons/md";
 import { RiHealthBookFill } from "react-icons/ri";
 import { TbVaccine } from "react-icons/tb";
 
@@ -54,10 +63,18 @@ function formatDate(inputDate) {
 	return `${day}-${month}-${year}`;
 }
 
+function capitalizeEveryLetter(str) {
+	return str
+		.split("")
+		.map((letter) => letter.toUpperCase())
+		.join("");
+}
+
 export default function PetVaccination() {
 	const { petId } = useParams();
 	const navigate = useNavigate();
 	const toast = useToast();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const today = new Date();
 	const formattedDate = today.toISOString().split("T")[0];
 
@@ -73,8 +90,11 @@ export default function PetVaccination() {
 	const [vaccineGivenDate, setVaccineGivenDate] = useState(formattedDate);
 	const [vaccineRenewalDate, setVaccineRenewalDate] = useState(null);
 
+	const [vaccineRenewalId, setVaccineRenewalId] = useState(null);
+
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleCreateVaccinationCard = async () => {
 		try {
@@ -101,6 +121,10 @@ export default function PetVaccination() {
 					isClosable: true,
 					position: "top",
 				});
+				setVaccineName("");
+				setVaccineBatch("");
+				setVaccineGivenDate(formattedDate);
+				setVaccineRenewalDate(null);
 			} else {
 				toast({
 					title: response.data.message,
@@ -146,6 +170,10 @@ export default function PetVaccination() {
 					position: "top",
 				});
 				fetchData();
+				setVaccineName("");
+				setVaccineBatch("");
+				setVaccineGivenDate(formattedDate);
+				setVaccineRenewalDate(null);
 			} else {
 				toast({
 					title: response.data.message,
@@ -168,7 +196,136 @@ export default function PetVaccination() {
 		}
 	};
 
-	const handleDelete = async () => {};
+	const handleDelete = async () => {
+		const confirmDelete = window.confirm(
+			"Are you sure you want to delete this vaccination card?"
+		);
+		if (confirmDelete) {
+			try {
+				setIsLoading(true);
+				const response = await axios.delete(
+					`http://localhost:1234/user/deleteVaccinationCard/${petId}`,
+					{ withCredentials: true }
+				);
+
+				if (response.status === 200) {
+					toast({
+						title: response.data.message,
+						status: "success",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+					setVaccinationCardExists(false);
+				} else {
+					toast({
+						title: response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} catch (error) {
+				toast({
+					title: error.response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			} finally {
+				setIsLoading(false);
+			}
+		}
+	};
+
+	const handleRemoveVaccine = async (vaccineId) => {
+		const confirmDelete = window.confirm(
+			"Are you sure you want to remove this vaccine from the vaccination card?"
+		);
+
+		if (confirmDelete) {
+			try {
+				setIsLoading(true);
+				const response = await axios.delete(
+					`http://localhost:1234/user/deleteVaccination/${petId}/${vaccineId}`,
+					{ withCredentials: true }
+				);
+
+				if (response.status === 200) {
+					toast({
+						title: response.data.message,
+						status: "success",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+					fetchData();
+				} else {
+					toast({
+						title: response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} catch (error) {
+				toast({
+					title: error.response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			} finally {
+				setIsLoading(false);
+			}
+		}
+	};
+
+	const handleRenewVaccine = async (vaccineId) => {
+		try {
+			setIsLoading(true);
+			const response = await axios.put(
+				`http://localhost:1234/user/renewVaccination/${petId}/${vaccineId}`,
+				{
+					vaccineRenewalDate: vaccineRenewalDate,
+				},
+				{ withCredentials: true }
+			);
+
+			if (response.status === 200) {
+				toast({
+					title: response.data.message,
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				fetchData();
+			} else {
+				toast({
+					title: response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			}
+		} catch (error) {
+			toast({
+				title: error.response.data.message,
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	const fetchData = async () => {
 		try {
@@ -201,7 +358,6 @@ export default function PetVaccination() {
 
 	useEffect(() => {
 		fetchData();
-		console.log("VCARD==>", vaccinationCard);
 	}, []);
 
 	return (
@@ -250,7 +406,7 @@ export default function PetVaccination() {
 							>
 								<TableContainer
 									width={"100%"}
-									maxHeight={"70vh"}
+									maxHeight={"80%"}
 									overflowY={"auto"}
 								>
 									<Table variant='simple' size='md'>
@@ -269,12 +425,16 @@ export default function PetVaccination() {
 													<Td textAlign={"left"}>
 														{titleCase(row.vaccineName)}
 													</Td>
-													<Td textAlign={"center"}>{row.vaccineBatch}</Td>
+													<Td textAlign={"center"}>
+														{capitalizeEveryLetter(row.vaccineBatch)}
+													</Td>
 													<Td textAlign={"center"}>
 														{formatDate(row.vaccineGivenDate)}
 													</Td>
 													<Td textAlign={"center"}>
-														{formatDate(row.vaccineRenewalDate)}
+														{row.vaccineRenewalDate === null
+															? "-"
+															: formatDate(row.vaccineRenewalDate)}
 													</Td>
 													<Td textAlign={"center"}>
 														<Button
@@ -287,10 +447,124 @@ export default function PetVaccination() {
 																transform: "scale(0.99)",
 																opacity: "0.5",
 															}}
+															onClick={() => {
+																setVaccineRenewalId(row._id);
+																onOpen();
+															}}
+															leftIcon={<MdAutorenew />}
+															mr={2.5}
 														>
-															Renew Vaccine
+															Renew
 														</Button>
+														<Tooltip
+															hasArrow
+															label='Remove Vaccine From Vaccination Card'
+															bg={"#EF5350"}
+															placement='top'
+															openDelay={75}
+														>
+															<Button
+																_hover={{
+																	bg: "#EF5350",
+																	color: "#000",
+																	transform: "scale(1.01)",
+																}}
+																_active={{
+																	transform: "scale(0.99)",
+																	opacity: "0.5",
+																}}
+																onClick={() => {
+																	handleRemoveVaccine(row._id);
+																}}
+																leftIcon={<IoIosRemoveCircle />}
+																variant={"outline"}
+																borderColor={"#EF5350"}
+																ml={2.5}
+															>
+																Remove
+															</Button>
+														</Tooltip>
 													</Td>
+													<>
+														<Modal
+															isOpen={isOpen}
+															onClose={onClose}
+															isCentered
+															size={"lg"}
+														>
+															<ModalOverlay />
+
+															<ModalContent>
+																<ModalHeader textDecoration={"underline"}>
+																	Vaccine Renewal Date
+																</ModalHeader>
+																<ModalCloseButton />
+
+																<ModalBody>
+																	<Text
+																		fontSize={"18px"}
+																		textAlign={"center"}
+																		mb={3}
+																	>
+																		Leave empty if vaccine is not renewable
+																	</Text>
+																	<FormControl id='renewalDate'>
+																		<Input
+																			id='renewalDate'
+																			type='date'
+																			name='renewalDate'
+																			placeholder='Vaccine Renewal Date'
+																			value={vaccineRenewalDate}
+																			onChange={(e) => {
+																				setVaccineRenewalDate(e.target.value);
+																			}}
+																		/>
+																	</FormControl>
+																</ModalBody>
+
+																<ModalFooter>
+																	<Button
+																		_hover={{
+																			bg: "#EF5350",
+																			color: "#000",
+																			transform: "scale(1.01)",
+																		}}
+																		_active={{
+																			transform: "scale(0.99)",
+																			opacity: "0.5",
+																		}}
+																		onClick={onClose}
+																		leftIcon={<MdDelete />}
+																		variant={"outline"}
+																		borderColor={"#EF5350"}
+																		mr={2.5}
+																	>
+																		Cancel
+																	</Button>
+																	<Button
+																		_hover={{
+																			bg: "yellowgreen",
+																			color: "#000",
+																			transform: "scale(1.01)",
+																		}}
+																		_active={{
+																			transform: "scale(0.99)",
+																			opacity: "0.5",
+																		}}
+																		onClick={() => {
+																			handleRenewVaccine(vaccineRenewalId);
+																			setVaccineRenewalDate(null);
+																			onClose();
+																		}}
+																		leftIcon={<FaCheckCircle />}
+																		ml={2.5}
+																	>
+																		Renew
+																	</Button>
+																</ModalFooter>
+															</ModalContent>
+														</Modal>
+													</>
 												</Tr>
 											))}
 										</Tbody>
@@ -328,10 +602,12 @@ export default function PetVaccination() {
 									hasArrow
 									label='Deletes Pet Vaccination Card'
 									placement='top'
+									bg={"#EF5350"}
+									openDelay={75}
 								>
 									<Button
 										_hover={{
-											bg: "yellowgreen",
+											bg: "#EF5350",
 											color: "#000",
 											transform: "scale(1.01)",
 										}}
@@ -342,6 +618,7 @@ export default function PetVaccination() {
 										onClick={handleDelete}
 										leftIcon={<MdDelete />}
 										variant={"outline"}
+										borderColor={"#EF5350"}
 										ml={2.5}
 									>
 										Delete

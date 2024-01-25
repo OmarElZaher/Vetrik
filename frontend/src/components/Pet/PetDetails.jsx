@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 
 // React Icons Imports
+import { BiHealth } from "react-icons/bi";
 import {
 	IoMdEye,
 	IoMdArrowRoundBack,
@@ -602,7 +603,7 @@ export default function PetDetails() {
 								onClick={() => {
 									navigate(`/pet-records/${pet._id}`);
 								}}
-								leftIcon={<RiHealthBookFill />}
+								leftIcon={<BiHealth />}
 								width={"30%"}
 								mx={2.5}
 							>

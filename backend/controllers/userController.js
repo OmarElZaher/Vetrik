@@ -1106,6 +1106,41 @@ const createVaccinationCard = asyncHandler(async (req, res) => {
 	}
 });
 
+// @desc Delete Pet Vaccination Card
+// @route DELETE /user/deleteVaccinationCard/:petId
+// @access Private
+const deleteVaccinationCard = asyncHandler(async (req, res) => {
+	const { petId } = req.params;
+
+	try {
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid Pet ID" });
+			return;
+		}
+
+		const pet = await Pet.findById(petId);
+
+		if (!pet) {
+			res.status(400).json({ message: "Pet Not Found" });
+			return;
+		}
+
+		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
+
+		if (!vaccinationCard) {
+			res.status(400).json({ message: "Pet Does Not Have A Vaccination Card" });
+			return;
+		}
+
+		await VaccinationCard.findByIdAndDelete(vaccinationCard._id);
+
+		res.status(200).json({ message: "Vaccination Card Deleted" });
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
 // @desc Get Pet Vaccination Card
 // @route GET /user/getVaccinationCard/:petId
 // @access Private
@@ -1688,6 +1723,7 @@ module.exports = {
 	updatePetProfile,
 	deletePetProfile,
 	createVaccinationCard,
+	deleteVaccinationCard,
 	removePetFromOwner,
 	getVaccinationCard,
 	addVaccination,
