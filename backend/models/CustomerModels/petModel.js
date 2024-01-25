@@ -13,7 +13,7 @@ const petSchema = new mongoose.Schema(
 		type: {
 			type: String,
 			required: true,
-			enum: ["Dog", "Cat", "Bird", "Turtle", "Monkey", "Hamster", "Fish"],
+			enum: ["dog", "cat", "bird", "turtle", "monkey", "hamster", "fish"],
 		},
 		breed: {
 			type: String,
@@ -21,7 +21,7 @@ const petSchema = new mongoose.Schema(
 		},
 		gender: {
 			type: String,
-			enum: ["Male", "Female"],
+			enum: ["male", "female"],
 			required: true,
 		},
 		lastVist: {

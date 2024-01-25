@@ -563,10 +563,10 @@ export default function PetDetails() {
 									opacity: "0.5",
 								}}
 								leftIcon={<IoMdArrowRoundBack />}
-								width={"20%"}
+								width={"15%"}
 								mr={2.5}
 							>
-								Filtered Pets Table
+								Back
 							</Button>
 
 							<Button
@@ -583,10 +583,30 @@ export default function PetDetails() {
 									navigate(`/pet-vaccination/${pet._id}`);
 								}}
 								leftIcon={<RiHealthBookFill />}
-								width={"35%"}
+								width={"30%"}
 								mx={2.5}
 							>
 								Vaccination Card
+							</Button>
+
+							<Button
+								_hover={{
+									bg: "yellowgreen",
+									color: "#000",
+									transform: "scale(1.01)",
+								}}
+								_active={{
+									transform: "scale(0.99)",
+									opacity: "0.5",
+								}}
+								onClick={() => {
+									navigate(`/pet-records/${pet._id}`);
+								}}
+								leftIcon={<RiHealthBookFill />}
+								width={"30%"}
+								mx={2.5}
+							>
+								Health Records
 							</Button>
 
 							<Tooltip
@@ -612,7 +632,7 @@ export default function PetDetails() {
 									variant={"outline"}
 									leftIcon={<MdDelete />}
 									borderColor={"#EF5350"}
-									width={"20%"}
+									width={"15%"}
 									ml={2.5}
 								>
 									Delete

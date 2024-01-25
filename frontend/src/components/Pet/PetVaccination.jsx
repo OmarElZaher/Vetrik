@@ -26,7 +26,8 @@ import {
 } from "@chakra-ui/react";
 
 // React Icon Imports
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoMdArrowRoundBack } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
 import { RiHealthBookFill } from "react-icons/ri";
 import { TbVaccine } from "react-icons/tb";
 
@@ -165,6 +166,8 @@ export default function PetVaccination() {
 			setIsLoading(false);
 		}
 	};
+
+	const handleDelete = async () => {};
 
 	const fetchData = async () => {
 		try {
@@ -311,6 +314,10 @@ export default function PetVaccination() {
 										transform: "scale(0.99)",
 										opacity: "0.5",
 									}}
+									onClick={() => {
+										navigate(`/pet-details/${petId}`);
+									}}
+									leftIcon={<IoMdArrowRoundBack />}
 									mr={2.5}
 								>
 									Pet Details
@@ -331,6 +338,9 @@ export default function PetVaccination() {
 											transform: "scale(0.99)",
 											opacity: "0.5",
 										}}
+										onClick={handleDelete}
+										leftIcon={<MdDelete />}
+										variant={"outline"}
 										ml={2.5}
 									>
 										Delete

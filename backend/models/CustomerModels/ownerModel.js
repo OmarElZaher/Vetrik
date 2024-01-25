@@ -20,12 +20,12 @@ const ownerSchema = mongoose.Schema(
 		},
 		gender: {
 			type: String,
-			enum: ["Male", "Female"],
+			enum: ["male", "female"],
 			required: true,
 		},
 		preferredContactMethod: {
 			type: String,
-			enum: ["Email", "Phone", "Both", "Neither"],
+			enum: ["email", "phone", "both", "neither"],
 			required: true,
 		},
 		receiveNotifications: {

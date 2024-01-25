@@ -399,11 +399,11 @@ export default function OwnerDetails() {
 									Contact Method
 								</Text>
 								<Text fontSize={"20px"}>
-									{owner.preferredContactMethod === "Both"
+									{owner.preferredContactMethod === "both"
 										? "Phone & Email"
-										: owner.preferredContactMethod === "Neither"
+										: owner.preferredContactMethod === "neither"
 										? "None"
-										: owner.preferredContactMethod}
+										: titleCase(owner.preferredContactMethod)}
 								</Text>
 							</Box>
 						</Box>
