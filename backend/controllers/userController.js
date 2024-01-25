@@ -9,6 +9,7 @@ const User = require("../models/SystemModels/userModel");
 const Owner = require("../models/CustomerModels/ownerModel");
 const Pet = require("../models/CustomerModels/petModel");
 const VaccinationCard = require("../models/CustomerModels/vaccinationModel");
+const HealthRecord = require("../models/CustomerModels/healthRecordModel");
 
 // ----------------------------------------------------------------
 // Global Variables
@@ -1055,7 +1056,7 @@ const createVaccinationCard = asyncHandler(async (req, res) => {
 		const petId = req.params.petId;
 
 		if (!mongoose.Types.ObjectId.isValid(petId)) {
-			res.status(400).json({ message: "Invalid User ID" });
+			res.status(400).json({ message: "Invalid Pet ID" });
 			return;
 		}
 
@@ -1308,6 +1309,150 @@ const deleteVaccination = asyncHandler(async (req, res) => {
 	}
 });
 
+// @desc Upload Health Record
+// @route POST /user/uploadHealthRecord/:petId
+// @access Private
+const uploadHealthRecord = asyncHandler(async (req, res) => {
+	const { petId } = req.params;
+
+	try {
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			res.status(400).json({ message: "Invalid Pet ID" });
+			return;
+		}
+
+		const pet = await Pet.findById(petId);
+
+		if (!pet) {
+			res.status(400).json({ message: "Pet Not Found" });
+			return;
+		}
+
+		if (!req.file) {
+			res.status(400).json({ message: "Please Upload A File" });
+			return;
+		}
+
+		const healthRecord = await HealthRecord.create({
+			filename: req.file.originalname,
+			data: req.file.buffer,
+			contentType: req.file.mimetype,
+			pet: pet._id,
+		});
+
+		if (healthRecord) {
+			res.status(200).json({ message: "Health Record Uploaded", healthRecord });
+		} else {
+			res.status(400).json({ message: "Invalid Data" });
+			return;
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Get All Pet Health Records
+// @route GET /user/getAllHealthRecords/:petId
+// @access Private
+const getAllHealthRecords = asyncHandler(async (req, res) => {
+	const { petId } = req.params;
+	const pet = await Pet.findById(petId);
+
+	try {
+		const healthRecords = await HealthRecord.find({ pet: pet._id });
+
+		if (!healthRecords) {
+			res.status(400).json({ message: "Health Records Not Found" });
+			return;
+		} else {
+			res.status(200).json({
+				message: "Retrieved Health Records Successfuly",
+				healthRecords,
+			});
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Download Health Record
+// @route GET /user/downloadHealthRecord/:petId/:healthRecordId
+// @access Private
+const downloadHealthRecord = asyncHandler(async (req, res) => {
+	const { petId } = req.params;
+
+	if (!mongoose.Types.ObjectId.isValid(petId)) {
+		res.status(400).json({ message: "Invalid Pet ID" });
+		return;
+	}
+
+	const pet = await Pet.findById(petId);
+
+	if (!pet) {
+		res.status(400).json({ message: "Pet Not Found" });
+		return;
+	}
+
+	const { healthRecordId } = req.params;
+
+	if (!mongoose.Types.ObjectId.isValid(healthRecordId)) {
+		res.status(400).json({ message: "Invalid Health Record ID" });
+		return;
+	}
+
+	try {
+		const healthRecord = await HealthRecord.findOne({
+			_id: healthRecordId,
+			pet: pet._id,
+		});
+
+		if (!healthRecord) {
+			res.status(400).json({ message: "Health Record Not Found" });
+			return;
+		} else {
+			res.setHeader(
+				"Content-Disposition",
+				`attachment; filename="${healthRecord.filename}"`
+			);
+			res.setHeader("Content-Type", `${healthRecord.contentType}`);
+			res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+		}
+
+		res.status(200).send(healthRecord.data);
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Delete Health Record
+// @route DELETE /user/deleteHealthRecord/:healthRecordId
+// @access Private
+const deleteHealthRecord = asyncHandler(async (req, res) => {
+	const { healthRecordId } = req.params;
+
+	if (!mongoose.Types.ObjectId.isValid(healthRecordId)) {
+		res.status(400).json({ message: "Invalid Health Record ID" });
+		return;
+	}
+
+	try {
+		const healthRecord = await HealthRecord.findByIdAndDelete(healthRecordId);
+
+		if (!healthRecord) {
+			res.status(400).json({ message: "Health Record Not Found" });
+			return;
+		} else {
+			res.status(200).json({ message: "Health Record Deleted" });
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
 // @desc Change Password
 // @route POST /user/changePassword
 // @access Private
@@ -1521,6 +1666,11 @@ module.exports = {
 	setAdmin,
 	getUserInfoById,
 	deleteUser,
+
+	uploadHealthRecord,
+	downloadHealthRecord,
+	getAllHealthRecords,
+	deleteHealthRecord,
 
 	loginUser,
 	logoutUser,

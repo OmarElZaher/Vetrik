@@ -1,6 +1,7 @@
 // Imports
 const express = require("express");
 const router = express.Router();
+const upload = require("../middleware/multerMiddleware");
 
 const {
 	createAdmin,
@@ -9,6 +10,11 @@ const {
 	getUserInfoById,
 	setAdmin,
 	deleteUser,
+
+	downloadHealthRecord,
+	uploadHealthRecord,
+	getAllHealthRecords,
+	deleteHealthRecord,
 
 	loginUser,
 	logoutUser,
@@ -54,6 +60,12 @@ router.get("/getOwnerPets/:ownerId", authenticate, getOwnerPets); // COMPLETE
 router.get("/getPetInfo/:petId", authenticate, getPetInfo); // COMPLETE
 router.get("/getVaccinationCard/:petId", authenticate, getVaccinationCard); // COMPLETE
 
+router.get("/getAllHealthRecords/:petId", getAllHealthRecords);
+router.get(
+	"/downloadHealthRecord/:petId/:healthRecordId",
+	downloadHealthRecord
+);
+
 // POST methods for /user
 router.post("/getUsers", authenticate, getUsers); // COMPLETE
 router.post("/createAdmin", authenticate, createAdmin); // COMPLETE
@@ -79,6 +91,12 @@ router.post(
 	createVaccinationCard
 ); // COMPLETE
 router.post("/addVaccination/:petId", authenticate, addVaccination); // COMPLETE
+
+router.post(
+	"/uploadHealthRecord/:petId",
+	upload.single("file"),
+	uploadHealthRecord
+);
 
 // PATCH methods for /user
 router.patch("/updateProfile", authenticate, updateUserProfile); // COMPLETE
@@ -108,6 +126,8 @@ router.delete(
 	authenticate,
 	deleteVaccination
 ); // COMPLETE
+
+router.delete("/deleteHealthRecord/:healthRecordId", deleteHealthRecord);
 
 // ----------------------------------------------------------------
 

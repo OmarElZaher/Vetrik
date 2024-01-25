@@ -145,6 +145,7 @@ export default function PetVaccination() {
 					isClosable: true,
 					position: "top",
 				});
+				fetchData();
 			} else {
 				toast({
 					title: response.data.message,

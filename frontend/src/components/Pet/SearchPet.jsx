@@ -13,7 +13,6 @@ import {
 	FormControl,
 	Heading,
 	Input,
-	InputGroup,
 	Icon,
 	List,
 	ListItem,
