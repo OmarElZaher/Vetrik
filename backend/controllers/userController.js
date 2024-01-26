@@ -20,9 +20,8 @@ let otpExpiry;
 // Helper Functions
 
 const generateToken = (id) => {
-	// TODO Update Token Expiration
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
-		expiresIn: "30d",
+		expiresIn: "1d",
 	});
 };
 
@@ -1278,7 +1277,6 @@ const renewVaccination = asyncHandler(async (req, res) => {
 
 		// Save the updated vaccination card
 		await vaccinationCard.save();
-		console.log("KHALASNA DIH");
 
 		res.status(200).json({ message: "Vaccination renewed successfully" });
 	} catch (error) {
@@ -1590,7 +1588,6 @@ const requestOTP = asyncHandler(async (req, res) => {
 			await user.save();
 			otpExpiry = new Date();
 			otpExpiry.setMinutes(otpExpiry.getMinutes() + 5);
-			console.log(otpExpiry);
 
 			const transporter = nodemailer.createTransport({
 				service: "",

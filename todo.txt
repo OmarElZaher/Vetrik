@@ -1,20 +1,11 @@
 BACKEND
 When updating user email, send confirmation message with OTP etc same for when creating a new user
-Lessa lazem a3mel hewar el upload healthrecords w keda dih mohema mot actually bas other wise supposedly the backend is complete
 
 FRONTEND
-prettier code
-fix lowercase handling 
 README.md file
 
 updateOwnerProfile
 updatePetProfile
-
-createVaccinationCard
-getVaccinationCard
-addVaccination
-renewVaccination
-deleteVaccination
 
 forgotUsername
 requestOTP
