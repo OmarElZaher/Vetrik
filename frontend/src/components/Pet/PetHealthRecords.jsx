@@ -33,16 +33,6 @@ import { MdDelete, MdUpload } from "react-icons/md";
 import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
-function titleCase(str) {
-	return str
-		.toLowerCase()
-		.split(" ")
-		.map((word) => {
-			return word.charAt(0).toUpperCase() + word.slice(1);
-		})
-		.join(" ");
-}
-
 export default function PetHealthRecords() {
 	const { petId } = useParams();
 	const toast = useToast();
