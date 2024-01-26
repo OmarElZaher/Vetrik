@@ -94,7 +94,6 @@ export default function PetVaccination() {
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
-	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleCreateVaccinationCard = async () => {
 		try {
@@ -393,7 +392,7 @@ export default function PetVaccination() {
 									fontWeight={"bold"}
 									textDecoration={"underline"}
 								>
-									{pet.name}
+									{titleCase(pet.name)}
 								</Text>
 							</Box>
 

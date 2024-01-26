@@ -381,7 +381,7 @@ export default function PetDetails() {
 								fontWeight={"bold"}
 								textDecoration={"underline"}
 							>
-								{pet.name}
+								{titleCase(pet.name)}
 							</Text>
 						</Box>
 
@@ -406,7 +406,7 @@ export default function PetDetails() {
 								<Text fontSize={"24px"} fontWeight={"bold"}>
 									Type of Animal
 								</Text>
-								<Text fontSize={"20px"}>{pet.type}</Text>
+								<Text fontSize={"20px"}>{titleCase(pet.type)}</Text>
 							</Box>
 
 							<Box
@@ -420,7 +420,7 @@ export default function PetDetails() {
 								<Text fontSize={"24px"} fontWeight={"bold"}>
 									Breed
 								</Text>
-								<Text fontSize={"20px"}>{pet.breed}</Text>
+								<Text fontSize={"20px"}>{titleCase(pet.breed)}</Text>
 							</Box>
 
 							<Box

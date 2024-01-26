@@ -919,7 +919,7 @@ const getPet = asyncHandler(async (req, res) => {
 			query.breed = new RegExp(breed, "i");
 		}
 		if (gender) {
-			query.gender = new RegExp(gender, "i");
+			query.gender = gender;
 		}
 
 		const pet = await Pet.find(query).populate("owners");

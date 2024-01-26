@@ -118,9 +118,9 @@ export default function PetTable() {
 									{JSON.parse(data).map((row) => (
 										<Tr key={data._id}>
 											<Td textAlign={"left"}>{titleCase(row.name)}</Td>
-											<Td textAlign={"center"}>{row.type}</Td>
-											<Td textAlign={"center"}>{row.breed}</Td>
-											<Td textAlign={"center"}>{row.gender}</Td>
+											<Td textAlign={"center"}>{titleCase(row.type)}</Td>
+											<Td textAlign={"center"}>{titleCase(row.breed)}</Td>
+											<Td textAlign={"center"}>{titleCase(row.gender)}</Td>
 											<Td textAlign={"right"}>
 												<Button
 													_hover={{

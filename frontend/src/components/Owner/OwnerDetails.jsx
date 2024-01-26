@@ -435,10 +435,10 @@ export default function OwnerDetails() {
 									<Tbody>
 										{owner.pets.map((pet) => (
 											<Tr key={pet._id}>
-												<Td textAlign={"left"}>{pet.name}</Td>
-												<Td textAlign={"center"}>{pet.type}</Td>
-												<Td textAlign={"center"}>{pet.breed}</Td>
-												<Td textAlign={"center"}>{pet.gender}</Td>
+												<Td textAlign={"left"}>{titleCase(pet.name)}</Td>
+												<Td textAlign={"center"}>{titleCase(pet.type)}</Td>
+												<Td textAlign={"center"}>{titleCase(pet.breed)}</Td>
+												<Td textAlign={"center"}>{titleCase(pet.gender)}</Td>
 												<Td textAlign={"center"}>
 													<Button
 														_hover={{
