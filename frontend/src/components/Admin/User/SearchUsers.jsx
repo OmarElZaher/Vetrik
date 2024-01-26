@@ -14,7 +14,6 @@ import {
 	Heading,
 	Icon,
 	Input,
-	InputGroup,
 	List,
 	ListIcon,
 	ListItem,

@@ -85,46 +85,45 @@ export default function PetDetails() {
 	const [gotData, setGotData] = useState(false);
 	const [error, setIsError] = useState(null);
 
-	const fetchData = async () => {
-		try {
-			setIsLoading(true);
-			const response = await axios.get(
-				`http://localhost:1234/user/getPetInfo/${petId}`,
-				{
-					withCredentials: true,
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				setIsLoading(true);
+				const response = await axios.get(
+					`http://localhost:1234/user/getPetInfo/${petId}`,
+					{
+						withCredentials: true,
+					}
+				);
+				if (response.status === 200) {
+					setPetAge(response.data.petAge);
+					setPet(response.data.pet);
+					setGotData(true);
+				} else {
+					setIsError(response.data.message);
+					toast({
+						title: response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
 				}
-			);
-			if (response.status === 200) {
-				setPetAge(response.data.petAge);
-				setPet(response.data.pet);
-				setGotData(true);
-			} else {
-				setIsError(response.data.message);
+			} catch (error) {
+				setIsError(error.response.data.message);
 				toast({
-					title: response.data.message,
+					title: error.response.data.message,
 					status: "error",
 					duration: 2500,
 					isClosable: true,
 					position: "top",
 				});
+			} finally {
+				setIsLoading(false);
 			}
-		} catch (error) {
-			setIsError(error.response.data.message);
-			toast({
-				title: error.response.data.message,
-				status: "error",
-				duration: 2500,
-				isClosable: true,
-				position: "top",
-			});
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	useEffect(() => {
+		};
 		fetchData();
-	}, []);
+	}, [petId, toast]);
 
 	const handleRemovePetFromOwner = async (ownerId, petId) => {
 		const confirmDelete = window.confirm(

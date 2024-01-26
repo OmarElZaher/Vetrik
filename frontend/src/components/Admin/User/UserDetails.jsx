@@ -139,45 +139,44 @@ export default function UserDetails() {
 		}
 	};
 
-	const fetchData = async () => {
-		try {
-			setIsLoading(true);
-			const response = await axios.get(
-				`http://localhost:1234/user/getUserInfo/${userId}`,
-				{ withCredentials: true }
-			);
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				setIsLoading(true);
+				const response = await axios.get(
+					`http://localhost:1234/user/getUserInfo/${userId}`,
+					{ withCredentials: true }
+				);
 
-			if (response.status === 200) {
-				setUser(response.data.user);
-				setIsAdmin(response.data.user.isAdmin);
-				setGotData(true);
-			} else {
-				setError(response.data.message);
+				if (response.status === 200) {
+					setUser(response.data.user);
+					setIsAdmin(response.data.user.isAdmin);
+					setGotData(true);
+				} else {
+					setError(response.data.message);
+					toast({
+						title: response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} catch (error) {
+				setError(error.response.data.message);
 				toast({
-					title: response.data.message,
+					title: error.response.data.message,
 					status: "error",
 					duration: 2500,
 					isClosable: true,
 					position: "top",
 				});
+			} finally {
+				setIsLoading(false);
 			}
-		} catch (error) {
-			setError(error.response.data.message);
-			toast({
-				title: error.response.data.message,
-				status: "error",
-				duration: 2500,
-				isClosable: true,
-				position: "top",
-			});
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	useEffect(() => {
+		};
 		fetchData();
-	}, []);
+	}, [toast, userId]);
 
 	return isLoading ? (
 		<Spinner />

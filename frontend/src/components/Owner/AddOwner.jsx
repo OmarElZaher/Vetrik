@@ -29,16 +29,6 @@ import { FaPerson } from "react-icons/fa6";
 import Spinner from "../General/Spinner";
 import Footer from "../General/Footer";
 
-function emailValidator(email) {
-	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-	if (!emailRegex.test(email)) {
-		return false;
-	} else {
-		return true;
-	}
-}
-
 export default function AddOwner() {
 	const navigate = useNavigate();
 	const toast = useToast();

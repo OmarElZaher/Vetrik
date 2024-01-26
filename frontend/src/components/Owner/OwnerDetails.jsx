@@ -64,42 +64,6 @@ export default function OwnerDetails() {
 	const [gender, setGender] = useState("");
 	const [dob, setDob] = useState(null);
 
-	const fetchData = async () => {
-		try {
-			setIsLoading(true);
-			const response = await axios.get(
-				`http://localhost:1234/user/getOwnerInfo/${ownerId}`,
-				{
-					withCredentials: true,
-				}
-			);
-			if (response.status === 200) {
-				setOwner(response.data);
-				setGotData(true);
-			} else {
-				setError(response.data.message);
-				toast({
-					title: response.data.message,
-					status: "error",
-					duration: 2500,
-					isClosable: true,
-					position: "top",
-				});
-			}
-		} catch (error) {
-			setError(error.response.data.message);
-			toast({
-				title: error.response.data.message,
-				status: "error",
-				duration: 2500,
-				isClosable: true,
-				position: "top",
-			});
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
 	const handleRemovePet = async (petId) => {
 		const confirmDelete = window.confirm(
 			"Are you sure you want to delete this pet?"
@@ -276,8 +240,43 @@ export default function OwnerDetails() {
 	};
 
 	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				setIsLoading(true);
+				const response = await axios.get(
+					`http://localhost:1234/user/getOwnerInfo/${ownerId}`,
+					{
+						withCredentials: true,
+					}
+				);
+				if (response.status === 200) {
+					setOwner(response.data);
+					setGotData(true);
+				} else {
+					setError(response.data.message);
+					toast({
+						title: response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} catch (error) {
+				setError(error.response.data.message);
+				toast({
+					title: error.response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			} finally {
+				setIsLoading(false);
+			}
+		};
 		fetchData();
-	}, []);
+	}, [ownerId, toast]);
 
 	return isLoading ? (
 		<Spinner />
