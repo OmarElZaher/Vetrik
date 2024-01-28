@@ -7,7 +7,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import axios from "axios";
 
 // Variable Imports
-import { vet_name } from "../../../variables";
+import { vet_name } from "../../variables";
 import { api } from "../../variables";
 
 // Chakra-UI Imports

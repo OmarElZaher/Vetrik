@@ -8,7 +8,7 @@ import axios from "axios";
 
 // Variable Imports
 import { api } from "../../variables";
-import { vet_name } from "../../../variables";
+import { vet_name } from "../../variables";
 
 // Chakra UI Imports
 import { useToast } from "@chakra-ui/react";
