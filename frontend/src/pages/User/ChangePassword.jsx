@@ -6,7 +6,8 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 // Axios Import
 import axios from "axios";
 
-// API URL Import
+// Variable Imports
+import { vet_name } from "../../../variables";
 import { api } from "../../variables";
 
 // Chakra-UI Imports
@@ -66,7 +67,7 @@ export default function ChangePasswordPage() {
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Change Password | Modern Vet</title>
+					<title>Change Password | {vet_name}</title>
 				</Helmet>
 			</HelmetProvider>
 

@@ -6,8 +6,9 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 // Axios Import
 import axios from "axios";
 
-// API URL Import
+// Variable Imports
 import { api } from "../../variables";
+import { vet_name } from "../../../variables";
 
 // Chakra UI Imports
 import { useToast } from "@chakra-ui/react";
@@ -69,7 +70,7 @@ export default function EditProfilePage() {
 				<>
 					<HelmetProvider>
 						<Helmet>
-							<title>Edit Profile | Modern Vet</title>
+							<title>Edit Profile | {vet_name}</title>
 						</Helmet>
 					</HelmetProvider>
 

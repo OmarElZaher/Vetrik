@@ -2,6 +2,9 @@
 import React from "react";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
+// Vet Name Imports
+import { vet_name } from "../../../variables";
+
 // Chakra UI Imports
 import { Box } from "@chakra-ui/react";
 
@@ -14,7 +17,7 @@ export default function AdminHomePage() {
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Admin Home | Modern Vet</title>
+					<title>Admin Home | {vet_name}</title>
 				</Helmet>
 			</HelmetProvider>
 

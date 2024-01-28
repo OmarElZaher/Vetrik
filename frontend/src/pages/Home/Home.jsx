@@ -2,6 +2,9 @@
 import React from "react";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
+// Vet Name Imports
+import { vet_name } from "../../../variables";
+
 // Custom Component Imports
 import Header from "../../components/General/Header";
 import Home from "../../components/General/Home";
@@ -12,7 +15,7 @@ export default function HomePage() {
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Home | Modern Vet</title>
+					<title>Home | {vet_name}</title>
 				</Helmet>
 			</HelmetProvider>
 

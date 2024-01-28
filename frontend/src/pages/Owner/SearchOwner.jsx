@@ -2,6 +2,9 @@
 import React from "react";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
+// Vet Name Imports
+import { vet_name } from "../../../variables";
+
 // Custom Component Imports
 import Header from "../../components/General/Header";
 import SearchOwner from "../../components/Owner/SearchOwner";
@@ -11,7 +14,7 @@ export default function SearchOwnerPage() {
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Search Owner | Modern Vet</title>
+					<title>Search Owner | {vet_name}</title>
 				</Helmet>
 			</HelmetProvider>
 
