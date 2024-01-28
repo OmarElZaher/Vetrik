@@ -23,6 +23,10 @@ import NotFoundPage from "./pages/General/NotFound";
 import EditProfilePage from "./pages/User/EditProfile";
 import ChangePasswordPage from "./pages/User/ChangePassword";
 import ForgotUsernamePage from "./pages/User/ForgotUsername";
+
+import RequestOTPPage from "./pages/User/RequestOTP";
+import VerifyOTPPage from "./pages/User/VerifyOTP";
+import ResetPasswordPage from "./pages/User/ResetPassword";
 // }
 
 // Owner Imports {
@@ -58,6 +62,10 @@ function App() {
 						<Route path='/change-password' element={<ChangePasswordPage />} />
 						<Route path='/edit-user' element={<EditProfilePage />} />
 						<Route path='/forgot-username' element={<ForgotUsernamePage />} />
+
+						<Route path='/forgot-password' element={<RequestOTPPage />} />
+						<Route path='/verify-otp' element={<VerifyOTPPage />} />
+						<Route path='/reset-password' element={<ResetPasswordPage />} />
 
 						{/* User Routes */}
 						<Route path='/search-owner' element={<SearchOwnerPage />} />

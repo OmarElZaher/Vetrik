@@ -1596,19 +1596,20 @@ const requestOTP = asyncHandler(async (req, res) => {
 			otpExpiry.setMinutes(otpExpiry.getMinutes() + 5);
 
 			const transporter = nodemailer.createTransport({
-				service: "",
+				service: "Gmail",
 				auth: {
-					user: "",
-					pass: "",
+					user: "omarelzaher93@gmail.com",
+					pass: "vtzilhuubkdtphww",
 				},
 			});
 
 			const mailOptions = {
-				from: "",
+				from: "omarelzaher93@gmail.com",
 				to: user.email,
 				subject: "[NO REPLY] Your Password Reset Request",
 				html: `<h1>You have requested to reset your password.<h1>
                 <p>Your OTP is ${otp}<p>
+                <p>Your OTP will expire in 5 MINUTES<p>
                 <p>If you did not request to reset your password, you can safely disregard this message.<p>
                 <p>This Is An Automated Message, Please Do Not Reply.<p>`,
 			};
@@ -1670,6 +1671,8 @@ const resetPassword = asyncHandler(async (req, res) => {
 	try {
 		const user = await User.findOne({ email: req.body.email });
 		const { newPassword, confirmPassword } = req.body;
+
+		console.log(newPassword, " ", confirmPassword);
 
 		if (!newPassword || !confirmPassword) {
 			res.status(400).json({ message: "Enter All Fields" });
