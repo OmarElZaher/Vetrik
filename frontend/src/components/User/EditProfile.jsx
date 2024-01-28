@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Badge,
@@ -45,12 +48,9 @@ export default function EditProfile() {
 		try {
 			setIsLoading(true);
 
-			const response = await axios.get(
-				"http://localhost:1234/user/getUserInfo",
-				{
-					withCredentials: true,
-				}
-			);
+			const response = await axios.get(`${api}/user/getUserInfo`, {
+				withCredentials: true,
+			});
 
 			if (response.status === 200) {
 				setEmail(response.data.email);
@@ -85,7 +85,7 @@ export default function EditProfile() {
 		try {
 			setIsLoading(true);
 			const response = await axios.patch(
-				"http://localhost:1234/user/updateProfile",
+				`${api}/user/updateProfile`,
 				{
 					username: username,
 					email: email,

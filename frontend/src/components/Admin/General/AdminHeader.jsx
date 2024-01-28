@@ -5,6 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../../variables";
+
 // ChakraUI Imports
 import { Box, IconButton, useToast } from "@chakra-ui/react";
 
@@ -26,7 +29,7 @@ export default function AdminHeader() {
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
-				"http://localhost:1234/user/logout",
+				`${api}/user/logout`,
 				{},
 				{
 					withCredentials: true,

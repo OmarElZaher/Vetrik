@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../../variables";
+
 // ChakraUI Imports
 import {
 	Box,
@@ -47,7 +50,7 @@ export default function SearchUsers() {
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
-				"http://localhost:1234/user/getUsers",
+				`${api}/user/getUsers`,
 				{
 					firstName: firstName,
 					lastName: lastName,

@@ -6,6 +6,9 @@ import { useParams } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -50,7 +53,7 @@ export default function PetHealthRecords() {
 		try {
 			setIsLoading(true);
 			const response = await axios.get(
-				`http://localhost:1234/user/getAllHealthRecords/${petId}`,
+				`${api}/user/getAllHealthRecords/${petId}`,
 				{ withCredentials: true }
 			);
 
@@ -128,7 +131,7 @@ export default function PetHealthRecords() {
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
-				`http://localhost:1234/user/uploadHealthRecord/${petId}`,
+				`${api}/user/uploadHealthRecord/${petId}`,
 				formData,
 				{
 					headers: {
@@ -171,7 +174,7 @@ export default function PetHealthRecords() {
 		try {
 			setIsLoading(true);
 			const response = await axios.get(
-				`http://localhost:1234/user/downloadHealthRecord/${petId}/${healthRecordId}`,
+				`${api}/user/downloadHealthRecord/${petId}/${healthRecordId}`,
 				{
 					responseType: "arraybuffer",
 				}
@@ -212,7 +215,7 @@ export default function PetHealthRecords() {
 			try {
 				setIsLoading(true);
 				const response = await axios.delete(
-					`http://localhost:1234/user/deleteHealthRecord/${healthRecordId}`,
+					`${api}/user/deleteHealthRecord/${healthRecordId}`,
 					{ withCredentials: true }
 				);
 

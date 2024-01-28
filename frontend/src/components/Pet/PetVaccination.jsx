@@ -6,6 +6,9 @@ import { useNavigate, useParams } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -100,7 +103,7 @@ export default function PetVaccination() {
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
-				`http://localhost:1234/user/createVaccinationCard/${petId}`,
+				`${api}/user/createVaccinationCard/${petId}`,
 				{
 					vaccineName: vaccineName,
 					vaccineBatch: vaccineBatch,
@@ -151,7 +154,7 @@ export default function PetVaccination() {
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
-				`http://localhost:1234/user/addVaccination/${petId}`,
+				`${api}/user/addVaccination/${petId}`,
 				{
 					vaccineName: vaccineName,
 					vaccineBatch: vaccineBatch,
@@ -204,7 +207,7 @@ export default function PetVaccination() {
 			try {
 				setIsLoading(true);
 				const response = await axios.delete(
-					`http://localhost:1234/user/deleteVaccinationCard/${petId}`,
+					`${api}/user/deleteVaccinationCard/${petId}`,
 					{ withCredentials: true }
 				);
 
@@ -249,7 +252,7 @@ export default function PetVaccination() {
 			try {
 				setIsLoading(true);
 				const response = await axios.delete(
-					`http://localhost:1234/user/deleteVaccination/${petId}/${vaccineId}`,
+					`${api}/user/deleteVaccination/${petId}/${vaccineId}`,
 					{ withCredentials: true }
 				);
 
@@ -289,7 +292,7 @@ export default function PetVaccination() {
 		try {
 			setIsLoading(true);
 			const response = await axios.put(
-				`http://localhost:1234/user/renewVaccination/${petId}/${vaccineId}`,
+				`${api}/user/renewVaccination/${petId}/${vaccineId}`,
 				{
 					vaccineRenewalDate: vaccineRenewalDate,
 				},
@@ -331,7 +334,7 @@ export default function PetVaccination() {
 		try {
 			setIsLoading(true);
 			const response = await axios.get(
-				`http://localhost:1234/user/getVaccinationCard/${petId}`,
+				`${api}/user/getVaccinationCard/${petId}`,
 				{
 					withCredentials: true,
 				}

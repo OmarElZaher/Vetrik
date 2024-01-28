@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -63,13 +66,9 @@ export default function SearchOwner() {
 				formData.email = email;
 			}
 
-			const response = await axios.post(
-				"http://localhost:1234/user/getOwner",
-				formData,
-				{
-					withCredentials: true,
-				}
-			);
+			const response = await axios.post(`${api}/user/getOwner`, formData, {
+				withCredentials: true,
+			});
 
 			if (response.status === 200) {
 				localStorage.setItem("ownerFilterData", JSON.stringify(response.data));

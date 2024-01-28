@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -50,7 +53,7 @@ export default function ChangePassword() {
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
-				"http://localhost:1234/user/changePassword",
+				`${api}/user/changePassword`,
 				{
 					oldPassword: oldPassword,
 					newPassword: newPassword,
@@ -70,11 +73,7 @@ export default function ChangePassword() {
 
 				try {
 					setIsLoading(true);
-					await axios.post(
-						"http://localhost:1234/user/logout",
-						{},
-						{ withCredentials: true }
-					);
+					await axios.post(`${api}/user/logout`, {}, { withCredentials: true });
 					navigate("/login");
 				} catch (error) {
 					toast({

@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -61,11 +64,9 @@ export default function SearchPet() {
 				formData.gender = gender;
 			}
 
-			const response = await axios.post(
-				"http://localhost:1234/user/getPet",
-				formData,
-				{ withCredentials: true }
-			);
+			const response = await axios.post(`${api}/user/getPet`, formData, {
+				withCredentials: true,
+			});
 
 			if (response.status === 200) {
 				localStorage.setItem("petFilterData", JSON.stringify(response.data));

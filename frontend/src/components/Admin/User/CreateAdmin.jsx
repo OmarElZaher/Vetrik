@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../../variables";
+
 // ChakraUI Imports
 import {
 	Box,
@@ -43,7 +46,7 @@ export default function CreateUser() {
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
-				"http://localhost:1234/user/createAdmin",
+				`${api}/user/createAdmin`,
 				{
 					username: username,
 					password: password,

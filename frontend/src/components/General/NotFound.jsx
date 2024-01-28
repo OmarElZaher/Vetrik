@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import { Box, Button, Icon, Text, useToast } from "@chakra-ui/react";
 
@@ -29,12 +32,9 @@ export default function NotFound() {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(
-					"http://localhost:1234/user/getUserInfo",
-					{
-						withCredentials: true,
-					}
-				);
+				const response = await axios.get(`${api}/user/getUserInfo`, {
+					withCredentials: true,
+				});
 
 				if (response.status === 200) {
 					setIsAdmin(response.data.isAdmin);

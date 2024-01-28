@@ -5,6 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -74,7 +77,7 @@ export default function OwnerDetails() {
 				setIsLoading(true);
 
 				const response = await axios.delete(
-					`http://localhost:1234/user/removePetFromOwner/${owner._id}/${petId}`,
+					`${api}/user/removePetFromOwner/${owner._id}/${petId}`,
 					{
 						withCredentials: true,
 					}
@@ -125,7 +128,7 @@ export default function OwnerDetails() {
 			try {
 				setIsLoading(true);
 				const response = await axios.delete(
-					`http://localhost:1234/user/deleteOwner/${owner._id}`,
+					`${api}/user/deleteOwner/${owner._id}`,
 					{
 						withCredentials: true,
 					}
@@ -191,13 +194,9 @@ export default function OwnerDetails() {
 					dob: dob,
 				};
 
-				const response = await axios.post(
-					"http://localhost:1234/user/createPet",
-					formData,
-					{
-						withCredentials: true,
-					}
-				);
+				const response = await axios.post(`${api}/user/createPet`, formData, {
+					withCredentials: true,
+				});
 
 				if (response.status === 200) {
 					toast({
@@ -244,7 +243,7 @@ export default function OwnerDetails() {
 			try {
 				setIsLoading(true);
 				const response = await axios.get(
-					`http://localhost:1234/user/getOwnerInfo/${ownerId}`,
+					`${api}/user/getOwnerInfo/${ownerId}`,
 					{
 						withCredentials: true,
 					}

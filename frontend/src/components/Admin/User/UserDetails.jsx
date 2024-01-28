@@ -5,6 +5,9 @@ import { useParams, useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../../variables";
+
 // ChakraUI Imports
 import {
 	Box,
@@ -55,7 +58,7 @@ export default function UserDetails() {
 			try {
 				setIsLoading(true);
 				const response = await axios.delete(
-					`http://localhost:1234/user/deleteUser/${userId}`,
+					`${api}/user/deleteUser/${userId}`,
 					{
 						withCredentials: true,
 					}
@@ -103,7 +106,7 @@ export default function UserDetails() {
 			try {
 				setIsLoading(true);
 				const response = await axios.patch(
-					`http://localhost:1234/user/setAdmin/${userId}`,
+					`${api}/user/setAdmin/${userId}`,
 					{},
 					{ withCredentials: true }
 				);
@@ -143,10 +146,9 @@ export default function UserDetails() {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(
-					`http://localhost:1234/user/getUserInfo/${userId}`,
-					{ withCredentials: true }
-				);
+				const response = await axios.get(`${api}/user/getUserInfo/${userId}`, {
+					withCredentials: true,
+				});
 
 				if (response.status === 200) {
 					setUser(response.data.user);

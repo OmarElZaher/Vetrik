@@ -5,6 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra-UI Imports
 import {
 	Box,
@@ -89,12 +92,9 @@ export default function PetDetails() {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(
-					`http://localhost:1234/user/getPetInfo/${petId}`,
-					{
-						withCredentials: true,
-					}
-				);
+				const response = await axios.get(`${api}/user/getPetInfo/${petId}`, {
+					withCredentials: true,
+				});
 				if (response.status === 200) {
 					setPetAge(response.data.petAge);
 					setPet(response.data.pet);
@@ -133,7 +133,7 @@ export default function PetDetails() {
 			try {
 				setIsLoading(true);
 				const response = await axios.delete(
-					`http://localhost:1234/user/removePetFromOwner/${ownerId}/${petId}`,
+					`${api}/user/removePetFromOwner/${ownerId}/${petId}`,
 					{ withCredentials: true }
 				);
 
@@ -181,10 +181,9 @@ export default function PetDetails() {
 		if (confirmDelete) {
 			try {
 				setIsLoading(true);
-				const response = await axios.delete(
-					`http://localhost:1234/user/deletePet/${petId}`,
-					{ withCredentials: true }
-				);
+				const response = await axios.delete(`${api}/user/deletePet/${petId}`, {
+					withCredentials: true,
+				});
 
 				if (response.status === 200) {
 					toast({
@@ -222,7 +221,7 @@ export default function PetDetails() {
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
-				`http://localhost:1234/user/addPetToOwner/${ownerId}/${petId}`,
+				`${api}/user/addPetToOwner/${ownerId}/${petId}`,
 				{
 					withCredentials: true,
 				}
@@ -285,7 +284,7 @@ export default function PetDetails() {
 			try {
 				setIsLoading(true);
 				const response = await axios.post(
-					"http://localhost:1234/user/getOwner",
+					`${api}/user/getOwner`,
 					{ email: ownerEmail },
 					{ withCredentials: true }
 				);

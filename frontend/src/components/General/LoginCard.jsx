@@ -5,6 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -55,13 +58,9 @@ export default function LoginCard() {
 				return;
 			}
 
-			const response = await axios.post(
-				"http://localhost:1234/user/login",
-				formData,
-				{
-					withCredentials: true,
-				}
-			);
+			const response = await axios.post(`${api}/user/login`, formData, {
+				withCredentials: true,
+			});
 
 			if (response.status === 200) {
 				toast({

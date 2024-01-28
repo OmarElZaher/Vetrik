@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -81,7 +84,7 @@ export default function AddOwner() {
 				setIsLoading(true);
 
 				const response = await axios.post(
-					"http://localhost:1234/user/createOwner",
+					`${api}/user/createOwner`,
 					{
 						firstName: firstName,
 						lastName: lastName,

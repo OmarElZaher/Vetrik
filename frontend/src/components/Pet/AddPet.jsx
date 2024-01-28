@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
+// API URL Import
+import { api } from "../../variables";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -63,7 +66,7 @@ export default function AddPet() {
 				});
 			} else {
 				const res = await axios.post(
-					"http://localhost:1234/user/getOwner",
+					`${api}/user/getOwner`,
 					{ email: ownerEmail },
 					{ withCredentials: true }
 				);
@@ -78,13 +81,9 @@ export default function AddPet() {
 						dob: dob,
 					};
 
-					const response = await axios.post(
-						"http://localhost:1234/user/createPet",
-						formData,
-						{
-							withCredentials: true,
-						}
-					);
+					const response = await axios.post(`${api}/user/createPet`, formData, {
+						withCredentials: true,
+					});
 
 					if (response.status === 200) {
 						toast({
