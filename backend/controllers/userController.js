@@ -1542,33 +1542,39 @@ const forgotUsername = asyncHandler(async (req, res) => {
 		res.status(400).json({ message: "User Not Found!" });
 		return;
 	} else {
-		const transporter = nodemailer.createTransport({
-			service: "",
-			auth: {
-				user: "",
-				pass: "",
-			},
-		});
+		try {
+			const transporter = nodemailer.createTransport({
+				service: "Gmail",
+				auth: {
+					user: "omarelzaher93@gmail.com",
+					pass: "vtzilhuubkdtphww",
+				},
+			});
 
-		const mailOptions = {
-			from: "",
-			to: user.email,
-			subject: "[NO REPLY] Your Username",
-			html: `<h1>Your username is ${user.username}<h1>
-			<p>If you did not request to retrieve your username, you can safely disregard this message.<p>
-			<p>This Is An Automated Message, Please Do Not Reply.<p>`,
-		};
+			const mailOptions = {
+				from: "omarelzaher93@gmail.com",
+				to: user.email,
+				subject: "[NO REPLY] Your Username",
+				html: `<h1>Hello, Dr. ${user.lastName}.<h1>
+				<h2> Your username is ${user.username}.<h2>
+				<p>If you did not request to retrieve your username, you can safely disregard this message.<p>
+				<p>This Is An Automated Message, Please Do Not Reply.<p>`,
+			};
 
-		transporter.sendMail(mailOptions, (error, info) => {
-			if (error) {
-				res.status(500);
-				throw new Error("Failed to Send Username Email.");
-			} else {
-				res
-					.status(200)
-					.json({ message: "Username Sent, Please Check Your Email" });
-			}
-		});
+			transporter.sendMail(mailOptions, (error, info) => {
+				if (error) {
+					res.status(500);
+					throw new Error("Failed to Send Username Email.");
+				} else {
+					res
+						.status(200)
+						.json({ message: "Username Sent, Please Check Your Email" });
+				}
+			});
+		} catch (error) {
+			res.status(500);
+			throw new Error(error);
+		}
 	}
 });
 

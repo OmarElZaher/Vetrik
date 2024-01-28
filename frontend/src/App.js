@@ -22,6 +22,7 @@ import NotFoundPage from "./pages/General/NotFound";
 
 import EditProfilePage from "./pages/User/EditProfile";
 import ChangePasswordPage from "./pages/User/ChangePassword";
+import ForgotUsernamePage from "./pages/User/ForgotUsername";
 // }
 
 // Owner Imports {
@@ -56,6 +57,7 @@ function App() {
 						<Route path='/login' element={<LoginPage />} />
 						<Route path='/change-password' element={<ChangePasswordPage />} />
 						<Route path='/edit-user' element={<EditProfilePage />} />
+						<Route path='/forgot-username' element={<ForgotUsernamePage />} />
 
 						{/* User Routes */}
 						<Route path='/search-owner' element={<SearchOwnerPage />} />
