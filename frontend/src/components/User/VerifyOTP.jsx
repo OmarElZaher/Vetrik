@@ -16,8 +16,11 @@ import {
 	FormLabel,
 	Flex,
 	Heading,
+	HStack,
 	Icon,
 	Input,
+	PinInput,
+	PinInputField,
 	Stack,
 	Text,
 	useToast,
@@ -83,23 +86,40 @@ export default function VerifyOTP() {
 								<Icon as={MdLockReset} fontSize='100px' />
 								<Heading fontSize={"4xl"}>Forgot Password</Heading>
 								<Text fontSize={"lg"} color={"gray.600"} align={"center"}>
-									Enter your OTP sent to your email to confirm it's really you.
+									Enter 6-digit One Time Passcode (OTP) sent to your email to
+									confirm it's really you.
 								</Text>
 							</Stack>
 
 							<Box rounded={"lg"} bg='#F6F9FB' boxShadow={"lg"} p={8}>
 								<Stack spacing={4}>
-									<FormControl id='otp'>
-										<FormLabel>Password Reset OTP</FormLabel>
-										<Input
-											id='otp'
-											type='text'
-											name='otp'
-											value={otp}
-											onChange={(e) => {
-												setOtp(e.target.value);
-											}}
-										/>
+									<FormControl
+										id='otp'
+										display={"flex"}
+										flexDirection={"column"}
+										justifyContent={"space-evenly"}
+										alignItems={"center"}
+									>
+										<FormLabel mb={5}>Password Reset OTP</FormLabel>
+										<HStack mb={5}>
+											<PinInput
+												otp
+												id='otp'
+												type='text'
+												value={otp}
+												onChange={(value) => {
+													setOtp(value);
+												}}
+												size={"lg"}
+											>
+												<PinInputField />
+												<PinInputField />
+												<PinInputField />
+												<PinInputField />
+												<PinInputField />
+												<PinInputField />
+											</PinInput>
+										</HStack>
 									</FormControl>
 
 									<Stack spacing={10}>
