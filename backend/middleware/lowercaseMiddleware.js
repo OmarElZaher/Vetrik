@@ -4,6 +4,7 @@ const convertToLowercase = (req, res, next) => {
 			if (
 				req.body.hasOwnProperty(key) &&
 				typeof req.body[key] === "string" &&
+				key.toLowerCase() !== "oldpassword" &&
 				key.toLowerCase() !== "password" &&
 				key.toLowerCase() !== "newpassword" &&
 				key.toLowerCase() !== "confirmpassword"

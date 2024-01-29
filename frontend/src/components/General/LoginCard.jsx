@@ -17,13 +17,17 @@ import {
 	FormLabel,
 	Heading,
 	Icon,
+	IconButton,
 	Input,
+	InputGroup,
+	InputRightElement,
 	Stack,
 	Text,
 	useToast,
 } from "@chakra-ui/react";
 
 // React Icons Imports
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FiLogIn } from "react-icons/fi";
 
 // Custom Component Imports
@@ -39,6 +43,9 @@ export default function LoginCard() {
 		username: "",
 		password: "",
 	});
+
+	// Show Password useState
+	const [showPassword, setShowPassword] = useState(false);
 
 	// Misc useState
 	const [isLoading, setIsLoading] = useState(false);
@@ -147,12 +154,48 @@ export default function LoginCard() {
 												*
 											</Text>
 										</FormLabel>
-										<Input
-											type='password'
-											name='password'
-											value={formData.password}
-											onChange={handleInputChange}
-										/>
+										<InputGroup>
+											{showPassword ? (
+												<InputRightElement
+													children={
+														<IconButton
+															_hover={{}}
+															_active={{}}
+															onClick={() => {
+																setShowPassword(!showPassword);
+															}}
+															as={FaEye}
+															cursor={"pointer"}
+															bg={"#FFF"}
+															size={"xs"}
+														/>
+													}
+												/>
+											) : (
+												<InputRightElement
+													children={
+														<IconButton
+															_hover={{}}
+															_active={{}}
+															onClick={() => {
+																setShowPassword(!showPassword);
+															}}
+															as={FaEyeSlash}
+															cursor={"pointer"}
+															bg={"#FFF"}
+															size={"xs"}
+														/>
+													}
+												/>
+											)}
+											<Input
+												id='password'
+												type={showPassword ? "text" : "password"}
+												name='password'
+												value={formData.password}
+												onChange={handleInputChange}
+											/>
+										</InputGroup>
 									</FormControl>
 
 									<Stack spacing={10}>

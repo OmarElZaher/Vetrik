@@ -17,13 +17,17 @@ import {
 	Flex,
 	Heading,
 	Icon,
+	IconButton,
 	Input,
+	InputGroup,
+	InputRightElement,
 	Stack,
 	Text,
 	useToast,
 } from "@chakra-ui/react";
 
 // React Icon Imports
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdLockReset } from "react-icons/md";
 
 // Custom Component Imports
@@ -37,6 +41,10 @@ export default function ResetPassword() {
 	// Form useStates
 	const [newPassword, setNewPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+
+	// Show useStates
+	const [showNewPassword, setShowNewPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
@@ -103,28 +111,98 @@ export default function ResetPassword() {
 								<Stack spacing={4}>
 									<FormControl id='password'>
 										<FormLabel>Password</FormLabel>
-										<Input
-											id='password'
-											type='password'
-											name='password'
-											value={newPassword}
-											onChange={(e) => {
-												setNewPassword(e.target.value);
-											}}
-										/>
+										<InputGroup>
+											{showNewPassword ? (
+												<InputRightElement
+													children={
+														<IconButton
+															_hover={{}}
+															_active={{}}
+															onClick={() => {
+																setShowNewPassword(!showNewPassword);
+															}}
+															as={FaEye}
+															cursor={"pointer"}
+															bg={"#FFF"}
+															size={"xs"}
+														/>
+													}
+												/>
+											) : (
+												<InputRightElement
+													children={
+														<IconButton
+															_hover={{}}
+															_active={{}}
+															onClick={() => {
+																setShowNewPassword(!showNewPassword);
+															}}
+															as={FaEyeSlash}
+															cursor={"pointer"}
+															bg={"#FFF"}
+															size={"xs"}
+														/>
+													}
+												/>
+											)}
+											<Input
+												id='password'
+												type={showNewPassword ? "text" : "password"}
+												name='password'
+												value={newPassword}
+												onChange={(e) => {
+													setNewPassword(e.target.value);
+												}}
+											/>
+										</InputGroup>
 									</FormControl>
 
 									<FormControl id='confirmPassword'>
 										<FormLabel>Confirm Password</FormLabel>
-										<Input
-											id='confirmPassword'
-											type='password'
-											name='confirmPassword'
-											value={confirmPassword}
-											onChange={(e) => {
-												setConfirmPassword(e.target.value);
-											}}
-										/>
+										<InputGroup>
+											{showConfirmPassword ? (
+												<InputRightElement
+													children={
+														<IconButton
+															_hover={{}}
+															_active={{}}
+															onClick={() => {
+																setShowConfirmPassword(!showConfirmPassword);
+															}}
+															as={FaEye}
+															cursor={"pointer"}
+															bg={"#FFF"}
+															size={"xs"}
+														/>
+													}
+												/>
+											) : (
+												<InputRightElement
+													children={
+														<IconButton
+															_hover={{}}
+															_active={{}}
+															onClick={() => {
+																setShowConfirmPassword(!showConfirmPassword);
+															}}
+															as={FaEyeSlash}
+															cursor={"pointer"}
+															bg={"#FFF"}
+															size={"xs"}
+														/>
+													}
+												/>
+											)}
+											<Input
+												id='confirmPassword'
+												type={showConfirmPassword ? "text" : "password"}
+												name='confirmPassword'
+												value={confirmPassword}
+												onChange={(e) => {
+													setConfirmPassword(e.target.value);
+												}}
+											/>
+										</InputGroup>
 									</FormControl>
 
 									<Stack spacing={10}>
