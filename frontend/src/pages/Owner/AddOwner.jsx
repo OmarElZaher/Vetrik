@@ -2,7 +2,8 @@
 import React from "react";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
-import { vet_name } from "../../variables";
+// Variable Imports
+import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Component Imports
 import Header from "../../components/General/Header";

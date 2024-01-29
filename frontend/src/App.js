@@ -33,6 +33,7 @@ import ResetPasswordPage from "./pages/User/ResetPassword";
 import SearchOwnerPage from "./pages/Owner/SearchOwner";
 import OwnerTablePage from "./pages/Owner/OwnerTable";
 import OwnerDetailsPage from "./pages/Owner/OwnerDetails";
+import EditOwnerPage from "./pages/Owner/EditOwner";
 
 import AddOwnerPage from "./pages/Owner/AddOwner";
 // }
@@ -79,6 +80,8 @@ function App() {
 							path='/owner-details/:ownerId'
 							element={<OwnerDetailsPage />}
 						/>
+
+						<Route path='/edit-owner/:ownerId' element={<EditOwnerPage />} />
 
 						<Route
 							path='/pet-vaccination/:petId'

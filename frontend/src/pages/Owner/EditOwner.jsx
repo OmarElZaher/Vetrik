@@ -3,23 +3,23 @@ import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 // Variable Imports
-import { VET_NAME as vet_name } from "../../utils/constants";
+import { VET_NAME } from "../../utils/constants";
 
 // Custom Component Imports
 import Header from "../../components/General/Header";
-import PetHealthRecords from "../../components/Pet/PetHealthRecords";
+import EditOwner from "../../components/Owner/EditOwner";
 
-export default function PetHealthRecordsPage() {
+export default function EditOwnerPage() {
 	return (
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Health Records | {vet_name}</title>
+					<title>Edit Owner | {VET_NAME}</title>
 				</Helmet>
-				<Header />
 			</HelmetProvider>
 
-			<PetHealthRecords />
+			<Header />
+			<EditOwner />
 		</>
 	);
 }

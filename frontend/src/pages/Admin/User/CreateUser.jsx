@@ -2,6 +2,9 @@
 import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
+// Variable Imports
+import { VET_NAME as vet_name } from "../../../utils/constants";
+
 // Custom Component Imports
 import AdminHeader from "../../../components/Admin/General/AdminHeader";
 import CreateUser from "../../../components/Admin/User/CreateUser";
@@ -11,7 +14,7 @@ export default function CreateUserPage() {
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Create User</title>
+					<title>Create User | {vet_name}</title>
 				</Helmet>
 			</HelmetProvider>
 

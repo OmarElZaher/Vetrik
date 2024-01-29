@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // API URL Import
-import { api } from "../../../variables";
+import { API_URL as api } from "../../../utils/constants";
 
 // ChakraUI Imports
 import {

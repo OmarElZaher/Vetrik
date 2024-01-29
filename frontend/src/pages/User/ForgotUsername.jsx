@@ -3,7 +3,7 @@ import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 // Variable Imports
-import { vet_name } from "../../variables";
+import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Components Imports
 import ForgotUsername from "../../components/User/ForgotUsername";
