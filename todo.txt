@@ -7,12 +7,6 @@ README.md file
 updateOwnerProfile
 updatePetProfile
 
-forgotUsername
-requestOTP
-verifyOTP
-resetPassword
-
-
 Revoking a token typically involves changing some property of the user (like the password or a token-related field) to invalidate the existing token. Here's a general outline of how you might approach token revocation:
 
 1. **Add a `tokenVersion` Field to the User Schema:**

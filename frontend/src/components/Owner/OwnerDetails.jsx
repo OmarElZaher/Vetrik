@@ -15,6 +15,7 @@ import {
 	Card,
 	CardBody,
 	FormControl,
+	Icon,
 	Input,
 	Table,
 	TableContainer,
@@ -30,6 +31,7 @@ import {
 } from "@chakra-ui/react";
 
 // React Icons Imports
+import { FaRegEdit } from "react-icons/fa";
 import { IoMdEye, IoMdAdd, IoMdArrowRoundBack } from "react-icons/io";
 import { TbTrashXFilled } from "react-icons/tb";
 
@@ -341,13 +343,54 @@ export default function OwnerDetails() {
 							height={"15%"}
 							mb={2}
 						>
-							<Text
-								fontSize={"30px"}
-								fontWeight={"bold"}
-								textDecoration={"underline"}
-							>{`${titleCase(owner.firstName)} ${titleCase(
-								owner.lastName
-							)}`}</Text>
+							<Box width={"33%"} />
+
+							<Box
+								display={"flex"}
+								justifyContent={"center"}
+								alignItems={"center"}
+								width={"33%"}
+								height={"100%"}
+							>
+								<Text
+									fontSize={"30px"}
+									fontWeight={"bold"}
+									textDecoration={"underline"}
+								>{`${titleCase(owner.firstName)} ${titleCase(
+									owner.lastName
+								)}`}</Text>
+							</Box>
+
+							<Box
+								display={"flex"}
+								justifyContent={"flex-end"}
+								alignItems={"center"}
+								width={"33%"}
+								height={"90%"}
+								mr={5}
+							>
+								<Text
+									onClick={() => {
+										navigate(`/edit-owner/${owner._id}`);
+									}}
+									_hover={{
+										color: "yellowgreen",
+										textDecoration: "underline",
+									}}
+									_active={{
+										transform: "scale(0.99)",
+										opacity: "0.5",
+									}}
+									display={"flex"}
+									justifyContent={"center"}
+									alignItems={"center"}
+									cursor={"pointer"}
+									fontSize={"20x"}
+								>
+									<Icon as={FaRegEdit} mr={1.5} />
+									Edit Profile
+								</Text>
+							</Box>
 						</Box>
 						<hr />
 						<Box
