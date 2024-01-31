@@ -14,7 +14,7 @@ export default function OwnerDetailsPage() {
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Pet Details | {vet_name}</title>
+					<title>Owner Details | {vet_name}</title>
 				</Helmet>
 			</HelmetProvider>
 

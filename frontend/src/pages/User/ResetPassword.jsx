@@ -13,7 +13,7 @@ export default function ResetPasswordPage() {
 		<>
 			<HelmetProvider>
 				<Helmet>
-					<title>Verify OTP | {vet_name}</title>
+					<title>Reset Password | {vet_name}</title>
 				</Helmet>
 			</HelmetProvider>
 			<ResetPassword />
