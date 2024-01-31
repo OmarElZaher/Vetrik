@@ -644,7 +644,7 @@ const getOwnerPets = asyncHandler(async (req, res) => {
 });
 
 // @desc Update Owner Information
-// @route PATCH /users/updateOwner/:ownerId
+// @route PATCH /user/updateOwner/:ownerId
 // @access Private
 const updateOwnerProfile = asyncHandler(async (req, res) => {
 	try {
@@ -1556,11 +1556,11 @@ const forgotUsername = asyncHandler(async (req, res) => {
 			const mailOptions = {
 				from: "omarelzaher93@gmail.com",
 				to: user.email,
-				subject: "[NO REPLY] Your Username",
-				html: `<h1>Hello, Dr. ${user.lastName}.<h1>
-				<h2> Your username is ${user.username}.<h2>
-				<p>If you did not request to retrieve your username, you can safely disregard this message.<p>
-				<p>This Is An Automated Message, Please Do Not Reply.<p>`,
+				subject: "[NO REPLY] Your Username Request",
+				html: `<h1>Hello, Dr. ${user.lastName}.</h1>
+				<h2> Your username is <b>${user.username}</b>.</h2>
+				<p>If you did not request to retrieve your username, you can safely disregard this message.</p>
+				<p>This Is An Automated Message, Please Do Not Reply.</p>`,
 			};
 
 			transporter.sendMail(mailOptions, (error, info) => {

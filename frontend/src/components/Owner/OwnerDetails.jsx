@@ -630,7 +630,7 @@ export default function OwnerDetails() {
 								>
 									NEW
 								</Text>
-								{"* (not already registered) "}
+								{" (not already registered) "}
 								pet to this owner, please enter all details of the pet.
 							</Text>
 						</Box>
