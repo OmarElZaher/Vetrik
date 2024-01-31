@@ -103,7 +103,7 @@ export default function ResetPassword() {
 								<Icon as={MdLockReset} fontSize='100px' />
 								<Heading fontSize={"4xl"}>Forgot Password</Heading>
 								<Text fontSize={"lg"} color={"gray.600"} align={"center"}>
-									Enter password and confirm password to reset your password.
+									Enter password and confirm password to reset.
 								</Text>
 							</Stack>
 
