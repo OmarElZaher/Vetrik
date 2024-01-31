@@ -438,7 +438,7 @@ export default function PetDetails() {
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								width={"25%"}
+								width={"20%"}
 								m={2}
 								p={2}
 							>
@@ -453,7 +453,7 @@ export default function PetDetails() {
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								width={"25%"}
+								width={"20%"}
 								m={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
@@ -467,7 +467,21 @@ export default function PetDetails() {
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								width={"25%"}
+								width={"20%"}
+								m={2}
+							>
+								<Text fontSize={"24px"} fontWeight={"bold"}>
+									Gender
+								</Text>
+								<Text fontSize={"20px"}>{titleCase(pet.gender)}</Text>
+							</Box>
+
+							<Box
+								display={"flex"}
+								flexDirection={"column"}
+								justifyContent={"center"}
+								alignItems={"center"}
+								width={"20%"}
 								m={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
@@ -481,7 +495,7 @@ export default function PetDetails() {
 								flexDirection={"column"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								width={"25%"}
+								width={"20%"}
 								m={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>

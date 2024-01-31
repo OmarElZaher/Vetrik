@@ -4,8 +4,6 @@ When updating user email, send confirmation message with OTP etc same for when c
 FRONTEND
 README.md file
 
-updatePetProfile
-
 fix all little bugs and stuff in code. like general view and styling, unify everything like the icons on top of cards to all be in the space etc.
 fix all input checks, check all input fields are entered, handle in frontend not call backend and wait for it to reply with error
 
