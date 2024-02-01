@@ -24,6 +24,7 @@ import {
 	Th,
 	Tr,
 	Text,
+	Tooltip,
 	useToast,
 } from "@chakra-ui/react";
 
@@ -347,26 +348,34 @@ export default function PetHealthRecords() {
 														>
 															Download
 														</Button>
-														<Button
-															_hover={{
-																bg: "red",
-																color: "#FFF",
-																transform: "scale(1.01)",
-															}}
-															_active={{
-																transform: "scale(0.99)",
-																opacity: "0.5",
-															}}
-															onClick={() => {
-																handleDelete(row._id);
-															}}
-															leftIcon={<MdDelete />}
-															variant={"outline"}
-															borderColor={"red"}
-															ml={2.5}
+														<Tooltip
+															hasArrow
+															label='Deletes Health Record for Pet'
+															bg={"#EF5350"}
+															placement='top'
+															openDelay={75}
 														>
-															Delete
-														</Button>
+															<Button
+																_hover={{
+																	bg: "#EF5350",
+																	color: "#000",
+																	transform: "scale(1.01)",
+																}}
+																_active={{
+																	transform: "scale(0.99)",
+																	opacity: "0.5",
+																}}
+																onClick={() => {
+																	handleDelete(row._id);
+																}}
+																variant={"outline"}
+																borderColor={"#EF5350"}
+																leftIcon={<MdDelete />}
+																ml={2.5}
+															>
+																Delete
+															</Button>
+														</Tooltip>
 													</Td>
 												</Tr>
 											))}

@@ -236,22 +236,24 @@ export default function AddOwner() {
 									</FormControl>
 
 									<FormControl id='email'>
-										<Input
-											id='email'
-											type='email'
-											name='email'
-											placeholder='Email'
-											value={email}
-											onChange={(e) => {
-												setEmail(e.target.value);
-											}}
-											mt={5}
-										/>
+										<InputGroup mt={5}>
+											<InputLeftAddon width={"5%"}>@</InputLeftAddon>
+											<Input
+												id='email'
+												type='email'
+												name='email'
+												placeholder='Email'
+												value={email}
+												onChange={(e) => {
+													setEmail(e.target.value);
+												}}
+											/>
+										</InputGroup>
 									</FormControl>
 
 									<FormControl id='mobileNumber' mt={5}>
 										<InputGroup>
-											<InputLeftAddon>+2</InputLeftAddon>
+											<InputLeftAddon width={"5%"}>+2</InputLeftAddon>
 											<Input
 												id='mobileNumber'
 												type='tel'

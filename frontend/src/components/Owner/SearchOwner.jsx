@@ -159,7 +159,7 @@ export default function SearchOwner() {
 										<Text display={"inline"} color={"yellowgreen"}>
 											search
 										</Text>{" "}
-										without any inputs.
+										with no inputs.
 									</ListItem>
 								</List>
 							</Box>
@@ -194,20 +194,24 @@ export default function SearchOwner() {
 								</FormControl>
 
 								<FormControl id='email'>
-									<Input
-										id='email'
-										type='email'
-										name='email'
-										placeholder='Email'
-										value={email}
-										onChange={handleEmailChange}
-										mt={5}
-									/>
+									<InputGroup mt={5}>
+										<InputLeftAddon width={"5%"}>@</InputLeftAddon>
+										<Input
+											id='email'
+											type='email'
+											name='email'
+											placeholder='Email'
+											value={email}
+											onChange={(e) => {
+												setEmail(e.target.value);
+											}}
+										/>
+									</InputGroup>
 								</FormControl>
 
 								<FormControl id='mobileNumber' mt={5}>
 									<InputGroup>
-										<InputLeftAddon>+2</InputLeftAddon>
+										<InputLeftAddon width={"5%"}>+2</InputLeftAddon>
 										<Input
 											id='mobileNumber'
 											type='tel'
