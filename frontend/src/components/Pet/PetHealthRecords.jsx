@@ -395,7 +395,6 @@ export default function PetHealthRecords() {
 									type={"file"}
 									onChange={handleFileChange}
 									cursor={"pointer"}
-									textAlign={"center"}
 									width={"40%"}
 									mb={5}
 								/>
