@@ -237,7 +237,14 @@ export default function AddOwner() {
 
 									<FormControl id='email'>
 										<InputGroup mt={5}>
-											<InputLeftAddon width={"5%"}>@</InputLeftAddon>
+											<InputLeftAddon
+												display={"flex"}
+												justifyContent={"center"}
+												alignItems={"center"}
+												width={"5%"}
+											>
+												@
+											</InputLeftAddon>
 											<Input
 												id='email'
 												type='email'
@@ -253,7 +260,14 @@ export default function AddOwner() {
 
 									<FormControl id='mobileNumber' mt={5}>
 										<InputGroup>
-											<InputLeftAddon width={"5%"}>+2</InputLeftAddon>
+											<InputLeftAddon
+												display={"flex"}
+												justifyContent={"center"}
+												alignItems={"center"}
+												width={"5%"}
+											>
+												+2
+											</InputLeftAddon>
 											<Input
 												id='mobileNumber'
 												type='tel'

@@ -195,23 +195,35 @@ export default function SearchOwner() {
 
 								<FormControl id='email'>
 									<InputGroup mt={5}>
-										<InputLeftAddon width={"5%"}>@</InputLeftAddon>
+										<InputLeftAddon
+											display={"flex"}
+											justifyContent={"center"}
+											alignItems={"center"}
+											width={"5%"}
+										>
+											@
+										</InputLeftAddon>
 										<Input
 											id='email'
 											type='email'
 											name='email'
 											placeholder='Email'
 											value={email}
-											onChange={(e) => {
-												setEmail(e.target.value);
-											}}
+											onChange={handleEmailChange}
 										/>
 									</InputGroup>
 								</FormControl>
 
 								<FormControl id='mobileNumber' mt={5}>
 									<InputGroup>
-										<InputLeftAddon width={"5%"}>+2</InputLeftAddon>
+										<InputLeftAddon
+											display={"flex"}
+											justifyContent={"center"}
+											alignItems={"center"}
+											width={"5%"}
+										>
+											+2
+										</InputLeftAddon>
 										<Input
 											id='mobileNumber'
 											type='tel'

@@ -245,39 +245,6 @@ export default function EditOwner() {
 								</FormControl>
 
 								<FormControl
-									id='mobileNumber'
-									display={"flex"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									mb={3}
-								>
-									<Box
-										display={"flex"}
-										flexDirection={"column"}
-										justifyContent={"center"}
-										alignItems={"flex-start"}
-										width={"100%"}
-									>
-										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-											Mobile Number
-										</Text>
-										<InputGroup>
-											<InputLeftAddon>+2</InputLeftAddon>
-											<Input
-												id='mobileNumber'
-												type='text'
-												name='mobileNumber'
-												value={mobileNumber}
-												onChange={(e) => {
-													setMobileNumber(e.target.value);
-												}}
-												mr={2.5}
-											/>
-										</InputGroup>
-									</Box>
-								</FormControl>
-
-								<FormControl
 									id='email'
 									display={"flex"}
 									justifyContent={"center"}
@@ -295,7 +262,14 @@ export default function EditOwner() {
 											Email
 										</Text>
 										<InputGroup>
-											<InputLeftAddon>@</InputLeftAddon>
+											<InputLeftAddon
+												display={"flex"}
+												justifyContent={"center"}
+												alignItems={"center"}
+												width={"5%"}
+											>
+												@
+											</InputLeftAddon>
 											<Input
 												id='email'
 												type='text'
@@ -303,6 +277,46 @@ export default function EditOwner() {
 												value={email}
 												onChange={(e) => {
 													setEmail(e.target.value);
+												}}
+												mr={2.5}
+											/>
+										</InputGroup>
+									</Box>
+								</FormControl>
+
+								<FormControl
+									id='mobileNumber'
+									display={"flex"}
+									justifyContent={"center"}
+									alignItems={"center"}
+									mb={3}
+								>
+									<Box
+										display={"flex"}
+										flexDirection={"column"}
+										justifyContent={"center"}
+										alignItems={"flex-start"}
+										width={"100%"}
+									>
+										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
+											Mobile Number
+										</Text>
+										<InputGroup>
+											<InputLeftAddon
+												display={"flex"}
+												justifyContent={"center"}
+												alignItems={"center"}
+												width={"5%"}
+											>
+												+2
+											</InputLeftAddon>
+											<Input
+												id='mobileNumber'
+												type='text'
+												name='mobileNumber'
+												value={mobileNumber}
+												onChange={(e) => {
+													setMobileNumber(e.target.value);
 												}}
 												mr={2.5}
 											/>
