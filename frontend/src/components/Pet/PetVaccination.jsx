@@ -361,7 +361,7 @@ export default function PetVaccination() {
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [vaccinationCardExists]);
 
 	return (
 		<>
