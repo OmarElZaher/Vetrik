@@ -85,6 +85,7 @@ export default function PetHealthRecords() {
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
 		const allowedFileTypes = [
+			"doc",
 			"docx",
 			"pdf",
 			"pages",

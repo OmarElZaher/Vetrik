@@ -21,7 +21,8 @@ import {
 } from "@chakra-ui/react";
 
 // React Icons Imports
-import { FaPerson } from "react-icons/fa6";
+import { FaUserAlt } from "react-icons/fa";
+import { IoIosAdd } from "react-icons/io";
 
 // Custom Components Imports
 import Footer from "../General/Footer";
@@ -123,7 +124,7 @@ export default function CreateUser() {
 									height={"5%"}
 									mb={10}
 								>
-									<Icon as={FaPerson} fontSize={"60px"} />
+									<Icon as={FaUserAlt} fontSize={"60px"} />
 								</Box>
 								<Box
 									display={"flex"}
@@ -133,7 +134,7 @@ export default function CreateUser() {
 									mt={5}
 								>
 									<Text fontSize={"3xl"} fontWeight={"bold"}>
-										Add An Owner
+										Add A User
 									</Text>
 								</Box>
 							</Box>
@@ -251,6 +252,7 @@ export default function CreateUser() {
 										opacity: "0.5",
 									}}
 									onClick={handleAdd}
+									leftIcon={<IoIosAdd />}
 									width={"25%"}
 								>
 									Add

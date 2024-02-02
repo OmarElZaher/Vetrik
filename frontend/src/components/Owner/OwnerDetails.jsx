@@ -252,6 +252,7 @@ export default function OwnerDetails() {
 				);
 				if (response.status === 200) {
 					setOwner(response.data);
+					console.log(response.data);
 					setGotData(true);
 				} else {
 					setError(response.data.message);
@@ -457,83 +458,97 @@ export default function OwnerDetails() {
 							alignItems={"center"}
 							height={"60%"}
 						>
-							<Text fontSize={"24px"} fontWeight={"bold"}>
-								Pets
-							</Text>
-							<TableContainer
-								width={"92%"}
-								maxHeight={"30vh"}
-								overflowY={"auto"}
-							>
-								<Table variant='simple' size='md'>
-									<Thead>
-										<Th textAlign={"left"}>Name</Th>
-										<Th textAlign={"center"}>Type</Th>
-										<Th textAlign={"center"}>Breed</Th>
-										<Th textAlign={"center"}>Gender</Th>
-										<Th textAlign={"center"}>Actions</Th>
-									</Thead>
-									<Tbody>
-										{owner.pets.map((pet) => (
-											<Tr key={pet._id}>
-												<Td textAlign={"left"}>{titleCase(pet.name)}</Td>
-												<Td textAlign={"center"}>{titleCase(pet.type)}</Td>
-												<Td textAlign={"center"}>{titleCase(pet.breed)}</Td>
-												<Td textAlign={"center"}>{titleCase(pet.gender)}</Td>
-												<Td textAlign={"center"}>
-													<Button
-														_hover={{
-															bg: "yellowgreen",
-															color: "#000",
-															transform: "scale(1.01)",
-														}}
-														_active={{
-															transform: "scale(0.99)",
-															opacity: "0.5",
-														}}
-														onClick={() => {
-															navigate(`/pet-details/${pet._id}`);
-														}}
-														leftIcon={<IoMdEye />}
-														mr={2.5}
-													>
-														View
-													</Button>
+							{owner.pets.length > 0 ? (
+								<>
+									<Text fontSize={"24px"} fontWeight={"bold"}>
+										Pets
+									</Text>
+									<TableContainer
+										width={"92%"}
+										maxHeight={"30vh"}
+										overflowY={"auto"}
+									>
+										<Table variant='simple' size='md'>
+											<Thead>
+												<Th textAlign={"left"}>Name</Th>
+												<Th textAlign={"center"}>Type</Th>
+												<Th textAlign={"center"}>Breed</Th>
+												<Th textAlign={"center"}>Gender</Th>
+												<Th textAlign={"center"}>Actions</Th>
+											</Thead>
+											<Tbody>
+												{owner.pets.map((pet) => (
+													<Tr key={pet._id}>
+														<Td textAlign={"left"}>{titleCase(pet.name)}</Td>
+														<Td textAlign={"center"}>{titleCase(pet.type)}</Td>
+														<Td textAlign={"center"}>{titleCase(pet.breed)}</Td>
+														<Td textAlign={"center"}>
+															{titleCase(pet.gender)}
+														</Td>
+														<Td textAlign={"center"}>
+															<Button
+																_hover={{
+																	bg: "yellowgreen",
+																	color: "#000",
+																	transform: "scale(1.01)",
+																}}
+																_active={{
+																	transform: "scale(0.99)",
+																	opacity: "0.5",
+																}}
+																onClick={() => {
+																	navigate(`/pet-details/${pet._id}`);
+																}}
+																leftIcon={<IoMdEye />}
+																mr={2.5}
+															>
+																View
+															</Button>
 
-													<Tooltip
-														hasArrow
-														label='Removes Pet from Owner Profile'
-														bg={"#EF5350"}
-														placement='top'
-														openDelay={75}
-													>
-														<Button
-															_hover={{
-																bg: "#EF5350",
-																color: "#000",
-																transform: "scale(1.01)",
-															}}
-															_active={{
-																transform: "scale(0.99)",
-																opacity: "0.5",
-															}}
-															onClick={() => {
-																handleRemovePet(pet._id);
-															}}
-															variant={"outline"}
-															borderColor={"#EF5350"}
-															leftIcon={<TbTrashXFilled />}
-															ml={2.5}
-														>
-															Remove
-														</Button>
-													</Tooltip>
-												</Td>
-											</Tr>
-										))}
-									</Tbody>
-								</Table>
-							</TableContainer>
+															<Tooltip
+																hasArrow
+																label='Removes Pet from Owner Profile'
+																bg={"#EF5350"}
+																placement='top'
+																openDelay={75}
+															>
+																<Button
+																	_hover={{
+																		bg: "#EF5350",
+																		color: "#000",
+																		transform: "scale(1.01)",
+																	}}
+																	_active={{
+																		transform: "scale(0.99)",
+																		opacity: "0.5",
+																	}}
+																	onClick={() => {
+																		handleRemovePet(pet._id);
+																	}}
+																	variant={"outline"}
+																	borderColor={"#EF5350"}
+																	leftIcon={<TbTrashXFilled />}
+																	ml={2.5}
+																>
+																	Remove
+																</Button>
+															</Tooltip>
+														</Td>
+													</Tr>
+												))}
+											</Tbody>
+										</Table>
+									</TableContainer>
+								</>
+							) : (
+								<Text
+									fontSize={"40px"}
+									textDecoration={"underline"}
+									color={"#EF5350"}
+								>
+									Owner Has No Registered Pets
+								</Text>
+							)}
 						</Box>
 
 						{/* Back, Delete Button */}

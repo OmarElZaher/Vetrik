@@ -419,7 +419,7 @@ export default function PetVaccination() {
 												<Th textAlign={"center"}>Batch</Th>
 												<Th textAlign={"center"}>Given Date</Th>
 												<Th textAlign={"center"}>Renewal Date</Th>
-												<Th textAlign={"center"}>Renew</Th>
+												<Th textAlign={"center"}>Actions</Th>
 											</Tr>
 										</Thead>
 										<Tbody>

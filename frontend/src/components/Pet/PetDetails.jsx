@@ -527,7 +527,7 @@ export default function PetDetails() {
 										<Th textAlign={"left"}>Full Name</Th>
 										<Th textAlign={"center"}>Email</Th>
 										<Th textAlign={"center"}>Mobile Number</Th>
-										<Th textAlign={"center"}>View Details</Th>
+										<Th textAlign={"center"}>Actions</Th>
 									</Thead>
 									<Tbody>
 										{pet.owners.map((owner) => (
