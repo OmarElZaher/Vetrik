@@ -222,12 +222,12 @@ export default function LoginCard() {
 											</Link>
 										</Stack>
 										<Button
-											bg={"blue.400"}
-											color={"white"}
 											_hover={{
 												bg: "blue.500",
 											}}
 											onClick={handleSubmit}
+											bg={"blue.400"}
+											color={"white"}
 										>
 											Sign in
 										</Button>
