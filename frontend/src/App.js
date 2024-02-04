@@ -19,6 +19,7 @@ import CreateAdminPage from "./pages/Admin/User/CreateAdmin";
 import HomePage from "./pages/Home/Home";
 import LoginPage from "./pages/General/Login";
 import NotFoundPage from "./pages/General/NotFound";
+import SendFeedbackPage from "./pages/General/SendFeedback";
 
 import EditProfilePage from "./pages/User/EditProfile";
 import ChangePasswordPage from "./pages/User/ChangePassword";
@@ -61,6 +62,8 @@ function App() {
 						{/* General Routes */}
 						<Route path='/' element={<HomePage />} />
 						<Route path='/login' element={<LoginPage />} />
+						<Route path='/send-feedback' element={<SendFeedbackPage />} />
+
 						<Route path='/change-password' element={<ChangePasswordPage />} />
 						<Route path='/edit-user' element={<EditProfilePage />} />
 						<Route path='/forgot-username' element={<ForgotUsernamePage />} />

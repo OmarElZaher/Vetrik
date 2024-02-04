@@ -30,6 +30,7 @@ import { GoHome } from "react-icons/go";
 import { IoMdSearch, IoIosArrowDropdown } from "react-icons/io";
 import { IoAdd } from "react-icons/io5";
 import { MdOutlinePets, MdOutlinePassword } from "react-icons/md";
+import { VscFeedback } from "react-icons/vsc";
 
 // Custom Component Imports
 import NavigationLinkDrawer from "./NavigationLinkDrawer";
@@ -46,6 +47,7 @@ export default function MyDrawer() {
 	const [isEditHovered, setIsEditHovered] = useState(false);
 	const [isHomeHovered, setIsHomeHovered] = useState(false);
 	const [isChangePasswordHovered, setIsChangePasswordHovered] = useState(false);
+	const [isFeedbackHovered, setIsFeedbackHovered] = useState(false);
 
 	// Open useStates
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -64,6 +66,8 @@ export default function MyDrawer() {
 			setIsHomeHovered(true);
 		} else if (type === "changePassword") {
 			setIsChangePasswordHovered(true);
+		} else if (type === "feedback") {
+			setIsFeedbackHovered(true);
 		}
 	};
 
@@ -80,6 +84,8 @@ export default function MyDrawer() {
 			setIsHomeHovered(false);
 		} else if (type === "changePassword") {
 			setIsChangePasswordHovered(false);
+		} else if (type === "feedback") {
+			setIsFeedbackHovered(false);
 		}
 	};
 
@@ -360,6 +366,52 @@ export default function MyDrawer() {
 									) : (
 										<></>
 									)}
+								</Box>
+							</Box>
+
+							{/* Send Feedback Button */}
+							<Box>
+								<Box
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
+								>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										onMouseOver={() => {
+											handleHover("feedback");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("feedback");
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate("/send-feedback");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
+										leftIcon={
+											<Icon
+												as={VscFeedback}
+												color={isFeedbackHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+									>
+										Send Feedback
+									</Button>
 								</Box>
 							</Box>
 
