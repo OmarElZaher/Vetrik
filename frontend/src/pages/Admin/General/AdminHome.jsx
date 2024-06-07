@@ -27,7 +27,7 @@ export default function AdminHomePage() {
 				justifyContent={"center"}
 				alignItems={"center"}
 				bg={"#F3F3F3"}
-				height={"87vh"}
+				height={"88vh"}
 			/>
 			<Footer />
 		</>
