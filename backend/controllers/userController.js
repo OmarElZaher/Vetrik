@@ -886,6 +886,28 @@ const createPet = asyncHandler(async (req, res) => {
 		// Create the pet
 		const pet = await Pet.create(req.body);
 
+		if (pet.age < 1) {
+			pet.ageClass = "Puppy/Kitten";
+		} else if (pet.age >= 1 && pet.age < 5) {
+			pet.ageClass = "Adult";
+		} else {
+			pet.ageClass = "Senior";
+		}
+
+		if (pet.weight < 2.2) {
+			pet.weightClass = "Extra Small";
+		} else if (pet.weight >= 2.2 && pet.weight < 5.4) {
+			pet.weightClass = "Small";
+		} else if (pet.weight >= 5.4 && pet.weight < 11.3) {
+			pet.weightClass = "Medium";
+		} else if (pet.weight >= 11.3 && pet.weight < 36.2) {
+			pet.weightClass = "Large";
+		} else {
+			pet.weightClass = "Extra Large";
+		}
+
+		pet.save();
+
 		// Associate the pet with each owner
 		for (const ownerId of ownerIds) {
 			const owner = await Owner.findById(ownerId);

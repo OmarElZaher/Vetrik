@@ -40,6 +40,7 @@ export default function AddPet() {
 	const [breed, setBreed] = useState("");
 	const [gender, setGender] = useState("");
 	const [dob, setDob] = useState("");
+	const [weight, setWeight] = useState("");
 	const [ownerEmail, setOwnerEmail] = useState("");
 
 	// Misc useStates
@@ -79,6 +80,7 @@ export default function AddPet() {
 						breed: breed,
 						gender: gender,
 						dob: dob,
+						weight: weight,
 					};
 
 					const response = await axios.post(`${api}/user/createPet`, formData, {
@@ -220,9 +222,8 @@ export default function AddPet() {
 											<option value='Fish'>Fish</option>
 										</Select>
 
-										<Input
+										<Select
 											id='breed'
-											type='text'
 											name='breed'
 											placeholder='Breed of Animal'
 											value={breed}
@@ -230,7 +231,88 @@ export default function AddPet() {
 												setBreed(e.target.value);
 											}}
 											ml={2}
-										/>
+										>
+											{type === "Dog" && (
+												<>
+													<option value='Stray'>Stray</option>
+													<option value='Labrador'>Labrador</option>
+													<option value='German Shepherd'>
+														German Shepherd
+													</option>
+													<option value='Golden Retriever'>
+														Golden Retriever
+													</option>
+													<option value='Bulldog'>Bulldog</option>
+													<option value='Beagle'>Beagle</option>
+													<option value='Cocker Spaniel'>Cocker Spaniel</option>
+												</>
+											)}
+											{type === "Cat" && (
+												<>
+													<option value='Stray'>Stray</option>
+													<option value='Persian'>Persian</option>
+													<option value='Siamese'>Siamese</option>
+													<option value='Maine Coon'>Maine Coon</option>
+													<option value='Ragdoll'>Ragdoll</option>
+													<option value='Bengal'>Bengal</option>
+												</>
+											)}
+											{type === "Bird" && (
+												<>
+													<option value='Parrot'>Parrot</option>
+													<option value='Canary'>Canary</option>
+													<option value='Finch'>Finch</option>
+													<option value='Cockatiel'>Cockatiel</option>
+													<option value='Budgerigar'>Budgerigar</option>
+												</>
+											)}
+											{type === "Turtle" && (
+												<>
+													<option value='Red-Eared Slider'>
+														Red-Eared Slider
+													</option>
+													<option value='Box Turtle'>Box Turtle</option>
+													<option value='Painted Turtle'>Painted Turtle</option>
+													<option value='Snapping Turtle'>
+														Snapping Turtle
+													</option>
+													<option value='Wood Turtle'>Wood Turtle</option>
+												</>
+											)}
+											{type === "Monkey" && (
+												<>
+													<option value='Capuchin'>Capuchin</option>
+													<option value='Marmoset'>Marmoset</option>
+													<option value='Tamarin'>Tamarin</option>
+													<option value='Squirrel Monkey'>
+														Squirrel Monkey
+													</option>
+													<option value='Macaque'>Macaque</option>
+												</>
+											)}
+											{type === "Hamster" && (
+												<>
+													<option value='Syrian'>Syrian</option>
+													<option value='Dwarf Campbell Russian'>
+														Dwarf Campbell Russian
+													</option>
+													<option value='Dwarf Winter White Russian'>
+														Dwarf Winter White Russian
+													</option>
+													<option value='Chinese'>Chinese</option>
+													<option value='Roborovski'>Roborovski</option>
+												</>
+											)}
+											{type === "Fish" && (
+												<>
+													<option value='Goldfish'>Goldfish</option>
+													<option value='Betta'>Betta</option>
+													<option value='Guppy'>Guppy</option>
+													<option value='Angelfish'>Angelfish</option>
+													<option value='Molly'>Molly</option>
+												</>
+											)}
+										</Select>
 									</FormControl>
 
 									<FormControl id='gender' mb={5}>
@@ -249,7 +331,12 @@ export default function AddPet() {
 										</Select>
 									</FormControl>
 
-									<FormControl id='dob' mb={5}>
+									<FormControl
+										id='dob'
+										mb={5}
+										display={"flex"}
+										justifyContent={"space-evenly"}
+									>
 										<Input
 											id='dob'
 											type='date'
@@ -258,6 +345,18 @@ export default function AddPet() {
 											value={dob}
 											onChange={(e) => {
 												setDob(e.target.value);
+											}}
+											mr={2}
+										/>
+
+										<Input
+											id='weight'
+											type='number'
+											name='weight'
+											placeholder='Weight (KGs)'
+											value={weight}
+											onChange={(e) => {
+												setWeight(e.target.value);
 											}}
 										/>
 									</FormControl>

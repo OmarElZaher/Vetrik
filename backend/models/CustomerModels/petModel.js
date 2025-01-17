@@ -10,6 +10,9 @@ const petSchema = new mongoose.Schema(
 			type: Date,
 			required: true,
 		},
+		ageClass: {
+			type: String,
+		},
 		type: {
 			type: String,
 			required: true,
@@ -23,6 +26,13 @@ const petSchema = new mongoose.Schema(
 			type: String,
 			enum: ["male", "female"],
 			required: true,
+		},
+		weight: {
+			type: Number,
+			required: true,
+		},
+		weightClass: {
+			type: String,
 		},
 		lastVist: {
 			type: Date,
