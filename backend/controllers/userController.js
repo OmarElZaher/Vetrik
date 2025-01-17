@@ -886,6 +886,7 @@ const createPet = asyncHandler(async (req, res) => {
 		// Create the pet
 		const pet = await Pet.create(req.body);
 
+		// TODO: Update weight classes and age according to animal
 		if (pet.age < 1) {
 			pet.ageClass = "Puppy/Kitten";
 		} else if (pet.age >= 1 && pet.age < 5) {
