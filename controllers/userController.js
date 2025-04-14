@@ -429,6 +429,8 @@ const loginUser = asyncHandler(async (req, res) => {
 				let token = generateToken(user._id);
 				res.cookie("token", token, {
 					httpOnly: true,
+					secure: true,
+					sameSite: "none",
 				});
 				res.status(200).json({
 					message: "Logged In Successfully",
