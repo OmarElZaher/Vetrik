@@ -56,7 +56,7 @@ export default function AddPet() {
 				breed === "" ||
 				gender === "" ||
 				dob === null ||
-				ownerEmail === ""
+				(ownerEmail === "" && localStorage.getItem("ownerId") === null)
 			) {
 				toast({
 					title: "Please Enter All Fields",
@@ -74,7 +74,9 @@ export default function AddPet() {
 
 				if (res.status === 200) {
 					const formData = {
-						owners: [res.data[0]._id],
+						owners: localStorage.getItem("ownerId")
+							? [localStorage.getItem("ownerId")]
+							: [res.data[0]._id],
 						name: name,
 						type: type,
 						breed: breed,
@@ -95,6 +97,7 @@ export default function AddPet() {
 							isClosable: true,
 							position: "top",
 						});
+						localStorage.removeItem("ownerId");
 						navigate(`/pet-details/${response.data.pet._id}`);
 					} else {
 						toast({

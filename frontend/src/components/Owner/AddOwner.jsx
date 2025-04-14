@@ -105,7 +105,9 @@ export default function AddOwner() {
 						isClosable: true,
 						position: "top",
 					});
-					navigate(`/owner-details/${response.data.ownerId}`);
+					localStorage.setItem("ownerId", response.data.ownerId);
+					navigate("/add-pet");
+					// navigate(`/owner-details/${response.data.ownerId}`);
 				} else {
 					toast({
 						title: response.data.message,
