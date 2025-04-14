@@ -65,11 +65,21 @@ export default function LoginCard() {
 				return;
 			}
 
-			const response = await axios.post(`${api}/user/login`, formData, {
-				withCredentials: true,
-			});
+			const response = await axios.post(
+				`${api}/user/login`,
+				formData,
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
+				}
+				// 	{
+				// 	withCredentials: true,
+				// }
+			);
 
 			if (response.status === 200) {
+				localStorage.setItem("token", response.data.token);
 				toast({
 					title: response.data.message,
 					status: "success",

@@ -30,10 +30,14 @@ export default function AdminHeader() {
 			setIsLoading(true);
 			const response = await axios.post(
 				`${api}/user/logout`,
-				{},
 				{
-					withCredentials: true,
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
 				}
+				// {
+				// 	withCredentials: true,
+				// },
 			);
 
 			if (response.status === 200) {

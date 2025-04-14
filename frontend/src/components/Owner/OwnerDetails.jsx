@@ -81,8 +81,13 @@ export default function OwnerDetails() {
 				const response = await axios.delete(
 					`${api}/user/removePetFromOwner/${owner._id}/${petId}`,
 					{
-						withCredentials: true,
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
 					}
+					// {
+					// 	withCredentials: true,
+					// }
 				);
 
 				if (response.status === 200) {
@@ -132,8 +137,13 @@ export default function OwnerDetails() {
 				const response = await axios.delete(
 					`${api}/user/deleteOwner/${owner._id}`,
 					{
-						withCredentials: true,
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
 					}
+					// {
+					// 	withCredentials: true,
+					// }
 				);
 
 				if (response.status === 200) {
@@ -196,9 +206,18 @@ export default function OwnerDetails() {
 					dob: dob,
 				};
 
-				const response = await axios.post(`${api}/user/createPet`, formData, {
-					withCredentials: true,
-				});
+				const response = await axios.post(
+					`${api}/user/createPet`,
+					formData,
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
+					}
+					// 	{
+					// 	withCredentials: true,
+					// }
+				);
 
 				if (response.status === 200) {
 					toast({
@@ -247,8 +266,13 @@ export default function OwnerDetails() {
 				const response = await axios.get(
 					`${api}/user/getOwnerInfo/${ownerId}`,
 					{
-						withCredentials: true,
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
 					}
+					// {
+					// 	withCredentials: true,
+					// }
 				);
 				if (response.status === 200) {
 					setOwner(response.data);
