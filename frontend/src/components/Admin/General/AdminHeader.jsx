@@ -28,17 +28,9 @@ export default function AdminHeader() {
 	const handleLogout = async () => {
 		try {
 			setIsLoading(true);
-			const response = await axios.post(
-				`${api}/user/logout`,
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-				// {
-				// 	withCredentials: true,
-				// },
-			);
+			const response = await axios.post(`${api}/user/logout`, {
+				withCredentials: true,
+			});
 
 			if (response.status === 200) {
 				navigate("/login");

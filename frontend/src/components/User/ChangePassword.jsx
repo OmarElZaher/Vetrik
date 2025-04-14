@@ -59,12 +59,7 @@ export default function ChangePassword() {
 					newPassword: newPassword,
 					confirmPassword: confirmPassword,
 				},
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-				// { withCredentials: true }
+				{ withCredentials: true }
 			);
 
 			if (response.status === 200) {
@@ -78,16 +73,7 @@ export default function ChangePassword() {
 
 				try {
 					setIsLoading(true);
-					await axios.post(
-						`${api}/user/logout`,
-						{},
-						{
-							headers: {
-								Authorization: `Bearer ${localStorage.getItem("token")}`,
-							},
-						}
-						// { withCredentials: true }
-					);
+					await axios.post(`${api}/user/logout`, {}, { withCredentials: true });
 					navigate("/login");
 				} catch (error) {
 					toast({

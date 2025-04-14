@@ -94,12 +94,7 @@ export default function AddOwner() {
 						receiveNotifications: receiveNotifications,
 						preferredContactMethod: preferredContactMethod,
 					},
-					{
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem("token")}`,
-						},
-					}
-					// { withCredentials: true }
+					{ withCredentials: true }
 				);
 
 				if (response.status === 200) {

@@ -69,12 +69,7 @@ export default function AddPet() {
 				const res = await axios.post(
 					`${api}/user/getOwner`,
 					{ email: ownerEmail },
-					{
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem("token")}`,
-						},
-					}
-					// { withCredentials: true }
+					{ withCredentials: true }
 				);
 
 				if (res.status === 200) {
@@ -90,18 +85,9 @@ export default function AddPet() {
 						weight: weight,
 					};
 
-					const response = await axios.post(
-						`${api}/user/createPet`,
-						formData,
-						{
-							headers: {
-								Authorization: `Bearer ${localStorage.getItem("token")}`,
-							},
-						}
-						// 	{
-						// 	withCredentials: true,
-						// }
-					);
+					const response = await axios.post(`${api}/user/createPet`, formData, {
+						withCredentials: true,
+					});
 
 					if (response.status === 200) {
 						toast({

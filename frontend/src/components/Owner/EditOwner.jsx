@@ -69,12 +69,7 @@ export default function EditOwner() {
 					mobileNumber,
 					preferredContactMethod: contactMethod,
 				},
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-				// { withCredentials: true }
+				{ withCredentials: true }
 			);
 
 			if (response.status === 200) {
@@ -111,17 +106,9 @@ export default function EditOwner() {
 	const fetchData = async () => {
 		try {
 			setIsLoading(true);
-			const response = await axios.get(
-				`${api}/user/getOwnerInfo/${ownerId}`,
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-				// 	{
-				// 	withCredentials: true,
-				// }
-			);
+			const response = await axios.get(`${api}/user/getOwnerInfo/${ownerId}`, {
+				withCredentials: true,
+			});
 			setFirstName(response.data.firstName);
 			setLastName(response.data.lastName);
 			setEmail(response.data.email);

@@ -58,13 +58,8 @@ export default function SearchUsers() {
 					email: email,
 				},
 				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
+					withCredentials: true,
 				}
-				// {
-				// 	withCredentials: true,
-				// }
 			);
 
 			if (response.status === 200) {

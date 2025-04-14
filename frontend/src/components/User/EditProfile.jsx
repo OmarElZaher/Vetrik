@@ -48,17 +48,9 @@ export default function EditProfile() {
 		try {
 			setIsLoading(true);
 
-			const response = await axios.get(
-				`${api}/user/getUserInfo`,
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-				// 	{
-				// 	withCredentials: true,
-				// }
-			);
+			const response = await axios.get(`${api}/user/getUserInfo`, {
+				withCredentials: true,
+			});
 
 			if (response.status === 200) {
 				setEmail(response.data.email);
@@ -99,13 +91,8 @@ export default function EditProfile() {
 					email: email,
 				},
 				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
+					withCredentials: true,
 				}
-				// {
-				// 	withCredentials: true,
-				// }
 			);
 
 			if (response.status === 200) {

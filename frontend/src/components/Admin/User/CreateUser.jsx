@@ -56,12 +56,7 @@ export default function CreateUser() {
 					firstName: firstName,
 					lastName: lastName,
 				},
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-				// { withCredentials: true }
+				{ withCredentials: true }
 			);
 
 			if (response.status === 200) {

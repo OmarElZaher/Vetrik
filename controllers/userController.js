@@ -427,11 +427,11 @@ const loginUser = asyncHandler(async (req, res) => {
 		} else {
 			if (await bcrypt.compare(password, user.password)) {
 				let token = generateToken(user._id);
-				// res.cookie("token", token, {
-				// 	httpOnly: true,
-				// 	secure: true,
-				// 	sameSite: "none",
-				// });
+				res.cookie("token", token, {
+					httpOnly: true,
+					secure: true,
+					sameSite: "none",
+				});
 				res.status(200).json({
 					message: "Logged In Successfully",
 					token: token,

@@ -68,12 +68,7 @@ export default function EditPet() {
 					gender: gender,
 					dob: dob,
 				},
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-				// { withCredentials: true }
+				{ withCredentials: true }
 			);
 
 			if (response.status === 200) {
@@ -110,17 +105,9 @@ export default function EditPet() {
 	const fetchData = async () => {
 		try {
 			setIsLoading(true);
-			const response = await axios.get(
-				`${api}/user/getPetInfo/${petId}`,
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-				// 	{
-				// 	withCredentials: true,
-				// }
-			);
+			const response = await axios.get(`${api}/user/getPetInfo/${petId}`, {
+				withCredentials: true,
+			});
 			setName(response.data.pet.name);
 			setType(response.data.pet.type);
 			setBreed(response.data.pet.breed);

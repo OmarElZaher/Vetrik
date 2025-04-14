@@ -32,17 +32,9 @@ export default function NotFound() {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(
-					`${api}/user/getUserInfo`,
-					{
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem("token")}`,
-						},
-					}
-					// 	{
-					// 	withCredentials: true,
-					// }
-				);
+				const response = await axios.get(`${api}/user/getUserInfo`, {
+					withCredentials: true,
+				});
 
 				if (response.status === 200) {
 					setIsAdmin(response.data.isAdmin);

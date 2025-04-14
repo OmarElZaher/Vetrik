@@ -60,13 +60,8 @@ export default function UserDetails() {
 				const response = await axios.delete(
 					`${api}/user/deleteUser/${userId}`,
 					{
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem("token")}`,
-						},
+						withCredentials: true,
 					}
-					// {
-					// 	withCredentials: true,
-					// }
 				);
 
 				if (response.status === 200) {
@@ -113,12 +108,7 @@ export default function UserDetails() {
 				const response = await axios.patch(
 					`${api}/user/setAdmin/${userId}`,
 					{},
-					{
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem("token")}`,
-						},
-					}
-					// { withCredentials: true }
+					{ withCredentials: true }
 				);
 				if (response.status === 200) {
 					setIsAdmin(true);
@@ -156,17 +146,9 @@ export default function UserDetails() {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(
-					`${api}/user/getUserInfo/${userId}`,
-					{
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem("token")}`,
-						},
-					}
-					// {
-					// 	withCredentials: true,
-					// }
-				);
+				const response = await axios.get(`${api}/user/getUserInfo/${userId}`, {
+					withCredentials: true,
+				});
 
 				if (response.status === 200) {
 					setUser(response.data.user);

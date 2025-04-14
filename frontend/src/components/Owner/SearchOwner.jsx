@@ -66,18 +66,9 @@ export default function SearchOwner() {
 				formData.email = email;
 			}
 
-			const response = await axios.post(
-				`${api}/user/getOwner`,
-				formData,
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-				// 	{
-				// 	withCredentials: true,
-				// }
-			);
+			const response = await axios.post(`${api}/user/getOwner`, formData, {
+				withCredentials: true,
+			});
 
 			if (response.status === 200) {
 				localStorage.setItem("ownerFilterData", JSON.stringify(response.data));
