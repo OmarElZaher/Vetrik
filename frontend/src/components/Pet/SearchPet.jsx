@@ -64,9 +64,18 @@ export default function SearchPet() {
 				formData.gender = gender;
 			}
 
-			const response = await axios.post(`${api}/user/getPet`, formData, {
-				withCredentials: true,
-			});
+			const response = await axios.post(
+				`${api}/user/getPet`,
+				formData,
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
+				}
+				// 	{
+				// 	withCredentials: true,
+				// }
+			);
 
 			if (response.status === 200) {
 				localStorage.setItem("petFilterData", JSON.stringify(response.data));

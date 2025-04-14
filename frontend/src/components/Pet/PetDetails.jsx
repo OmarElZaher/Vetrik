@@ -94,9 +94,17 @@ export default function PetDetails() {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(`${api}/user/getPetInfo/${petId}`, {
-					withCredentials: true,
-				});
+				const response = await axios.get(
+					`${api}/user/getPetInfo/${petId}`,
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
+					}
+					// 	{
+					// 	withCredentials: true,
+					// }
+				);
 				if (response.status === 200) {
 					setPetAge(response.data.petAge);
 					setPet(response.data.pet);
@@ -136,7 +144,12 @@ export default function PetDetails() {
 				setIsLoading(true);
 				const response = await axios.delete(
 					`${api}/user/removePetFromOwner/${ownerId}/${petId}`,
-					{ withCredentials: true }
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
+					}
+					// { withCredentials: true }
 				);
 
 				if (response.status === 200) {
@@ -183,9 +196,17 @@ export default function PetDetails() {
 		if (confirmDelete) {
 			try {
 				setIsLoading(true);
-				const response = await axios.delete(`${api}/user/deletePet/${petId}`, {
-					withCredentials: true,
-				});
+				const response = await axios.delete(
+					`${api}/user/deletePet/${petId}`,
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
+					}
+					// 	{
+					// 	withCredentials: true,
+					// }
+				);
 
 				if (response.status === 200) {
 					toast({
@@ -225,8 +246,13 @@ export default function PetDetails() {
 			const response = await axios.post(
 				`${api}/user/addPetToOwner/${ownerId}/${petId}`,
 				{
-					withCredentials: true,
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
 				}
+				// {
+				// 	withCredentials: true,
+				// }
 			);
 
 			if (response.status === 200) {
@@ -288,7 +314,12 @@ export default function PetDetails() {
 				const response = await axios.post(
 					`${api}/user/getOwner`,
 					{ email: ownerEmail },
-					{ withCredentials: true }
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
+					}
+					// { withCredentials: true }
 				);
 
 				if (response.status === 200) {

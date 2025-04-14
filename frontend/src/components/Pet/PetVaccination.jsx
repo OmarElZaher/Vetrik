@@ -111,8 +111,13 @@ export default function PetVaccination() {
 					vaccineRenewalDate: vaccineRenewalDate,
 				},
 				{
-					withCredentials: true,
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
 				}
+				// {
+				// 	withCredentials: true,
+				// }
 			);
 
 			if (response.status === 200) {
@@ -161,7 +166,12 @@ export default function PetVaccination() {
 					vaccineGivenDate: vaccineGivenDate,
 					vaccineRenewalDate: vaccineRenewalDate,
 				},
-				{ withCredentials: true }
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
+				}
+				// { withCredentials: true }
 			);
 
 			if (response.status === 200) {
@@ -208,7 +218,12 @@ export default function PetVaccination() {
 				setIsLoading(true);
 				const response = await axios.delete(
 					`${api}/user/deleteVaccinationCard/${petId}`,
-					{ withCredentials: true }
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
+					}
+					// { withCredentials: true }
 				);
 
 				if (response.status === 200) {
@@ -253,7 +268,12 @@ export default function PetVaccination() {
 				setIsLoading(true);
 				const response = await axios.delete(
 					`${api}/user/deleteVaccination/${petId}/${vaccineId}`,
-					{ withCredentials: true }
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
+					}
+					// { withCredentials: true }
 				);
 
 				if (response.status === 200) {
@@ -296,7 +316,12 @@ export default function PetVaccination() {
 				{
 					vaccineRenewalDate: vaccineRenewalDate,
 				},
-				{ withCredentials: true }
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
+				}
+				// { withCredentials: true }
 			);
 
 			if (response.status === 200) {
@@ -336,8 +361,13 @@ export default function PetVaccination() {
 			const response = await axios.get(
 				`${api}/user/getVaccinationCard/${petId}`,
 				{
-					withCredentials: true,
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
 				}
+				// {
+				// 	withCredentials: true,
+				// }
 			);
 			if (response.status === 200) {
 				setVaccinationCardExists(true);

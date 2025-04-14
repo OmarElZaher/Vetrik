@@ -55,7 +55,12 @@ export default function PetHealthRecords() {
 			setIsLoading(true);
 			const response = await axios.get(
 				`${api}/user/getAllHealthRecords/${petId}`,
-				{ withCredentials: true }
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
+				}
+				// { withCredentials: true }
 			);
 
 			if (response.status === 200) {
@@ -218,7 +223,12 @@ export default function PetHealthRecords() {
 				setIsLoading(true);
 				const response = await axios.delete(
 					`${api}/user/deleteHealthRecord/${healthRecordId}`,
-					{ withCredentials: true }
+					{
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+						},
+					}
+					// { withCredentials: true }
 				);
 
 				if (response.status === 200) {
