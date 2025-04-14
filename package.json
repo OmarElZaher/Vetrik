@@ -4,11 +4,11 @@
 	"description": "Database Admin System to Handle Files of All Customers",
 	"main": "server.js",
 	"scripts": {
-		"start": "node backend/server.js",
-		"server": "nodemon backend/server.js",
+		"start": "node server.js",
+		"server": "nodemon server.js",
 		"client": "npm start --prefix frontend",
 		"install:all": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
-		"dev": "concurrently \"npm run server\" \"npm run client\" "
+		"dev": "concurrently \"npm run server\" \"npm run client\""
 	},
 	"author": "Omar ElZaher",
 	"license": "MIT",
