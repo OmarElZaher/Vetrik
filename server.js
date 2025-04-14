@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use(convertToLowerCase);
 app.use(
 	cors({
-		origin: "http://localhost:3000",
+		origin: "https://vetrik-7eg5cwxf0-omarelzahers-projects.vercel.app",
 		credentials: true,
 	})
 );
