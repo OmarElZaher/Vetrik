@@ -22,8 +22,7 @@ app.use(cookieParser());
 app.use(convertToLowerCase);
 app.use(
 	cors({
-		// origin: /^https:\/\/vetrik.*\.vercel\.app$/,
-		origin: "https://vetrik.vercel.app",
+		origin: ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/],
 		credentials: true,
 	})
 );
