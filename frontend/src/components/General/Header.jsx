@@ -125,7 +125,7 @@ export default function Header() {
 					alignItems='center'
 					key={2}
 				>
-					<Link to={isAdmin ? "/admin" : "/"}>LOGO PLACEMENT</Link>
+					<Link to={isAdmin ? "/admin" : "/"}>Vetrik 🐾</Link>
 				</Box>
 				<Box
 					width='33vw'

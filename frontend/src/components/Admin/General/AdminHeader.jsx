@@ -82,7 +82,7 @@ export default function AdminHeader() {
 					width='33vw'
 					height='50px'
 				>
-					<Link to={"/admin"}>LOGO PLACEMENT</Link>
+					<Link to={"/admin"}>Vetrik 🐾</Link>
 				</Box>
 				<Box
 					display='flex'
