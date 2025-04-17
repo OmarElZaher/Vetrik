@@ -21,13 +21,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(convertToLowerCase);
 app.use(
-	cors({
-		origin:
-			process.env.NODE_ENV === "production"
-				? ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/]
-				: "http://localhost:3000",
-		credentials: true,
-	})
+  cors({
+    origin:
+      // process.env.NODE_ENV === "production"
+      ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/],
+    // : "http://localhost:3000",
+    credentials: true,
+  })
 );
 app.use(morgan("dev"));
 app.use(helmet());
@@ -36,5 +36,5 @@ app.use("/user", require("./routes/userRoutes"));
 app.use(errorHandler);
 
 app.listen(port, () =>
-	console.log(`Server started on port ${port}...`.green.bold)
+  console.log(`Server started on port ${port}...`.green.bold)
 );

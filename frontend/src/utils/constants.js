@@ -1,7 +1,9 @@
-const VET_NAME = "Modern Vet";
-const API_URL =
-	process.env.NODE_ENV === "production"
-		? process.env.REACT_APP_API_URL
-		: "http://localhost:4000";
+const VET_NAME = "AlphaVet";
+const API_URL = "vetrik-production.up.railway.app";
+
+// const API_URL =
+// 	process.env.NODE_ENV === "production"
+// 		? process.env.REACT_APP_API_URL
+// 		: "http://localhost:4000";
 
 export { VET_NAME, API_URL };
