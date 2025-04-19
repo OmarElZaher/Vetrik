@@ -138,7 +138,7 @@ export default function CreateUser() {
 										fontWeight={"bold"}
 										textDecoration={"underline"}
 									>
-										Add An Admin
+										إضافة مشرف
 									</Text>
 								</Box>
 							</Box>
@@ -161,7 +161,7 @@ export default function CreateUser() {
 										id='firstName'
 										type='text'
 										name='firstName'
-										placeholder='First Name'
+										placeholder='الإسم الأول'
 										value={firstName}
 										onChange={(e) => {
 											setFirstName(e.target.value);
@@ -173,7 +173,7 @@ export default function CreateUser() {
 										id='lastName'
 										type='text'
 										name='lastName'
-										placeholder='Last Name'
+										placeholder='إسم العائلة'
 										value={lastName}
 										onChange={(e) => {
 											setLastName(e.target.value);
@@ -187,7 +187,7 @@ export default function CreateUser() {
 										id='email'
 										type='email'
 										name='email'
-										placeholder='Email'
+										placeholder='إيميل'
 										value={email}
 										onChange={(e) => {
 											setEmail(e.target.value);
@@ -200,7 +200,7 @@ export default function CreateUser() {
 										id='username'
 										type='text'
 										name='username'
-										placeholder='Username'
+										placeholder='كلمة المستخدم'
 										value={username}
 										onChange={(e) => {
 											setUsername(e.target.value);
@@ -217,7 +217,7 @@ export default function CreateUser() {
 										id='password'
 										type='password'
 										name='password'
-										placeholder='Password'
+										placeholder='كلمة المرور'
 										value={password}
 										onChange={(e) => {
 											setPassword(e.target.value);
@@ -228,7 +228,7 @@ export default function CreateUser() {
 										id='confirmPassword'
 										type='password'
 										name='confirmPassword'
-										placeholder='Confirm Password'
+										placeholder='تأكيد كلمة المرور'
 										value={confirmPassword}
 										onChange={(e) => {
 											setConfirmPassword(e.target.value);
@@ -257,7 +257,7 @@ export default function CreateUser() {
 									onClick={handleAdd}
 									width={"25%"}
 								>
-									Add
+									أضف
 								</Button>
 							</Box>
 						</Card>

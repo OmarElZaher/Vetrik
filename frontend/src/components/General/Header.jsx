@@ -142,6 +142,7 @@ export default function Header() {
 						color='FFF'
 						onClick={handleLogout}
 						cursor={"pointer"}
+						aria-label='تسجيل الخروج'
 						_hover={{
 							color: "#D4F500",
 						}}

@@ -47,10 +47,10 @@ export default function UsersTable() {
 					height={"100vh"}
 				>
 					<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-						NOT FOUND
+						غير موجود
 					</Text>
 					<Text fontSize={"25px"} textDecoration={"underline"}>
-						Please Search For A User Before Accessing This Page
+						من فضلك ابحث عن المستخدم قبل ما تدخل الصفحة دي
 					</Text>
 					<Button
 						_hover={{
@@ -69,7 +69,7 @@ export default function UsersTable() {
 						width={"25vw"}
 						mt={10}
 					>
-						Go Back To Search
+						الرجوع لصفحة البحث
 					</Button>
 				</Box>
 			</>
@@ -92,7 +92,7 @@ export default function UsersTable() {
 							fontWeight={500}
 							textDecoration={"underline"}
 						>
-							Users Found
+							المستخدمين اللي تم العثور عليهم
 						</Text>
 					</Box>
 					<Box
@@ -107,10 +107,10 @@ export default function UsersTable() {
 							<Table variant='simple' size='md'>
 								<Thead>
 									<Tr>
-										<Th textAlign={"left"}>Full Name</Th>
-										<Th textAlign={"center"}>Username</Th>
-										<Th textAlign={"center"}>Email</Th>
-										<Th textAlign={"right"}>View Details</Th>
+										<Th textAlign={"left"}>الاسم الكامل</Th>
+										<Th textAlign={"center"}>اسم المستخدم</Th>
+										<Th textAlign={"center"}>البريد الإلكتروني</Th>
+										<Th textAlign={"right"}>عرض التفاصيل</Th>
 									</Tr>
 								</Thead>
 								<Tbody>
@@ -137,7 +137,7 @@ export default function UsersTable() {
 													}}
 													leftIcon={<IoMdEye />}
 												>
-													View
+													عرض
 												</Button>
 											</Td>
 										</Tr>
@@ -169,7 +169,7 @@ export default function UsersTable() {
 							leftIcon={<IoMdArrowRoundBack />}
 							width={"25vw"}
 						>
-							Back To Search
+							الرجوع لصفحة البحث
 						</Button>
 					</Box>
 				</Box>

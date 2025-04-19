@@ -134,7 +134,7 @@ export default function CreateUser() {
 									mt={5}
 								>
 									<Text fontSize={"3xl"} fontWeight={"bold"}>
-										Add A User
+										إضافة مستخدم
 									</Text>
 								</Box>
 							</Box>
@@ -157,7 +157,7 @@ export default function CreateUser() {
 										id='firstName'
 										type='text'
 										name='firstName'
-										placeholder='First Name'
+										placeholder='الاسم الأول'
 										value={firstName}
 										onChange={(e) => {
 											setFirstName(e.target.value);
@@ -169,7 +169,7 @@ export default function CreateUser() {
 										id='lastName'
 										type='text'
 										name='lastName'
-										placeholder='Last Name'
+										placeholder='اسم العائلة'
 										value={lastName}
 										onChange={(e) => {
 											setLastName(e.target.value);
@@ -183,7 +183,7 @@ export default function CreateUser() {
 										id='email'
 										type='email'
 										name='email'
-										placeholder='Email'
+										placeholder='البريد الإلكتروني'
 										value={email}
 										onChange={(e) => {
 											setEmail(e.target.value);
@@ -196,7 +196,7 @@ export default function CreateUser() {
 										id='username'
 										type='text'
 										name='username'
-										placeholder='Username'
+										placeholder='اسم المستخدم'
 										value={username}
 										onChange={(e) => {
 											setUsername(e.target.value);
@@ -213,7 +213,7 @@ export default function CreateUser() {
 										id='password'
 										type='password'
 										name='password'
-										placeholder='Password'
+										placeholder='كلمة السر'
 										value={password}
 										onChange={(e) => {
 											setPassword(e.target.value);
@@ -224,7 +224,7 @@ export default function CreateUser() {
 										id='confirmPassword'
 										type='password'
 										name='confirmPassword'
-										placeholder='Confirm Password'
+										placeholder='تأكيد كلمة السر'
 										value={confirmPassword}
 										onChange={(e) => {
 											setConfirmPassword(e.target.value);
@@ -255,7 +255,7 @@ export default function CreateUser() {
 									leftIcon={<IoIosAdd />}
 									width={"25%"}
 								>
-									Add
+									إضافة
 								</Button>
 							</Box>
 						</Card>

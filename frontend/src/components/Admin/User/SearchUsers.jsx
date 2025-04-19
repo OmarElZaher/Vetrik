@@ -117,7 +117,7 @@ export default function SearchUsers() {
 								<Icon as={FaPerson} fontSize={"60px"} />
 
 								<Heading size='lg' mt={2}>
-									Search For A User
+									ابحث عن مستخدم
 								</Heading>
 							</Box>
 
@@ -125,15 +125,15 @@ export default function SearchUsers() {
 								<List>
 									<ListItem>
 										<ListIcon as={MdSettings} color='yellowgreen' />
-										Enter one, or more details to find desired user.
+										اكتب اسم أو أكتر علشان تلاقي المستخدم اللي بتدور عليه.
 									</ListItem>
 									<ListItem>
 										<ListIcon as={MdSettings} color='yellowgreen' />
-										To get all users, press{" "}
+										لو عايز تظهر كل المستخدمين، دوس{" "}
 										<Text display={"inline"} color={"yellowgreen"}>
-											search
+											بحث
 										</Text>{" "}
-										without any inputs.
+										من غير ما تكتب أي حاجة.
 									</ListItem>
 								</List>
 							</Box>
@@ -152,7 +152,7 @@ export default function SearchUsers() {
 										id='firstName'
 										type='text'
 										name='firstName'
-										placeholder='First Name'
+										placeholder='الاسم الأول'
 										value={firstName}
 										onChange={(e) => {
 											setFirstName(e.target.value);
@@ -163,7 +163,7 @@ export default function SearchUsers() {
 										id='lastName'
 										type='text'
 										name='lastName'
-										placeholder='Last Name'
+										placeholder='اسم العائلة'
 										value={lastName}
 										onChange={(e) => {
 											setLastName(e.target.value);
@@ -181,7 +181,7 @@ export default function SearchUsers() {
 										id='username'
 										type='text'
 										name='username'
-										placeholder='Username'
+										placeholder='اسم المستخدم'
 										value={username}
 										onChange={(e) => {
 											setUsername(e.target.value);
@@ -194,7 +194,7 @@ export default function SearchUsers() {
 										id='email'
 										type='email'
 										name='email'
-										placeholder='Email'
+										placeholder='البريد الإلكتروني'
 										value={email}
 										onChange={(e) => {
 											setEmail(e.target.value);
@@ -225,7 +225,7 @@ export default function SearchUsers() {
 										width={"50%"}
 										mt={10}
 									>
-										Search
+										بحث
 									</Button>
 								</FormControl>
 							</Box>

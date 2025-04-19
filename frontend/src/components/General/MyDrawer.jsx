@@ -131,7 +131,7 @@ export default function MyDrawer() {
 						textDecoration='underline'
 						pl='20px'
 					>
-						Menu
+						القائمة
 					</DrawerHeader>
 
 					<DrawerBody>
@@ -177,7 +177,7 @@ export default function MyDrawer() {
 											/>
 										}
 									>
-										Home
+										الصفحة الرئيسية
 									</Button>
 								</Box>
 							</Box>
@@ -238,7 +238,7 @@ export default function MyDrawer() {
 											/>
 										}
 									>
-										Search
+										بحث
 									</Button>
 								</Box>
 
@@ -254,7 +254,7 @@ export default function MyDrawer() {
 											>
 												<NavigationLinkDrawer
 													icon={FaPerson}
-													text={"Search For An Owner"}
+													text={"بحث عن المالك"}
 													to={"/search-owner"}
 													justifyContent='flex-end'
 													alignItems='center'
@@ -262,7 +262,7 @@ export default function MyDrawer() {
 
 												<NavigationLinkDrawer
 													icon={MdOutlinePets}
-													text={"Search For A Pet"}
+													text={"بحث عن حيوان أليف"}
 													to={"/search-pet"}
 													justifyContent='flex-end'
 													alignItems='center'
@@ -332,7 +332,7 @@ export default function MyDrawer() {
 											/>
 										}
 									>
-										Add
+										إضافة
 									</Button>
 								</Box>
 
@@ -348,7 +348,7 @@ export default function MyDrawer() {
 											>
 												<NavigationLinkDrawer
 													icon={FaPerson}
-													text={"Add An Owner"}
+													text={"إضافة مالك"}
 													to={"/add-owner"}
 													justifyContent='flex-end'
 													alignItems='flex-start'
@@ -356,7 +356,7 @@ export default function MyDrawer() {
 
 												<NavigationLinkDrawer
 													icon={MdOutlinePets}
-													text={"Add A Pet"}
+													text={"إضافة حيوان أليف"}
 													to={"/add-pet"}
 													justifyContent='flex-end'
 													alignItems='flex-start'
@@ -410,7 +410,7 @@ export default function MyDrawer() {
 											/>
 										}
 									>
-										Send Feedback
+										إرسال ملاحظات
 									</Button>
 								</Box>
 							</Box>
@@ -456,7 +456,7 @@ export default function MyDrawer() {
 											/>
 										}
 									>
-										Edit Profile
+										تعديل الملف الشخصي
 									</Button>
 								</Box>
 							</Box>
@@ -502,14 +502,14 @@ export default function MyDrawer() {
 											/>
 										}
 									>
-										Change Password
+										تغيير كلمة السر
 									</Button>
 								</Box>
 							</Box>
 						</Flex>
 					</DrawerBody>
 
-					<DrawerFooter color='#8F8F8F'>® Modern Vet Clinic</DrawerFooter>
+					<DrawerFooter color='#8F8F8F'>® Vetrik</DrawerFooter>
 				</DrawerContent>
 			</Drawer>
 		</>

@@ -168,7 +168,7 @@ export default function MyDrawerAdmin() {
 											/>
 										}
 									>
-										Home
+										الصفحة الرئيسية
 									</Button>
 								</Box>
 							</Box>
@@ -214,7 +214,7 @@ export default function MyDrawerAdmin() {
 											/>
 										}
 									>
-										Manage Users
+										إدارة المستخدمين
 									</Button>
 								</Box>
 							</Box>
@@ -272,7 +272,7 @@ export default function MyDrawerAdmin() {
 											/>
 										}
 									>
-										Add
+										إضافة مستخدم
 									</Button>
 								</Box>
 
@@ -350,7 +350,7 @@ export default function MyDrawerAdmin() {
 											/>
 										}
 									>
-										Edit Profile
+										تعديل الملف الشخصي
 									</Button>
 								</Box>
 							</Box>
@@ -396,14 +396,14 @@ export default function MyDrawerAdmin() {
 											/>
 										}
 									>
-										Change Password
+										تغيير كلمة المرور
 									</Button>
 								</Box>
 							</Box>
 						</Flex>
 					</DrawerBody>
 
-					<DrawerFooter color='#8F8F8F'>® Modern Vet Clinic</DrawerFooter>
+					<DrawerFooter color='#8F8F8F'>® Vetrik</DrawerFooter>
 				</DrawerContent>
 			</Drawer>
 		</>

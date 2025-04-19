@@ -125,9 +125,10 @@ export default function LoginCard() {
 						<Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
 							<Stack align={"center"}>
 								<Icon as={FiLogIn} fontSize='100px' />
-								<Heading fontSize={"4xl"}>Welcome Back Doctor! 👋🏽</Heading>
+								<Heading fontSize={"4xl"}>مرحباً بعودتك يا دكتور! 👋🏽</Heading>
 								<Text fontSize={"lg"} color={"gray.600"} align={"center"}>
-									Sign In Using Your Credentials to Access Your Dashboard
+									قم بتسجيل الدخول باستخدام بياناتك للوصول إلى لوحة التحكم
+									الخاصة بك
 								</Text>
 							</Stack>
 
@@ -135,7 +136,7 @@ export default function LoginCard() {
 								<Stack spacing={4}>
 									<FormControl id='username'>
 										<FormLabel>
-											Username{" "}
+											اسم المستخدم{" "}
 											<Text display={"inline"} color='red'>
 												*
 											</Text>
@@ -150,7 +151,7 @@ export default function LoginCard() {
 
 									<FormControl id='password'>
 										<FormLabel>
-											Password{" "}
+											كلمة السر{" "}
 											<Text display={"inline"} color='red'>
 												*
 											</Text>
@@ -210,7 +211,7 @@ export default function LoginCard() {
 													color={"blue.400"}
 													_hover={{ textDecoration: "underline" }}
 												>
-													Forgot username?
+													نسيت اسم المستخدم؟
 												</Text>
 											</Link>
 											<Link to={"/forgot-password"}>
@@ -218,7 +219,7 @@ export default function LoginCard() {
 													color={"blue.400"}
 													_hover={{ textDecoration: "underline" }}
 												>
-													Forgot password?
+													نسيت كلمة السر؟
 												</Text>
 											</Link>
 										</Stack>
@@ -230,7 +231,7 @@ export default function LoginCard() {
 											bg={"blue.400"}
 											color={"white"}
 										>
-											Sign in
+											تسجيل الدخول
 										</Button>
 									</Stack>
 								</Stack>

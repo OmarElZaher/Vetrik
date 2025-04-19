@@ -143,7 +143,7 @@ export default function SearchOwner() {
 								<Icon as={FaPerson} fontSize={"60px"} />
 
 								<Heading size='lg' mt={2}>
-									Search For An Owner
+									بحث عن المالك
 								</Heading>
 							</Box>
 
@@ -151,15 +151,15 @@ export default function SearchOwner() {
 								<List>
 									<ListItem>
 										<ListIcon as={MdSettings} color='yellowgreen' />
-										Enter one, or more details to find desired owner.
+										أدخل اسم أو أكتر علشان توصل للمالك اللي بتدور عليه.
 									</ListItem>
 									<ListItem>
 										<ListIcon as={MdSettings} color='yellowgreen' />
-										To get all owners, press{" "}
+										لو عايز تشوف كل المالكين، دوس{" "}
 										<Text display={"inline"} color={"yellowgreen"}>
-											search
+											بحث
 										</Text>{" "}
-										with no inputs.
+										من غير ما تكتب حاجة.
 									</ListItem>
 								</List>
 							</Box>
@@ -177,7 +177,7 @@ export default function SearchOwner() {
 										id='firstName'
 										type='text'
 										name='firstName'
-										placeholder='First Name'
+										placeholder='الاسم الأول'
 										value={firstName}
 										onChange={handleFirstNameChange}
 										mr={2.5}
@@ -186,7 +186,7 @@ export default function SearchOwner() {
 										id='lastName'
 										type='text'
 										name='lastName'
-										placeholder='Last Name'
+										placeholder='اسم العائلة'
 										value={lastName}
 										onChange={handleLastNameChange}
 										ml={2.5}
@@ -207,7 +207,7 @@ export default function SearchOwner() {
 											id='email'
 											type='email'
 											name='email'
-											placeholder='Email'
+											placeholder='البريد الإلكتروني'
 											value={email}
 											onChange={handleEmailChange}
 										/>
@@ -228,7 +228,7 @@ export default function SearchOwner() {
 											id='mobileNumber'
 											type='tel'
 											name='mobileNumber'
-											placeholder='Mobile Number'
+											placeholder='رقم الموبايل'
 											value={mobileNumber}
 											onChange={handleMobileNumberChange}
 										/>
@@ -256,7 +256,7 @@ export default function SearchOwner() {
 										width={"50%"}
 										mt={10}
 									>
-										Search
+										بحث
 									</Button>
 								</FormControl>
 							</Box>

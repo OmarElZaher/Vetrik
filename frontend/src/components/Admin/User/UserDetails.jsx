@@ -193,7 +193,7 @@ export default function UserDetails() {
 				height={"87vh"}
 			>
 				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-					ERROR
+					خطأ
 				</Text>
 				<Text fontSize={"40px"} textDecoration={"underline"}>
 					{error}
@@ -215,7 +215,7 @@ export default function UserDetails() {
 					width={"25vw"}
 					mt={10}
 				>
-					Go Back To Search
+					الرجوع لصفحة البحث
 				</Button>
 			</Box>
 			<Footer />
@@ -252,7 +252,7 @@ export default function UserDetails() {
 							fontWeight={"bold"}
 							textDecoration={"underline"}
 						>
-							User Information
+							بيانات المستخدم
 						</Text>
 						<Text fontSize={"28px"} mt={2}>
 							{`${titleCase(user.firstName)} ${titleCase(user.lastName)}`}
@@ -276,7 +276,7 @@ export default function UserDetails() {
 							height={"80%"}
 						>
 							<Text fontSize={"30px"} fontWeight={"bold"}>
-								Username
+								اسم المستخدم
 							</Text>
 							<Text fontSize={"30px"}>{user.username}</Text>
 						</Box>
@@ -291,7 +291,7 @@ export default function UserDetails() {
 							height={"80%"}
 						>
 							<Text fontSize={"30px"} fontWeight={"bold"}>
-								Email
+								البريد الإلكتروني
 							</Text>
 							<Text fontSize={"30px"}>{user.email}</Text>
 						</Box>
@@ -306,7 +306,7 @@ export default function UserDetails() {
 							height={"80%"}
 						>
 							<Text fontWeight={"bold"}>
-								Is Admin:{" "}
+								هل هو مشرف؟{" "}
 								{isAdmin ? (
 									<Badge colorScheme='green'>True</Badge>
 								) : (
@@ -327,7 +327,7 @@ export default function UserDetails() {
 					>
 						<Tooltip
 							hasArrow
-							label='Sets User As An Admin'
+							label='تعيين المستخدم كمشرف'
 							openDelay={75}
 							placement='top'
 							bg={"yellowgreen"}
@@ -345,12 +345,12 @@ export default function UserDetails() {
 								onClick={handleSetAdmin}
 								mx={1.5}
 							>
-								Set As Admin
+								تعيين كمشرف
 							</Button>
 						</Tooltip>
 						<Tooltip
 							hasArrow
-							label='Deletes User From System'
+							label='حذف المستخدم من النظام'
 							openDelay={75}
 							placement='top'
 							bg={"#EF5350"}
@@ -371,7 +371,7 @@ export default function UserDetails() {
 								leftIcon={<TbTrashXFilled />}
 								mx={1.5}
 							>
-								Delete User
+								حذف المستخدم
 							</Button>
 						</Tooltip>
 					</Box>

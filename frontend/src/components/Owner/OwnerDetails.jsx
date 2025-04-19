@@ -316,7 +316,7 @@ export default function OwnerDetails() {
 					width={"25vw"}
 					mt={10}
 				>
-					Go Back To Search
+					الرجوع لصفحة البحث
 				</Button>
 			</Box>
 			<Footer />
@@ -389,7 +389,7 @@ export default function OwnerDetails() {
 									fontSize={"20x"}
 								>
 									<Icon as={FaRegEdit} mr={1.5} />
-									Edit Profile
+									تعديل الملف الشخصي
 								</Text>
 							</Box>
 						</Box>
@@ -410,7 +410,7 @@ export default function OwnerDetails() {
 								p={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
-									Email
+									البريد الإلكتروني
 								</Text>
 								<Text fontSize={"20px"}>{owner.email}</Text>
 							</Box>
@@ -423,7 +423,7 @@ export default function OwnerDetails() {
 								m={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
-									Mobile Number
+									رقم الموبايل
 								</Text>
 								<Text fontSize={"20px"}>{owner.mobileNumber}</Text>
 							</Box>
@@ -438,13 +438,13 @@ export default function OwnerDetails() {
 								p={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
-									Contact Method
+									طريقة التواصل
 								</Text>
 								<Text fontSize={"20px"}>
 									{owner.preferredContactMethod === "both"
-										? "Phone & Email"
+										? "مكالمة وبريد"
 										: owner.preferredContactMethod === "neither"
-										? "None"
+										? "لا يفضل التواصل"
 										: titleCase(owner.preferredContactMethod)}
 								</Text>
 							</Box>
@@ -461,7 +461,7 @@ export default function OwnerDetails() {
 							{owner.pets.length > 0 ? (
 								<>
 									<Text fontSize={"24px"} fontWeight={"bold"}>
-										Pets
+										الحيوانات المسجلة
 									</Text>
 									<TableContainer
 										width={"92%"}
@@ -470,11 +470,11 @@ export default function OwnerDetails() {
 									>
 										<Table variant='simple' size='md'>
 											<Thead>
-												<Th textAlign={"left"}>Name</Th>
-												<Th textAlign={"center"}>Type</Th>
-												<Th textAlign={"center"}>Breed</Th>
-												<Th textAlign={"center"}>Gender</Th>
-												<Th textAlign={"center"}>Actions</Th>
+												<Th textAlign={"left"}>الاسم</Th>
+												<Th textAlign={"center"}>النوع</Th>
+												<Th textAlign={"center"}>السلالة</Th>
+												<Th textAlign={"center"}>الجنس</Th>
+												<Th textAlign={"center"}>إجراءات</Th>
 											</Thead>
 											<Tbody>
 												{owner.pets.map((pet) => (
@@ -507,7 +507,7 @@ export default function OwnerDetails() {
 
 															<Tooltip
 																hasArrow
-																label='Removes Pet from Owner Profile'
+																label='حذف الحيوان من حساب المالك'
 																bg={"#EF5350"}
 																placement='top'
 																openDelay={75}
@@ -530,7 +530,7 @@ export default function OwnerDetails() {
 																	leftIcon={<TbTrashXFilled />}
 																	ml={2.5}
 																>
-																	Remove
+																	حذف
 																</Button>
 															</Tooltip>
 														</Td>
@@ -546,7 +546,7 @@ export default function OwnerDetails() {
 									textDecoration={"underline"}
 									color={"#EF5350"}
 								>
-									Owner Has No Registered Pets
+									لا يوجد حيوانات مسجلة
 								</Text>
 							)}
 						</Box>
@@ -579,11 +579,11 @@ export default function OwnerDetails() {
 								width={"40%"}
 								mr={2.5}
 							>
-								Filtered Owners Table
+								جدول المالكين المصفى
 							</Button>
 							<Tooltip
 								hasArrow
-								label='Deletes Owner From System'
+								label='حذف المالك من النظام'
 								bg={"#EF5350"}
 								placement='top'
 								openDelay={75}
@@ -605,7 +605,7 @@ export default function OwnerDetails() {
 									width={"25%"}
 									ml={2.5}
 								>
-									Delete
+									حذف
 								</Button>
 							</Tooltip>
 						</Box>
@@ -625,7 +625,7 @@ export default function OwnerDetails() {
 								fontWeight={"bold"}
 								textDecor={"underline"}
 							>
-								Add A Pet
+								إضافة حيوان أليف
 							</Text>
 						</Box>
 						<Box
@@ -636,17 +636,17 @@ export default function OwnerDetails() {
 							height={"15%"}
 						>
 							<Text fontSize={"20px"} textAlign={"center"}>
-								To register a{" "}
+								لتسجيل{" "}
 								<Text
 									fontSize={"20px"}
 									display={"inline"}
 									textDecoration={"underline"}
 									fontWeight={"bold"}
 								>
-									NEW
+									حيوان جديد
 								</Text>
 								{" (not already registered) "}
-								pet to this owner, please enter all details of the pet.
+								مش متسجل قبل كده، اكتب كل البيانات المطلوبة.
 							</Text>
 						</Box>
 						<Box
@@ -663,7 +663,7 @@ export default function OwnerDetails() {
 									id='name'
 									type='text'
 									name='name'
-									placeholder='Pet Name'
+									placeholder='اسم الحيوان'
 									value={name}
 									onChange={(e) => {
 										setName(e.target.value);
@@ -681,7 +681,7 @@ export default function OwnerDetails() {
 								<Select
 									id='type'
 									name='type'
-									placeholder='Type of Animal'
+									placeholder='نوع الحيوان'
 									cursor={"pointer"}
 									value={type}
 									onChange={(e) => {
@@ -689,20 +689,20 @@ export default function OwnerDetails() {
 									}}
 									mr={2}
 								>
-									<option value='Dog'>Dog</option>
-									<option value='Cat'>Cat</option>
-									<option value='Bird'>Bird</option>
-									<option value='Turtle'>Turtle</option>
-									<option value='Monkey'>Monkey</option>
-									<option value='Hamster'>Hamster</option>
-									<option value='Fish'>Fish</option>
+									<option value='Dog'>كلب</option>
+									<option value='Cat'>قطة</option>
+									<option value='Bird'>طائر</option>
+									<option value='Turtle'>سلحفاة</option>
+									<option value='Monkey'>قرد</option>
+									<option value='Hamster'>هامستر</option>
+									<option value='Fish'>سمكة</option>
 								</Select>
 
 								<Input
 									id='breed'
 									type='text'
 									name='breed'
-									placeholder='Breed of Animal'
+									placeholder='سلالة الحيوان'
 									value={breed}
 									onChange={(e) => {
 										setBreed(e.target.value);
@@ -714,15 +714,15 @@ export default function OwnerDetails() {
 								<Select
 									id='gender'
 									name='gender'
-									placeholder='Select Gender'
+									placeholder='اختيار الجنس'
 									cursor={"pointer"}
 									value={gender}
 									onChange={(e) => {
 										setGender(e.target.value);
 									}}
 								>
-									<option value='Male'>Male</option>
-									<option value='Female'>Female</option>
+									<option value='Male'>ذكر</option>
+									<option value='Female'>أنثى</option>
 								</Select>
 							</FormControl>
 							<FormControl id='dob'>
@@ -730,7 +730,7 @@ export default function OwnerDetails() {
 									id='dob'
 									type='date'
 									name='dob'
-									placeholder='Date of Birth'
+									placeholder='تاريخ الميلاد'
 									value={dob}
 									onChange={(e) => {
 										setDob(e.target.value);
@@ -759,7 +759,7 @@ export default function OwnerDetails() {
 								leftIcon={<IoMdAdd />}
 								width={"25%"}
 							>
-								Add
+								إضافة
 							</Button>
 						</Box>
 					</CardBody>

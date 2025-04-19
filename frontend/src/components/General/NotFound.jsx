@@ -79,7 +79,7 @@ export default function NotFound() {
 					404 ERROR
 				</Text>
 				<Text fontSize={"40px"} textDecoration={"underline"}>
-					PAGE NOT FOUND
+					الصفحة مش موجودة
 				</Text>
 				<Button
 					_hover={{
@@ -103,7 +103,7 @@ export default function NotFound() {
 					width={"25vw"}
 					mt={10}
 				>
-					Home
+					الصفحة الرئيسية
 				</Button>
 			</Box>
 			<Footer />

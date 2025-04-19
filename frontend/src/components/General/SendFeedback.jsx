@@ -82,20 +82,19 @@ export default function SendFeedback() {
 						height={"15%"}
 					>
 						<Text fontSize={"40px"} fontWeight={"bold"}>
-							Send Feedback
+							أرسل ملاحظاتك
 						</Text>
-						<Text fontSize={"22px"}>Help make this system better! </Text>
+						<Text fontSize={"22px"}>ساعدنا نطوّر النظام ده! </Text>
 						<Text fontSize={"21px"} textAlign={"center"}>
-							Send any ideas you have to make this an easier and more convinient
-							software.
+							لو عندك أي أفكار ممكن تسهّل استخدام البرنامج أو تخليه أريح، ابعتها
+							لينا.
 						</Text>
 						<Text fontSize={"21px"}>
-							You can also report any problems you find while using the system.
+							كمان تقدر تبلغ عن أي مشكلة حصلت معاك وإنت بتستخدم النظام.
 						</Text>
 						<Text fontSize={"21px"}>
 							{" "}
-							Your feedback is important to us and will be taken into
-							consideration!{" "}
+							رأيك يهمنا جدًا، وهنراعيه إن شاء الله!{" "}
 						</Text>
 					</Box>
 					<Box
@@ -117,7 +116,7 @@ export default function SendFeedback() {
 								id='firstName'
 								type='text'
 								name='firstName'
-								placeholder='First Name'
+								placeholder='الاسم الأول'
 								value={firstName}
 								onChange={(e) => {
 									setFirstName(e.target.value);
@@ -128,7 +127,7 @@ export default function SendFeedback() {
 								id='lastName'
 								type='text'
 								name='lastName'
-								placeholder='Last Name'
+								placeholder='اسم العائلة'
 								value={lastName}
 								onChange={(e) => {
 									setLastName(e.target.value);
@@ -161,7 +160,7 @@ export default function SendFeedback() {
 									id='email'
 									type='email'
 									name='email'
-									placeholder='Email'
+									placeholder='البريد الإلكتروني'
 									value={email}
 									onChange={(e) => {
 										setEmail(e.target.value);
@@ -175,7 +174,7 @@ export default function SendFeedback() {
 								id='clinic'
 								type='text'
 								name='clinic'
-								placeholder='Operating Clinic'
+								placeholder='اسم العيادة'
 								value={clinic}
 								onChange={(e) => {
 									setClinic(e.target.value);
@@ -187,7 +186,7 @@ export default function SendFeedback() {
 							<Textarea
 								id='feedback'
 								name='feedback'
-								placeholder="What's On Your Mind?"
+								placeholder='اكتب اللي في بالك...'
 								value={feedback}
 								onChange={(e) => {
 									console.log(e.target.value);
@@ -216,7 +215,7 @@ export default function SendFeedback() {
 							onClick={handleSubmit}
 							width={"25%"}
 						>
-							Submit
+							إرسال
 						</Button>
 					</Box>
 				</Card>

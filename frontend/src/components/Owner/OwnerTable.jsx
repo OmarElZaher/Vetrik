@@ -50,7 +50,7 @@ export default function OwnerTable() {
 						NOT FOUND
 					</Text>
 					<Text fontSize={"25px"} textDecoration={"underline"}>
-						Please Search For An Owner Before Accessing This Page
+						من فضلك ابحث عن المالك قبل الدخول للصفحة دي
 					</Text>
 					<Button
 						_hover={{
@@ -69,7 +69,7 @@ export default function OwnerTable() {
 						width={"25vw"}
 						mt={10}
 					>
-						Go Back To Search
+						الرجوع لصفحة البحث
 					</Button>
 				</Box>
 			</>
@@ -92,7 +92,7 @@ export default function OwnerTable() {
 							fontWeight={500}
 							textDecoration={"underline"}
 						>
-							Owners Found
+							المالكين اللي تم العثور عليهم
 						</Text>
 					</Box>
 					<Box
@@ -107,10 +107,10 @@ export default function OwnerTable() {
 							<Table variant='simple' size='md'>
 								<Thead>
 									<Tr>
-										<Th textAlign={"left"}>Full Name</Th>
-										<Th textAlign={"center"}>Email</Th>
-										<Th textAlign={"center"}>Mobile Number</Th>
-										<Th textAlign={"right"}>View Details</Th>
+										<Th textAlign={"left"}>الاسم الكامل</Th>
+										<Th textAlign={"center"}>البريد الإلكتروني</Th>
+										<Th textAlign={"center"}>رقم الموبايل</Th>
+										<Th textAlign={"right"}>عرض التفاصيل</Th>
 									</Tr>
 								</Thead>
 								<Tbody>
@@ -137,7 +137,7 @@ export default function OwnerTable() {
 													}}
 													leftIcon={<IoMdEye />}
 												>
-													View
+													عرض
 												</Button>
 											</Td>
 										</Tr>
@@ -169,7 +169,7 @@ export default function OwnerTable() {
 							leftIcon={<IoMdArrowRoundBack />}
 							width={"25vw"}
 						>
-							Back To Search
+							الرجوع لصفحة البحث
 						</Button>
 					</Box>
 				</Box>

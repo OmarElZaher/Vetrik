@@ -19,7 +19,7 @@ export default function Footer() {
 				justify={{ base: "center", md: "space-between" }}
 				align={{ base: "center", md: "center" }}
 			>
-				<Text>© 2024 Modern Vet Clinic. All rights reserved.</Text>
+				<Text>© 2024 Vetrik. All rights reserved.</Text>
 			</Container>
 		</Box>
 	);

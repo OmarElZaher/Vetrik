@@ -182,7 +182,7 @@ export default function AddOwner() {
 									mt={5}
 								>
 									<Text fontSize={"3xl"} fontWeight={"bold"}>
-										Add An Owner
+										إضافة مالك جديد
 									</Text>
 								</Box>
 
@@ -202,7 +202,7 @@ export default function AddOwner() {
 											id='firstName'
 											type='text'
 											name='firstName'
-											placeholder='First Name'
+											placeholder='الاسم الأول'
 											value={firstName}
 											onChange={(e) => {
 												setFirstName(e.target.value);
@@ -213,7 +213,7 @@ export default function AddOwner() {
 											id='lastName'
 											type='text'
 											name='lastName'
-											placeholder='Last Name'
+											placeholder='اسم العائلة'
 											value={lastName}
 											onChange={(e) => {
 												setLastName(e.target.value);
@@ -224,7 +224,7 @@ export default function AddOwner() {
 										<Select
 											id='gender'
 											name='gender'
-											placeholder='Select Gender'
+											placeholder='اختر الجنس'
 											cursor={"pointer"}
 											value={gender}
 											onChange={(e) => {
@@ -232,8 +232,8 @@ export default function AddOwner() {
 											}}
 											ml={2.5}
 										>
-											<option value='Male'>Male</option>
-											<option value='Female'>Female</option>
+											<option value='Male'>ذكر</option>
+											<option value='Female'>أنثى</option>
 										</Select>
 									</FormControl>
 
@@ -251,7 +251,7 @@ export default function AddOwner() {
 												id='email'
 												type='email'
 												name='email'
-												placeholder='Email'
+												placeholder='البريد الإلكتروني'
 												value={email}
 												onChange={(e) => {
 													setEmail(e.target.value);
@@ -268,13 +268,13 @@ export default function AddOwner() {
 												alignItems={"center"}
 												width={"5%"}
 											>
-												+2
+												+٢
 											</InputLeftAddon>
 											<Input
 												id='mobileNumber'
 												type='tel'
 												name='mobileNumber'
-												placeholder='Mobile Number'
+												placeholder='رقم الموبايل'
 												value={mobileNumber}
 												onChange={(e) => {
 													setMobileNumber(e.target.value);
@@ -287,7 +287,7 @@ export default function AddOwner() {
 										<Select
 											id='receiveNotifications'
 											name='receiveNotifications'
-											placeholder='Receive Notifications?'
+											placeholder='استقبال الإشعارات؟'
 											cursor={"pointer"}
 											value={receiveNotifications}
 											onChange={(e) => {
@@ -295,14 +295,14 @@ export default function AddOwner() {
 											}}
 											mr={2.5}
 										>
-											<option value='true'>Yes</option>
-											<option value='false'>No</option>
+											<option value='true'>نعم</option>
+											<option value='false'>لا</option>
 										</Select>
 
 										<Select
 											id='preferredContactMethod'
 											name='preferredContactMethod'
-											placeholder='Select Preferred Contact Method'
+											placeholder='طريقة التواصل المفضلة'
 											cursor={"pointer"}
 											value={preferredContactMethod}
 											onChange={(e) => {
@@ -318,10 +318,9 @@ export default function AddOwner() {
 												: {})}
 											ml={2.5}
 										>
-											<option value='Email'>Email</option>
-											<option value='Phone'>Phone</option>
-											<option value='Both'>Both</option>
-											<option value='Neither'>Neither</option>
+											<option value='Email'>بريد إلكتروني</option>
+											<option value='Phone'>مكالمة</option>
+											<option value='Both'>الاثنين</option>
 										</Select>
 									</FormControl>
 								</Box>
@@ -347,7 +346,7 @@ export default function AddOwner() {
 										width={"25%"}
 									>
 										{" "}
-										Add{" "}
+										إضافة{" "}
 									</Button>
 								</Box>
 							</CardBody>
