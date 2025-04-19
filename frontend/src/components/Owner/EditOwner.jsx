@@ -178,7 +178,7 @@ export default function EditOwner() {
 									mt={5}
 								>
 									<Text fontSize={"3xl"} fontWeight={"bold"}>
-										Edit Owner Profile
+										تعديل بيانات المالك
 									</Text>
 								</Box>
 							</Box>
@@ -207,7 +207,7 @@ export default function EditOwner() {
 											width={"100%"}
 										>
 											<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-												First Name
+												الاسم الأول
 											</Text>
 											<Input
 												id='firstName'
@@ -228,7 +228,7 @@ export default function EditOwner() {
 											width={"100%"}
 										>
 											<Text fontSize={"16px"} color={"#7F7F7F"} ml={4} mb={1}>
-												Last Name
+												اسم العائلة
 											</Text>
 											<Input
 												id='lastName'
@@ -259,7 +259,7 @@ export default function EditOwner() {
 										width={"100%"}
 									>
 										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-											Email
+											البريد الإلكتروني
 										</Text>
 										<InputGroup>
 											<InputLeftAddon
@@ -299,7 +299,7 @@ export default function EditOwner() {
 										width={"100%"}
 									>
 										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-											Mobile Number
+											رقم الموبايل
 										</Text>
 										<InputGroup>
 											<InputLeftAddon
@@ -308,7 +308,7 @@ export default function EditOwner() {
 												alignItems={"center"}
 												width={"5%"}
 											>
-												+2
+												+٢
 											</InputLeftAddon>
 											<Input
 												id='mobileNumber'
@@ -338,7 +338,7 @@ export default function EditOwner() {
 										width={"100%"}
 									>
 										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-											Receive Notifications?
+											طريقة التواصل المفضلة
 										</Text>
 										<InputGroup>
 											<Select
@@ -350,10 +350,10 @@ export default function EditOwner() {
 													setContactMethod(e.target.value);
 												}}
 											>
-												<option value='email'>Email</option>
-												<option value='phone'>Phone</option>
-												<option value='Both'>Both</option>
-												<option value='neither'>Neither</option>
+												<option value='email'>بريد إلكتروني</option>
+												<option value='phone'>مكالمة</option>
+												<option value='Both'>الاثنين</option>
+												<option value='neither'>لا أفضل التواصل</option>
 											</Select>
 										</InputGroup>
 									</Box>
@@ -381,7 +381,7 @@ export default function EditOwner() {
 									width={"25%"}
 								>
 									{" "}
-									Save
+									حفظ التعديلات
 								</Button>
 							</Box>
 						</Card>
