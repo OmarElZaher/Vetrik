@@ -329,7 +329,7 @@ export default function PetDetails() {
 				height={"87vh"}
 			>
 				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-					ERROR
+					خطأ
 				</Text>
 				<Text fontSize={"40px"} textDecoration={"underline"}>
 					{error}
@@ -352,7 +352,7 @@ export default function PetDetails() {
 					width={"25vw"}
 					mt={10}
 				>
-					Go Back To Search
+					الرجوع للبحث
 				</Button>
 			</Box>
 			<Footer />
@@ -419,7 +419,7 @@ export default function PetDetails() {
 									fontSize={"20x"}
 								>
 									<Icon as={FaRegEdit} mr={1.5} />
-									Edit Profile
+									تعديل البروفايل
 								</Text>
 							</Box>
 						</Box>
@@ -443,7 +443,7 @@ export default function PetDetails() {
 								p={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
-									Type of Animal
+									نوع الحيوان
 								</Text>
 								<Text fontSize={"20px"}>{titleCase(pet.type)}</Text>
 							</Box>
@@ -457,7 +457,7 @@ export default function PetDetails() {
 								m={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
-									Breed
+									السلالة
 								</Text>
 								<Text fontSize={"20px"}>{titleCase(pet.breed)}</Text>
 							</Box>
@@ -471,7 +471,7 @@ export default function PetDetails() {
 								m={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
-									Gender
+									الجنس
 								</Text>
 								<Text fontSize={"20px"}>{titleCase(pet.gender)}</Text>
 							</Box>
@@ -485,7 +485,7 @@ export default function PetDetails() {
 								m={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
-									Date of Birth
+									تاريخ الميلاد
 								</Text>
 								<Text fontSize={"20px"}>{formatDate(pet.dob)}</Text>
 							</Box>
@@ -499,7 +499,7 @@ export default function PetDetails() {
 								m={2}
 							>
 								<Text fontSize={"24px"} fontWeight={"bold"}>
-									Age
+									العُمر
 								</Text>
 								<Text fontSize={"20px"}>{petAge}</Text>
 							</Box>
@@ -515,7 +515,7 @@ export default function PetDetails() {
 							height={"50%"}
 						>
 							<Text fontSize={"24px"} fontWeight={"bold"}>
-								Owners
+								المالكين
 							</Text>
 							<TableContainer
 								width={"92%"}
@@ -524,10 +524,10 @@ export default function PetDetails() {
 							>
 								<Table variant='simple' size='md'>
 									<Thead>
-										<Th textAlign={"left"}>Full Name</Th>
-										<Th textAlign={"center"}>Email</Th>
-										<Th textAlign={"center"}>Mobile Number</Th>
-										<Th textAlign={"center"}>Actions</Th>
+										<Th textAlign={"left"}>الاسم الكامل</Th>
+										<Th textAlign={"center"}>البريد الإلكتروني</Th>
+										<Th textAlign={"center"}>رقم المحمول</Th>
+										<Th textAlign={"center"}>الإجراءات</Th>
 									</Thead>
 									<Tbody>
 										{pet.owners.map((owner) => (
@@ -558,7 +558,7 @@ export default function PetDetails() {
 													</Button>
 													<Tooltip
 														hasArrow
-														label='Removes Owner from Pet Profile'
+														label='إزالة المالك من ملف الحيوان'
 														bg={"#EF5350"}
 														placement='top'
 														openDelay={75}
@@ -581,7 +581,7 @@ export default function PetDetails() {
 															leftIcon={<MdDelete />}
 															mr={2.5}
 														>
-															Remove
+															حظف
 														</Button>
 													</Tooltip>
 												</Td>
@@ -620,7 +620,7 @@ export default function PetDetails() {
 								width={"15%"}
 								mr={2.5}
 							>
-								Back
+								رجوع
 							</Button>
 
 							<Button
@@ -640,7 +640,7 @@ export default function PetDetails() {
 								width={"30%"}
 								mx={2.5}
 							>
-								Vaccination Card
+								كارت التطعيمات
 							</Button>
 
 							<Button
@@ -660,12 +660,12 @@ export default function PetDetails() {
 								width={"30%"}
 								mx={2.5}
 							>
-								Health Records
+								السجلات الصحية
 							</Button>
 
 							<Tooltip
 								hasArrow
-								label='Deletes Pet From System'
+								label='حذف الحيوان من النظام'
 								bg={"#EF5350"}
 								placement='top'
 								openDelay={75}
@@ -689,7 +689,7 @@ export default function PetDetails() {
 									width={"15%"}
 									ml={2.5}
 								>
-									Delete
+									حذف
 								</Button>
 							</Tooltip>
 						</Box>
@@ -711,7 +711,7 @@ export default function PetDetails() {
 									fontWeight={"bold"}
 									textDecor={"underline"}
 								>
-									Add Existing Owner
+									إضافة مالك موجود
 								</Text>
 							</Box>
 
@@ -723,8 +723,8 @@ export default function PetDetails() {
 								height={"15%"}
 							>
 								<Text fontSize={"20px"} textAlign={"center"}>
-									To add existing owner to this pet, please filter by owner
-									email and click on the add button.
+									لإضافة مالك موجود لهذا الحيوان، فلتر بالإيميل بتاع المالك
+									واضغط زر الإضافة.
 								</Text>
 							</Box>
 
@@ -740,19 +740,19 @@ export default function PetDetails() {
 										mb={2}
 									>
 										<Text fontSize={"20px"} fontWeight={"bold"}>
-											Owner Name
+											اسم المالك
 										</Text>
 										<Text fontSize={"18px"}>{`${titleCase(
 											owner[0].firstName
 										)} ${titleCase(owner[0].lastName)}`}</Text>
 
 										<Text fontSize={"20px"} fontWeight={"bold"} mt={2}>
-											Mobile Number
+											رقم المحمول
 										</Text>
 										<Text fontSize={"18px"}>{owner[0].mobileNumber}</Text>
 
 										<Text fontSize={"20px"} fontWeight={"bold"} mt={2}>
-											Email
+											البريد الإلكتروني
 										</Text>
 										<Text fontSize={"18px"}>{owner[0].email}</Text>
 									</Box>
@@ -778,7 +778,7 @@ export default function PetDetails() {
 											leftIcon={<IoMdAdd />}
 											mr={2.5}
 										>
-											Add
+											إضافة
 										</Button>
 
 										<Button
@@ -798,7 +798,7 @@ export default function PetDetails() {
 											leftIcon={<IoMdSearch />}
 											ml={2.5}
 										>
-											Search Again
+											بحث مرة أخرى
 										</Button>
 									</Box>
 								</>
@@ -819,7 +819,7 @@ export default function PetDetails() {
 												id='email'
 												type='email'
 												name='email'
-												placeholder='Owner Email'
+												placeholder='بريد المالك الإلكتروني'
 												value={ownerEmail}
 												onChange={(event) => {
 													setOwnerEmail(event.target.value);
@@ -846,7 +846,7 @@ export default function PetDetails() {
 											onClick={handleSearchOwner}
 											leftIcon={<IoMdSearch />}
 										>
-											Search
+											بحث
 										</Button>
 									</Box>
 								</>

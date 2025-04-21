@@ -88,17 +88,17 @@ export default function ForgotUsername() {
 						<Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
 							<Stack align={"center"}>
 								<Icon as={GrPowerReset} fontSize='100px' />
-								<Heading fontSize={"4xl"}>Forgot Username</Heading>
+								<Heading fontSize={"4xl"}>نسيت اسم المستخدم</Heading>
 								<Text fontSize={"lg"} color={"gray.600"} align={"center"}>
-									Enter your registered email address below and we'll send you
-									your username.
+									أدخل بريدك الإلكتروني المُسجَّل وسنرسل لك اسم المستخدم الخاص
+									بك.
 								</Text>
 							</Stack>
 
 							<Box rounded={"lg"} bg='#F6F9FB' boxShadow={"lg"} p={8}>
 								<Stack spacing={4}>
 									<FormControl id='email'>
-										<FormLabel>Email Address</FormLabel>
+										<FormLabel>البريد الإلكتروني</FormLabel>
 										<Input
 											id='email'
 											type='email'
@@ -119,7 +119,7 @@ export default function ForgotUsername() {
 											}}
 											onClick={handleRequest}
 										>
-											Submit
+											إرسال
 										</Button>
 									</Stack>
 								</Stack>

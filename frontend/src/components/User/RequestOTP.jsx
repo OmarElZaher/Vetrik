@@ -88,17 +88,17 @@ export default function RequestOTP() {
 						<Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
 							<Stack align={"center"}>
 								<Icon as={MdLockReset} fontSize='100px' />
-								<Heading fontSize={"4xl"}>Forgot Password</Heading>
+								<Heading fontSize={"4xl"}>نسيت كلمة المرور</Heading>
 								<Text fontSize={"lg"} color={"gray.600"} align={"center"}>
-									Enter your registered email address below to receive a
-									password reset OTP.
+									أدخل بريدك الإلكتروني المُسجَّل أدناه لإرسال رمز التحقق لإعادة
+									تعيين كلمة المرور.
 								</Text>
 							</Stack>
 
 							<Box rounded={"lg"} bg='#F6F9FB' boxShadow={"lg"} p={8}>
 								<Stack spacing={4}>
 									<FormControl id='email'>
-										<FormLabel>Email Address</FormLabel>
+										<FormLabel>البريد الإلكتروني</FormLabel>
 										<Input
 											id='email'
 											type='email'
@@ -119,7 +119,7 @@ export default function RequestOTP() {
 											}}
 											onClick={handleRequest}
 										>
-											Submit
+											إرسال
 										</Button>
 									</Stack>
 								</Stack>

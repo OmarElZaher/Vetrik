@@ -175,7 +175,7 @@ export default function AddPet() {
 									mt={5}
 								>
 									<Text fontSize={"3xl"} fontWeight={"bold"}>
-										Add A Pet
+										إضافة حيوان
 									</Text>
 								</Box>
 								<Box
@@ -190,7 +190,7 @@ export default function AddPet() {
 											id='name'
 											type='text'
 											name='name'
-											placeholder='Pet Name'
+											placeholder='اسم الحيوان'
 											value={name}
 											onChange={(e) => {
 												setName(e.target.value);
@@ -208,7 +208,7 @@ export default function AddPet() {
 										<Select
 											id='type'
 											name='type'
-											placeholder='Type of Animal'
+											placeholder='نوع الحيوان'
 											cursor={"pointer"}
 											value={type}
 											onChange={(e) => {
@@ -216,19 +216,19 @@ export default function AddPet() {
 											}}
 											mr={2}
 										>
-											<option value='Dog'>Dog</option>
-											<option value='Cat'>Cat</option>
-											<option value='Bird'>Bird</option>
-											<option value='Turtle'>Turtle</option>
-											<option value='Monkey'>Monkey</option>
-											<option value='Hamster'>Hamster</option>
-											<option value='Fish'>Fish</option>
+											<option value='Dog'>كلب</option>
+											<option value='Cat'>قطة</option>
+											<option value='Bird'>طائر</option>
+											<option value='Turtle'>سلحفاة</option>
+											<option value='Monkey'>قرد</option>
+											<option value='Hamster'>هامستر</option>
+											<option value='Fish'>سمكة</option>
 										</Select>
 
 										<Select
 											id='breed'
 											name='breed'
-											placeholder='Breed of Animal'
+											placeholder='سلالة الحيوان'
 											value={breed}
 											onChange={(e) => {
 												setBreed(e.target.value);
@@ -322,15 +322,15 @@ export default function AddPet() {
 										<Select
 											id='gender'
 											name='gender'
-											placeholder='Select Gender'
+											placeholder='اختر الجنس'
 											cursor={"pointer"}
 											value={gender}
 											onChange={(e) => {
 												setGender(e.target.value);
 											}}
 										>
-											<option value='Male'>Male</option>
-											<option value='Female'>Female</option>
+											<option value='Male'>ذكر</option>
+											<option value='Female'>أنثى</option>
 										</Select>
 									</FormControl>
 
@@ -344,7 +344,7 @@ export default function AddPet() {
 											id='dob'
 											type='date'
 											name='dob'
-											placeholder='Date of Birth'
+											placeholder='تاريخ الميلاد'
 											value={dob}
 											onChange={(e) => {
 												setDob(e.target.value);
@@ -356,7 +356,7 @@ export default function AddPet() {
 											id='weight'
 											type='number'
 											name='weight'
-											placeholder='Weight (KGs)'
+											placeholder='الوزن (كجم)'
 											value={weight}
 											onChange={(e) => {
 												setWeight(e.target.value);
@@ -369,7 +369,7 @@ export default function AddPet() {
 											id='ownerEmail'
 											type='text'
 											name='owner'
-											placeholder='Owner Email'
+											placeholder='بريد المالك'
 											value={ownerEmail}
 											onChange={(e) => {
 												setOwnerEmail(e.target.value);
@@ -398,7 +398,7 @@ export default function AddPet() {
 										leftIcon={<IoMdAdd />}
 										width={"25%"}
 									>
-										Add
+										إضافة
 									</Button>
 								</Box>
 							</CardBody>

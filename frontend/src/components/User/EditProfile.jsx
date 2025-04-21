@@ -175,7 +175,7 @@ export default function EditProfile() {
 								width={"25vw"}
 								mt={10}
 							>
-								Home
+								الصفحة الرئيسية
 							</Button>
 						</Card>
 					</Box>
@@ -214,7 +214,7 @@ export default function EditProfile() {
 									textDecoration={"underline"}
 									mt={2}
 								>
-									Edit Profile
+									تعديل الملف الشخصي
 								</Text>
 							</Box>
 
@@ -235,14 +235,14 @@ export default function EditProfile() {
 									mb={5}
 								>
 									<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-										Username
+										اسم المستخدم
 									</Text>
 									<Input
 										id='username'
 										type='text'
 										name='username'
 										value={username}
-										placeholder='Username'
+										placeholder='اسم المستخدم'
 										onChange={(e) => {
 											setUsername(e.target.value);
 										}}
@@ -257,14 +257,14 @@ export default function EditProfile() {
 									mb={5}
 								>
 									<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-										Email
+										البريد الإلكتروني
 									</Text>
 									<Input
 										id='email'
 										type='email'
 										name='email'
 										value={email}
-										placeholder='Email'
+										placeholder='البريد الإلكتروني'
 										onChange={(e) => {
 											setEmail(e.target.value);
 										}}
@@ -280,15 +280,15 @@ export default function EditProfile() {
 									{isAdmin ? (
 										<>
 											<Text fontWeight={"bold"} fontSize={"12px"}>
-												Is Admin:{" "}
+												حساب أدمن:{" "}
 											</Text>
 											<Badge colorScheme='green' fontSize={"12px"} ml={3}>
-												True
+												نعم
 											</Badge>
 										</>
 									) : (
 										<>
-											<Text fontWeight={"bold"}>Is Admin: </Text>
+											<Text fontWeight={"bold"}>حساب أدمن: </Text>
 											<Badge
 												variant='outline'
 												colorScheme='red'
@@ -296,7 +296,7 @@ export default function EditProfile() {
 												ml={3}
 												mt={0.5}
 											>
-												False
+												لا
 											</Badge>
 										</>
 									)}
@@ -325,7 +325,7 @@ export default function EditProfile() {
 									leftIcon={<Icon as={FaSave} />}
 									width={"50%"}
 								>
-									Save Changes
+									حفظ التعديلات
 								</Button>
 							</Box>
 						</Card>

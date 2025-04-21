@@ -18,7 +18,6 @@ import {
 	Heading,
 	HStack,
 	Icon,
-	Input,
 	PinInput,
 	PinInputField,
 	Stack,
@@ -84,10 +83,10 @@ export default function VerifyOTP() {
 						<Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
 							<Stack align={"center"}>
 								<Icon as={MdLockReset} fontSize='100px' />
-								<Heading fontSize={"4xl"}>Forgot Password</Heading>
+								<Heading fontSize={"4xl"}>نسيت كلمة المرور</Heading>
 								<Text fontSize={"lg"} color={"gray.600"} align={"center"}>
-									Enter 6-digit One Time Passcode (OTP) sent to your email to
-									confirm it's really you.
+									من فضلك أدخل رمز التحقق المكوّن من 6 أرقام المرسل إلى بريدك
+									الإلكتروني لتأكيد هويتك.
 								</Text>
 							</Stack>
 
@@ -100,7 +99,7 @@ export default function VerifyOTP() {
 										justifyContent={"space-evenly"}
 										alignItems={"center"}
 									>
-										<FormLabel mb={5}>Password Reset OTP</FormLabel>
+										<FormLabel mb={5}>رمز التحقق</FormLabel>
 										<HStack mb={5}>
 											<PinInput
 												otp
@@ -131,7 +130,7 @@ export default function VerifyOTP() {
 											}}
 											onClick={handleVerify}
 										>
-											Submit
+											تأكيد
 										</Button>
 									</Stack>
 								</Stack>

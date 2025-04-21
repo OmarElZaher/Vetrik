@@ -137,7 +137,7 @@ export default function ChangePassword() {
 					>
 						<Icon as={MdOutlinePassword} fontSize={"40px"} />
 						<Text fontSize={"40px"} fontWeight={"bold"}>
-							Change Password
+							تغيير كلمة المرور
 						</Text>
 					</Box>
 
@@ -194,7 +194,7 @@ export default function ChangePassword() {
 									id='oldPassword'
 									type={showOldPassword ? "text" : "password"}
 									value={oldPassword}
-									placeholder='Old Password'
+									placeholder='كلمة المرور الحالية'
 									onChange={(e) => {
 										setOldPassword(e.target.value);
 									}}
@@ -246,7 +246,7 @@ export default function ChangePassword() {
 									id='newPassword'
 									type={showNewPassword ? "text" : "password"}
 									value={newPassword}
-									placeholder='New Password'
+									placeholder='كلمة المرور الجديدة'
 									onChange={(e) => {
 										setNewPassword(e.target.value);
 									}}
@@ -297,7 +297,7 @@ export default function ChangePassword() {
 									id='confirmPassword'
 									type={showConfirmPassword ? "text" : "password"}
 									value={confirmPassword}
-									placeholder='Confirm Password'
+									placeholder='تأكيد كلمة المرور الجديدة'
 									onChange={(e) => {
 										setConfirmPassword(e.target.value);
 									}}
@@ -327,7 +327,7 @@ export default function ChangePassword() {
 							leftIcon={<Icon as={PiPasswordBold} />}
 						>
 							{" "}
-							Change Password
+							تغيير كلمة المرور
 						</Button>
 					</Box>
 				</Card>

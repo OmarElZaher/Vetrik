@@ -139,7 +139,7 @@ export default function SearchPet() {
 						<Icon as={MdOutlinePets} fontSize={"60px"} />
 
 						<Heading size='lg' mt={2}>
-							Search For A Pet
+							ابحث عن حيوان أليف
 						</Heading>
 					</Box>
 
@@ -147,15 +147,15 @@ export default function SearchPet() {
 						<List>
 							<ListItem>
 								<ListIcon as={MdSettings} color='yellowgreen' />
-								Enter one, or more details to find desired pet.
+								أدخل اسم الحيوان أو أي بيانات إضافية للبحث عنه.
 							</ListItem>
 							<ListItem>
 								<ListIcon as={MdSettings} color='yellowgreen' />
-								To get all pets, press{" "}
+								للحصول على جميع الحيوانات، اضغط{" "}
 								<Text display={"inline"} color={"yellowgreen"}>
-									search
+									بحث
 								</Text>{" "}
-								without any inputs.
+								بدون إدخال أي بيانات.
 							</ListItem>
 						</List>
 					</Box>
@@ -173,7 +173,7 @@ export default function SearchPet() {
 								id='name'
 								type='text'
 								name='name'
-								placeholder='Name'
+								placeholder='اسم الحيوان'
 								value={name}
 								onChange={handleNameChange}
 							/>
@@ -188,26 +188,26 @@ export default function SearchPet() {
 							<Select
 								id='type'
 								name='type'
-								placeholder='Select Type of Animal'
+								placeholder='اختر نوع الحيوان'
 								cursor={"pointer"}
 								value={type}
 								onChange={handleTypeChange}
 								mt={5}
 								mr={2.5}
 							>
-								<option value='Dog'>Dog</option>
-								<option value='Cat'>Cat</option>
-								<option value='Bird'>Bird</option>
-								<option value='Turtle'>Turtle</option>
-								<option value='Monkey'>Monkey</option>
-								<option value='HamsterFish'>Hamster</option>
-								<option value='Fish'>Fish</option>
+								<option value='Dog'>كلب</option>
+								<option value='Cat'>قطة</option>
+								<option value='Bird'>عصفور</option>
+								<option value='Turtle'>سلحفاة</option>
+								<option value='Monkey'>قرد</option>
+								<option value='Hamster'>هامستر</option>
+								<option value='Fish'>سمكة</option>
 							</Select>
 							<Input
 								id='breed'
 								type='text'
 								name='breed'
-								placeholder='Breed of Animal'
+								placeholder='سلالة الحيوان'
 								value={breed}
 								onChange={handleBreedChange}
 								mt={5}
@@ -219,13 +219,13 @@ export default function SearchPet() {
 							<Select
 								id='gender'
 								name='gender'
-								placeholder='Select Gender'
+								placeholder='اختر الجنس'
 								cursor={"pointer"}
 								value={gender}
 								onChange={handleGenderChange}
 							>
-								<option value='Male'>Male</option>
-								<option value='Female'>Female</option>
+								<option value='Male'>ذكر</option>
+								<option value='Female'>أنثى</option>
 							</Select>
 						</FormControl>
 
@@ -250,7 +250,7 @@ export default function SearchPet() {
 								width={"50%"}
 								mt={10}
 							>
-								Search
+								بحث
 							</Button>
 						</FormControl>
 					</Box>

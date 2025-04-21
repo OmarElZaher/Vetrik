@@ -177,7 +177,7 @@ export default function EditPet() {
 									mt={5}
 								>
 									<Text fontSize={"3xl"} fontWeight={"bold"}>
-										Edit Pet Profile
+										تعديل ملف الحيوان
 									</Text>
 								</Box>
 							</Box>
@@ -206,7 +206,7 @@ export default function EditPet() {
 											width={"100%"}
 										>
 											<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-												Name
+												الاسم
 											</Text>
 											<Input
 												id='name'
@@ -237,7 +237,7 @@ export default function EditPet() {
 										width={"100%"}
 									>
 										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-											Type
+											النوع
 										</Text>
 										<InputGroup>
 											<Select
@@ -250,13 +250,13 @@ export default function EditPet() {
 												}}
 												mr={2.5}
 											>
-												<option value='dog'>Dog</option>
-												<option value='cat'>Cat</option>
-												<option value='bird'>Bird</option>
-												<option value='turtle'>Turtle</option>
-												<option value='monkey'>Monkey</option>
-												<option value='hamster'>Hamster</option>
-												<option value='fish'>Fish</option>
+												<option value='dog'>كلب</option>
+												<option value='cat'>قطة</option>
+												<option value='bird'>عصفور</option>
+												<option value='turtle'>سلحفاة</option>
+												<option value='monkey'>قرد</option>
+												<option value='hamster'>هامستر</option>
+												<option value='fish'>سمكة</option>
 											</Select>
 										</InputGroup>
 									</Box>
@@ -268,7 +268,7 @@ export default function EditPet() {
 										width={"100%"}
 									>
 										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-											Breed
+											السلالة
 										</Text>
 										<Input
 											id='breed'
@@ -298,7 +298,7 @@ export default function EditPet() {
 										width={"100%"}
 									>
 										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-											Date of Birth
+											تاريخ الميلاد
 										</Text>
 										<InputGroup>
 											<Input
@@ -329,7 +329,7 @@ export default function EditPet() {
 										width={"100%"}
 									>
 										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-											Gender
+											الجنس
 										</Text>
 										<InputGroup>
 											<Select
@@ -341,8 +341,8 @@ export default function EditPet() {
 													setGender(e.target.value);
 												}}
 											>
-												<option value='male'>Male</option>
-												<option value='female'>Female</option>
+												<option value='male'>ذكر</option>
+												<option value='female'>أنثى</option>
 											</Select>
 										</InputGroup>
 									</Box>
@@ -370,7 +370,7 @@ export default function EditPet() {
 									width={"25%"}
 								>
 									{" "}
-									Save
+									حفظ
 								</Button>
 							</Box>
 						</Card>

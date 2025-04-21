@@ -101,16 +101,16 @@ export default function ResetPassword() {
 						<Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
 							<Stack align={"center"}>
 								<Icon as={MdLockReset} fontSize='100px' />
-								<Heading fontSize={"4xl"}>Forgot Password</Heading>
+								<Heading fontSize={"4xl"}>إعادة تعيين كلمة المرور</Heading>
 								<Text fontSize={"lg"} color={"gray.600"} align={"center"}>
-									Enter password and confirm password to reset.
+									أدخل كلمة المرور الجديدة وقم بتأكيدها لإعادة التعيين.
 								</Text>
 							</Stack>
 
 							<Box rounded={"lg"} bg='#F6F9FB' boxShadow={"lg"} p={8}>
 								<Stack spacing={4}>
 									<FormControl id='password'>
-										<FormLabel>Password</FormLabel>
+										<FormLabel>كلمة المرور الجديدة</FormLabel>
 										<InputGroup>
 											{showNewPassword ? (
 												<InputRightElement
@@ -158,7 +158,7 @@ export default function ResetPassword() {
 									</FormControl>
 
 									<FormControl id='confirmPassword'>
-										<FormLabel>Confirm Password</FormLabel>
+										<FormLabel>تأكيد كلمة المرور</FormLabel>
 										<InputGroup>
 											{showConfirmPassword ? (
 												<InputRightElement
@@ -214,7 +214,7 @@ export default function ResetPassword() {
 											}}
 											onClick={handleChange}
 										>
-											Submit
+											تأكيد
 										</Button>
 									</Stack>
 								</Stack>
