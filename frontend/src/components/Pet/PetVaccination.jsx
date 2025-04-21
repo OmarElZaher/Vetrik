@@ -399,7 +399,6 @@ export default function PetVaccination() {
 									{titleCase(pet.name)}
 								</Text>
 							</Box>
-
 							<Box
 								display={"flex"}
 								justifyContent={"center"}
@@ -415,11 +414,11 @@ export default function PetVaccination() {
 									<Table variant='simple' size='md'>
 										<Thead>
 											<Tr>
-												<Th textAlign={"left"}>Name</Th>
-												<Th textAlign={"center"}>Batch</Th>
-												<Th textAlign={"center"}>Given Date</Th>
-												<Th textAlign={"center"}>Renewal Date</Th>
-												<Th textAlign={"center"}>Actions</Th>
+												<Th textAlign={"left"}>اسم اللقاح</Th>
+												<Th textAlign={"center"}>الدفعة</Th>
+												<Th textAlign={"center"}>تاريخ الإعطاء</Th>
+												<Th textAlign={"center"}>تاريخ التجديد</Th>
+												<Th textAlign={"center"}>الإجراءات</Th>
 											</Tr>
 										</Thead>
 										<Tbody>
@@ -461,7 +460,7 @@ export default function PetVaccination() {
 														</Button>
 														<Tooltip
 															hasArrow
-															label='Remove Vaccine From Vaccination Card'
+															label='إزالة اللقاح من كارت التطعيمات'
 															bg={"#EF5350"}
 															placement='top'
 															openDelay={75}
@@ -484,7 +483,7 @@ export default function PetVaccination() {
 																borderColor={"#EF5350"}
 																ml={2.5}
 															>
-																Remove
+																إزالة
 															</Button>
 														</Tooltip>
 													</Td>
@@ -499,7 +498,7 @@ export default function PetVaccination() {
 
 															<ModalContent>
 																<ModalHeader textDecoration={"underline"}>
-																	Vaccine Renewal Date
+																	تاريخ تجديد اللقاح
 																</ModalHeader>
 																<ModalCloseButton />
 
@@ -509,14 +508,14 @@ export default function PetVaccination() {
 																		textAlign={"center"}
 																		mb={3}
 																	>
-																		Leave empty if vaccine is not renewable
+																		سيبها فاضية لو اللقاح مش قابل للتجديد
 																	</Text>
 																	<FormControl id='renewalDate'>
 																		<Input
 																			id='renewalDate'
 																			type='date'
 																			name='renewalDate'
-																			placeholder='Vaccine Renewal Date'
+																			placeholder='تاريخ تجديد اللقاح'
 																			value={vaccineRenewalDate}
 																			onChange={(e) => {
 																				setVaccineRenewalDate(e.target.value);
@@ -542,7 +541,7 @@ export default function PetVaccination() {
 																		borderColor={"#EF5350"}
 																		mr={2.5}
 																	>
-																		Cancel
+																		إلغاء
 																	</Button>
 																	<Button
 																		_hover={{
@@ -562,7 +561,7 @@ export default function PetVaccination() {
 																		leftIcon={<FaCheckCircle />}
 																		ml={2.5}
 																	>
-																		Renew
+																		تجديد
 																	</Button>
 																</ModalFooter>
 															</ModalContent>
@@ -598,12 +597,12 @@ export default function PetVaccination() {
 									leftIcon={<IoMdArrowRoundBack />}
 									mr={2.5}
 								>
-									Pet Details
+									تفاصيل الحيوان
 								</Button>
 
 								<Tooltip
 									hasArrow
-									label='Deletes Pet Vaccination Card'
+									label='حذف كارت تطعيم الحيوان'
 									placement='top'
 									bg={"#EF5350"}
 									openDelay={75}
@@ -624,7 +623,7 @@ export default function PetVaccination() {
 										borderColor={"#EF5350"}
 										ml={2.5}
 									>
-										Delete
+										حذف
 									</Button>
 								</Tooltip>
 							</Box>
@@ -652,11 +651,10 @@ export default function PetVaccination() {
 									fontWeight={"bold"}
 									textDecoration={"underline"}
 								>
-									Add A Vaccine
+									أضف لقاح
 								</Text>
 								<Text fontSize={"18px"} textAlign={"center"} mt={2}>
-									Enter all details of the vaccine to save to pet vaccination
-									card.
+									اكتب كل بيانات اللقاح عشان تحفظها في كارت تطعيم الحيوان.
 								</Text>
 							</Box>
 
@@ -673,7 +671,7 @@ export default function PetVaccination() {
 										id='vaccineName'
 										type='text'
 										name='vaccineName'
-										placeholder='Vaccine Name (As Written on Vaccine)'
+										placeholder='اسم اللقاح (زي المكتوب على اللقاح)'
 										value={vaccineName}
 										onChange={(e) => {
 											setVaccineName(e.target.value);
@@ -686,7 +684,7 @@ export default function PetVaccination() {
 										id='vaccineBatch'
 										type='text'
 										name='vaccineBatch'
-										placeholder='Vaccine Batch Number'
+										placeholder='رقم دفعة اللقاح'
 										value={vaccineBatch}
 										onChange={(e) => {
 											setVaccineBatch(e.target.value);
@@ -702,13 +700,13 @@ export default function PetVaccination() {
 									mb={3}
 								>
 									<Text fontSize={"16px"} color={"#798296"} ml={1.5} mb={1}>
-										Vaccine Given Date (Today By Default)
+										تاريخ إعطاء اللقاح (اليوم افتراضيًا)
 									</Text>
 									<Input
 										id='givenDate'
 										type='date'
 										name='givenDate'
-										placeholder='Given Date'
+										placeholder='تاريخ الإعطاء'
 										value={vaccineGivenDate}
 										onChange={(e) => {
 											setVaccineGivenDate(e.target.value);
@@ -718,7 +716,7 @@ export default function PetVaccination() {
 								<Tooltip
 									hasArrow
 									placement='bottom'
-									label='Leave Empty if Vaccine is Not Renewable'
+									label='سيبها فاضية لو اللقاح غير قابل للتجديد'
 								>
 									<FormControl
 										id='renewalDate'
@@ -727,13 +725,13 @@ export default function PetVaccination() {
 										justifyContent={"center"}
 									>
 										<Text fontSize={"16px"} color={"#798296"} ml={1.5} mb={1}>
-											Vaccine Renewal Date
+											تاريخ تجديد اللقاح
 										</Text>
 										<Input
 											id='renewalDate'
 											type='date'
 											name='renewalDate'
-											placeholder='Renewal Date'
+											placeholder='تاريخ التجديد'
 											value={vaccineRenewalDate}
 											onChange={(e) => {
 												setVaccineRenewalDate(e.target.value);
@@ -764,7 +762,7 @@ export default function PetVaccination() {
 									leftIcon={<IoMdAdd />}
 									width={"50%"}
 								>
-									Add
+									إضافة
 								</Button>
 							</Box>
 						</Card>
@@ -803,7 +801,7 @@ export default function PetVaccination() {
 									fontWeight={"bold"}
 									textDecoration={"underline"}
 								>
-									Vaccination Card
+									كارت التطعيمات
 								</Text>
 							</Box>
 							<Box
@@ -815,8 +813,8 @@ export default function PetVaccination() {
 								height={"10%"}
 							>
 								<Text fontSize={"25px"} textAlign={"center"} color={"#F39C11"}>
-									Pet does not have an existing vaccination card, input vaccine
-									details to create one.
+									الحيوان ده ماعندوش كارت تطعيم، اكتب بيانات اللقاح عشان تنشئ
+									واحد.
 								</Text>
 							</Box>
 
@@ -833,7 +831,7 @@ export default function PetVaccination() {
 										id='vaccineName'
 										type='text'
 										name='vaccineName'
-										placeholder='Vaccine Name (As Written on Vaccine)'
+										placeholder='اسم اللقاح (زي المكتوب على اللقاح)'
 										value={vaccineName}
 										onChange={(e) => {
 											setVaccineName(e.target.value);
@@ -846,7 +844,7 @@ export default function PetVaccination() {
 										id='vaccineBatch'
 										type='text'
 										name='vaccineBatch'
-										placeholder='Vaccine Batch Number'
+										placeholder='رقم دفعة اللقاح'
 										value={vaccineBatch}
 										onChange={(e) => {
 											setVaccineBatch(e.target.value);
@@ -866,13 +864,13 @@ export default function PetVaccination() {
 										width={"50%"}
 									>
 										<Text fontSize={"16px"} color={"#798296"} ml={1.5} mb={1}>
-											Vaccine Given Date (Today By Default)
+											تاريخ إعطاء اللقاح (اليوم افتراضيًا)
 										</Text>
 										<Input
 											id='givenDate'
 											type='date'
 											name='givenDate'
-											placeholder='Vaccine Given Date'
+											placeholder='تاريخ الإعطاء'
 											value={vaccineGivenDate}
 											onChange={(e) => {
 												setVaccineGivenDate(e.target.value);
@@ -883,7 +881,7 @@ export default function PetVaccination() {
 									<Tooltip
 										hasArrow
 										placement='bottom'
-										label='Leave Empty if Vaccine is Not Renewable'
+										label='سيبها فاضية لو اللقاح غير قابل للتجديد'
 									>
 										<Box
 											display={"flex"}
@@ -892,13 +890,13 @@ export default function PetVaccination() {
 											width={"50%"}
 										>
 											<Text fontSize={"16px"} color={"#798296"} ml={3} mb={1}>
-												Vaccine Renewal Date
+												تاريخ تجديد اللقاح
 											</Text>
 											<Input
 												id='renewalDate'
 												type='date'
 												name='renewalDate'
-												placeholder='Vaccine Renewal Date'
+												placeholder='تاريخ تجديد اللقاح'
 												value={vaccineRenewalDate}
 												onChange={(e) => {
 													setVaccineRenewalDate(e.target.value);
@@ -930,7 +928,7 @@ export default function PetVaccination() {
 									onClick={handleCreateVaccinationCard}
 									leftIcon={<TbVaccine />}
 								>
-									Create Vaccination Card
+									إنشاء كارت التطعيمات
 								</Button>
 							</Box>
 						</Card>

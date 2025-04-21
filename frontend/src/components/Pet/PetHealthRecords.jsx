@@ -292,7 +292,7 @@ export default function PetHealthRecords() {
 									fontWeight={"bold"}
 									textDecoration={"underline"}
 								>
-									Health Records
+									السجلات الصحية
 								</Text>
 							</Box>
 							<Box
@@ -310,9 +310,9 @@ export default function PetHealthRecords() {
 									<Table variant='simple' size='md'>
 										<Thead>
 											<Tr>
-												<Th textAlign={"left"}>File Name</Th>
-												<Th textAlign={"center"}>Last Date Modified</Th>
-												<Th textAlign={"center"}>Action</Th>
+												<Th textAlign={"left"}>اسم الملف</Th>
+												<Th textAlign={"center"}>آخر تعديل</Th>
+												<Th textAlign={"center"}>الإجراء</Th>
 											</Tr>
 										</Thead>
 										<Tbody>
@@ -351,7 +351,7 @@ export default function PetHealthRecords() {
 														</Button>
 														<Tooltip
 															hasArrow
-															label='Deletes Health Record for Pet'
+															label='حذف السجل الصحي للحيوان'
 															bg={"#EF5350"}
 															placement='top'
 															openDelay={75}
@@ -374,7 +374,7 @@ export default function PetHealthRecords() {
 																leftIcon={<MdDelete />}
 																ml={2.5}
 															>
-																Delete
+																حذف
 															</Button>
 														</Tooltip>
 													</Td>
@@ -412,7 +412,7 @@ export default function PetHealthRecords() {
 									onClick={handleUpload}
 									leftIcon={<MdUpload />}
 								>
-									Upload
+									رفع
 								</Button>
 							</Box>
 						</Card>

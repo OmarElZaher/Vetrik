@@ -47,10 +47,10 @@ export default function PetTable() {
 					height={"100vh"}
 				>
 					<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-						NOT FOUND
+						غير موجود
 					</Text>
 					<Text fontSize={"25px"} textDecoration={"underline"}>
-						Please Search For A Pet Before Accessing This Page
+						من فضلك دور على حيوان أليف قبل ما تفتح الصفحة دي
 					</Text>
 					<Button
 						_hover={{
@@ -69,7 +69,7 @@ export default function PetTable() {
 						width={"25vw"}
 						mt={10}
 					>
-						Go Back To Search
+						الرجوع للبحث
 					</Button>
 				</Box>
 			</>
@@ -92,7 +92,7 @@ export default function PetTable() {
 							fontWeight={500}
 							textDecoration={"underline"}
 						>
-							Pets Found
+							الحيوانات اللي لقيناها
 						</Text>
 					</Box>
 					<Box
@@ -107,11 +107,11 @@ export default function PetTable() {
 							<Table variant='simple' size='md'>
 								<Thead>
 									<Tr>
-										<Th textAlign={"left"}>Name</Th>
-										<Th textAlign={"center"}>Type</Th>
-										<Th textAlign={"center"}>Breed</Th>
-										<Th textAlign={"center"}>Gender</Th>
-										<Th textAlign={"right"}>View Details</Th>
+										<Th textAlign={"left"}>الاسم</Th>
+										<Th textAlign={"center"}>النوع</Th>
+										<Th textAlign={"center"}>السلالة</Th>
+										<Th textAlign={"center"}>الجنس</Th>
+										<Th textAlign={"right"}>عرض التفاصيل</Th>
 									</Tr>
 								</Thead>
 								<Tbody>
@@ -137,7 +137,7 @@ export default function PetTable() {
 													}}
 													leftIcon={<IoMdEye />}
 												>
-													View
+													عرض
 												</Button>
 											</Td>
 										</Tr>
@@ -165,7 +165,7 @@ export default function PetTable() {
 							width={"25vw"}
 							my={10}
 						>
-							Back To Search
+							الرجوع للبحث
 						</Button>
 					</Box>
 				</Box>

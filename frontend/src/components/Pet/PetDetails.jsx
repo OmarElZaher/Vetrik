@@ -554,7 +554,7 @@ export default function PetDetails() {
 														leftIcon={<IoMdEye />}
 														mr={2.5}
 													>
-														View
+														عرض
 													</Button>
 													<Tooltip
 														hasArrow
