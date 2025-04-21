@@ -138,6 +138,7 @@ export default function AddPet() {
 			) : (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -211,10 +212,11 @@ export default function AddPet() {
 											placeholder='نوع الحيوان'
 											cursor={"pointer"}
 											value={type}
+											iconColor='transparent'
 											onChange={(e) => {
 												setType(e.target.value);
 											}}
-											mr={2}
+											ml={2}
 										>
 											<option value='Dog'>كلب</option>
 											<option value='Cat'>قطة</option>
@@ -229,11 +231,12 @@ export default function AddPet() {
 											id='breed'
 											name='breed'
 											placeholder='سلالة الحيوان'
+											iconColor='transparent'
 											value={breed}
 											onChange={(e) => {
 												setBreed(e.target.value);
 											}}
-											ml={2}
+											mr={2}
 										>
 											{type === "Dog" && (
 												<>
@@ -325,6 +328,7 @@ export default function AddPet() {
 											placeholder='اختر الجنس'
 											cursor={"pointer"}
 											value={gender}
+											iconColor='transparent'
 											onChange={(e) => {
 												setGender(e.target.value);
 											}}
@@ -349,7 +353,7 @@ export default function AddPet() {
 											onChange={(e) => {
 												setDob(e.target.value);
 											}}
-											mr={2}
+											ml={2}
 										/>
 
 										<Input
@@ -395,7 +399,7 @@ export default function AddPet() {
 											opacity: "0.5",
 										}}
 										onClick={handleAdd}
-										leftIcon={<IoMdAdd />}
+										rightIcon={<IoMdAdd />}
 										width={"25%"}
 									>
 										إضافة

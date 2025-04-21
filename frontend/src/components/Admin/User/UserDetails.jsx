@@ -192,13 +192,14 @@ export default function UserDetails() {
 				bg={"#F3F3F3"}
 				height={"87vh"}
 			>
-				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
+				<Text dir='rtl' fontWeight={"bold"} fontSize={"60px"} color={"red"}>
 					خطأ
 				</Text>
 				<Text fontSize={"40px"} textDecoration={"underline"}>
 					{error}
 				</Text>
 				<Button
+					dir='rtl'
 					_hover={{
 						bg: "yellowgreen",
 						color: "#000",
@@ -238,6 +239,7 @@ export default function UserDetails() {
 					height='95%'
 				>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						flexDirection={"column"}
 						justifyContent={"center"}
@@ -260,6 +262,7 @@ export default function UserDetails() {
 					</Box>
 
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -317,6 +320,7 @@ export default function UserDetails() {
 					</Box>
 
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}

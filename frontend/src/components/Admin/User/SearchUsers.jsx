@@ -97,6 +97,7 @@ export default function SearchUsers() {
 			) : (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"space-around"}
 						alignItems={"center"}
@@ -121,7 +122,7 @@ export default function SearchUsers() {
 								</Heading>
 							</Box>
 
-							<Box ml={10} my={7} height={"10%"}>
+							<Box mr={10} my={7} height={"10%"}>
 								<List>
 									<ListItem>
 										<ListIcon as={MdSettings} color='yellowgreen' />
@@ -157,7 +158,7 @@ export default function SearchUsers() {
 										onChange={(e) => {
 											setFirstName(e.target.value);
 										}}
-										mr={2.5}
+										ml={2.5}
 									/>
 									<Input
 										id='lastName'
@@ -168,7 +169,7 @@ export default function SearchUsers() {
 										onChange={(e) => {
 											setLastName(e.target.value);
 										}}
-										ml={2.5}
+										mr={2.5}
 									/>
 								</FormControl>
 
@@ -221,7 +222,7 @@ export default function SearchUsers() {
 											opacity: "0.5",
 										}}
 										onClick={handleSearch}
-										leftIcon={<Icon as={IoMdSearch} />}
+										rightIcon={<Icon as={IoMdSearch} />}
 										width={"50%"}
 										mt={10}
 									>

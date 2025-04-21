@@ -137,6 +137,7 @@ export default function EditPet() {
 			) : (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -205,7 +206,7 @@ export default function EditPet() {
 											alignItems={"flex-start"}
 											width={"100%"}
 										>
-											<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
+											<Text fontSize={"16px"} color={"#7F7F7F"} mr={1.5} mb={1}>
 												الاسم
 											</Text>
 											<Input
@@ -216,7 +217,7 @@ export default function EditPet() {
 												onChange={(e) => {
 													setName(e.target.value);
 												}}
-												mr={2.5}
+												ml={2.5}
 											/>
 										</Box>
 									</InputGroup>
@@ -236,7 +237,7 @@ export default function EditPet() {
 										alignItems={"flex-start"}
 										width={"100%"}
 									>
-										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
+										<Text fontSize={"16px"} color={"#7F7F7F"} mr={1.5} mb={1}>
 											النوع
 										</Text>
 										<InputGroup>
@@ -248,7 +249,8 @@ export default function EditPet() {
 												onChange={(e) => {
 													setType(e.target.value);
 												}}
-												mr={2.5}
+												iconColor='transparent'
+												ml={2.5}
 											>
 												<option value='dog'>كلب</option>
 												<option value='cat'>قطة</option>
@@ -267,7 +269,7 @@ export default function EditPet() {
 										alignItems={"flex-start"}
 										width={"100%"}
 									>
-										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
+										<Text fontSize={"16px"} color={"#7F7F7F"} mr={1.5} mb={1}>
 											السلالة
 										</Text>
 										<Input
@@ -278,7 +280,7 @@ export default function EditPet() {
 											onChange={(e) => {
 												setBreed(e.target.value);
 											}}
-											mr={2.5}
+											ml={2.5}
 										/>
 									</Box>
 								</FormControl>
@@ -297,7 +299,7 @@ export default function EditPet() {
 										alignItems={"flex-start"}
 										width={"100%"}
 									>
-										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
+										<Text fontSize={"16px"} color={"#7F7F7F"} mr={1.5} mb={1}>
 											تاريخ الميلاد
 										</Text>
 										<InputGroup>
@@ -309,7 +311,7 @@ export default function EditPet() {
 												onChange={(e) => {
 													setDob(e.target.value);
 												}}
-												mr={2.5}
+												ml={2.5}
 											/>
 										</InputGroup>
 									</Box>
@@ -333,7 +335,9 @@ export default function EditPet() {
 										</Text>
 										<InputGroup>
 											<Select
+												dir='ltr'
 												id='gender'
+												iconColor='transparent'
 												name='gender'
 												value={gender}
 												cursor={"pointer"}
@@ -366,7 +370,7 @@ export default function EditPet() {
 										opacity: "0.5",
 									}}
 									onClick={handleEdit}
-									leftIcon={<Icon as={IoSaveSharp} />}
+									rightIcon={<Icon as={IoSaveSharp} />}
 									width={"25%"}
 								>
 									{" "}

@@ -285,6 +285,7 @@ export default function OwnerDetails() {
 	) : error ? (
 		<>
 			<Box
+				dir='rtl'
 				display={"flex"}
 				flexDirection={"column"}
 				justifyContent={"center"}
@@ -324,6 +325,7 @@ export default function OwnerDetails() {
 	) : gotData ? (
 		<>
 			<Box
+				dir='rtl'
 				display={"flex"}
 				justifyContent={"center"}
 				alignItems={"center"}
@@ -331,7 +333,7 @@ export default function OwnerDetails() {
 				height={"87vh"}
 			>
 				{/* Owner Information */}
-				<Card width='60vw' height='80vh' mt={15} mr={2}>
+				<Card dir='rtl' width='60vw' height='80vh' mt={15} ml={2}>
 					<CardBody
 						display={"flex"}
 						flexDirection={"column"}
@@ -388,7 +390,7 @@ export default function OwnerDetails() {
 									cursor={"pointer"}
 									fontSize={"20x"}
 								>
-									<Icon as={FaRegEdit} mr={1.5} />
+									<Icon as={FaRegEdit} ml={1.5} />
 									تعديل الملف الشخصي
 								</Text>
 							</Box>
@@ -499,10 +501,10 @@ export default function OwnerDetails() {
 																onClick={() => {
 																	navigate(`/pet-details/${pet._id}`);
 																}}
-																leftIcon={<IoMdEye />}
-																mr={2.5}
+																rightIcon={<IoMdEye />}
+																ml={2.5}
 															>
-																View
+																عرض
 															</Button>
 
 															<Tooltip
@@ -527,8 +529,8 @@ export default function OwnerDetails() {
 																	}}
 																	variant={"outline"}
 																	borderColor={"#EF5350"}
-																	leftIcon={<TbTrashXFilled />}
-																	ml={2.5}
+																	rightIcon={<TbTrashXFilled />}
+																	mr={2.5}
 																>
 																	حذف
 																</Button>
@@ -553,6 +555,7 @@ export default function OwnerDetails() {
 
 						{/* Back, Delete Button */}
 						<Box
+							dir='rtl'
 							display={"flex"}
 							justifyContent={"center"}
 							alignItems={"center"}
@@ -575,9 +578,9 @@ export default function OwnerDetails() {
 									transform: "scale(0.99)",
 									opacity: "0.5",
 								}}
-								leftIcon={<IoMdArrowRoundBack />}
+								rightIcon={<IoMdArrowRoundBack />}
 								width={"40%"}
-								mr={2.5}
+								ml={2.5}
 							>
 								جدول المالكين المصفى
 							</Button>
@@ -599,11 +602,11 @@ export default function OwnerDetails() {
 										opacity: "0.5",
 									}}
 									onClick={handleDeleteOwner}
-									leftIcon={<TbTrashXFilled />}
+									rightIcon={<TbTrashXFilled />}
 									variant={"outline"}
 									borderColor={"#EF5350"}
 									width={"25%"}
-									ml={2.5}
+									mr={2.5}
 								>
 									حذف
 								</Button>
@@ -613,7 +616,7 @@ export default function OwnerDetails() {
 				</Card>
 
 				{/* Add a pet */}
-				<Card width='35vw' height='80vh' mt={15} ml={2}>
+				<Card dir='rtl' width='35vw' height='80vh' mt={15} mr={2}>
 					<CardBody
 						display={"flex"}
 						flexDirection={"column"}
@@ -643,13 +646,13 @@ export default function OwnerDetails() {
 									textDecoration={"underline"}
 									fontWeight={"bold"}
 								>
-									حيوان جديد
+									حيوان جديد{" "}
 								</Text>
-								{" (not already registered) "}
 								مش متسجل قبل كده، اكتب كل البيانات المطلوبة.
 							</Text>
 						</Box>
 						<Box
+							dir='rtl'
 							display={"flex"}
 							flexDirection={"column"}
 							justifyContent={"center"}
@@ -684,10 +687,11 @@ export default function OwnerDetails() {
 									placeholder='نوع الحيوان'
 									cursor={"pointer"}
 									value={type}
+									iconColor='transparent'
 									onChange={(e) => {
 										setType(e.target.value);
 									}}
-									mr={2}
+									ml={2}
 								>
 									<option value='Dog'>كلب</option>
 									<option value='Cat'>قطة</option>
@@ -707,7 +711,7 @@ export default function OwnerDetails() {
 									onChange={(e) => {
 										setBreed(e.target.value);
 									}}
-									ml={2}
+									mr={2}
 								/>
 							</FormControl>
 							<FormControl id='gender' mb={5}>
@@ -717,6 +721,7 @@ export default function OwnerDetails() {
 									placeholder='اختيار الجنس'
 									cursor={"pointer"}
 									value={gender}
+									iconColor='transparent'
 									onChange={(e) => {
 										setGender(e.target.value);
 									}}
@@ -756,7 +761,7 @@ export default function OwnerDetails() {
 									opacity: "0.5",
 								}}
 								onClick={handleAddPet}
-								leftIcon={<IoMdAdd />}
+								rightIcon={<IoMdAdd />}
 								width={"25%"}
 							>
 								إضافة

@@ -119,6 +119,7 @@ export default function SearchPet() {
 	) : (
 		<>
 			<Box
+				dir='rtl'
 				display={"flex"}
 				justifyContent={"space-around"}
 				alignItems={"center"}
@@ -143,7 +144,7 @@ export default function SearchPet() {
 						</Heading>
 					</Box>
 
-					<Box height={"10%"} ml={10} my={7}>
+					<Box height={"10%"} mr={10} my={7}>
 						<List>
 							<ListItem>
 								<ListIcon as={MdSettings} color='yellowgreen' />
@@ -191,9 +192,10 @@ export default function SearchPet() {
 								placeholder='اختر نوع الحيوان'
 								cursor={"pointer"}
 								value={type}
+								iconColor='transparent'
 								onChange={handleTypeChange}
 								mt={5}
-								mr={2.5}
+								ml={2.5}
 							>
 								<option value='Dog'>كلب</option>
 								<option value='Cat'>قطة</option>
@@ -211,16 +213,18 @@ export default function SearchPet() {
 								value={breed}
 								onChange={handleBreedChange}
 								mt={5}
-								ml={2.5}
+								mr={2.5}
 							/>
 						</FormControl>
 
-						<FormControl id='gender' mt={5}>
+						<FormControl id='gender' mt={5} mr={"25%"}>
 							<Select
 								id='gender'
 								name='gender'
 								placeholder='اختر الجنس'
 								cursor={"pointer"}
+								iconColor='transparent'
+								width={"50%"}
 								value={gender}
 								onChange={handleGenderChange}
 							>

@@ -137,6 +137,7 @@ export default function EditProfile() {
 			) : error ? (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						flexDirection={"column"}
 						justifyContent={"center"}
@@ -184,6 +185,7 @@ export default function EditProfile() {
 			) : gotData ? (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -207,7 +209,7 @@ export default function EditProfile() {
 								height={"15%"}
 								mt={5}
 							>
-								<Icon as={FaRegEdit} fontSize={"40px"} mr={5} />
+								<Icon as={FaRegEdit} fontSize={"40px"} ml={5} />
 								<Text
 									fontWeight={"bold"}
 									fontSize={"40px"}
@@ -234,7 +236,7 @@ export default function EditProfile() {
 									alignItems={"flex-start"}
 									mb={5}
 								>
-									<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
+									<Text fontSize={"16px"} color={"#7F7F7F"} mr={1.5} mb={1}>
 										اسم المستخدم
 									</Text>
 									<Input
@@ -256,7 +258,7 @@ export default function EditProfile() {
 									alignItems={"flex-start"}
 									mb={5}
 								>
-									<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
+									<Text fontSize={"16px"} color={"#7F7F7F"} mr={1.5} mb={1}>
 										البريد الإلكتروني
 									</Text>
 									<Input
@@ -282,7 +284,7 @@ export default function EditProfile() {
 											<Text fontWeight={"bold"} fontSize={"12px"}>
 												حساب أدمن:{" "}
 											</Text>
-											<Badge colorScheme='green' fontSize={"12px"} ml={3}>
+											<Badge colorScheme='green' fontSize={"12px"} mr={3}>
 												نعم
 											</Badge>
 										</>
@@ -293,7 +295,7 @@ export default function EditProfile() {
 												variant='outline'
 												colorScheme='red'
 												fontSize={"12px"}
-												ml={3}
+												mr={3}
 												mt={0.5}
 											>
 												لا
@@ -322,7 +324,7 @@ export default function EditProfile() {
 										opacity: "0.5",
 									}}
 									onClick={handleSubmit}
-									leftIcon={<Icon as={FaSave} />}
+									rightIcon={<Icon as={FaSave} />}
 									width={"50%"}
 								>
 									حفظ التعديلات

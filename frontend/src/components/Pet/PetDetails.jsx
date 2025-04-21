@@ -321,6 +321,7 @@ export default function PetDetails() {
 	) : error ? (
 		<>
 			<Box
+				dir='rtl'
 				display={"flex"}
 				flexDirection={"column"}
 				justifyContent={"center"}
@@ -361,6 +362,7 @@ export default function PetDetails() {
 		<>
 			<>
 				<Box
+					dir='rtl'
 					display={"flex"}
 					justifyContent={"center"}
 					alignItems={"center"}
@@ -369,7 +371,7 @@ export default function PetDetails() {
 					height={"87vh"}
 				>
 					{/* Pet Information */}
-					<Card width='70%' height='90%' mr={1.5}>
+					<Card width='70%' height='90%' ml={1.5}>
 						<Box
 							display={"flex"}
 							justifyContent={"center"}
@@ -398,7 +400,7 @@ export default function PetDetails() {
 								alignItems={"center"}
 								width={"33%"}
 								height={"90%"}
-								mr={5}
+								ml={5}
 							>
 								<Text
 									onClick={() => {
@@ -418,7 +420,7 @@ export default function PetDetails() {
 									cursor={"pointer"}
 									fontSize={"20x"}
 								>
-									<Icon as={FaRegEdit} mr={1.5} />
+									<Icon as={FaRegEdit} ml={1.5} />
 									تعديل البروفايل
 								</Text>
 							</Box>
@@ -551,8 +553,8 @@ export default function PetDetails() {
 														onClick={() => {
 															navigate(`/owner-details/${owner._id}`);
 														}}
-														leftIcon={<IoMdEye />}
-														mr={2.5}
+														rightIcon={<IoMdEye />}
+														ml={2.5}
 													>
 														عرض
 													</Button>
@@ -578,8 +580,8 @@ export default function PetDetails() {
 															}}
 															variant={"outline"}
 															borderColor={"#EF5350"}
-															leftIcon={<MdDelete />}
-															mr={2.5}
+															rightIcon={<MdDelete />}
+															ml={2.5}
 														>
 															حظف
 														</Button>
@@ -594,6 +596,7 @@ export default function PetDetails() {
 
 						{/* Back Button */}
 						<Box
+							dir='rtl'
 							display={"flex"}
 							justifyContent={"center"}
 							alignItems={"center"}
@@ -616,9 +619,9 @@ export default function PetDetails() {
 									transform: "scale(0.99)",
 									opacity: "0.5",
 								}}
-								leftIcon={<IoMdArrowRoundBack />}
+								rightIcon={<IoMdArrowRoundBack />}
 								width={"15%"}
-								mr={2.5}
+								ml={2.5}
 							>
 								رجوع
 							</Button>
@@ -636,7 +639,7 @@ export default function PetDetails() {
 								onClick={() => {
 									navigate(`/pet-vaccination/${pet._id}`);
 								}}
-								leftIcon={<RiHealthBookFill />}
+								rightIcon={<RiHealthBookFill />}
 								width={"30%"}
 								mx={2.5}
 							>
@@ -656,7 +659,7 @@ export default function PetDetails() {
 								onClick={() => {
 									navigate(`/pet-records/${pet._id}`);
 								}}
-								leftIcon={<BiHealth />}
+								rightIcon={<BiHealth />}
 								width={"30%"}
 								mx={2.5}
 							>
@@ -684,17 +687,17 @@ export default function PetDetails() {
 										handleDeletePet(pet._id);
 									}}
 									variant={"outline"}
-									leftIcon={<MdDelete />}
+									rightIcon={<MdDelete />}
 									borderColor={"#EF5350"}
 									width={"15%"}
-									ml={2.5}
+									mr={2.5}
 								>
 									حذف
 								</Button>
 							</Tooltip>
 						</Box>
 					</Card>
-					<Card width={"25vw"} height={"90%"} ml={1.5}>
+					<Card width={"25vw"} height={"90%"} mr={1.5}>
 						<CardBody
 							display={"flex"}
 							flexDirection={"column"}
@@ -716,6 +719,7 @@ export default function PetDetails() {
 							</Box>
 
 							<Box
+								dir='rtl'
 								display={"flex"}
 								flexDirection={"column"}
 								justifyContent={"center"}
@@ -731,6 +735,7 @@ export default function PetDetails() {
 							{owner !== null ? (
 								<>
 									<Box
+										dir='rtl'
 										display={"flex"}
 										flexDirection={"column"}
 										justifyContent={"center"}
@@ -775,8 +780,8 @@ export default function PetDetails() {
 											onClick={() => {
 												handleAddOwnerToPet(owner[0]._id, pet._id);
 											}}
-											leftIcon={<IoMdAdd />}
-											mr={2.5}
+											rightIcon={<IoMdAdd />}
+											ml={2.5}
 										>
 											إضافة
 										</Button>
@@ -795,8 +800,8 @@ export default function PetDetails() {
 												setOwner(null);
 												setOwnerEmail(null);
 											}}
-											leftIcon={<IoMdSearch />}
-											ml={2.5}
+											rightIcon={<IoMdSearch />}
+											mr={2.5}
 										>
 											بحث مرة أخرى
 										</Button>
@@ -828,6 +833,7 @@ export default function PetDetails() {
 										</FormControl>
 									</Box>
 									<Box
+										dir='rtl'
 										display={"flex"}
 										justifyContent={"center"}
 										alignItems={"center"}
@@ -844,7 +850,7 @@ export default function PetDetails() {
 												opacity: "0.5",
 											}}
 											onClick={handleSearchOwner}
-											leftIcon={<IoMdSearch />}
+											rightIcon={<IoMdSearch />}
 										>
 											بحث
 										</Button>

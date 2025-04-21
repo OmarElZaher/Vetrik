@@ -15,7 +15,7 @@ import {
 	FormControl,
 	Input,
 	InputGroup,
-	InputLeftAddon,
+	InputRightAddon,
 	Text,
 	Textarea,
 	useToast,
@@ -59,6 +59,7 @@ export default function SendFeedback() {
 	) : (
 		<>
 			<Box
+				dir='rtl'
 				display={"flex"}
 				justifyContent={"center"}
 				alignItems={"center"}
@@ -121,7 +122,7 @@ export default function SendFeedback() {
 								onChange={(e) => {
 									setFirstName(e.target.value);
 								}}
-								mr={2.5}
+								ml={2.5}
 							/>
 							<Input
 								id='lastName'
@@ -132,7 +133,7 @@ export default function SendFeedback() {
 								onChange={(e) => {
 									setLastName(e.target.value);
 								}}
-								ml={2.5}
+								mr={2.5}
 							/>
 						</FormControl>
 
@@ -148,14 +149,14 @@ export default function SendFeedback() {
 								justifyContent={"center"}
 								alignItems={"center"}
 							>
-								<InputLeftAddon
+								<InputRightAddon
 									display={"flex"}
 									justifyContent={"center"}
 									alignItems={"center"}
 									width={"5%"}
 								>
 									@
-								</InputLeftAddon>
+								</InputRightAddon>
 								<Input
 									id='email'
 									type='email'
@@ -196,6 +197,7 @@ export default function SendFeedback() {
 						</FormControl>
 					</Box>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}

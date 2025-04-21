@@ -97,6 +97,7 @@ export default function CreateUser() {
 			) : (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -162,7 +163,7 @@ export default function CreateUser() {
 										onChange={(e) => {
 											setFirstName(e.target.value);
 										}}
-										mr={2.5}
+										ml={2.5}
 									/>
 
 									<Input
@@ -174,7 +175,7 @@ export default function CreateUser() {
 										onChange={(e) => {
 											setLastName(e.target.value);
 										}}
-										ml={2.5}
+										mr={2.5}
 									/>
 								</FormControl>
 
@@ -218,7 +219,7 @@ export default function CreateUser() {
 										onChange={(e) => {
 											setPassword(e.target.value);
 										}}
-										mr={2.5}
+										ml={2.5}
 									/>
 									<Input
 										id='confirmPassword'
@@ -229,7 +230,7 @@ export default function CreateUser() {
 										onChange={(e) => {
 											setConfirmPassword(e.target.value);
 										}}
-										ml={2.5}
+										mr={2.5}
 									/>
 								</FormControl>
 							</Box>
@@ -252,7 +253,7 @@ export default function CreateUser() {
 										opacity: "0.5",
 									}}
 									onClick={handleAdd}
-									leftIcon={<IoIosAdd />}
+									rightIcon={<IoIosAdd />}
 									width={"25%"}
 								>
 									إضافة

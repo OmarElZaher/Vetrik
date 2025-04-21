@@ -17,7 +17,7 @@ import {
 	Heading,
 	Input,
 	InputGroup,
-	InputLeftAddon,
+	InputRightAddon,
 	Icon,
 	List,
 	Text,
@@ -123,6 +123,7 @@ export default function SearchOwner() {
 			) : (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"space-around"}
 						alignItems={"center"}
@@ -147,7 +148,7 @@ export default function SearchOwner() {
 								</Heading>
 							</Box>
 
-							<Box height={"10%"} ml={10} my={7}>
+							<Box height={"10%"} mr={10} my={7}>
 								<List>
 									<ListItem>
 										<ListIcon as={MdSettings} color='yellowgreen' />
@@ -166,7 +167,7 @@ export default function SearchOwner() {
 
 							<hr />
 
-							<Box height={"50%"} p={10}>
+							<Box dir='rtl' height={"50%"} p={10}>
 								{/* Search Form */}
 								<FormControl
 									id='fullName'
@@ -180,7 +181,7 @@ export default function SearchOwner() {
 										placeholder='الاسم الأول'
 										value={firstName}
 										onChange={handleFirstNameChange}
-										mr={2.5}
+										ml={2.5}
 									/>
 									<Input
 										id='lastName'
@@ -189,20 +190,20 @@ export default function SearchOwner() {
 										placeholder='اسم العائلة'
 										value={lastName}
 										onChange={handleLastNameChange}
-										ml={2.5}
+										mr={2.5}
 									/>
 								</FormControl>
 
 								<FormControl id='email'>
 									<InputGroup mt={5}>
-										<InputLeftAddon
+										<InputRightAddon
 											display={"flex"}
 											justifyContent={"center"}
 											alignItems={"center"}
 											width={"5%"}
 										>
 											@
-										</InputLeftAddon>
+										</InputRightAddon>
 										<Input
 											id='email'
 											type='email'
@@ -216,15 +217,17 @@ export default function SearchOwner() {
 
 								<FormControl id='mobileNumber' mt={5}>
 									<InputGroup>
-										<InputLeftAddon
+										<InputRightAddon
+											dir='rtl'
 											display={"flex"}
 											justifyContent={"center"}
 											alignItems={"center"}
 											width={"5%"}
 										>
-											+2
-										</InputLeftAddon>
+											+٢
+										</InputRightAddon>
 										<Input
+											dir='rtl'
 											id='mobileNumber'
 											type='tel'
 											name='mobileNumber'
@@ -236,6 +239,7 @@ export default function SearchOwner() {
 								</FormControl>
 
 								<FormControl
+									dir='rtl'
 									display={"flex"}
 									flexDirection={"column"}
 									justifyContent={"center"}
@@ -252,7 +256,7 @@ export default function SearchOwner() {
 											opacity: "0.5",
 										}}
 										onClick={handleSubmit}
-										leftIcon={<Icon as={IoMdSearch} />}
+										rightIcon={<Icon as={IoMdSearch} />}
 										width={"50%"}
 										mt={10}
 									>

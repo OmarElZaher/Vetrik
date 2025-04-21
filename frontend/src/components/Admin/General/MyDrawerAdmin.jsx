@@ -122,7 +122,7 @@ export default function MyDrawerAdmin() {
 						fontSize='20px'
 						textDecoration='underline'
 					>
-						Menu
+						القامة
 					</DrawerHeader>
 
 					<DrawerBody>
@@ -135,6 +135,7 @@ export default function MyDrawerAdmin() {
 									alignItems={"center"}
 								>
 									<Button
+										dir='rtl'
 										_hover={{
 											bg: "#D4F500",
 											borderColor: "#D4F500",
@@ -181,6 +182,7 @@ export default function MyDrawerAdmin() {
 									alignItems='center'
 								>
 									<Button
+										dir='rtl'
 										_hover={{
 											bg: "#D4F500",
 											borderColor: "#D4F500",
@@ -228,6 +230,7 @@ export default function MyDrawerAdmin() {
 									alignItems='center'
 								>
 									<Button
+										dir='rtl'
 										_hover={{
 											bg: "#D4F500",
 											borderColor: "#D4F500",
@@ -281,6 +284,7 @@ export default function MyDrawerAdmin() {
 									{isAddOpen ? (
 										<Flex gap='middle' vertical align='center'>
 											<Box
+												dir='rtl'
 												display='flex'
 												flexDirection='column'
 												alignItems='flex-start'
@@ -288,7 +292,7 @@ export default function MyDrawerAdmin() {
 											>
 												<NavigationLinkDrawer
 													icon={FaPerson}
-													text={"Create A User"}
+													text={"اضف مستخدم"}
 													to={"/admin/create-user"}
 													justifyContent='flex-end'
 													alignItems='flex-start'
@@ -296,7 +300,7 @@ export default function MyDrawerAdmin() {
 
 												<NavigationLinkDrawer
 													icon={MdAdminPanelSettings}
-													text={"Create An Admin"}
+													text={"اضف ادمن"}
 													to={"/admin/create-admin"}
 													justifyContent='flex-end'
 													alignItems='flex-start'
@@ -317,6 +321,7 @@ export default function MyDrawerAdmin() {
 									alignItems='center'
 								>
 									<Button
+										dir='rtl'
 										_hover={{
 											bg: "#D4F500",
 											borderColor: "#D4F500",
@@ -363,6 +368,7 @@ export default function MyDrawerAdmin() {
 									alignItems='center'
 								>
 									<Button
+										dir='rtl'
 										_hover={{
 											bg: "#D4F500",
 											borderColor: "#D4F500",

@@ -40,6 +40,7 @@ export default function UsersTable() {
 		return (
 			<>
 				<Box
+					dir='rtl'
 					display={"flex"}
 					flexDirection={"column"}
 					justifyContent={"center"}
@@ -53,6 +54,7 @@ export default function UsersTable() {
 						من فضلك ابحث عن المستخدم قبل ما تدخل الصفحة دي
 					</Text>
 					<Button
+						dir='rtl'
 						_hover={{
 							bg: "yellowgreen",
 							color: "#000",
@@ -79,6 +81,7 @@ export default function UsersTable() {
 			<>
 				<Box width={"100%"} height={"87vh"}>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						flexDirection={"column"}
 						justifyContent={"center"}
@@ -96,6 +99,7 @@ export default function UsersTable() {
 						</Text>
 					</Box>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						flexDirection={"column"}
 						justifyContent={"center"}
@@ -135,7 +139,7 @@ export default function UsersTable() {
 														transform: "scale(0.99)",
 														opacity: "0.5",
 													}}
-													leftIcon={<IoMdEye />}
+													rightIcon={<IoMdEye />}
 												>
 													عرض
 												</Button>
@@ -153,6 +157,7 @@ export default function UsersTable() {
 						height={"10%"}
 					>
 						<Button
+							dir='rtl'
 							_hover={{
 								bg: "yellowgreen",
 								color: "#000",
@@ -166,7 +171,7 @@ export default function UsersTable() {
 								localStorage.removeItem("usersFilterData");
 								navigate("/admin/search-users");
 							}}
-							leftIcon={<IoMdArrowRoundBack />}
+							rightIcon={<IoMdArrowRoundBack />}
 							width={"25vw"}
 						>
 							الرجوع لصفحة البحث

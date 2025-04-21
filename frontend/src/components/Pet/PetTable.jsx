@@ -40,6 +40,7 @@ export default function PetTable() {
 		return (
 			<>
 				<Box
+					dir='rtl'
 					display={"flex"}
 					flexDirection={"column"}
 					justifyContent={"center"}
@@ -79,6 +80,7 @@ export default function PetTable() {
 			<>
 				<Box width={"100%"} height={"90vh"}>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						flexDirection={"column"}
 						justifyContent={"center"}
@@ -96,6 +98,7 @@ export default function PetTable() {
 						</Text>
 					</Box>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						flexDirection={"column"}
 						justifyContent={"center"}
@@ -135,7 +138,7 @@ export default function PetTable() {
 													onClick={() => {
 														navigate(`/pet-details/${row._id}`);
 													}}
-													leftIcon={<IoMdEye />}
+													rightIcon={<IoMdEye />}
 												>
 													عرض
 												</Button>

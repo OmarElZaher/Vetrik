@@ -1572,9 +1572,10 @@ const forgotUsername = asyncHandler(async (req, res) => {
 		try {
 			const transporter = nodemailer.createTransport({
 				service: "Gmail",
+				secure: true,
 				auth: {
 					user: "omarelzaher93@gmail.com",
-					pass: "vtzilhuubkdtphww",
+					pass: "",
 				},
 			});
 
@@ -1624,9 +1625,10 @@ const requestOTP = asyncHandler(async (req, res) => {
 
 			const transporter = nodemailer.createTransport({
 				service: "Gmail",
+				secure: true,
 				auth: {
 					user: "omarelzaher93@gmail.com",
-					pass: "vtzilhuubkdtphww",
+					pass: "",
 				},
 			});
 

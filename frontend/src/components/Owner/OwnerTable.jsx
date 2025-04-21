@@ -40,6 +40,7 @@ export default function OwnerTable() {
 		return (
 			<>
 				<Box
+					dir='rtl'
 					display={"flex"}
 					flexDirection={"column"}
 					justifyContent={"center"}
@@ -77,7 +78,7 @@ export default function OwnerTable() {
 	} else {
 		return (
 			<>
-				<Box width={"100%"} height={"87vh"}>
+				<Box dir='rtl' width={"100%"} height={"87vh"}>
 					<Box
 						display={"flex"}
 						flexDirection={"column"}
@@ -135,7 +136,7 @@ export default function OwnerTable() {
 													onClick={() => {
 														navigate(`/owner-details/${row._id}`);
 													}}
-													leftIcon={<IoMdEye />}
+													rightIcon={<IoMdEye />}
 												>
 													عرض
 												</Button>
@@ -166,7 +167,7 @@ export default function OwnerTable() {
 								localStorage.removeItem("ownerFilterData");
 								navigate("/search-owner");
 							}}
-							leftIcon={<IoMdArrowRoundBack />}
+							rightIcon={<IoMdArrowRoundBack />}
 							width={"25vw"}
 						>
 							الرجوع لصفحة البحث

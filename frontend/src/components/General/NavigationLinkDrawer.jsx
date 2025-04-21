@@ -14,7 +14,12 @@ export default function NavigationLinkDrawer({
 }) {
 	const navigate = useNavigate();
 	return (
-		<Box display='flex' justifyContent={justifyContent} alignItems={alignItems}>
+		<Box
+			dir='rtl'
+			display='flex'
+			justifyContent={justifyContent}
+			alignItems={alignItems}
+		>
 			<Button
 				_hover={{
 					bg: "#D4F500",
@@ -35,7 +40,7 @@ export default function NavigationLinkDrawer({
 				color='#8F8F8F'
 				borderColor='#8F8F8F'
 				width={"230px"}
-				ml={10}
+				mr={10}
 				mt={2}
 			>
 				{text}

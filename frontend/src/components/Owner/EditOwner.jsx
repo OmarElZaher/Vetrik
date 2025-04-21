@@ -18,7 +18,7 @@ import {
 	Icon,
 	Input,
 	InputGroup,
-	InputLeftAddon,
+	InputRightAddon,
 	Select,
 	Text,
 	useToast,
@@ -138,6 +138,7 @@ export default function EditOwner() {
 			) : (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -217,7 +218,7 @@ export default function EditOwner() {
 												onChange={(e) => {
 													setFirstName(e.target.value);
 												}}
-												mr={2.5}
+												ml={2.5}
 											/>
 										</Box>
 										<Box
@@ -238,7 +239,7 @@ export default function EditOwner() {
 												onChange={(e) => {
 													setLastName(e.target.value);
 												}}
-												ml={2.5}
+												mr={2.5}
 											/>
 										</Box>
 									</InputGroup>
@@ -262,14 +263,14 @@ export default function EditOwner() {
 											البريد الإلكتروني
 										</Text>
 										<InputGroup>
-											<InputLeftAddon
+											<InputRightAddon
 												display={"flex"}
 												justifyContent={"center"}
 												alignItems={"center"}
 												width={"5%"}
 											>
 												@
-											</InputLeftAddon>
+											</InputRightAddon>
 											<Input
 												id='email'
 												type='text'
@@ -278,7 +279,7 @@ export default function EditOwner() {
 												onChange={(e) => {
 													setEmail(e.target.value);
 												}}
-												mr={2.5}
+												ml={2.5}
 											/>
 										</InputGroup>
 									</Box>
@@ -302,14 +303,14 @@ export default function EditOwner() {
 											رقم الموبايل
 										</Text>
 										<InputGroup>
-											<InputLeftAddon
+											<InputRightAddon
 												display={"flex"}
 												justifyContent={"center"}
 												alignItems={"center"}
 												width={"5%"}
 											>
 												+٢
-											</InputLeftAddon>
+											</InputRightAddon>
 											<Input
 												id='mobileNumber'
 												type='text'
@@ -318,33 +319,39 @@ export default function EditOwner() {
 												onChange={(e) => {
 													setMobileNumber(e.target.value);
 												}}
-												mr={2.5}
+												ml={2.5}
 											/>
 										</InputGroup>
 									</Box>
 								</FormControl>
 
 								<FormControl
+									dir='rtl'
 									id='recieveNotifications'
 									display={"flex"}
 									justifyContent={"center"}
 									alignItems={"center"}
 								>
 									<Box
+										dir='rtl'
 										display={"flex"}
 										flexDirection={"column"}
 										justifyContent={"center"}
 										alignItems={"flex-start"}
 										width={"100%"}
 									>
-										<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
+										<Text fontSize={"16px"} color={"#7F7F7F"} mr={"25%"} mb={1}>
 											طريقة التواصل المفضلة
 										</Text>
 										<InputGroup>
 											<Select
+												dir='rtl'
 												id='receiveNotifications'
 												name='receiveNotifications'
 												cursor={"pointer"}
+												iconColor='transparent'
+												width={"50%"}
+												mr={"25%"}
 												value={contactMethod}
 												onChange={(e) => {
 													setContactMethod(e.target.value);
@@ -360,6 +367,7 @@ export default function EditOwner() {
 								</FormControl>
 							</Box>
 							<Box
+								dir='rtl'
 								display={"flex"}
 								justifyContent={"center"}
 								alignItems={"center"}
@@ -377,7 +385,7 @@ export default function EditOwner() {
 										opacity: "0.5",
 									}}
 									onClick={handleEdit}
-									leftIcon={<Icon as={IoSaveSharp} />}
+									rightIcon={<Icon as={IoSaveSharp} />}
 									width={"25%"}
 								>
 									{" "}

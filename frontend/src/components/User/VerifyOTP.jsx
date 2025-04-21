@@ -84,7 +84,12 @@ export default function VerifyOTP() {
 							<Stack align={"center"}>
 								<Icon as={MdLockReset} fontSize='100px' />
 								<Heading fontSize={"4xl"}>نسيت كلمة المرور</Heading>
-								<Text fontSize={"lg"} color={"gray.600"} align={"center"}>
+								<Text
+									dir='rtl'
+									fontSize={"lg"}
+									color={"gray.600"}
+									align={"center"}
+								>
 									من فضلك أدخل رمز التحقق المكوّن من 6 أرقام المرسل إلى بريدك
 									الإلكتروني لتأكيد هويتك.
 								</Text>

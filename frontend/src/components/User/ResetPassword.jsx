@@ -110,7 +110,7 @@ export default function ResetPassword() {
 							<Box rounded={"lg"} bg='#F6F9FB' boxShadow={"lg"} p={8}>
 								<Stack spacing={4}>
 									<FormControl id='password'>
-										<FormLabel>كلمة المرور الجديدة</FormLabel>
+										<FormLabel dir='rtl'>كلمة المرور الجديدة</FormLabel>
 										<InputGroup>
 											{showNewPassword ? (
 												<InputRightElement
@@ -158,7 +158,7 @@ export default function ResetPassword() {
 									</FormControl>
 
 									<FormControl id='confirmPassword'>
-										<FormLabel>تأكيد كلمة المرور</FormLabel>
+										<FormLabel dir='rtl'>تأكيد كلمة المرور</FormLabel>
 										<InputGroup>
 											{showConfirmPassword ? (
 												<InputRightElement
@@ -207,6 +207,7 @@ export default function ResetPassword() {
 
 									<Stack spacing={10}>
 										<Button
+											dir='rtl'
 											bg={"blue.400"}
 											color={"white"}
 											_hover={{

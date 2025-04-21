@@ -89,7 +89,12 @@ export default function RequestOTP() {
 							<Stack align={"center"}>
 								<Icon as={MdLockReset} fontSize='100px' />
 								<Heading fontSize={"4xl"}>نسيت كلمة المرور</Heading>
-								<Text fontSize={"lg"} color={"gray.600"} align={"center"}>
+								<Text
+									dir='rtl'
+									fontSize={"lg"}
+									color={"gray.600"}
+									align={"center"}
+								>
 									أدخل بريدك الإلكتروني المُسجَّل أدناه لإرسال رمز التحقق لإعادة
 									تعيين كلمة المرور.
 								</Text>
@@ -98,7 +103,7 @@ export default function RequestOTP() {
 							<Box rounded={"lg"} bg='#F6F9FB' boxShadow={"lg"} p={8}>
 								<Stack spacing={4}>
 									<FormControl id='email'>
-										<FormLabel>البريد الإلكتروني</FormLabel>
+										<FormLabel dir='rtl'>البريد الإلكتروني</FormLabel>
 										<Input
 											id='email'
 											type='email'

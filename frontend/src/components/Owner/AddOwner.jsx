@@ -18,7 +18,7 @@ import {
 	Icon,
 	Input,
 	InputGroup,
-	InputLeftAddon,
+	InputRightAddon,
 	Select,
 	Text,
 	useToast,
@@ -146,6 +146,7 @@ export default function AddOwner() {
 			) : (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -187,6 +188,7 @@ export default function AddOwner() {
 								</Box>
 
 								<Box
+									dir='rtl'
 									display={"flex"}
 									flexDirection={"column"}
 									justifyContent={"center"}
@@ -207,7 +209,7 @@ export default function AddOwner() {
 											onChange={(e) => {
 												setFirstName(e.target.value);
 											}}
-											mr={2.5}
+											ml={2.5}
 										/>
 										<Input
 											id='lastName'
@@ -226,11 +228,12 @@ export default function AddOwner() {
 											name='gender'
 											placeholder='اختر الجنس'
 											cursor={"pointer"}
+											iconColor='transparent'
 											value={gender}
 											onChange={(e) => {
 												setGender(e.target.value);
 											}}
-											ml={2.5}
+											mr={2.5}
 										>
 											<option value='Male'>ذكر</option>
 											<option value='Female'>أنثى</option>
@@ -239,14 +242,14 @@ export default function AddOwner() {
 
 									<FormControl id='email'>
 										<InputGroup mt={5}>
-											<InputLeftAddon
+											<InputRightAddon
 												display={"flex"}
 												justifyContent={"center"}
 												alignItems={"center"}
 												width={"5%"}
 											>
 												@
-											</InputLeftAddon>
+											</InputRightAddon>
 											<Input
 												id='email'
 												type='email'
@@ -260,17 +263,18 @@ export default function AddOwner() {
 										</InputGroup>
 									</FormControl>
 
-									<FormControl id='mobileNumber' mt={5}>
-										<InputGroup>
-											<InputLeftAddon
+									<FormControl dir='rtl' id='mobileNumber' mt={5}>
+										<InputGroup dir='rtl'>
+											<InputRightAddon
 												display={"flex"}
 												justifyContent={"center"}
 												alignItems={"center"}
 												width={"5%"}
 											>
 												+٢
-											</InputLeftAddon>
+											</InputRightAddon>
 											<Input
+												dir='rtl'
 												id='mobileNumber'
 												type='tel'
 												name='mobileNumber'
@@ -283,17 +287,23 @@ export default function AddOwner() {
 										</InputGroup>
 									</FormControl>
 
-									<FormControl id='notifications' mt={5} display={"flex"}>
+									<FormControl
+										dir='rtl'
+										id='notifications'
+										mt={5}
+										display={"flex"}
+									>
 										<Select
 											id='receiveNotifications'
 											name='receiveNotifications'
 											placeholder='استقبال الإشعارات؟'
+											iconColor='transparent'
 											cursor={"pointer"}
 											value={receiveNotifications}
 											onChange={(e) => {
 												setReceiveNotifications(e.target.value);
 											}}
-											mr={2.5}
+											ml={2.5}
 										>
 											<option value='true'>نعم</option>
 											<option value='false'>لا</option>
@@ -316,7 +326,8 @@ export default function AddOwner() {
 											{...(receiveNotifications === "false"
 												? { disabled: true }
 												: {})}
-											ml={2.5}
+											mr={2.5}
+											iconColor='transparent'
 										>
 											<option value='Email'>بريد إلكتروني</option>
 											<option value='Phone'>مكالمة</option>
@@ -326,6 +337,7 @@ export default function AddOwner() {
 								</Box>
 
 								<Box
+									dir='rtl'
 									display={"flex"}
 									justifyContent={"center"}
 									alignItems={"center"}
@@ -342,7 +354,7 @@ export default function AddOwner() {
 											opacity: "0.5",
 										}}
 										onClick={handleAdd}
-										leftIcon={<IoMdAdd />}
+										rightIcon={<IoMdAdd />}
 										width={"25%"}
 									>
 										{" "}

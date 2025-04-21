@@ -370,6 +370,7 @@ export default function PetVaccination() {
 			) : vaccinationCardExists ? (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -382,7 +383,7 @@ export default function PetVaccination() {
 							alignItems={"center"}
 							width={"65%"}
 							height={"90%"}
-							mr={1.5}
+							ml={1.5}
 						>
 							<Box
 								display={"flex"}
@@ -453,10 +454,10 @@ export default function PetVaccination() {
 																setVaccineRenewalId(row._id);
 																onOpen();
 															}}
-															leftIcon={<MdAutorenew />}
-															mr={2.5}
+															rightIcon={<MdAutorenew />}
+															ml={2.5}
 														>
-															Renew
+															تجديد
 														</Button>
 														<Tooltip
 															hasArrow
@@ -478,10 +479,10 @@ export default function PetVaccination() {
 																onClick={() => {
 																	handleRemoveVaccine(row._id);
 																}}
-																leftIcon={<IoIosRemoveCircle />}
+																rightIcon={<IoIosRemoveCircle />}
 																variant={"outline"}
 																borderColor={"#EF5350"}
-																ml={2.5}
+																mr={2.5}
 															>
 																إزالة
 															</Button>
@@ -539,7 +540,7 @@ export default function PetVaccination() {
 																		leftIcon={<MdDelete />}
 																		variant={"outline"}
 																		borderColor={"#EF5350"}
-																		mr={2.5}
+																		ml={2.5}
 																	>
 																		إلغاء
 																	</Button>
@@ -559,7 +560,7 @@ export default function PetVaccination() {
 																			onClose();
 																		}}
 																		leftIcon={<FaCheckCircle />}
-																		ml={2.5}
+																		mr={2.5}
 																	>
 																		تجديد
 																	</Button>
@@ -594,8 +595,8 @@ export default function PetVaccination() {
 									onClick={() => {
 										navigate(`/pet-details/${petId}`);
 									}}
-									leftIcon={<IoMdArrowRoundBack />}
-									mr={2.5}
+									rightIcon={<IoMdArrowRoundBack />}
+									ml={2.5}
 								>
 									تفاصيل الحيوان
 								</Button>
@@ -618,10 +619,10 @@ export default function PetVaccination() {
 											opacity: "0.5",
 										}}
 										onClick={handleDelete}
-										leftIcon={<MdDelete />}
+										rightIcon={<MdDelete />}
 										variant={"outline"}
 										borderColor={"#EF5350"}
-										ml={2.5}
+										mr={2.5}
 									>
 										حذف
 									</Button>
@@ -636,7 +637,7 @@ export default function PetVaccination() {
 							alignItems={"center"}
 							width={"30%"}
 							height={"90%"}
-							ml={1.5}
+							mr={1.5}
 						>
 							<Box
 								display={"flex"}
@@ -699,7 +700,7 @@ export default function PetVaccination() {
 									justifyContent={"center"}
 									mb={3}
 								>
-									<Text fontSize={"16px"} color={"#798296"} ml={1.5} mb={1}>
+									<Text fontSize={"16px"} color={"#798296"} mr={1.5} mb={1}>
 										تاريخ إعطاء اللقاح (اليوم افتراضيًا)
 									</Text>
 									<Input
@@ -724,7 +725,7 @@ export default function PetVaccination() {
 										flexDirection={"column"}
 										justifyContent={"center"}
 									>
-										<Text fontSize={"16px"} color={"#798296"} ml={1.5} mb={1}>
+										<Text fontSize={"16px"} color={"#798296"} mr={1.5} mb={1}>
 											تاريخ تجديد اللقاح
 										</Text>
 										<Input
@@ -759,7 +760,7 @@ export default function PetVaccination() {
 										opacity: "0.5",
 									}}
 									onClick={handleAddVaccine}
-									leftIcon={<IoMdAdd />}
+									rightIcon={<IoMdAdd />}
 									width={"50%"}
 								>
 									إضافة
@@ -773,6 +774,7 @@ export default function PetVaccination() {
 				<>
 					{" "}
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -863,7 +865,7 @@ export default function PetVaccination() {
 										justifyContent={"center"}
 										width={"50%"}
 									>
-										<Text fontSize={"16px"} color={"#798296"} ml={1.5} mb={1}>
+										<Text fontSize={"16px"} color={"#798296"} mr={1.5} mb={1}>
 											تاريخ إعطاء اللقاح (اليوم افتراضيًا)
 										</Text>
 										<Input
@@ -875,7 +877,7 @@ export default function PetVaccination() {
 											onChange={(e) => {
 												setVaccineGivenDate(e.target.value);
 											}}
-											mr={2.5}
+											ml={2.5}
 										/>
 									</Box>
 									<Tooltip
@@ -889,7 +891,7 @@ export default function PetVaccination() {
 											justifyContent={"center"}
 											width={"50%"}
 										>
-											<Text fontSize={"16px"} color={"#798296"} ml={3} mb={1}>
+											<Text fontSize={"16px"} color={"#798296"} mr={3} mb={1}>
 												تاريخ تجديد اللقاح
 											</Text>
 											<Input
@@ -901,7 +903,7 @@ export default function PetVaccination() {
 												onChange={(e) => {
 													setVaccineRenewalDate(e.target.value);
 												}}
-												ml={2.5}
+												mr={2.5}
 											/>
 										</Box>
 									</Tooltip>
@@ -926,7 +928,7 @@ export default function PetVaccination() {
 										opacity: "0.5",
 									}}
 									onClick={handleCreateVaccinationCard}
-									leftIcon={<TbVaccine />}
+									rightIcon={<TbVaccine />}
 								>
 									إنشاء كارت التطعيمات
 								</Button>

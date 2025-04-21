@@ -68,6 +68,7 @@ export default function NotFound() {
 		<>
 			{isAdmin ? <AdminHeader /> : <Header />}
 			<Box
+				dir='rtl'
 				display={"flex"}
 				flexDirection={"column"}
 				justifyContent={"center"}

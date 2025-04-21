@@ -264,6 +264,7 @@ export default function PetHealthRecords() {
 			) : (
 				<>
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -344,10 +345,10 @@ export default function PetHealthRecords() {
 															onClick={() => {
 																handleDownload(row._id);
 															}}
-															leftIcon={<IoMdDownload />}
-															mr={2.5}
+															rightIcon={<IoMdDownload />}
+															ml={2.5}
 														>
-															Download
+															تحميل
 														</Button>
 														<Tooltip
 															hasArrow
@@ -371,8 +372,8 @@ export default function PetHealthRecords() {
 																}}
 																variant={"outline"}
 																borderColor={"#EF5350"}
-																leftIcon={<MdDelete />}
-																ml={2.5}
+																rightIcon={<MdDelete />}
+																mr={2.5}
 															>
 																حذف
 															</Button>
@@ -410,7 +411,7 @@ export default function PetHealthRecords() {
 										opacity: "0.5",
 									}}
 									onClick={handleUpload}
-									leftIcon={<MdUpload />}
+									rightIcon={<MdUpload />}
 								>
 									رفع
 								</Button>

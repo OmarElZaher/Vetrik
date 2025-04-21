@@ -139,6 +139,7 @@ export default function MyDrawer() {
 							{/* Home Button */}
 							<Box>
 								<Box
+									dir='rtl'
 									display={"flex"}
 									justifyContent={"flex-start"}
 									alignItems={"center"}
@@ -186,6 +187,7 @@ export default function MyDrawer() {
 							<Box>
 								{/* Search Button */}
 								<Box
+									dir='rtl'
 									display='flex'
 									justifyContent='flex-start'
 									alignItems='center'
@@ -247,6 +249,7 @@ export default function MyDrawer() {
 									{isSearchOpen ? (
 										<Flex gap='middle' vertical align='center'>
 											<Box
+												dir='rtl'
 												display='flex'
 												flexDirection='column'
 												alignItems='flex-start'
@@ -279,6 +282,7 @@ export default function MyDrawer() {
 							<Box>
 								{/* Add Button */}
 								<Box
+									dir='rtl'
 									display='flex'
 									justifyContent='flex-start'
 									alignItems='center'
@@ -337,7 +341,7 @@ export default function MyDrawer() {
 								</Box>
 
 								{/* Additional Buttons For Add */}
-								<Box>
+								<Box dir='rtl'>
 									{isAddOpen ? (
 										<Flex gap='middle' vertical align='center'>
 											<Box
@@ -372,6 +376,7 @@ export default function MyDrawer() {
 							{/* Send Feedback Button */}
 							<Box>
 								<Box
+									dir='rtl'
 									display='flex'
 									justifyContent='flex-start'
 									alignItems='center'
@@ -418,6 +423,7 @@ export default function MyDrawer() {
 							{/* Edit Profile Button */}
 							<Box>
 								<Box
+									dir='rtl'
 									display='flex'
 									justifyContent='flex-start'
 									alignItems='center'
@@ -464,6 +470,7 @@ export default function MyDrawer() {
 							{/* Change Password Button */}
 							<Box>
 								<Box
+									dir='rtl'
 									display='flex'
 									justifyContent='flex-start'
 									alignItems='center'

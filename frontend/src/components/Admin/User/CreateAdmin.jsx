@@ -134,6 +134,7 @@ export default function CreateUser() {
 									mt={5}
 								>
 									<Text
+										dir='rtl'
 										fontSize={"40px"}
 										fontWeight={"bold"}
 										textDecoration={"underline"}
@@ -152,6 +153,7 @@ export default function CreateUser() {
 								width={"90%"}
 							>
 								<FormControl
+									dir='rtl'
 									id='name'
 									display={"flex"}
 									justifyContent={"space-evenly"}
@@ -166,7 +168,7 @@ export default function CreateUser() {
 										onChange={(e) => {
 											setFirstName(e.target.value);
 										}}
-										mr={2.5}
+										ml={2.5}
 									/>
 
 									<Input
@@ -178,11 +180,11 @@ export default function CreateUser() {
 										onChange={(e) => {
 											setLastName(e.target.value);
 										}}
-										ml={2.5}
+										mr={2.5}
 									/>
 								</FormControl>
 
-								<FormControl id='email' mb={5}>
+								<FormControl dir='rtl' id='email' mb={5}>
 									<Input
 										id='email'
 										type='email'
@@ -195,7 +197,7 @@ export default function CreateUser() {
 									/>
 								</FormControl>
 
-								<FormControl id='username' mb={5}>
+								<FormControl dir='rtl' id='username' mb={5}>
 									<Input
 										id='username'
 										type='text'
@@ -209,6 +211,7 @@ export default function CreateUser() {
 								</FormControl>
 
 								<FormControl
+									dir='rtl'
 									id='password'
 									display={"flex"}
 									justifyContent={"space-evenly"}
@@ -222,7 +225,7 @@ export default function CreateUser() {
 										onChange={(e) => {
 											setPassword(e.target.value);
 										}}
-										mr={2.5}
+										ml={2.5}
 									/>
 									<Input
 										id='confirmPassword'
@@ -245,6 +248,7 @@ export default function CreateUser() {
 								width={"90%"}
 							>
 								<Button
+									dir='rtl'
 									_hover={{
 										bg: "yellowgreen",
 										color: "#000",
