@@ -129,7 +129,7 @@ export default function PetDetails() {
 
 	const handleRemovePetFromOwner = async (ownerId, petId) => {
 		const confirmDelete = window.confirm(
-			"Are you sure you want to remove this owner from this pet?"
+			"هل أنت متأكد أنك تريد إزالة هذا المالك من هذا الحيوان؟"
 		);
 		if (confirmDelete) {
 			try {
@@ -178,7 +178,7 @@ export default function PetDetails() {
 
 	const handleDeletePet = async (petId) => {
 		const confirmDelete = window.confirm(
-			"Are you sure you want to delete this pet?"
+			"هل أنت متأكد أنك تريد حذف هذا الحيوان؟"
 		);
 		if (confirmDelete) {
 			try {

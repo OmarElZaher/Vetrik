@@ -52,7 +52,7 @@ export default function UserDetails() {
 
 	const handleDeleteUser = async () => {
 		const confirmDelete = window.confirm(
-			"Are you sure you want to delete this user?"
+			"هل أنت متأكد أنك تريد حذف هذا المستخدم؟"
 		);
 		if (confirmDelete) {
 			try {
@@ -98,9 +98,9 @@ export default function UserDetails() {
 
 	const handleSetAdmin = async () => {
 		const confirmSetAdmin = window.confirm(
-			`Are you sure you want to set ${titleCase(user.firstName)} ${titleCase(
+			`هل أنت متأكد أنك تريد تعيين ${titleCase(user.firstName)} ${titleCase(
 				user.lastName
-			)} as an admin?`
+			)} كمشرف؟`
 		);
 		if (confirmSetAdmin) {
 			try {

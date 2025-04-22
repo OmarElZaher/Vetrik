@@ -201,7 +201,7 @@ export default function PetVaccination() {
 
 	const handleDelete = async () => {
 		const confirmDelete = window.confirm(
-			"Are you sure you want to delete this vaccination card?"
+			"هل أنت متأكد أنك تريد حذف كارت التطعيمات هذا؟"
 		);
 		if (confirmDelete) {
 			try {
@@ -245,7 +245,7 @@ export default function PetVaccination() {
 
 	const handleRemoveVaccine = async (vaccineId) => {
 		const confirmDelete = window.confirm(
-			"Are you sure you want to remove this vaccine from the vaccination card?"
+			"هل أنت متأكد أنك تريد إزالة هذا اللقاح من كارت التطعيمات؟"
 		);
 
 		if (confirmDelete) {

@@ -210,7 +210,7 @@ export default function PetHealthRecords() {
 
 	const handleDelete = async (healthRecordId) => {
 		const confirmDelete = window.confirm(
-			"Are you sure you want to delete this health record?"
+			"هل أنت متأكد أنك تريد حذف هذا السجل الصحي؟"
 		);
 
 		if (confirmDelete) {
