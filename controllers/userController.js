@@ -1575,7 +1575,7 @@ const forgotUsername = asyncHandler(async (req, res) => {
 				secure: true,
 				auth: {
 					user: "omarelzaher93@gmail.com",
-					pass: "",
+					pass: "ifrijtiwsdnqnlbk",
 				},
 			});
 
@@ -1628,7 +1628,7 @@ const requestOTP = asyncHandler(async (req, res) => {
 				secure: true,
 				auth: {
 					user: "omarelzaher93@gmail.com",
-					pass: "",
+					pass: "ifrijtiwsdnqnlbk",
 				},
 			});
 
