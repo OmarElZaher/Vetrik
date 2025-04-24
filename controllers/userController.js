@@ -505,7 +505,6 @@ const createOwner = asyncHandler(async (req, res) => {
 		!firstName ||
 		!lastName ||
 		!mobileNumber ||
-		!email ||
 		!gender ||
 		!receiveNotifications
 	) {
