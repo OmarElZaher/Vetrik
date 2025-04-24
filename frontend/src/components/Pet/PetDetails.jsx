@@ -83,7 +83,7 @@ export default function PetDetails() {
 
 	// Owner useStates
 	const [owner, setOwner] = useState(null);
-	const [ownerEmail, setOwnerEmail] = useState(null);
+	const [ownerMobileNumber, setownerMobileNumber] = useState(null);
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
@@ -242,7 +242,7 @@ export default function PetDetails() {
 					owners: prev.owners.concat(response.data.owner),
 				}));
 				setOwner(null);
-				setOwnerEmail(null);
+				setownerMobileNumber(null);
 			} else {
 				toast({
 					title: response.data.message,
@@ -266,7 +266,7 @@ export default function PetDetails() {
 	};
 
 	const handleSearchOwner = async () => {
-		if (ownerEmail === null || ownerEmail === "") {
+		if (ownerMobileNumber === null || ownerMobileNumber === "") {
 			toast({
 				title: "Please Enter an Email Address",
 				status: "error",
@@ -274,7 +274,7 @@ export default function PetDetails() {
 				isClosable: true,
 				position: "top",
 			});
-		} else if (!isValidEmail(ownerEmail)) {
+		} else if (!isValidEmail(ownerMobileNumber)) {
 			toast({
 				title: "Please Enter a Valid Email Address",
 				status: "error",
@@ -287,7 +287,7 @@ export default function PetDetails() {
 				setIsLoading(true);
 				const response = await axios.post(
 					`${api}/user/getOwner`,
-					{ email: ownerEmail },
+					{ mobileNumber: ownerMobileNumber },
 					{ withCredentials: true }
 				);
 
@@ -798,7 +798,7 @@ export default function PetDetails() {
 											}}
 											onClick={() => {
 												setOwner(null);
-												setOwnerEmail(null);
+												setownerMobileNumber(null);
 											}}
 											rightIcon={<IoMdSearch />}
 											mr={2.5}
@@ -824,10 +824,10 @@ export default function PetDetails() {
 												id='email'
 												type='email'
 												name='email'
-												placeholder='بريد المالك الإلكتروني'
-												value={ownerEmail}
+												placeholder='رقم المحمول'
+												value={ownerMobileNumber}
 												onChange={(event) => {
-													setOwnerEmail(event.target.value);
+													setownerMobileNumber(event.target.value);
 												}}
 											/>
 										</FormControl>
