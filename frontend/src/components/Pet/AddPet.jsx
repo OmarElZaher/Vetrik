@@ -41,7 +41,7 @@ export default function AddPet() {
 	const [gender, setGender] = useState("");
 	const [dob, setDob] = useState("");
 	const [weight, setWeight] = useState("");
-	const [ownerPhoneNumber, setownerPhoneNumber] = useState("");
+	const [ownerMobileNumber, setownerMobileNumber] = useState("");
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +56,7 @@ export default function AddPet() {
 				breed === "" ||
 				gender === "" ||
 				dob === null ||
-				(ownerPhoneNumber === "" && localStorage.getItem("ownerId") === null)
+				(ownerMobileNumber === "" && localStorage.getItem("ownerId") === null)
 			) {
 				toast({
 					title: "Please Enter All Fields",
@@ -68,7 +68,7 @@ export default function AddPet() {
 			} else {
 				const res = await axios.post(
 					`${api}/user/getOwner`,
-					{ phoneNumber: ownerPhoneNumber },
+					{ mobileNumber: ownerMobileNumber },
 					{ withCredentials: true }
 				);
 
@@ -368,15 +368,15 @@ export default function AddPet() {
 										/>
 									</FormControl>
 
-									<FormControl id='ownerPhoneNumber'>
+									<FormControl id='ownerMobileNumber'>
 										<Input
-											id='ownerPhoneNumber'
+											id='ownerMobileNumber'
 											type='text'
 											name='owner'
 											placeholder='رقم هاتف المالك'
-											value={ownerPhoneNumber}
+											value={ownerMobileNumber}
 											onChange={(e) => {
-												setownerPhoneNumber(e.target.value);
+												setownerMobileNumber(e.target.value);
 											}}
 										/>
 									</FormControl>

@@ -53,7 +53,6 @@ export default function AddOwner() {
 			firstName === "" ||
 			lastName === "" ||
 			mobileNumber === "" ||
-			email === "" ||
 			gender === "" ||
 			receiveNotifications === "" ||
 			receiveNotifications === null
