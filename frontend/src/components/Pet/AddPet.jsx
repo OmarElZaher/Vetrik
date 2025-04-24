@@ -68,7 +68,7 @@ export default function AddPet() {
 			} else {
 				const res = await axios.post(
 					`${api}/user/getOwner`,
-					{ email: ownerPhoneNumber },
+					{ phoneNumber: ownerPhoneNumber },
 					{ withCredentials: true }
 				);
 
