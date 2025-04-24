@@ -525,6 +525,11 @@ const createOwner = asyncHandler(async (req, res) => {
 			return;
 		}
 
+		// Check if email inputted
+		if (!email) {
+			req.body.email = "No Email";
+		}
+
 		// Create the owner
 		const owner = await Owner.create(req.body);
 
