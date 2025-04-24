@@ -268,21 +268,23 @@ export default function PetDetails() {
 	const handleSearchOwner = async () => {
 		if (ownerMobileNumber === null || ownerMobileNumber === "") {
 			toast({
-				title: "Please Enter an Email Address",
+				title: "Please Enter Owner's Mobile Number",
 				status: "error",
 				duration: 2500,
 				isClosable: true,
 				position: "top",
 			});
-		} else if (!isValidEmail(ownerMobileNumber)) {
-			toast({
-				title: "Please Enter a Valid Email Address",
-				status: "error",
-				duration: 2500,
-				isClosable: true,
-				position: "top",
-			});
-		} else {
+		} 
+		// else if (!isValidEmail(ownerMobileNumber)) {
+		// 	toast({
+		// 		title: "Please Enter a Valid Email Address",
+		// 		status: "error",
+		// 		duration: 2500,
+		// 		isClosable: true,
+		// 		position: "top",
+		// 	});
+		// }
+		 else {
 			try {
 				setIsLoading(true);
 				const response = await axios.post(
