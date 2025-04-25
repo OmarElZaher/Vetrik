@@ -8,6 +8,8 @@ import axios from "axios";
 // API URL Import
 import { API_URL as api } from "../../../utils/constants";
 
+console.log("Frontend Env: " + api);
+
 // ChakraUI Imports
 import {
 	Box,
