@@ -55,11 +55,13 @@ export default function AddPet() {
 				type === "" ||
 				breed === "" ||
 				gender === "" ||
+				weight === "" ||
 				dob === null ||
+				dob === "" ||
 				(ownerMobileNumber === "" && localStorage.getItem("ownerId") === null)
 			) {
 				toast({
-					title: "Please Enter All Fields",
+					title: "يرجى إدخال جميع الحقول",
 					status: "error",
 					duration: 2500,
 					isClosable: true,

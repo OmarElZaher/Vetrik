@@ -42,7 +42,7 @@ export default function Header() {
 				navigate("/login");
 			}
 		} catch (error) {
-			if (error.response.data.message === "Not Logged In") {
+			if (error.response.data.message === "غير مسجل الدخول") {
 				navigate("/login");
 			} else {
 				toast({

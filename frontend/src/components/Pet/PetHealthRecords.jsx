@@ -100,7 +100,7 @@ export default function PetHealthRecords() {
 
 			if (!allowedFileTypes.includes(fileExtension)) {
 				toast({
-					title: "Please select a valid file type.",
+					title: "يرجى اختيار نوع ملف صالح.",
 					status: "error",
 					duration: 2500,
 					isClosable: true,
@@ -118,7 +118,7 @@ export default function PetHealthRecords() {
 	const handleUpload = async () => {
 		if (selectedFile === null) {
 			toast({
-				title: "Please select a file to upload.",
+				title: "يرجى اختيار ملف للرفع.",
 				status: "error",
 				duration: 2500,
 				isClosable: true,

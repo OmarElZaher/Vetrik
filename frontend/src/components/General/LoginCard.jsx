@@ -56,7 +56,7 @@ export default function LoginCard() {
 
 			if (formData.username === "" || formData.password === "") {
 				toast({
-					title: "Please Enter All Fields",
+					title: "يرجى إدخال جميع الحقول",
 					status: "error",
 					duration: 2500,
 					position: "top",

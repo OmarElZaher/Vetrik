@@ -182,7 +182,7 @@ export default function OwnerDetails() {
 				dob === null
 			) {
 				toast({
-					title: "Please Enter All Fields",
+					title: "من فضلك أدخل جميع الحقول",
 					status: "error",
 					duration: 2500,
 					isClosable: true,

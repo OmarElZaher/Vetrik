@@ -58,7 +58,7 @@ export default function AddOwner() {
 			receiveNotifications === null
 		) {
 			toast({
-				title: "Input All Fields",
+				title: "يرجى إدخال جميع الحقول",
 				status: "error",
 				duration: 2000,
 				isClosable: true,
@@ -69,7 +69,7 @@ export default function AddOwner() {
 			preferredContactMethod === ""
 		) {
 			toast({
-				title: "Enter Preferred Contact Method",
+				title: "يرجى اختيار طريقة التواصل المفضلة",
 				status: "error",
 				duration: 2000,
 				isClosable: true,
