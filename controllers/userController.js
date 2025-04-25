@@ -60,7 +60,7 @@ const createUser = asyncHandler(async (req, res) => {
 		const user = req.user;
 
 		if (!user.isAdmin) {
-			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
 			return;
 		} else {
 			const {
@@ -82,13 +82,13 @@ const createUser = asyncHandler(async (req, res) => {
 				!password ||
 				!confirmPassword
 			) {
-				res.status(400).json({ message: "Please Enter All Fields" });
+				res.status(400).json({ message: "يرجى إدخال جميع الحقول" });
 				return;
 			}
 
 			// Validate email format using a regular expression
 			if (!emailValidator(email)) {
-				res.status(400).json({ message: "Invalid email format" });
+				res.status(400).json({ message: "البريد الإلكتروني غير صحيحة" });
 				return;
 			}
 
@@ -96,7 +96,7 @@ const createUser = asyncHandler(async (req, res) => {
 			if (!passwordValidator(password)) {
 				res.status(400).json({
 					message:
-						"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
+						"يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، بما في ذلك حرف كبير واحد، وحرف صغير واحد، ورقم واحد",
 				});
 				return;
 			}
@@ -108,15 +108,15 @@ const createUser = asyncHandler(async (req, res) => {
 			if (usernameExists) {
 				res
 					.status(400)
-					.json({ message: "Username Taken, Please Try Another One" });
+					.json({ message: "اسم المستخدم مأخوذ، يرجى تجربة اسم آخر" });
 				return;
 			} else if (emailExists) {
 				res
 					.status(400)
-					.json({ message: "A User With This Email Already Exists" });
+					.json({ message: "يوجد مستخدم بهذا البريد الإلكتروني بالفعل" });
 				return;
 			} else if (password !== confirmPassword) {
-				res.status(400).json({ message: "Passwords Do Not Match" });
+				res.status(400).json({ message: "كلمات المرور غير متطابقة" });
 				return;
 			}
 
@@ -158,7 +158,7 @@ const createUser = asyncHandler(async (req, res) => {
 const createAdmin = asyncHandler(async (req, res) => {
 	try {
 		if (!req.user.isAdmin) {
-			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
 			return;
 		}
 
@@ -181,7 +181,7 @@ const createAdmin = asyncHandler(async (req, res) => {
 const setAdmin = asyncHandler(async (req, res) => {
 	try {
 		if (!req.user.isAdmin) {
-			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
 			return;
 		}
 
@@ -195,19 +195,19 @@ const setAdmin = asyncHandler(async (req, res) => {
 		const user = await User.findById(userId);
 
 		if (!user) {
-			res.status(400).json({ message: "User Not Found" });
+			res.status(400).json({ message: "المستخدم غير موجود" });
 			return;
 		}
 
 		if (user.isAdmin) {
-			res.status(400).json({ message: "User Is Already An Admin" });
+			res.status(400).json({ message: "المستخدم هو أدمن بالفعل" });
 			return;
 		}
 
 		user.isAdmin = true;
 		await user.save();
 
-		res.status(200).json({ message: "User Role Changed To Admin" });
+		res.status(200).json({ message: "تم تغيير دور المستخدم إلى أدمن" });
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
@@ -244,10 +244,10 @@ const getUsers = asyncHandler(async (req, res) => {
 					users,
 				});
 			} else {
-				res.status(400).json({ message: "No Users Found!" });
+				res.status(400).json({ message: "لم يتم العثور على مستخدمين!" });
 			}
 		} else {
-			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
 		}
 	} catch (error) {
 		res.status(500);
@@ -271,7 +271,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 			const deleted = await User.findByIdAndDelete(userId);
 
 			if (deleted) {
-				res.status(200).json({ message: "User Deleted Successfuly" });
+				res.status(200).json({ message: "تم حذف المستخدم بنجاح" });
 			} else {
 				res
 					.status(400)
@@ -279,7 +279,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 				return;
 			}
 		} else {
-			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
 			return;
 		}
 	} catch (error) {
@@ -309,11 +309,11 @@ const getUserInfoById = asyncHandler(async (req, res) => {
 					user: user,
 				});
 			} else {
-				res.status(400).json({ message: "User Not Found" });
+				res.status(400).json({ message: "المستخدم غير موجود" });
 				return;
 			}
 		} else {
-			res.status(400).json({ message: "Unauthorized: Not An Admin" });
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
 			return;
 		}
 	} catch (error) {
@@ -338,12 +338,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 		}
 
 		if (!emailValidator(email)) {
-			res.status(400).json({ message: "Invalid Email" });
+			res.status(400).json({ message: "البريد الإلكتروني غير صحيح" });
 			return;
 		}
 
 		if (username === "") {
-			res.status(400).json({ message: "Username Cannot Be Empty" });
+			res.status(400).json({ message: "اسم المستخدم لا يمكن أن يكون فارغًا" });
 			return;
 		}
 
@@ -355,7 +355,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 			});
 
 			if (usernameExists) {
-				res.status(400).json({ message: "Username is already taken" });
+				res.status(400).json({ message: "اسم المستخدم مأخوذ بالفعل" });
 				return;
 			}
 		}
@@ -368,7 +368,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 			});
 
 			if (emailExists) {
-				res.status(400).json({ message: "Email is already in use" });
+				res.status(400).json({ message: "البريد الإلكتروني مستخدم بالفعل" });
 				return;
 			}
 		}
@@ -376,7 +376,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 		const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body);
 
 		if (updatedUser) {
-			res.status(200).json({ message: "User Updated Successfully" });
+			res.status(200).json({ message: "تم تحديث المستخدم بنجاح" });
 		}
 	} catch (error) {
 		res.status(500);
@@ -392,12 +392,12 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
 		const { confirm } = req.body;
 
 		if (confirm !== "CONFIRM") {
-			res.status(400).json({ message: "Please Enter 'CONFIRM'" });
+			res.status(400).json({ message: "يرجى إدخال 'CONFIRM'" });
 		} else {
 			const deleted = await User.findByIdAndDelete(req.user._id);
 
 			if (deleted) {
-				res.status(200).json({ message: "User Removed" });
+				res.status(200).json({ message: "تم حذف المستخدم بنجاح" });
 			} else {
 				res.status(400).json({ message: "User Not Found" });
 				return;
@@ -417,13 +417,13 @@ const loginUser = asyncHandler(async (req, res) => {
 		const { username, password } = req.body;
 
 		if (!username || !password) {
-			res.status(400).json({ message: "Please Enter All Fields" });
+			res.status(400).json({ message: "يرجى إدخال جميع الحقول" });
 		}
 
 		const user = await User.findOne({ username: username });
 
 		if (!user) {
-			res.status(400).json({ message: "Invalid Username" });
+			res.status(400).json({ message: "اسم المستخدم غير صحيح" });
 		} else {
 			if (await bcrypt.compare(password, user.password)) {
 				let token = generateToken(user._id);
@@ -433,12 +433,12 @@ const loginUser = asyncHandler(async (req, res) => {
 					sameSite: "none",
 				});
 				res.status(200).json({
-					message: "Logged In Successfully",
+					message: "تم تسجيل الدخول بنجاح",
 					token: token,
 					isAdmin: user.isAdmin,
 				});
 			} else {
-				res.status(400).json({ message: "Invalid Password" });
+				res.status(400).json({ message: "كلمة المرور غير صحيحة" });
 			}
 		}
 	} catch (error) {
@@ -455,7 +455,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 		res
 			.clearCookie("token")
 			.status(200)
-			.json({ message: "Logged Out Successfully" });
+			.json({ message: "تم تسجيل الخروج بنجاح" });
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
@@ -480,7 +480,7 @@ const getUserInfo = asyncHandler(async (req, res) => {
 				isAdmin: user.isAdmin,
 			});
 		} else {
-			res.status(400).json({ message: "User Not Found" });
+			res.status(400).json({ message: "المستخدم غير موجود" });
 		}
 	} catch (error) {
 		res.status(500);
@@ -508,7 +508,7 @@ const createOwner = asyncHandler(async (req, res) => {
 		!gender ||
 		!receiveNotifications
 	) {
-		res.status(400).json({ message: "Please Enter All Fields" });
+		res.status(400).json({ message: "يرجى إدخال جميع الحقول" });
 		return;
 	}
 
@@ -520,14 +520,14 @@ const createOwner = asyncHandler(async (req, res) => {
 
 		if (existingOwner) {
 			res.status(400).json({
-				message: "An owner with this email or mobile number already exists",
+				message: "يوجد مالك بالفعل بهذا البريد الإلكتروني أو رقم الهاتف",
 			});
 			return;
 		}
 
 		// Check if email inputted
 		if (!email) {
-			req.body.email = "No Email";
+			req.body.email = "––";
 		}
 
 		// Create the owner
@@ -550,7 +550,7 @@ const createOwner = asyncHandler(async (req, res) => {
 
 			res
 				.status(200)
-				.json({ message: "Owner Created Successfully", ownerId: owner._id });
+				.json({ message: "تم إنشاء المالك بنجاح", ownerId: owner._id });
 		}
 	} catch (error) {
 		res.status(500);
@@ -575,7 +575,7 @@ const getOwnerInfo = asyncHandler(async (req, res) => {
 		if (owner) {
 			res.status(200).json(owner);
 		} else {
-			res.status(400).json({ message: "Owner Not Found!" });
+			res.status(400).json({ message: "لم يتم العثور على المالك!" });
 			return;
 		}
 	} catch (error) {
@@ -610,7 +610,7 @@ const getOwner = asyncHandler(async (req, res) => {
 		if (owner.length > 0) {
 			res.status(200).json(owner);
 		} else {
-			res.status(400).json({ message: "No Owners Found!" });
+			res.status(400).json({ message: "لم يتم العثور على مالكين!" });
 		}
 	} catch (error) {
 		res.status(500);
@@ -633,7 +633,7 @@ const getOwnerPets = asyncHandler(async (req, res) => {
 		const owner = await Owner.findById(ownerId).populate("pets");
 
 		if (!owner) {
-			res.status(400).json({ message: "Owner Not Found!" });
+			res.status(400).json({ message: "لم يتم العثور على المالك!" });
 			return;
 		} else if (owner.pets.length > 0) {
 			res.status(200).json({
@@ -641,7 +641,7 @@ const getOwnerPets = asyncHandler(async (req, res) => {
 				pets: owner.pets,
 			});
 		} else {
-			res.status(400).json({ message: "No Pets Found!" });
+			res.status(400).json({ message: "لم يتم العثور على حيوانات أليفة!" });
 		}
 	} catch (error) {
 		res.status(500);
@@ -681,14 +681,14 @@ const updateOwnerProfile = asyncHandler(async (req, res) => {
 			!preferredContactMethod &&
 			!receiveNotifications
 		) {
-			res.status(400).json({ message: "Enter Any Data To Update" });
+			res.status(400).json({ message: "يرجى إدخال أي بيانات للتحديث" });
 			return;
 		}
 
 		const updatedOwner = await Owner.findByIdAndUpdate(ownerId, req.body);
 
 		if (updatedOwner) {
-			res.status(200).json({ message: "Owner Updated Successfully" });
+			res.status(200).json({ message: "تم تحديث بيانات المالك بنجاح" });
 		} else {
 			res.status(400).json({ message: "Owner Not Found!" });
 			return;
@@ -721,20 +721,20 @@ const addPetToOwner = asyncHandler(async (req, res) => {
 		const owner = await Owner.findById(ownerId);
 
 		if (!owner) {
-			res.status(400).json({ message: "Owner Not Found!" });
+			res.status(400).json({ message: "لم يتم العثور على المالك!" });
 			return;
 		}
 
 		const pet = await Pet.findById(petId);
 
 		if (!pet) {
-			res.status(400).json({ message: "Pet Not Found!" });
+			res.status(400).json({ message: "لم يتم العثور على الحيوان الأليف!" });
 			return;
 		}
 
 		// Check if the pet is already associated with the owner
 		if (owner.pets.includes(petId)) {
-			res.status(400).json({ message: "Pet Already Associated With Owner" });
+			res.status(400).json({ message: "الحيوان الأليف مرتبط بالفعل بالمالك" });
 			return;
 		}
 
@@ -773,7 +773,7 @@ const removePetFromOwner = asyncHandler(async (req, res) => {
 		const owner = await Owner.findById(ownerId);
 
 		if (!owner) {
-			res.status(400).json({ message: "Owner Not Found!" });
+			res.status(400).json({ message: "لم يتم العثور على المالك!" });
 			return;
 		}
 
@@ -805,7 +805,7 @@ const removePetFromOwner = asyncHandler(async (req, res) => {
 		}
 
 		res.status(200).json({
-			message: "Pet Removed From Owner",
+			message: "تم إزالة الحيوان الأليف من المالك",
 			ownerId: owner._id,
 			petId: pet._id,
 		});
@@ -859,7 +859,7 @@ const deleteOwnerProfile = asyncHandler(async (req, res) => {
 		const deletedOwner = await Owner.findByIdAndDelete(ownerId);
 
 		if (deletedOwner) {
-			res.status(200).json({ message: "Owner Removed From System" });
+			res.status(200).json({ message: "تم إزالة المالك من النظام" });
 		}
 	} catch (error) {
 		res.status(500);
@@ -955,7 +955,7 @@ const getPet = asyncHandler(async (req, res) => {
 		if (pet.length > 0) {
 			res.status(200).json(pet);
 		} else {
-			res.status(400).json({ message: "No Pets Found!" });
+			res.status(400).json({ message: "لم يتم العثور على حيوانات أليفة!" });
 		}
 	} catch (error) {
 		res.status(500);
@@ -1009,7 +1009,7 @@ const updatePetProfile = asyncHandler(async (req, res) => {
 		const updatedPet = await Pet.findByIdAndUpdate(petId, req.body);
 
 		if (updatedPet) {
-			res.status(200).json({ message: "Pet Updated Successfully" });
+			res.status(200).json({ message: "تم تحديث بيانات الحيوان الأليف بنجاح" });
 		} else {
 			res.status(400).json({ message: "Pet Not Found!" });
 			return;
@@ -1068,7 +1068,7 @@ const deletePetProfile = asyncHandler(async (req, res) => {
 		} else {
 			res
 				.status(200)
-				.json({ message: "Pet Deleted Successfully", petId: pet._id });
+				.json({ message: "تم حذف الحيوان الأليف بنجاح", petId: pet._id });
 		}
 	} catch (error) {
 		res.status(500);
@@ -1100,7 +1100,9 @@ const createVaccinationCard = asyncHandler(async (req, res) => {
 		});
 
 		if (vaccinationCardExists) {
-			res.status(400).json({ message: "Pet Already Has A Vaccination Card" });
+			res
+				.status(400)
+				.json({ message: "الحيوان الأليف لديه بطاقة تطعيم بالفعل" });
 			return;
 		}
 
@@ -1108,7 +1110,7 @@ const createVaccinationCard = asyncHandler(async (req, res) => {
 			req.body;
 
 		if (!vaccineName || !vaccineBatch || !vaccineGivenDate) {
-			res.status(400).json({ message: "Please Enter All Fields" });
+			res.status(400).json({ message: "يرجى إدخال جميع الحقول" });
 			return;
 		}
 
@@ -1123,7 +1125,7 @@ const createVaccinationCard = asyncHandler(async (req, res) => {
 		});
 
 		if (vaccinationCard) {
-			res.status(200).json({ message: "Vaccination Card Created" });
+			res.status(200).json({ message: "تم إنشاء بطاقة التطعيم بنجاح" });
 		} else {
 			res.status(400).json({ message: "Invalid Data" });
 			return;
@@ -1156,13 +1158,13 @@ const deleteVaccinationCard = asyncHandler(async (req, res) => {
 		const vaccinationCard = await VaccinationCard.findOne({ pet: pet._id });
 
 		if (!vaccinationCard) {
-			res.status(400).json({ message: "Pet Does Not Have A Vaccination Card" });
+			res.status(400).json({ message: "الحيوان الأليف ليس لديه بطاقة تطعيم" });
 			return;
 		}
 
 		await VaccinationCard.findByIdAndDelete(vaccinationCard._id);
 
-		res.status(200).json({ message: "Vaccination Card Deleted" });
+		res.status(200).json({ message: "تم حذف بطاقة التطعيم بنجاح" });
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
@@ -1191,7 +1193,7 @@ const getVaccinationCard = asyncHandler(async (req, res) => {
 		const vaccinationCard = await VaccinationCard.findOne({ pet: petId });
 
 		if (!vaccinationCard) {
-			res.status(400).json({ message: "Pet Does Not Have A Vaccination Card" });
+			res.status(400).json({ message: "الحيوان الأليف ليس لديه بطاقة تطعيم" });
 			return;
 		} else {
 			res.status(200).json({
@@ -1237,12 +1239,12 @@ const addVaccination = asyncHandler(async (req, res) => {
 		const { vaccineName, vaccineBatch, vaccineGivenDate } = req.body;
 
 		if (!vaccineName || !vaccineBatch || !vaccineGivenDate) {
-			res.status(400).json({ message: "Please Enter All Fields" });
+			res.status(400).json({ message: "يرجى إدخال جميع الحقول" });
 			return;
 		} else {
 			vaccinationCard.vaccine.push(req.body);
 			await vaccinationCard.save();
-			res.status(200).json({ message: "Vaccination Added" });
+			res.status(200).json({ message: "تم إضافة التطعيم بنجاح" });
 		}
 	} catch (error) {
 		res.status(500);
@@ -1307,7 +1309,7 @@ const renewVaccination = asyncHandler(async (req, res) => {
 		// Save the updated vaccination card
 		await vaccinationCard.save();
 
-		res.status(200).json({ message: "Vaccination renewed successfully" });
+		res.status(200).json({ message: "تم تجديد التطعيم بنجاح" });
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
@@ -1364,7 +1366,7 @@ const deleteVaccination = asyncHandler(async (req, res) => {
 		// Save the updated vaccination card
 		await vaccinationCard.save();
 
-		res.status(200).json({ message: "Vaccination deleted successfully" });
+		res.status(200).json({ message: "تم حذف التطعيم بنجاح" });
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
@@ -1391,7 +1393,7 @@ const uploadHealthRecord = asyncHandler(async (req, res) => {
 		}
 
 		if (!req.file) {
-			res.status(400).json({ message: "Please Upload A File" });
+			res.status(400).json({ message: "يرجى تحميل ملف" });
 			return;
 		}
 
@@ -1403,7 +1405,9 @@ const uploadHealthRecord = asyncHandler(async (req, res) => {
 		});
 
 		if (healthRecord) {
-			res.status(200).json({ message: "Health Record Uploaded", healthRecord });
+			res
+				.status(200)
+				.json({ message: "تم رفع السجل الصحي بنجاح", healthRecord });
 		} else {
 			res.status(400).json({ message: "Invalid Data" });
 			return;
@@ -1429,7 +1433,7 @@ const getAllHealthRecords = asyncHandler(async (req, res) => {
 			return;
 		} else {
 			res.status(200).json({
-				message: "Retrieved Health Records Successfuly",
+				message: "تم استرجاع السجلات الصحية بنجاح",
 				healthRecords,
 			});
 		}
@@ -1507,7 +1511,7 @@ const deleteHealthRecord = asyncHandler(async (req, res) => {
 			res.status(400).json({ message: "Health Record Not Found" });
 			return;
 		} else {
-			res.status(200).json({ message: "Health Record Deleted" });
+			res.status(200).json({ message: "تم حذف السجل الصحي بنجاح" });
 		}
 	} catch (error) {
 		res.status(500);
@@ -1537,15 +1541,18 @@ const changePassword = asyncHandler(async (req, res) => {
 		} else if (await bcrypt.compare(newPassword, user.password)) {
 			res
 				.status(400)
-				.json({ message: "New Password Cannot Be The Same As Old Password" });
+				.json({
+					message:
+						"لا يمكن أن تكون كلمة المرور الجديدة هي نفسها كلمة المرور القديمة",
+				});
 			return;
 		} else if (newPassword !== confirmPassword) {
-			res.status(400).json({ message: "Passwords Don't Match" });
+			res.status(400).json({ message: "كلمات المرور غير متطابقة" });
 			return;
 		} else if (!passwordValidator(newPassword)) {
 			res.status(400).json({
 				message:
-					"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
+					"يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، بما في ذلك حرف كبير واحد، وحرف صغير واحد، ورقم واحد",
 			});
 			return;
 		} else {
@@ -1554,7 +1561,7 @@ const changePassword = asyncHandler(async (req, res) => {
 
 			user.password = hashedPassword;
 			await user.save();
-			res.status(200).json({ message: "Password Changed" });
+			res.status(200).json({ message: "تم تغيير كلمة المرور بنجاح" });
 			req.user = null;
 		}
 	} catch (error) {
@@ -1600,7 +1607,9 @@ const forgotUsername = asyncHandler(async (req, res) => {
 				} else {
 					res
 						.status(200)
-						.json({ message: "Username Sent, Please Check Your Email" });
+						.json({
+							message: "تم إرسال اسم المستخدم، يرجى التحقق من بريدك الإلكتروني",
+						});
 				}
 			});
 		} catch (error) {
@@ -1654,7 +1663,7 @@ const requestOTP = asyncHandler(async (req, res) => {
 				} else {
 					res
 						.status(200)
-						.json({ message: "OTP Sent, Please Check Your Email" });
+						.json({ message: "تم إرسال OTP، يرجى التحقق من بريدك الإلكتروني" });
 				}
 			});
 		}
@@ -1673,20 +1682,22 @@ const verifyOTP = asyncHandler(async (req, res) => {
 		const otp = req.body.otp;
 
 		if (!otp) {
-			res.status(400).json({ message: "Please Enter OTP" });
+			res.status(400).json({ message: "يرجى إدخال OTP" });
 			return;
 		} else {
 			if (Date.now() > otpExpiry) {
-				res.status(400).json({ message: "OTP Expired, Please Try Again" });
+				res
+					.status(400)
+					.json({ message: "انتهت صلاحية OTP، يرجى المحاولة مرة أخرى" });
 				return;
 			} else {
 				if (user.passwordResetOTP === otp) {
 					user.passwordResetOTP = "";
 					await user.save();
 					otpExpiry = null;
-					res.status(200).json({ message: "OTP Verified" });
+					res.status(200).json({ message: "تم التحقق من OTP بنجاح" });
 				} else {
-					res.status(400).json({ message: "Invalid OTP" });
+					res.status(400).json({ message: "OTP غير صحيح" });
 					return;
 				}
 			}
@@ -1708,15 +1719,15 @@ const resetPassword = asyncHandler(async (req, res) => {
 		console.log(newPassword, " ", confirmPassword);
 
 		if (!newPassword || !confirmPassword) {
-			res.status(400).json({ message: "Enter All Fields" });
+			res.status(400).json({ message: "يرجى إدخال جميع الحقول" });
 			return;
 		} else if (newPassword !== confirmPassword) {
-			res.status(400).json({ message: "Passwords Don't Match" });
+			res.status(400).json({ message: "كلمات المرور غير متطابقة" });
 			return;
 		} else if (!passwordValidator(newPassword)) {
 			res.status(400).json({
 				message:
-					"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one digit",
+					"يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، بما في ذلك حرف كبير واحد، وحرف صغير واحد، ورقم واحد",
 			});
 			return;
 		} else {
@@ -1725,7 +1736,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 
 			user.password = hashedPassword;
 			await user.save();
-			res.status(200).json({ message: "Password Has Been Reset" });
+			res.status(200).json({ message: "تم إعادة تعيين كلمة المرور بنجاح" });
 		}
 	} catch (error) {
 		res.status(500);
