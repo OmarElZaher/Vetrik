@@ -68,6 +68,7 @@ export default function OwnerDetails() {
 	const [breed, setBreed] = useState("");
 	const [gender, setGender] = useState("");
 	const [dob, setDob] = useState(null);
+	const [weight, setWeight] = useState("");
 
 	const handleRemovePet = async (petId) => {
 		const confirmDelete = window.confirm(
@@ -177,6 +178,7 @@ export default function OwnerDetails() {
 				type === "" ||
 				breed === "" ||
 				gender === "" ||
+				weight === "" ||
 				dob === null
 			) {
 				toast({
@@ -193,6 +195,7 @@ export default function OwnerDetails() {
 					type: type,
 					breed: breed,
 					gender: gender,
+					weight: weight,
 					dob: dob,
 				};
 
@@ -216,6 +219,7 @@ export default function OwnerDetails() {
 					setType("");
 					setBreed("");
 					setGender("");
+					setWeight("");
 					setDob(null);
 				} else {
 					toast({
@@ -729,6 +733,18 @@ export default function OwnerDetails() {
 									<option value='Male'>ذكر</option>
 									<option value='Female'>أنثى</option>
 								</Select>
+							</FormControl>
+							<FormControl id='weight' mb={5}>
+								<Input
+									id='weight'
+									type='number'
+									name='weight'
+									placeholder='وزن الحيوان (كجم)'
+									value={weight}
+									onChange={(e) => {
+										setWeight(e.target.value);
+									}}
+								/>
 							</FormControl>
 							<FormControl id='dob'>
 								<Input
