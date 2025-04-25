@@ -70,7 +70,6 @@ export default function LoginCard() {
 			});
 
 			if (response.status === 200) {
-				localStorage.setItem("token", response.data.token);
 				toast({
 					title: response.data.message,
 					status: "success",

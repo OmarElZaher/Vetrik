@@ -22,10 +22,8 @@ app.use(cookieParser());
 app.use(convertToLowerCase);
 app.use(
 	cors({
-		origin: ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/],
-		//   process.env.NODE_ENV === "production"
-		//     ? ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/]
-		//     : "http://localhost:3000",
+		// origin: ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/],
+		origin: "http://localhost:3000",
 
 		credentials: true,
 	})
