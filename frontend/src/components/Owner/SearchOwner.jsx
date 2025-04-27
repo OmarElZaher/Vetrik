@@ -40,8 +40,7 @@ export default function SearchOwner() {
 	const navigate = useNavigate();
 
 	// Form useStates
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
+	const [fullName, setFullName] = useState("");
 	const [mobileNumber, setMobileNumber] = useState("");
 	const [email, setEmail] = useState("");
 
@@ -53,11 +52,8 @@ export default function SearchOwner() {
 			setIsLoading(true);
 			let formData = {};
 
-			if (firstName !== "") {
-				formData.firstName = firstName;
-			}
-			if (lastName !== "") {
-				formData.lastName = lastName;
+			if (fullName !== "") {
+				formData.fullName = fullName;
 			}
 			if (mobileNumber !== "") {
 				formData.mobileNumber = mobileNumber;
@@ -95,12 +91,8 @@ export default function SearchOwner() {
 		}
 	};
 
-	const handleFirstNameChange = (e) => {
-		setFirstName(e.target.value);
-	};
-
-	const handleLastNameChange = (e) => {
-		setLastName(e.target.value);
+	const handleFullNameChange = (e) => {
+		setFullName(e.target.value);
 	};
 
 	const handleMobileNumberChange = (e) => {
@@ -175,22 +167,13 @@ export default function SearchOwner() {
 									justifyContent={"space-evenly"}
 								>
 									<Input
-										id='firstName'
+										id='fullName'
 										type='text'
-										name='firstName'
-										placeholder='الاسم الأول'
-										value={firstName}
-										onChange={handleFirstNameChange}
+										name='fullName'
+										placeholder='(الاسم كامل (الاسم الأول واسم العائلة'
+										value={fullName}
+										onChange={handleFullNameChange}
 										ml={2.5}
-									/>
-									<Input
-										id='lastName'
-										type='text'
-										name='lastName'
-										placeholder='اسم العائلة'
-										value={lastName}
-										onChange={handleLastNameChange}
-										mr={2.5}
 									/>
 								</FormControl>
 

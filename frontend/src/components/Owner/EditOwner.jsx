@@ -48,8 +48,7 @@ export default function EditOwner() {
 	const toast = useToast();
 
 	// Form useStates
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
+	const [fullName, setFullName] = useState("");
 	const [email, setEmail] = useState("");
 	const [mobileNumber, setMobileNumber] = useState("");
 	const [contactMethod, setContactMethod] = useState("");
@@ -63,8 +62,7 @@ export default function EditOwner() {
 			const response = await axios.patch(
 				`${api}/user/updateOwner/${ownerId}`,
 				{
-					firstName,
-					lastName,
+					fullName,
 					email,
 					mobileNumber,
 					preferredContactMethod: contactMethod,
@@ -109,8 +107,7 @@ export default function EditOwner() {
 			const response = await axios.get(`${api}/user/getOwnerInfo/${ownerId}`, {
 				withCredentials: true,
 			});
-			setFirstName(response.data.firstName);
-			setLastName(response.data.lastName);
+			setFullName(response.data.fullName);
 			setEmail(response.data.email);
 			setMobileNumber(response.data.mobileNumber);
 			setContactMethod(response.data.preferredContactMethod);
@@ -208,38 +205,17 @@ export default function EditOwner() {
 											width={"100%"}
 										>
 											<Text fontSize={"16px"} color={"#7F7F7F"} ml={1.5} mb={1}>
-												الاسم الأول
+												الاسم كامل (الاسم الأول واسم العائلة)
 											</Text>
 											<Input
-												id='firstName'
+												id='fullName'
 												type='text'
-												name='firstName'
-												value={titleCase(firstName)}
+												name='fullName'
+												value={titleCase(fullName)}
 												onChange={(e) => {
-													setFirstName(e.target.value);
+													setFullName(e.target.value);
 												}}
 												ml={2.5}
-											/>
-										</Box>
-										<Box
-											display={"flex"}
-											flexDirection={"column"}
-											justifyContent={"center"}
-											alignItems={"flex-start"}
-											width={"100%"}
-										>
-											<Text fontSize={"16px"} color={"#7F7F7F"} ml={4} mb={1}>
-												اسم العائلة
-											</Text>
-											<Input
-												id='lastName'
-												type='text'
-												name='lastName'
-												value={titleCase(lastName)}
-												onChange={(e) => {
-													setLastName(e.target.value);
-												}}
-												mr={2.5}
 											/>
 										</Box>
 									</InputGroup>

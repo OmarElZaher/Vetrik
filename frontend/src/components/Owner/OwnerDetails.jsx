@@ -363,9 +363,8 @@ export default function OwnerDetails() {
 									fontSize={"30px"}
 									fontWeight={"bold"}
 									textDecoration={"underline"}
-								>{`${titleCase(owner.firstName)} ${titleCase(
-									owner.lastName
-								)}`}</Text>
+								>{`${titleCase(owner.fullName)}`}
+								</Text>
 							</Box>
 
 							<Box
