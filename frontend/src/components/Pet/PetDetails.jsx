@@ -67,11 +67,6 @@ function formatDate(date) {
 	return [day, month, year].join("-");
 }
 
-function isValidEmail(email) {
-	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	return emailRegex.test(email);
-}
-
 export default function PetDetails() {
 	const { petId } = useParams();
 	const navigate = useNavigate();
@@ -539,6 +534,7 @@ export default function PetDetails() {
 												<Td textAlign={"left"}>
     												{owner.fullName}
 													{console.log("OWNER: " + owner.fullName + " " + owner._id + " " + pet._id)}
+													{console.log("PET: " + pet.owners + " " + pet._id)}
 												</Td>
 												<Td textAlign={"center"}>{owner.email}</Td>
 												<Td textAlign={"center"}>{owner.mobileNumber}</Td>
