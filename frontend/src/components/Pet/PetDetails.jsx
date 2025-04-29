@@ -538,7 +538,7 @@ export default function PetDetails() {
 											<Tr key={owner._id}>
 												<Td textAlign={"left"}>
     												{owner.fullName}
-													{console.log("OWNER: " + owner)}
+													{console.log("OWNER: " + owner.fullName + " " + owner._id + " " + pet._id)}
 												</Td>
 												<Td textAlign={"center"}>{owner.email}</Td>
 												<Td textAlign={"center"}>{owner.mobileNumber}</Td>
