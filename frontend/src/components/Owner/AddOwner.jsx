@@ -37,8 +37,7 @@ export default function AddOwner() {
 	const toast = useToast();
 
 	// Form useStates
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
+	const [fullName, setFullName] = useState("");
 	const [mobileNumber, setMobileNumber] = useState("");
 	const [email, setEmail] = useState("");
 	const [gender, setGender] = useState("");
@@ -50,8 +49,7 @@ export default function AddOwner() {
 
 	const handleAdd = async () => {
 		if (
-			firstName === "" ||
-			lastName === "" ||
+			fullName === "" ||
 			mobileNumber === "" ||
 			gender === "" ||
 			receiveNotifications === "" ||
@@ -85,8 +83,7 @@ export default function AddOwner() {
 				const response = await axios.post(
 					`${api}/user/createOwner`,
 					{
-						firstName: firstName,
-						lastName: lastName,
+						fullName: fullName,
 						mobileNumber: mobileNumber,
 						email: email,
 						gender: gender,
@@ -200,28 +197,17 @@ export default function AddOwner() {
 										justifyContent={"space-evenly"}
 									>
 										<Input
-											id='firstName'
+											id='fullName'
 											type='text'
-											name='firstName'
-											placeholder='الاسم الأول'
-											value={firstName}
+											name='fullName'
+											placeholder='الاسم كامل (الاسم الأول واسم العائلة)'
+											value={fullName}
 											onChange={(e) => {
-												setFirstName(e.target.value);
+												setFullName(e.target.value);
 											}}
 											ml={2.5}
 										/>
-										<Input
-											id='lastName'
-											type='text'
-											name='lastName'
-											placeholder='اسم العائلة'
-											value={lastName}
-											onChange={(e) => {
-												setLastName(e.target.value);
-											}}
-											ml={2.5}
-											mr={2.5}
-										/>
+									
 										<Select
 											id='gender'
 											name='gender'

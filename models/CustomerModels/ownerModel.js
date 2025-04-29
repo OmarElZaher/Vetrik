@@ -2,11 +2,7 @@ const mongoose = require("mongoose");
 
 const ownerSchema = mongoose.Schema(
 	{
-		firstName: {
-			type: String,
-			required: true,
-		},
-		lastName: {
+		fullName: {
 			type: String,
 			required: true,
 		},
@@ -44,9 +40,5 @@ const ownerSchema = mongoose.Schema(
 		timestamps: true,
 	}
 );
-
-ownerSchema.virtual("fullName").get(function () {
-	return `${this.firstName} ${this.lastName}`;
-});
 
 module.exports = mongoose.model("Owner", ownerSchema);

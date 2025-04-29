@@ -536,9 +536,9 @@ export default function PetDetails() {
 									<Tbody>
 										{pet.owners.map((owner) => (
 											<Tr key={owner._id}>
-												<Td textAlign={"left"}>{`${titleCase(
-													owner.firstName
-												)} ${titleCase(owner.lastName)}`}</Td>
+												<Td textAlign={"left"}>
+    												{owner.fullName}
+												</Td>
 												<Td textAlign={"center"}>{owner.email}</Td>
 												<Td textAlign={"center"}>{owner.mobileNumber}</Td>
 												<Td textAlign={"center"}>
@@ -749,10 +749,9 @@ export default function PetDetails() {
 										<Text fontSize={"20px"} fontWeight={"bold"}>
 											اسم المالك
 										</Text>
-										<Text fontSize={"18px"}>{`${titleCase(
-											owner[0].firstName
-										)} ${titleCase(owner[0].lastName)}`}</Text>
-
+										<Text fontSize={"18px"}>
+											{owner[0].fullName}
+										</Text>
 										<Text fontSize={"20px"} fontWeight={"bold"} mt={2}>
 											رقم المحمول
 										</Text>

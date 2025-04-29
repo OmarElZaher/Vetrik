@@ -220,14 +220,11 @@ const setAdmin = asyncHandler(async (req, res) => {
 const getUsers = asyncHandler(async (req, res) => {
 	try {
 		if (req.user.isAdmin) {
-			const { firstName, lastName, username, email } = req.body;
+			const { fullName, username, email } = req.body;
 			let query = { username: { $ne: req.user.username } };
 
-			if (firstName) {
-				query.firstName = new RegExp(firstName, "i");
-			}
-			if (lastName) {
-				query.lastName = new RegExp(lastName, "i");
+			if (fullName) {
+				query.fullName = new RegExp(fullName, "i");
 			}
 			if (username) {
 				query.username = new RegExp(username, "i");
@@ -493,8 +490,7 @@ const getUserInfo = asyncHandler(async (req, res) => {
 // @access Private
 const createOwner = asyncHandler(async (req, res) => {
 	const {
-		firstName,
-		lastName,
+		fullName,
 		mobileNumber,
 		email,
 		gender,
@@ -502,8 +498,7 @@ const createOwner = asyncHandler(async (req, res) => {
 	} = req.body;
 
 	if (
-		!firstName ||
-		!lastName ||
+		!fullName ||
 		!mobileNumber ||
 		!gender ||
 		!receiveNotifications
@@ -588,15 +583,12 @@ const getOwnerInfo = asyncHandler(async (req, res) => {
 // @route POST /user/getOwner/
 // @access Private
 const getOwner = asyncHandler(async (req, res) => {
-	const { firstName, lastName, mobileNumber, email } = req.body;
+	const { fullName, mobileNumber, email } = req.body;
 	try {
 		let query = {};
 
-		if (firstName) {
-			query.firstName = new RegExp(firstName, "i");
-		}
-		if (lastName) {
-			query.lastName = new RegExp(lastName, "i");
+		if (fullName) {
+			query.fullName = new RegExp(fullName, "i");
 		}
 		if (mobileNumber) {
 			query.mobileNumber = new RegExp(mobileNumber, "i");
@@ -662,8 +654,7 @@ const updateOwnerProfile = asyncHandler(async (req, res) => {
 		}
 
 		const {
-			firstName,
-			lastName,
+			fullName,
 			mobileNumber,
 			email,
 			gender,
@@ -673,8 +664,7 @@ const updateOwnerProfile = asyncHandler(async (req, res) => {
 
 		// Check if there was no data entered
 		if (
-			!firstName &&
-			!lastName &&
+			!fullName &&
 			!mobileNumber &&
 			!email &&
 			!gender &&

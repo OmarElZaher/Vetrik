@@ -116,35 +116,35 @@ export default function OwnerTable() {
 									</Tr>
 								</Thead>
 								<Tbody>
-    {JSON.parse(data).map((row) => (
-        <Tr key={row._id}>
-            <Td textAlign={"left"}>
-                {`${titleCase(row.firstName || "Unknown")} ${titleCase(row.lastName || "Unknown")}`}
-            </Td>
-            <Td textAlign={"center"}>{row.email || "N/A"}</Td>
-            <Td textAlign={"center"}>{row.mobileNumber || "N/A"}</Td>
-            <Td textAlign={"right"}>
-                <Button
-                    _hover={{
-                        bg: "yellowgreen",
-                        color: "#000",
-                        transform: "scale(1.01)",
-                    }}
-                    _active={{
-                        transform: "scale(0.99)",
-                        opacity: "0.5",
-                    }}
-                    onClick={() => {
-                        navigate(`/owner-details/${row._id}`);
-                    }}
-                    rightIcon={<IoMdEye />}
-                >
-                    عرض
-                </Button>
-            </Td>
-        </Tr>
-    ))}
-</Tbody>
+									{JSON.parse(data).map((row) => (
+										<Tr key={data._id}>
+											<Td textAlign={"left"}>{`${titleCase(
+												row.fullName
+											)}`}</Td>
+											<Td textAlign={"center"}>{row.email}</Td>
+											<Td textAlign={"center"}>{row.mobileNumber}</Td>
+											<Td textAlign={"right"}>
+												<Button
+													_hover={{
+														bg: "yellowgreen",
+														color: "#000",
+														transform: "scale(1.01)",
+													}}
+													_active={{
+														transform: "scale(0.99)",
+														opacity: "0.5",
+													}}
+													onClick={() => {
+														navigate(`/owner-details/${row._id}`);
+													}}
+													rightIcon={<IoMdEye />}
+												>
+													عرض
+												</Button>
+											</Td>
+										</Tr>
+									))}
+								</Tbody>
 							</Table>
 						</TableContainer>
 					</Box>
