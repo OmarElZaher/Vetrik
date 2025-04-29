@@ -117,9 +117,9 @@ export default function OwnerTable() {
 								<Tbody>
 									{JSON.parse(data).map((row) => (
 										<Tr key={data._id}>
-											<Td textAlign={"left"}>{`${titleCase(
-												row.firstName
-											)} ${titleCase(row.lastName)}`}</Td>
+											<Td textAlign={"left"}>
+    {`${titleCase(row.firstName || "Unknown")} ${titleCase(row.lastName || "Unknown")}`}
+</Td>
 											<Td textAlign={"center"}>{row.email}</Td>
 											<Td textAlign={"center"}>{row.mobileNumber}</Td>
 											<Td textAlign={"right"}>
