@@ -23,9 +23,7 @@ app.use(convertToLowerCase);
 console.log(`Backend Environment: ${process.env.NODE_ENV}`);
 app.use(
 	cors({
-		origin: process.env.NODE_ENV === "production" 
-			? ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/] 
-			: "http://localhost:3000",
+		origin: ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/],
 		credentials: true,
 	})
 );
