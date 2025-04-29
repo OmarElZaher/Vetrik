@@ -967,7 +967,7 @@ const getPetInfo = asyncHandler(async (req, res) => {
 
 		const pet = await Pet.findById(petId).populate({
 			path: "owners",
-			select: "firstName lastName mobileNumber email",
+			select: "fullName mobileNumber email",
 		});
 
 		if (!pet) {

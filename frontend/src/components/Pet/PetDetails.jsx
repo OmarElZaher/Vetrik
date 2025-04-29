@@ -270,15 +270,6 @@ export default function PetDetails() {
 				position: "top",
 			});
 		}
-		// else if (!isValidEmail(ownerMobileNumber)) {
-		// 	toast({
-		// 		title: "Please Enter a Valid Email Address",
-		// 		status: "error",
-		// 		duration: 2500,
-		// 		isClosable: true,
-		// 		position: "top",
-		// 	});
-		// }
 		else {
 			try {
 				setIsLoading(true);
@@ -533,8 +524,6 @@ export default function PetDetails() {
 											<Tr key={owner._id}>
 												<Td textAlign={"left"}>
     												{owner.fullName}
-													{console.log("OWNER: " + owner.fullName + " " + owner._id + " " + pet._id)}
-													{console.log("PET: " + pet.owners + " " + pet._id)}
 												</Td>
 												<Td textAlign={"center"}>{owner.email}</Td>
 												<Td textAlign={"center"}>{owner.mobileNumber}</Td>
