@@ -489,20 +489,10 @@ const getUserInfo = asyncHandler(async (req, res) => {
 // @route POST /user/createOwner
 // @access Private
 const createOwner = asyncHandler(async (req, res) => {
-	const {
-		fullName,
-		mobileNumber,
-		email,
-		gender,
-		receiveNotifications,
-	} = req.body;
+	const { fullName, mobileNumber, email, gender, receiveNotifications } =
+		req.body;
 
-	if (
-		!fullName ||
-		!mobileNumber ||
-		!gender ||
-		!receiveNotifications
-	) {
+	if (!fullName || !mobileNumber || !gender || !receiveNotifications) {
 		res.status(400).json({ message: "يرجى إدخال جميع الحقول" });
 		return;
 	}
@@ -1529,12 +1519,10 @@ const changePassword = asyncHandler(async (req, res) => {
 			res.status(400).json({ message: "Invalid Password" });
 			return;
 		} else if (await bcrypt.compare(newPassword, user.password)) {
-			res
-				.status(400)
-				.json({
-					message:
-						"لا يمكن أن تكون كلمة المرور الجديدة هي نفسها كلمة المرور القديمة",
-				});
+			res.status(400).json({
+				message:
+					"لا يمكن أن تكون كلمة المرور الجديدة هي نفسها كلمة المرور القديمة",
+			});
 			return;
 		} else if (newPassword !== confirmPassword) {
 			res.status(400).json({ message: "كلمات المرور غير متطابقة" });
@@ -1595,11 +1583,9 @@ const forgotUsername = asyncHandler(async (req, res) => {
 					res.status(500);
 					throw new Error("Failed to Send Username Email.");
 				} else {
-					res
-						.status(200)
-						.json({
-							message: "تم إرسال اسم المستخدم، يرجى التحقق من بريدك الإلكتروني",
-						});
+					res.status(200).json({
+						message: "تم إرسال اسم المستخدم، يرجى التحقق من بريدك الإلكتروني",
+					});
 				}
 			});
 		} catch (error) {

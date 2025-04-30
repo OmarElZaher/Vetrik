@@ -36,7 +36,7 @@ export default function AdminHeader() {
 				navigate("/login");
 			}
 		} catch (error) {
-			if (error.response.data.message === "غير مسجل الدخول") {
+			if (error.response.data.message === "Not Logged In") {
 				navigate("/login");
 			} else {
 				toast({
