@@ -24,6 +24,7 @@ const {
 	logoutUser,
 	deleteUserProfile,
 	getUserInfo,
+	getSecretaryNotifications,
 	updateUserProfile,
 	forgotUsername,
 	changePassword,
@@ -59,6 +60,11 @@ const { authenticate } = require("../middleware/authMiddleware");
 
 // GET methods for /user
 router.get("/getUserInfo", authenticate, getUserInfo); //
+router.get(
+	"/getSecretaryNotifications",
+	authenticate,
+	getSecretaryNotifications
+); // COMPLETE
 router.get("/getUserInfo/:userId", authenticate, getUserInfoById); //
 router.get("/getOwnerInfo/:ownerId", authenticate, getOwnerInfo); // COMPLETE
 router.get("/getOwnerPets/:ownerId", authenticate, getOwnerPets); // COMPLETE

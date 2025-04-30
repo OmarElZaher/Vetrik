@@ -609,6 +609,34 @@ const getUserInfo = asyncHandler(async (req, res) => {
 	}
 });
 
+// @desc Get Secretary Notifications
+// @route GET /user/getSecretaryNotifications
+// @access Private
+const getSecretaryNotifications = asyncHandler(async (req, res) => {
+	try {
+		if (req.user.role === "secretary") {
+			const user = await User.findById(req.user._id)
+				.select("notifications")
+				.exec();
+			if (user.notifications.length > 0) {
+				res.status(200).json({
+					message: "تم استرجاع الإشعارات بنجاح",
+					notifications: user.notifications,
+				});
+			} else {
+				res.status(400).json({ message: "لم يتم العثور على إشعارات!" });
+				return;
+			}
+		} else {
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات السكرتير" });
+			return;
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
 // @desc Create New Owner
 // @route POST /user/createOwner
 // @access Private
@@ -1864,6 +1892,7 @@ module.exports = {
 	loginUser,
 	logoutUser,
 	getUserInfo,
+	getSecretaryNotifications,
 	deleteUserProfile,
 	updateUserProfile,
 	changePassword,

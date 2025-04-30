@@ -23,13 +23,14 @@ app.use(convertToLowerCase);
 app.use(
 	cors({
 		origin: ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/],
-		
+
 		credentials: true,
 	})
 );
 app.use(morgan("dev"));
 app.use(helmet());
 app.use("/user", require("./routes/userRoutes"));
+app.use("/case", require("./routes/caseRoutes"));
 
 app.use(errorHandler);
 
