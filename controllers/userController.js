@@ -59,8 +59,8 @@ const createUser = asyncHandler(async (req, res) => {
 	try {
 		const user = req.user;
 
-		if (!user.isAdmin) {
-			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
+		if (!user.role === "admin") {
+			res.status(400).json({ message: "غير مصرح: ليس الأدمن" });
 			return;
 		} else {
 			const {
@@ -70,7 +70,7 @@ const createUser = asyncHandler(async (req, res) => {
 				lastName,
 				password,
 				confirmPassword,
-				isAdmin,
+				role,
 			} = req.body;
 
 			// Checks if all fields are entered
@@ -129,7 +129,7 @@ const createUser = asyncHandler(async (req, res) => {
 				firstName,
 				lastName,
 				password: hashedPassword,
-				isAdmin,
+				role,
 			});
 
 			if (user) {
@@ -140,6 +140,7 @@ const createUser = asyncHandler(async (req, res) => {
 					email: user.email,
 					firstName: user.firstName,
 					lastName: user.lastName,
+					role: user.role,
 				});
 			} else {
 				res.status(400).json({ message: "Invalid User Data" });
@@ -157,17 +158,61 @@ const createUser = asyncHandler(async (req, res) => {
 // @access Private
 const createAdmin = asyncHandler(async (req, res) => {
 	try {
-		if (!req.user.isAdmin) {
+		if (!req.user.role === "admin") {
 			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
 			return;
 		}
 
-		req.body.isAdmin = true;
+		req.body.role = "admin";
 
 		// Call the createUser function with isAdmin set to true
 		await createUser(req, res, () => {}, {
 			...req.body,
-			isAdmin: true,
+			role: "admin",
+		});
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Create A New Veterinarian
+// @route POST /user/createVet
+// @access Private
+const createVet = asyncHandler(async (req, res) => {
+	try {
+		if (!req.user.role === "admin") {
+			res.status(400).json({ message: "غير مصرح: ليس الأدمن" });
+			return;
+		}
+
+		req.body.role = "vet";
+
+		await createUser(req, res, () => {}, {
+			...req.body,
+			role: "vet",
+		});
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Create A New Secretary
+// @route POST /user/createSecretary
+// @access Private
+const createSecretary = asyncHandler(async (req, res) => {
+	try {
+		if (!req.user.role === "admin") {
+			res.status(400).json({ message: "غير مصرح: ليس الأدمن" });
+			return;
+		}
+
+		req.body.role = "secretary";
+
+		await createUser(req, res, () => {}, {
+			...req.body,
+			role: "secretary",
 		});
 	} catch (error) {
 		res.status(500);
@@ -180,7 +225,7 @@ const createAdmin = asyncHandler(async (req, res) => {
 // @access Private
 const setAdmin = asyncHandler(async (req, res) => {
 	try {
-		if (!req.user.isAdmin) {
+		if (!req.user.role === "admin") {
 			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
 			return;
 		}
@@ -199,15 +244,94 @@ const setAdmin = asyncHandler(async (req, res) => {
 			return;
 		}
 
-		if (user.isAdmin) {
+		if (user.role === "admin") {
 			res.status(400).json({ message: "المستخدم هو أدمن بالفعل" });
 			return;
 		}
 
-		user.isAdmin = true;
+		user.role = "admin";
 		await user.save();
 
 		res.status(200).json({ message: "تم تغيير دور المستخدم إلى أدمن" });
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Set user as vet
+// @route PATCH /user/setVet/:userId
+// @access Private
+const setVet = asyncHandler(async (req, res) => {
+	try {
+		if (!req.user.role === "admin") {
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
+			return;
+		}
+
+		const { userId } = req.params;
+
+		if (!mongoose.Types.ObjectId.isValid(userId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+		const user = await User.findById(userId);
+
+		if (!user) {
+			res.status(400).json({ message: "المستخدم غير موجود" });
+			return;
+		}
+
+		if (user.role === "vet") {
+			res.status(400).json({ message: "المستخدم هو طبيب بيطري بالفعل" });
+			return;
+		}
+
+		user.role = "vet";
+
+		await user.save();
+
+		res.status(200).json({ message: "تم تغيير دور المستخدم إلى طبيب بيطري" });
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Set user as secretary
+// @route PATCH /user/setSecretary/:userId
+// @access Private
+const setSecretary = asyncHandler(async (req, res) => {
+	try {
+		if (!req.user.role === "admin") {
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
+			return;
+		}
+
+		const { userId } = req.params;
+
+		if (!mongoose.Types.ObjectId.isValid(userId)) {
+			res.status(400).json({ message: "Invalid User ID" });
+			return;
+		}
+
+		const user = await User.findById(userId);
+
+		if (!user) {
+			res.status(400).json({ message: "المستخدم غير موجود" });
+			return;
+		}
+
+		if (user.role === "secretary") {
+			res.status(400).json({ message: "المستخدم هو سكرتير بالفعل" });
+			return;
+		}
+
+		user.role = "secretary";
+
+		await user.save();
+
+		res.status(200).json({ message: "تم تغيير دور المستخدم إلى سكرتير" });
 	} catch (error) {
 		res.status(500);
 		throw new Error(error);
@@ -219,7 +343,7 @@ const setAdmin = asyncHandler(async (req, res) => {
 // @access Private
 const getUsers = asyncHandler(async (req, res) => {
 	try {
-		if (req.user.isAdmin) {
+		if (req.user.role === "admin") {
 			const { fullName, username, email } = req.body;
 			let query = { username: { $ne: req.user.username } };
 
@@ -257,7 +381,7 @@ const getUsers = asyncHandler(async (req, res) => {
 // @access Private
 const deleteUser = asyncHandler(async (req, res) => {
 	try {
-		if (req.user.isAdmin) {
+		if (req.user.role === "admin") {
 			const userId = req.params.userId;
 
 			if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -290,7 +414,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @access Private
 const getUserInfoById = asyncHandler(async (req, res) => {
 	try {
-		if (req.user.isAdmin) {
+		if (req.user.role === "admin") {
 			const userId = req.params.userId;
 
 			if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -327,9 +451,9 @@ const getUserInfoById = asyncHandler(async (req, res) => {
 // @access Private
 const updateUserProfile = asyncHandler(async (req, res) => {
 	try {
-		const { username, email, password, passwordResetOTP, isAdmin } = req.body;
+		const { username, email, password, passwordResetOTP, role } = req.body;
 
-		if (password || passwordResetOTP || isAdmin) {
+		if (password || passwordResetOTP || role) {
 			res.status(400).json({ message: "Cannot Do That, Nice Try Though ;)" });
 			return;
 		}
@@ -432,7 +556,7 @@ const loginUser = asyncHandler(async (req, res) => {
 				res.status(200).json({
 					message: "تم تسجيل الدخول بنجاح",
 					token: token,
-					isAdmin: user.isAdmin,
+					role: user.role,
 				});
 			} else {
 				res.status(400).json({ message: "كلمة المرور غير صحيحة" });
@@ -474,7 +598,7 @@ const getUserInfo = asyncHandler(async (req, res) => {
 				lastName: user.lastName,
 				email: user.email,
 				username: user.username,
-				isAdmin: user.isAdmin,
+				role: user.role,
 			});
 		} else {
 			res.status(400).json({ message: "المستخدم غير موجود" });
@@ -489,20 +613,10 @@ const getUserInfo = asyncHandler(async (req, res) => {
 // @route POST /user/createOwner
 // @access Private
 const createOwner = asyncHandler(async (req, res) => {
-	const {
-		fullName,
-		mobileNumber,
-		email,
-		gender,
-		receiveNotifications,
-	} = req.body;
+	const { fullName, mobileNumber, email, gender, receiveNotifications } =
+		req.body;
 
-	if (
-		!fullName ||
-		!mobileNumber ||
-		!gender ||
-		!receiveNotifications
-	) {
+	if (!fullName || !mobileNumber || !gender || !receiveNotifications) {
 		res.status(400).json({ message: "يرجى إدخال جميع الحقول" });
 		return;
 	}
@@ -1529,12 +1643,10 @@ const changePassword = asyncHandler(async (req, res) => {
 			res.status(400).json({ message: "Invalid Password" });
 			return;
 		} else if (await bcrypt.compare(newPassword, user.password)) {
-			res
-				.status(400)
-				.json({
-					message:
-						"لا يمكن أن تكون كلمة المرور الجديدة هي نفسها كلمة المرور القديمة",
-				});
+			res.status(400).json({
+				message:
+					"لا يمكن أن تكون كلمة المرور الجديدة هي نفسها كلمة المرور القديمة",
+			});
 			return;
 		} else if (newPassword !== confirmPassword) {
 			res.status(400).json({ message: "كلمات المرور غير متطابقة" });
@@ -1595,11 +1707,9 @@ const forgotUsername = asyncHandler(async (req, res) => {
 					res.status(500);
 					throw new Error("Failed to Send Username Email.");
 				} else {
-					res
-						.status(200)
-						.json({
-							message: "تم إرسال اسم المستخدم، يرجى التحقق من بريدك الإلكتروني",
-						});
+					res.status(200).json({
+						message: "تم إرسال اسم المستخدم، يرجى التحقق من بريدك الإلكتروني",
+					});
 				}
 			});
 		} catch (error) {
@@ -1737,8 +1847,12 @@ const resetPassword = asyncHandler(async (req, res) => {
 module.exports = {
 	createAdmin,
 	createUser,
+	createVet,
+	createSecretary,
 	getUsers,
 	setAdmin,
+	setVet,
+	setSecretary,
 	getUserInfoById,
 	deleteUser,
 

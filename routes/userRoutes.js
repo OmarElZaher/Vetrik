@@ -6,9 +6,13 @@ const upload = require("../middleware/multerMiddleware");
 const {
 	createAdmin,
 	createUser,
+	createVet,
+	createSecretary,
 	getUsers,
 	getUserInfoById,
 	setAdmin,
+	setVet,
+	setSecretary,
 	deleteUser,
 
 	downloadHealthRecord,
@@ -71,6 +75,8 @@ router.get(
 router.post("/getUsers", authenticate, getUsers); // COMPLETE
 router.post("/createAdmin", authenticate, createAdmin); // COMPLETE
 router.post("/createUser", authenticate, createUser); // COMPLETE
+router.post("/createVet", authenticate, createVet); //
+router.post("/createSecretary", authenticate, createSecretary); //
 router.post("/login", loginUser); // COMPLETE
 router.post("/changePassword", authenticate, changePassword); // COMPLETE
 router.post("/forgotUsername", forgotUsername); // COMPLETE
@@ -104,6 +110,8 @@ router.patch("/updateProfile", authenticate, updateUserProfile); // COMPLETE
 router.patch("/updateOwner/:ownerId", authenticate, updateOwnerProfile); // COMPLETE
 router.patch("/updatePet/:petId", authenticate, updatePetProfile); // COMPLETE
 router.patch("/setAdmin/:userId", authenticate, setAdmin); // COMPLETE
+router.patch("/setVet/:userId", authenticate, setVet); //
+router.patch("/setSecretary/:userId", authenticate, setSecretary); //
 
 // PUT methods for /user
 router.put(
