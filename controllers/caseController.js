@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 
 const Case = require("../models/SystemModels/caseModel");
-const User = require("../models/User");
+const User = require("../models/SystemModels/userModel");
 
 // @desc Create A New Case
 // @route POST /case/createCase
@@ -13,6 +13,13 @@ const createCase = asyncHandler(async (req, res) => {
 
 		if (!petId || !reasonForVisit) {
 			return res.status(400).json({ message: "Please fill all fields" });
+		}
+
+		if (!req.user || req.user.role !== "secretary") {
+			return res.status(403).json({ message: "Unauthorized" });
+		}
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			return res.status(400).json({ message: "Invalid pet ID" });
 		}
 
 		const newCase = await Case.create({
@@ -39,7 +46,11 @@ const createCase = asyncHandler(async (req, res) => {
 // @access Private
 const getAllCases = asyncHandler(async (req, res) => {
 	try {
-		const cases = await Case.find({}).populate("petId secretaryId vetId");
+		const cases = await Case.find({})
+		.populate("petId", "name type breed")
+		.populate("secretaryId", "username email")
+		.populate("vetId", "username email")
+		.exec();
 
 		if (cases.length === 0 || !cases) {
 			return res.status(404).json({ message: "No cases found" });
@@ -55,18 +66,20 @@ const getAllCases = asyncHandler(async (req, res) => {
 });
 
 // @desc Get Case By ID
-// @route GET /case/getCase/:id
+// @route GET /case/getCaseById/:id
 // @access Private
 const getCaseById = asyncHandler(async (req, res) => {
 	try {
-		const caseId = req.params.id;
+		const { caseId } = req.params;
 
 		if (!mongoose.Types.ObjectId.isValid(caseId)) {
 			return res.status(400).json({ message: "Invalid case ID" });
 		}
 
 		const caseData = await Case.findById(caseId)
-			.populate("petId secretaryId vetId")
+			.populate("petId", "name type breed")
+			.populate("secretaryId", "username email")
+			.populate("vetId", "username email")
 			.exec();
 
 		if (!caseData || caseData.length === 0) {
@@ -87,7 +100,7 @@ const getCaseById = asyncHandler(async (req, res) => {
 // @access Private
 const updateCase = asyncHandler(async (req, res) => {
 	try {
-		const caseId = req.params.id;
+		const { caseId } = req.params;
 		const { status, actionsTaken } = req.body;
 
 		if (!mongoose.Types.ObjectId.isValid(caseId)) {
@@ -114,11 +127,11 @@ const updateCase = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete Case
-// @route DELETE /case/deleteCase/:id
+// @route DELETE /case/deleteCase/:caseId
 // @access Private
 const deleteCase = asyncHandler(async (req, res) => {
 	try {
-		const caseId = req.params.id;
+		const { caseId } = req.params;
 
 		if (!mongoose.Types.ObjectId.isValid(caseId)) {
 			return res.status(400).json({ message: "Invalid case ID" });
@@ -310,6 +323,19 @@ const completeCase = asyncHandler(async (req, res) => {
 			return res.status(400).json({ message: "Invalid case ID" });
 		}
 
+		if (req.user._id.toString() !== caseData.vetId.toString()) {
+			return res.status(403).json({ message: "Unauthorized" });
+		}
+		if (!actionsTaken) {
+			return res.status(400).json({ message: "Actions taken are required" });
+		}
+		if (caseData.status === "completed") {
+			return res.status(400).json({ message: "Case already completed" });
+		}
+		if (caseData.status !== "in-progress") {
+			return res.status(400).json({ message: "Case is not in progress" });
+		}
+
 		const updatedCase = await Case.findByIdAndUpdate(
 			caseId,
 			{ status: "completed", actionsTaken },
@@ -324,7 +350,7 @@ const completeCase = asyncHandler(async (req, res) => {
 		const secretary = await User.findById(updatedCase.secretaryId);
 		if (secretary) {
 			secretary.notifications.unshift({
-				message: `Case ${updatedCase._id} has been completed by ${req.user.fullName}`,
+				message: `Case has been completed by ${req.user.fullName}`,
 				caseId: updatedCase._id,
 			});
 			await secretary.save();
