@@ -105,6 +105,7 @@ export default function ViewCases() {
 				status: "success",
 				duration: 2000,
 				isClosable: true,
+				position: "top",
 			});
 			// Remove accepted case from UI
 			setCases((prev) => prev.filter((c) => c._id !== caseId));
@@ -116,6 +117,7 @@ export default function ViewCases() {
 				status: "error",
 				duration: 2500,
 				isClosable: true,
+				position: "top",
 			});
 		}
 	};
@@ -163,160 +165,109 @@ export default function ViewCases() {
 			<Footer />
 		</>
 	) : gotData ? (
-		// <>
-		// 	<Box dir='rtl' width={"100%"} height={"87vh"}>
-		// 		<Box
-		// 			display={"flex"}
-		// 			flexDirection={"column"}
-		// 			justifyContent={"center"}
-		// 			alignItems={"center"}
-		// 			height={"15%"}
-		// 			my={5}
-		// 		>
-		// 			<Text
-		// 				fontSize={"35px"}
-		// 				color={"#121211"}
-		// 				fontWeight={500}
-		// 				textDecoration={"underline"}
-		// 			>
-		// 				الحالات المستنية
-		// 			</Text>
-		// 		</Box>
-		// 		<Box
-		// 			display={"flex"}
-		// 			flexDirection={"column"}
-		// 			justifyContent={"center"}
-		// 			alignItems={"center"}
-		// 			width={"100%"}
-		// 			height={"70%"}
-		// 		>
-		// 			<TableContainer width={"80%"} maxHeight={"70vh"} overflowY={"auto"}>
-		// 				<Table variant='simple' size='md'>
-		// 					<Thead>
-		// 						<Tr>
-		// 							<Th textAlign={"left"}>الاسم الكامل</Th>
-		// 							<Th textAlign={"center"}>البريد الإلكتروني</Th>
-		// 							<Th textAlign={"center"}>رقم الموبايل</Th>
-		// 							<Th textAlign={"right"}>عرض التفاصيل</Th>
-		// 						</Tr>
-		// 					</Thead>
-		// 					<Tbody>
-		// 						{cases.map((row) => (
-		// 							<Tr key={row._id}>
-		// 								<Td textAlign={"left"}>{`${row.fullName}`}</Td>
-		// 								<Td textAlign={"center"}>{row.email}</Td>
-		// 								<Td textAlign={"center"}>{row.mobileNumber}</Td>
-		// 								<Td textAlign={"right"}>
-		// 									<Button
-		// 										_hover={{
-		// 											bg: "yellowgreen",
-		// 											color: "#000",
-		// 											transform: "scale(1.01)",
-		// 										}}
-		// 										_active={{
-		// 											transform: "scale(0.99)",
-		// 											opacity: "0.5",
-		// 										}}
-		// 										onClick={() => {
-		// 											navigate(`/owner-details/${row._id}`);
-		// 										}}
-		// 										rightIcon={<IoMdEye />}
-		// 									>
-		// 										عرض
-		// 									</Button>
-		// 								</Td>
-		// 							</Tr>
-		// 						))}
-		// 					</Tbody>
-		// 				</Table>
-		// 			</TableContainer>
-		// 		</Box>
-		// 		<Box
-		// 			display={"flex"}
-		// 			justifyContent={"center"}
-		// 			alignItems={"center"}
-		// 			height={"10%"}
-		// 		>
-		// 			<Button
-		// 				_hover={{
-		// 					bg: "yellowgreen",
-		// 					color: "#000",
-		// 					transform: "scale(1.01)",
-		// 				}}
-		// 				_active={{
-		// 					transform: "scale(0.99)",
-		// 					opacity: "0.5",
-		// 				}}
-		// 				onClick={() => {
-		// 					localStorage.removeItem("ownerFilterData");
-		// 					navigate("/search-owner");
-		// 				}}
-		// 				rightIcon={<IoMdArrowRoundBack />}
-		// 				width={"25vw"}
-		// 			>
-		// 				الرجوع لصفحة البحث
-		// 			</Button>
-		// 		</Box>
-		// 	</Box>
-		// 	<Footer />
-		// </>
-
 		<>
-			<Box dir='rtl' px={10} pt={10} minHeight='87vh'>
-				<Text
-					fontSize='3xl'
-					fontWeight='bold'
-					mb={6}
-					textAlign='center'
-					textDecoration='underline'
+			<Box dir='rtl' width={"100%"} height={"87vh"}>
+				<Box
+					display={"flex"}
+					flexDirection={"column"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					height={"15%"}
+					my={5}
 				>
-					الحالات المستنية
-				</Text>
-
-				<TableContainer>
-					<Table variant='striped' colorScheme='gray'>
-						<Thead>
+					<Text
+						fontSize={"35px"}
+						color={"#121211"}
+						fontWeight={500}
+						textDecoration={"underline"}
+					>
+						الحالات المستنية
+					</Text>
+				</Box>
+				<Box
+					display={"flex"}
+					flexDirection={"column"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					width={"100%"}
+					height={"70%"}
+				>
+					{cases.length === 0 ? (
+						<Text fontSize={"20px"} color={"#121211"}>
+							لا توجد حالات متاحة
+						</Text>
+					) : (<>
+						
+					<TableContainer width={"80%"} maxHeight={"70vh"} overflowY={"auto"}>
+						<Table variant='simple' size='md'>
+							<Thead>
 							<Tr>
-								<Th>اسم الحيوان</Th>
-								<Th>السلالة</Th>
-								<Th>النوع</Th>
-								<Th>فئة الوزن</Th>
-								<Th>البريد الإلكتروني للمالك</Th>
-								<Th>تفاصيل</Th>
+								<Th textAlign={'right'}>اسم الحيوان</Th>
+								<Th textAlign={'center'}>السلالة</Th>
+								<Th textAlign={'center'}>النوع</Th>
+								<Th textAlign={'center'}>فئة الوزن</Th>
+								<Th textAlign={'left'}>تفاصيل</Th>
 							</Tr>
-						</Thead>
-						<Tbody>
-							{cases.map((item) => (
-								<Tr key={item._id}>
-									<Td>{item.petId.name}</Td>
-									<Td>{item.petId.breed}</Td>
-									<Td>{item.petId.type}</Td>
-									<Td>{item.petId.weightClass}</Td>
-									<Td>{item.email}</Td>
-									<Td>
+							</Thead>
+							<Tbody>
+								{cases.map((row) => (
+									<Tr key={row._id}>
+										<Td textAlign={'right'}>{`${row.petId.name}`}</Td>
+										<Td textAlign={'center'}>{`${row.petId.breed}`}</Td>
+										<Td textAlign={'center'}>{`${row.petId.type}`}</Td>
+										<Td textAlign={'center'}>{`${row.petId.weightClass}`}</Td>
+
+										<Td textAlign={'left'}>
 										<Button
 											rightIcon={<IoMdEye />}
-											onClick={() => handleShowDetails(item)}
+											onClick={() => handleShowDetails(row)}
 											colorScheme='green'
 											variant='solid'
 										>
 											عرض
 										</Button>
 									</Td>
-								</Tr>
-							))}
-						</Tbody>
-					</Table>
-				</TableContainer>
+									</Tr>
+								))}
+							</Tbody>
+						</Table>
+					</TableContainer>
+					</>)}
+				</Box>
+				<Box
+					display={"flex"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					height={"10%"}
+				>
+					<Button
+						_hover={{
+							bg: "yellowgreen",
+							color: "#000",
+							transform: "scale(1.01)",
+						}}
+						_active={{
+							transform: "scale(0.99)",
+							opacity: "0.5",
+						}}
+						onClick={() => {
+							localStorage.removeItem("ownerFilterData");
+							navigate("/");
+						}}
+						rightIcon={<IoMdArrowRoundBack />}
+						width={"25vw"}
+					>
+						الرجوع
+					</Button>
+				</Box>
 			</Box>
-
 			<Footer />
 
 			{/* Modal for Case Details */}
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent dir='rtl'>
-					<ModalHeader>تفاصيل الحالة</ModalHeader>
+					<ModalHeader textAlign={'center'}>تفاصيل الحالة</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						<Text fontSize='lg'>
@@ -328,7 +279,7 @@ export default function ViewCases() {
 					<ModalFooter>
 						<Button
 							colorScheme='green'
-							mr={3}
+							ml={3}
 							onClick={() => handleAcceptCase(selectedCase._id)}
 						>
 							قبول الحالة
