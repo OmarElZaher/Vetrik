@@ -24,6 +24,8 @@ app.use(
 	cors({
 		origin: ["https://vetrik.vercel.app", /^https:\/\/vetrik.*\.vercel\.app$/],
 
+		// origin: "http://localhost:3000",
+
 		credentials: true,
 	})
 );
