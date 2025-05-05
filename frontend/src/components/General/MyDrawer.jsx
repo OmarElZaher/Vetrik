@@ -26,6 +26,7 @@ import { Flex } from "antd";
 // React Icons Imports
 import { CiEdit } from "react-icons/ci";
 import { FaPerson } from "react-icons/fa6";
+import { FaBuffer } from "react-icons/fa6";
 import { GoHome } from "react-icons/go";
 import { IoMdSearch, IoIosArrowDropdown } from "react-icons/io";
 import { IoAdd } from "react-icons/io5";
@@ -48,6 +49,7 @@ export default function MyDrawer() {
 	const [isHomeHovered, setIsHomeHovered] = useState(false);
 	const [isChangePasswordHovered, setIsChangePasswordHovered] = useState(false);
 	const [isFeedbackHovered, setIsFeedbackHovered] = useState(false);
+	const [isViewCasesHovered, setIsViewCasesHovered] = useState(false);
 
 	// Open useStates
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -68,6 +70,8 @@ export default function MyDrawer() {
 			setIsChangePasswordHovered(true);
 		} else if (type === "feedback") {
 			setIsFeedbackHovered(true);
+		} else if (type === "viewCases") {
+			setIsViewCasesHovered(true);
 		}
 	};
 
@@ -86,6 +90,8 @@ export default function MyDrawer() {
 			setIsChangePasswordHovered(false);
 		} else if (type === "feedback") {
 			setIsFeedbackHovered(false);
+		} else if (type === "viewCases") {
+			setIsViewCasesHovered(false);
 		}
 	};
 
@@ -370,6 +376,53 @@ export default function MyDrawer() {
 									) : (
 										<></>
 									)}
+								</Box>
+							</Box>
+
+							{/* View Cases Button */}
+							<Box>
+								<Box
+									dir='rtl'
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
+								>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										onMouseOver={() => {
+											handleHover("viewCases");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("viewCases");
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate("/view-cases");
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
+										leftIcon={
+											<Icon
+												as={FaBuffer}
+												color={isViewCasesHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+									>
+										عرض الحالات
+									</Button>
 								</Box>
 							</Box>
 
