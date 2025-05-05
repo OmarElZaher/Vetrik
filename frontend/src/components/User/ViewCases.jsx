@@ -1,6 +1,6 @@
 // React Imports
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Axios Import
 import axios from "axios";
@@ -12,11 +12,6 @@ import { API_URL as api } from "../../utils/constants";
 import {
 	Box,
 	Button,
-	Card,
-	CardBody,
-	FormControl,
-	Icon,
-	Input,
 	Table,
 	TableContainer,
 	Th,
@@ -32,16 +27,12 @@ import {
 	ModalBody,
 	ModalFooter,
 	Text,
-	Tooltip,
 	useDisclosure,
-	Select,
 	useToast,
 } from "@chakra-ui/react";
 
 // React Icons Imports
-import { FaRegEdit } from "react-icons/fa";
-import { IoMdEye, IoMdAdd, IoMdArrowRoundBack } from "react-icons/io";
-import { TbSettingsDollar, TbTrashXFilled } from "react-icons/tb";
+import { IoMdEye, IoMdArrowRoundBack } from "react-icons/io";
 
 // Custom Component Imports
 import Footer from "../General/Footer";
