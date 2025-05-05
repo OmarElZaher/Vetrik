@@ -161,7 +161,7 @@ const getUnassignedCases = asyncHandler(async (req, res) => {
 			vetId: null,
 			status: "waiting",
 		})
-			.populate("petId")
+			.populate("petId", "name type breed weightClass")
 			.populate("secretaryId", "fullName email");
 
 		if (unassignedCases.length === 0) {

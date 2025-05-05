@@ -38,6 +38,17 @@ import { IoMdEye, IoMdArrowRoundBack } from "react-icons/io";
 import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
+function titleCase(str) {
+    if (!str) return "";
+    return str
+        .toLowerCase()
+        .split(" ")
+        .map((word) => {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+        })
+        .join(" ");
+}
+
 export default function ViewCases() {
 	const toast = useToast();
 	const navigate = useNavigate();
@@ -154,12 +165,12 @@ export default function ViewCases() {
 					onClick={() => {
 						navigate("/");
 					}}
-					leftIcon={<IoMdArrowRoundBack />}
+					rightIcon={<IoMdArrowRoundBack />}
 					bg={"#FFF"}
 					width={"25vw"}
 					mt={10}
 				>
-					الرجوع لصفحة البحث
+					الرجوع
 				</Button>
 			</Box>
 			<Footer />
@@ -213,15 +224,14 @@ export default function ViewCases() {
 								{cases.map((row) => (
 									<Tr key={row._id}>
 										<Td textAlign={'right'}>{`${row.petId.name}`}</Td>
-										<Td textAlign={'center'}>{`${row.petId.breed}`}</Td>
-										<Td textAlign={'center'}>{`${row.petId.type}`}</Td>
+										<Td textAlign={'center'}>{`${titleCase(row.petId.breed)}`}</Td>
+										<Td textAlign={'center'}>{`${titleCase(row.petId.type)}`}</Td>
 										<Td textAlign={'center'}>{`${row.petId.weightClass}`}</Td>
 
 										<Td textAlign={'left'}>
 										<Button
 											rightIcon={<IoMdEye />}
 											onClick={() => handleShowDetails(row)}
-											colorScheme='green'
 											variant='solid'
 										>
 											عرض
