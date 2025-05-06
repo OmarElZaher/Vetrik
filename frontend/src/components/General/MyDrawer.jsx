@@ -25,12 +25,13 @@ import { Flex } from "antd";
 
 // React Icons Imports
 import { CiEdit } from "react-icons/ci";
-import { FaPerson } from "react-icons/fa6";
+import { FaPerson, FaBuffer, FaBookMedical } from "react-icons/fa6";
 import { GoHome } from "react-icons/go";
 import { IoMdSearch, IoIosArrowDropdown } from "react-icons/io";
 import { IoAdd } from "react-icons/io5";
 import { MdOutlinePets, MdOutlinePassword } from "react-icons/md";
 import { VscFeedback } from "react-icons/vsc";
+import { BsFileMedical } from "react-icons/bs";
 
 // Custom Component Imports
 import NavigationLinkDrawer from "./NavigationLinkDrawer";
@@ -48,10 +49,12 @@ export default function MyDrawer() {
 	const [isHomeHovered, setIsHomeHovered] = useState(false);
 	const [isChangePasswordHovered, setIsChangePasswordHovered] = useState(false);
 	const [isFeedbackHovered, setIsFeedbackHovered] = useState(false);
+	const [isCasesHovered, setIsCasesHovered] = useState(false);
 
 	// Open useStates
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isAddOpen, setIsAddOpen] = useState(false);
+	const [isCasesOpen, setIsCasesOpen] = useState(false);
 
 	const handleHover = (type) => {
 		if (type === "close") {
@@ -68,6 +71,8 @@ export default function MyDrawer() {
 			setIsChangePasswordHovered(true);
 		} else if (type === "feedback") {
 			setIsFeedbackHovered(true);
+		} else if (type === "cases") {
+			setIsCasesHovered(true);
 		}
 	};
 
@@ -86,6 +91,8 @@ export default function MyDrawer() {
 			setIsChangePasswordHovered(false);
 		} else if (type === "feedback") {
 			setIsFeedbackHovered(false);
+		} else if (type === "cases") {
+			setIsCasesHovered(false);
 		}
 	};
 
@@ -210,10 +217,7 @@ export default function MyDrawer() {
 											handleMouseOut("search");
 										}}
 										onClick={() => {
-											if (isAddOpen) {
-												setIsAddOpen(!isAddOpen);
-											}
-											setIsSearchOpen(!isSearchOpen);
+												setIsSearchOpen(!isSearchOpen);
 										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
@@ -305,10 +309,6 @@ export default function MyDrawer() {
 											handleMouseOut("add");
 										}}
 										onClick={() => {
-											if (isSearchOpen) {
-												setIsSearchOpen(!isSearchOpen);
-											}
-
 											setIsAddOpen(!isAddOpen);
 										}}
 										justifyContent={"flex-start"}
@@ -362,6 +362,97 @@ export default function MyDrawer() {
 													icon={MdOutlinePets}
 													text={"إضافة حيوان أليف"}
 													to={"/add-pet"}
+													justifyContent='flex-end'
+													alignItems='flex-start'
+												/>
+											</Box>
+										</Flex>
+									) : (
+										<></>
+									)}
+								</Box>
+							</Box>
+
+							{/* Cases Accordion */}
+							<Box>
+								{/* Cases Button */}
+								<Box
+									dir='rtl'
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
+								>
+									<Button
+										_hover={{
+											bg: "#D4F500",
+											borderColor: "#D4F500",
+											color: "#000",
+											transform: "scale(1.05)",
+										}}
+										_active={{
+											transform: "scale(0.98)",
+											opacity: "0.5",
+										}}
+										onMouseOver={() => {
+											handleHover("cases");
+										}}
+										onMouseOut={() => {
+											handleMouseOut("cases");
+										}}
+										onClick={() => {
+											setIsCasesOpen(!isCasesOpen);
+										}}
+										justifyContent={"flex-start"}
+										alignItems={"center"}
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='20px'
+										width='100%'
+										leftIcon={
+											<Icon
+												as={FaBuffer}
+												color={isCasesHovered ? "#000" : "#8F8F8F"}
+											/>
+										}
+										rightIcon={
+											<Icon
+												as={IoIosArrowDropdown}
+												fontSize='18px'
+												color={isCasesHovered ? "#000" : "#8F8F8F"}
+												transform={
+													isCasesOpen ? "rotate(-180deg)" : "rotate(0deg)"
+												}
+												transition='transform 0.15s ease'
+											/>
+										}
+									>
+										الحالات
+									</Button>
+								</Box>
+
+								{/* Additional Buttons For Cases */}
+								<Box dir='rtl'>
+									{isCasesOpen ? (
+										<Flex gap='middle' vertical align='center'>
+											<Box
+												display='flex'
+												flexDirection='column'
+												alignItems='flex-start'
+												justifyContent='flex-start'
+											>
+												<NavigationLinkDrawer
+													icon={FaBookMedical}
+													text={"Check Open Cases"}
+													to={"/view-cases"}
+													justifyContent='flex-end'
+													alignItems='flex-start'
+												/>
+
+												<NavigationLinkDrawer
+													icon={BsFileMedical}
+													text={"Check Assigned Cases"}
+													to={"/assigned-cases"}
 													justifyContent='flex-end'
 													alignItems='flex-start'
 												/>

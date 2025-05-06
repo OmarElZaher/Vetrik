@@ -27,11 +27,32 @@ const userSchema = mongoose.Schema(
 			type: String,
 			default: "",
 		},
-		isAdmin: {
-			type: Boolean,
-			default: false,
+		role: {
+			type: String,
+			enum: ["admin", "vet", "secretary"],
 			required: true,
+			default: "vet",
 		},
+		notifications: [
+			{
+				message: {
+					type: String,
+					required: true,
+				},
+				read: {
+					type: Boolean,
+					default: false,
+				},
+				caseId: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Case",
+				},
+				createdAt: {
+					type: Date,
+					default: Date.now,
+				},
+			},
+		],
 	},
 	{
 		timestamps: true,
