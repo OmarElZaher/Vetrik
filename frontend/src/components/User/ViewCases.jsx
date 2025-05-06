@@ -39,14 +39,14 @@ import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
 function titleCase(str) {
-    if (!str) return "";
-    return str
-        .toLowerCase()
-        .split(" ")
-        .map((word) => {
-            return word.charAt(0).toUpperCase() + word.slice(1);
-        })
-        .join(" ");
+	if (!str) return "";
+	return str
+		.toLowerCase()
+		.split(" ")
+		.map((word) => {
+			return word.charAt(0).toUpperCase() + word.slice(1);
+		})
+		.join(" ");
 }
 
 export default function ViewCases() {
@@ -121,6 +121,7 @@ export default function ViewCases() {
 			// Remove accepted case from UI
 			setCases((prev) => prev.filter((c) => c._id !== caseId));
 			onClose();
+			navigate("/assigned-cases");
 		} catch (err) {
 			toast({
 				title: "Failed to accept case.",
@@ -207,42 +208,53 @@ export default function ViewCases() {
 						<Text fontSize={"20px"} color={"#121211"}>
 							لا توجد حالات متاحة
 						</Text>
-					) : (<>
-						
-					<TableContainer width={"80%"} maxHeight={"70vh"} overflowY={"auto"}>
-						<Table variant='simple' size='md'>
-							<Thead>
-							<Tr>
-								<Th textAlign={'right'}>اسم الحيوان</Th>
-								<Th textAlign={'center'}>السلالة</Th>
-								<Th textAlign={'center'}>النوع</Th>
-								<Th textAlign={'center'}>فئة الوزن</Th>
-								<Th textAlign={'left'}>تفاصيل</Th>
-							</Tr>
-							</Thead>
-							<Tbody>
-								{cases.map((row) => (
-									<Tr key={row._id}>
-										<Td textAlign={'right'}>{`${row.petId.name}`}</Td>
-										<Td textAlign={'center'}>{`${titleCase(row.petId.breed)}`}</Td>
-										<Td textAlign={'center'}>{`${titleCase(row.petId.type)}`}</Td>
-										<Td textAlign={'center'}>{`${row.petId.weightClass}`}</Td>
+					) : (
+						<>
+							<TableContainer
+								width={"80%"}
+								maxHeight={"70vh"}
+								overflowY={"auto"}
+							>
+								<Table variant='simple' size='md'>
+									<Thead>
+										<Tr>
+											<Th textAlign={"right"}>اسم الحيوان</Th>
+											<Th textAlign={"center"}>السلالة</Th>
+											<Th textAlign={"center"}>النوع</Th>
+											<Th textAlign={"center"}>فئة الوزن</Th>
+											<Th textAlign={"left"}>تفاصيل</Th>
+										</Tr>
+									</Thead>
+									<Tbody>
+										{cases.map((row) => (
+											<Tr key={row._id}>
+												<Td textAlign={"right"}>{`${row.petId.name}`}</Td>
+												<Td textAlign={"center"}>{`${titleCase(
+													row.petId.breed
+												)}`}</Td>
+												<Td textAlign={"center"}>{`${titleCase(
+													row.petId.type
+												)}`}</Td>
+												<Td
+													textAlign={"center"}
+												>{`${row.petId.weightClass}`}</Td>
 
-										<Td textAlign={'left'}>
-										<Button
-											rightIcon={<IoMdEye />}
-											onClick={() => handleShowDetails(row)}
-											variant='solid'
-										>
-											عرض
-										</Button>
-									</Td>
-									</Tr>
-								))}
-							</Tbody>
-						</Table>
-					</TableContainer>
-					</>)}
+												<Td textAlign={"left"}>
+													<Button
+														rightIcon={<IoMdEye />}
+														onClick={() => handleShowDetails(row)}
+														variant='solid'
+													>
+														عرض
+													</Button>
+												</Td>
+											</Tr>
+										))}
+									</Tbody>
+								</Table>
+							</TableContainer>
+						</>
+					)}
 				</Box>
 				<Box
 					display={"flex"}
@@ -277,7 +289,7 @@ export default function ViewCases() {
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent dir='rtl'>
-					<ModalHeader textAlign={'center'}>تفاصيل الحالة</ModalHeader>
+					<ModalHeader textAlign={"center"}>تفاصيل الحالة</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						<Text fontSize='lg'>

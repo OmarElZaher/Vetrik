@@ -47,10 +47,10 @@ const createCase = asyncHandler(async (req, res) => {
 const getAllCases = asyncHandler(async (req, res) => {
 	try {
 		const cases = await Case.find({})
-		.populate("petId", "name type breed")
-		.populate("secretaryId", "username email")
-		.populate("vetId", "username email")
-		.exec();
+			.populate("petId", "name type breed")
+			.populate("secretaryId", "username email")
+			.populate("vetId", "username email")
+			.exec();
 
 		if (cases.length === 0 || !cases) {
 			return res.status(404).json({ message: "No cases found" });
@@ -279,7 +279,10 @@ const getAssignedCases = asyncHandler(async (req, res) => {
 			return res.status(403).json({ message: "Unauthorized" });
 		}
 
-		const assignedCases = await Case.find({ vetId: req.user._id })
+		const assignedCases = await Case.find({
+			vetId: req.user._id,
+			status: "in-progress",
+		})
 			.populate("petId secretaryId")
 			.exec();
 

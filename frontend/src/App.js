@@ -104,7 +104,7 @@ function App() {
 						<Route path='/add-pet' element={<AddPetPage />} />
 
 						<Route path='/view-cases' element={<ViewCasesPage />} />
-						<Route path='/assigned-cases' element={<AssignedCasesPage/>}/>
+						<Route path='/assigned-cases' element={<AssignedCasesPage />} />
 
 						{/* Admin Routes */}
 						<Route path='/admin' element={<AdminHomePage />} />
