@@ -1,12 +1,6 @@
 // React Imports
 import React, { useState } from "react";
 
-// Axios Import
-import axios from "axios";
-
-// Variable Imports
-import { API_URL as api } from "../../utils/constants";
-
 // Chakra UI Imports
 import {
 	Box,

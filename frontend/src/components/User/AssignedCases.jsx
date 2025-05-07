@@ -71,7 +71,6 @@ export default function AssignedCases() {
 	const [gotData, setGotData] = useState(false);
 
 	const [actionsTaken, setActionsTaken] = useState("");
-	const [requiredActions, setRequiredActions] = useState("");
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -185,11 +184,6 @@ export default function AssignedCases() {
 				position: "top",
 			});
 		}
-	};
-
-	const handleShowDetials = (caseItem) => {
-		setSelectedCase(caseItem);
-		setRequiredActions(caseItem.reasonForVisit);
 	};
 
 	return isLoading ? (
