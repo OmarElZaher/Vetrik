@@ -381,7 +381,12 @@ export default function ViewCases() {
 						}}
 						onClick={() => {
 							localStorage.removeItem("ownerFilterData");
-							navigate("/");
+							localStorage.getItem("userRole") === "vet"
+								? navigate("/vet")
+								: localStorage.getItem("userRole") ===
+								  "secretary"
+								? navigate("/secretary")
+								: navigate("/admin");
 						}}
 						rightIcon={<IoMdArrowRoundBack />}
 						width={"25vw"}
