@@ -51,7 +51,7 @@ export default function SecretaryHome() {
 	const toast = useToast();
 	const navigate = useNavigate();
 
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	const [role, setRole] = useState("");
 

@@ -1,5 +1,5 @@
 // React Imports
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // Axios Import
@@ -24,6 +24,40 @@ export default function AdminHeader() {
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
+
+	useEffect(() => {
+		const fetchRole = async () => {
+			try {
+				const response = await axios.get(`${api}/user/getUserInfo`, {
+					withCredentials: true,
+				});
+				if (response.status === 200) {
+					if (response.data.role !== "admin") {
+						if (response.data.role === "vet") {
+							navigate("/vet");
+						}
+						if (response.data.role === "secretary") {
+							navigate("/secretary");
+						}
+					}
+				}
+			} catch (error) {
+				if (error.response.data.message === "Not Logged In") {
+					navigate("/login");
+				} else {
+					toast({
+						title: error.response.data.message,
+						status: "error",
+						duration: 2000,
+						position: "top",
+						isClosable: true,
+					});
+				}
+			}
+		};
+
+		fetchRole();
+	}, [navigate, toast]);
 
 	const handleLogout = async () => {
 		try {
@@ -56,40 +90,40 @@ export default function AdminHeader() {
 		<Spinner />
 	) : (
 		<Box
-			bg='#121211'
-			position='sticky'
+			bg="#121211"
+			position="sticky"
 			top={0}
 			zIndex={10}
-			color='#FFFFFF'
-			width='100%'
-			height='50px'
+			color="#FFFFFF"
+			width="100%"
+			height="50px"
 		>
-			<Box display='flex' justifyContent='center' alignItems='center'>
+			<Box display="flex" justifyContent="center" alignItems="center">
 				<Box
-					display='flex'
-					justifyContent='flex-start'
-					alignItems='center'
-					fontSize='25px'
-					width='33vw'
-					height='50px'
+					display="flex"
+					justifyContent="flex-start"
+					alignItems="center"
+					fontSize="25px"
+					width="33vw"
+					height="50px"
 				>
 					<MyDrawerAdmin />
 				</Box>
 				<Box
-					display='flex'
-					justifyContent='center'
-					alignItems='center'
-					width='33vw'
-					height='50px'
+					display="flex"
+					justifyContent="center"
+					alignItems="center"
+					width="33vw"
+					height="50px"
 				>
 					<Link to={"/admin"}>Vetrik 🐾</Link>
 				</Box>
 				<Box
-					display='flex'
-					justifyContent='flex-end'
-					alignItems='center'
-					width='33vw'
-					height='50px'
+					display="flex"
+					justifyContent="flex-end"
+					alignItems="center"
+					width="33vw"
+					height="50px"
 				>
 					<IconButton
 						_hover={{
@@ -101,10 +135,10 @@ export default function AdminHeader() {
 						onClick={handleLogout}
 						as={IoMdLogOut}
 						size={"sm"}
-						bg='#121211'
-						color='FFF'
+						bg="#121211"
+						color="FFF"
 						cursor={"pointer"}
-						transition='all 0.05s ease'
+						transition="all 0.05s ease"
 					/>
 				</Box>
 			</Box>

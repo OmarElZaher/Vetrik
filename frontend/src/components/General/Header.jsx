@@ -15,7 +15,8 @@ import { Box, IconButton, useToast } from "@chakra-ui/react";
 import { IoMdLogOut } from "react-icons/io";
 
 // Custom Component Imports
-import MyDrawer from "./MyDrawer";
+import VetDrawer from "./VetDrawer";
+import SecretaryDrawer from "./SecretaryDrawer";
 import Spinner from "./Spinner";
 
 export default function Header() {
@@ -24,10 +25,10 @@ export default function Header() {
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
-	const [isAdmin, setIsAdmin] = useState(false);
+
+	const [role] = useState(localStorage.getItem("userRole") || "user");
 
 	const handleLogout = async () => {
-		localStorage.clear();
 		try {
 			setIsLoading(true);
 			const response = await axios.post(
@@ -39,6 +40,7 @@ export default function Header() {
 			);
 
 			if (response.status === 200) {
+				localStorage.clear();
 				navigate("/login");
 			}
 		} catch (error) {
@@ -66,11 +68,9 @@ export default function Header() {
 					withCredentials: true,
 				});
 
-				if (response.status === 200) {
-					setIsAdmin(response.data.isAdmin);
-				} else {
+				if (response.status !== 200) {
 					toast({
-						title: response.data.message,
+						title: response?.data?.message,
 						status: "error",
 						duration: 2500,
 						isClosable: true,
@@ -79,7 +79,7 @@ export default function Header() {
 				}
 			} catch (error) {
 				toast({
-					title: error.response.data.message,
+					title: error?.response?.data?.message,
 					status: "error",
 					duration: 2500,
 					isClosable: true,
@@ -96,60 +96,74 @@ export default function Header() {
 		<Spinner />
 	) : (
 		<Box
-			as='nav'
-			bg='#121211'
-			width='100%'
-			height='50px'
-			position='sticky'
+			as="nav"
+			bg="#121211"
+			width="100%"
+			height="50px"
+			position="sticky"
 			top={0}
-			color='#FFFFFF'
+			color="#FFFFFF"
 			zIndex={10}
 		>
-			<Box display='flex' justifyContent='center' alignItems='center'>
+			<Box display="flex" justifyContent="center" alignItems="center">
 				<Box
-					width='33vw'
-					height='50px'
-					display='flex'
-					justifyContent='flex-start'
-					alignItems='center'
+					width="33vw"
+					height="50px"
+					display="flex"
+					justifyContent="flex-start"
+					alignItems="center"
 					key={1}
-					fontSize='25px'
+					fontSize="25px"
 				>
-					<MyDrawer />
+					{role === "secretary" ? (
+						<SecretaryDrawer />
+					) : role === "vet" ? (
+						<VetDrawer />
+					) : null}
 				</Box>
 				<Box
-					width='33vw'
-					height='50px'
-					display='flex'
-					justifyContent='center'
-					alignItems='center'
+					width="33vw"
+					height="50px"
+					display="flex"
+					justifyContent="center"
+					alignItems="center"
 					key={2}
 				>
-					<Link to={isAdmin ? "/admin" : "/"}>Vetrik 🐾</Link>
+					<Link
+						to={
+							role === "admin"
+								? "/admin"
+								: role === "vet"
+								? "/vet"
+								: "/secretary"
+						}
+					>
+						Vetrik 🐾
+					</Link>
 				</Box>
 				<Box
-					width='33vw'
-					height='50px'
-					display='flex'
-					justifyContent='flex-end'
-					alignItems='center'
+					width="33vw"
+					height="50px"
+					display="flex"
+					justifyContent="flex-end"
+					alignItems="center"
 					key={3}
 				>
 					<IconButton
 						as={IoMdLogOut}
 						size={"sm"}
-						bg='#121211'
-						color='FFF'
+						bg="#121211"
+						color="FFF"
 						onClick={handleLogout}
 						cursor={"pointer"}
-						aria-label='تسجيل الخروج'
+						aria-label="تسجيل الخروج"
 						_hover={{
 							color: "#D4F500",
 						}}
 						_active={{
 							opacity: "0.5",
 						}}
-						transition='all 0.05s ease'
+						transition="all 0.05s ease"
 					/>
 				</Box>
 			</Box>
