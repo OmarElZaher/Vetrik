@@ -1,6 +1,8 @@
 // React Imports
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { API_URL as api } from "../../utils/constants";
 
 // Chakra UI Imports
 import {
@@ -35,6 +37,7 @@ import { BsFileMedical } from "react-icons/bs";
 
 // Custom Component Imports
 import NavigationLinkDrawer from "./NavigationLinkDrawer";
+import axios from "axios";
 
 export default function MyDrawer() {
 	const navigate = useNavigate();
@@ -55,6 +58,25 @@ export default function MyDrawer() {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const [isAddOpen, setIsAddOpen] = useState(false);
 	const [isCasesOpen, setIsCasesOpen] = useState(false);
+
+	const [role, setRole] = useState("");
+
+	useEffect(() => {
+		const fetchUserRole = async () => {
+			try {
+				const response = await axios.get(`${api}/user/getUserInfo`, {
+					withCredentials: true,
+				});
+
+				if (response.status === 200) {
+					setRole(response.data.role);
+				}
+			} catch (error) {
+				console.error("Error fetching user data:", error);
+			}
+		};
+		fetchUserRole();
+	});
 
 	const handleHover = (type) => {
 		if (type === "close") {
@@ -217,7 +239,7 @@ export default function MyDrawer() {
 											handleMouseOut("search");
 										}}
 										onClick={() => {
-												setIsSearchOpen(!isSearchOpen);
+											setIsSearchOpen(!isSearchOpen);
 										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
@@ -432,36 +454,71 @@ export default function MyDrawer() {
 								</Box>
 
 								{/* Additional Buttons For Cases */}
-								<Box dir='rtl'>
-									{isCasesOpen ? (
-										<Flex gap='middle' vertical align='center'>
-											<Box
-												display='flex'
-												flexDirection='column'
-												alignItems='flex-start'
-												justifyContent='flex-start'
-											>
-												<NavigationLinkDrawer
-													icon={FaBookMedical}
-													text={"Check Open Cases"}
-													to={"/view-cases"}
-													justifyContent='flex-end'
-													alignItems='flex-start'
-												/>
+								{role === "secretary" ? (
+									<>
+										<Box dir='rtl'>
+											{isCasesOpen ? (
+												<Flex gap='middle' vertical align='center'>
+													<Box
+														display='flex'
+														flexDirection='column'
+														alignItems='flex-start'
+														justifyContent='flex-start'
+													>
+														<NavigationLinkDrawer
+															icon={FaBookMedical}
+															text={"testing"}
+															to={"/view-cases"}
+															justifyContent='flex-end'
+															alignItems='flex-start'
+														/>
 
-												<NavigationLinkDrawer
-													icon={BsFileMedical}
-													text={"Check Assigned Cases"}
-													to={"/assigned-cases"}
-													justifyContent='flex-end'
+														<NavigationLinkDrawer
+															icon={BsFileMedical}
+															text={"Check Assigned Cases"}
+															to={"/assigned-cases"}
+															justifyContent='flex-end'
+															alignItems='flex-start'
+														/>
+													</Box>
+												</Flex>
+											) : (
+												<></>
+											)}
+										</Box>
+									</>
+								) : (
+									<Box dir='rtl'>
+										{isCasesOpen ? (
+											<Flex gap='middle' vertical align='center'>
+												<Box
+													display='flex'
+													flexDirection='column'
 													alignItems='flex-start'
-												/>
-											</Box>
-										</Flex>
-									) : (
-										<></>
-									)}
-								</Box>
+													justifyContent='flex-start'
+												>
+													<NavigationLinkDrawer
+														icon={FaBookMedical}
+														text={"Check Open Cases"}
+														to={"/view-cases"}
+														justifyContent='flex-end'
+														alignItems='flex-start'
+													/>
+
+													<NavigationLinkDrawer
+														icon={BsFileMedical}
+														text={"Check Assigned Cases"}
+														to={"/assigned-cases"}
+														justifyContent='flex-end'
+														alignItems='flex-start'
+													/>
+												</Box>
+											</Flex>
+										) : (
+											<></>
+										)}
+									</Box>
+								)}
 							</Box>
 
 							{/* Send Feedback Button */}

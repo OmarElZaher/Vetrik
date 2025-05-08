@@ -16,7 +16,8 @@ import CreateAdminPage from "./pages/Admin/User/CreateAdmin";
 // }
 
 // General Imports {
-import HomePage from "./pages/Home/Home";
+import VetHomePage from "./pages/Home/VetHome";
+import SecretaryHomePage from "./pages/Home/SecretaryHome";
 import LoginPage from "./pages/General/Login";
 import NotFoundPage from "./pages/General/NotFound";
 import SendFeedbackPage from "./pages/General/SendFeedback";
@@ -63,7 +64,8 @@ function App() {
 				<Router>
 					<Routes>
 						{/* General Routes */}
-						<Route path='/' element={<HomePage />} />
+						<Route path='/vet' element={<VetHomePage />} />
+						<Route path='/secretary' element={<SecretaryHomePage />} />
 						<Route path='/login' element={<LoginPage />} />
 						<Route path='/send-feedback' element={<SendFeedbackPage />} />
 

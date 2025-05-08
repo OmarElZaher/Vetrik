@@ -77,10 +77,13 @@ export default function LoginCard() {
 					position: "top",
 					isClosable: true,
 				});
-				if (response.data.isAdmin) {
+
+				if (response.data.role === "admin") {
 					navigate("/admin");
-				} else {
-					navigate("/");
+				} else if (response.data.role === "vet") {
+					navigate("/vet");
+				} else if (response.data.role === "secretary") {
+					navigate("/secretary");
 				}
 			} else {
 				toast({

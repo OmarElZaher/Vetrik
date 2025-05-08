@@ -17,6 +17,7 @@ import {
 	Icon,
 	Input,
 	Text,
+	Select,
 	useToast,
 } from "@chakra-ui/react";
 
@@ -39,6 +40,7 @@ export default function CreateUser() {
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [confirmPassword, setConfirmPassword] = React.useState("");
+	const [role, setRole] = React.useState("");
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -55,6 +57,7 @@ export default function CreateUser() {
 					email: email,
 					firstName: firstName,
 					lastName: lastName,
+					role: role,
 				},
 				{ withCredentials: true }
 			);
@@ -209,6 +212,7 @@ export default function CreateUser() {
 									id='password'
 									display={"flex"}
 									justifyContent={"space-evenly"}
+									mb={5}
 								>
 									<Input
 										id='password'
@@ -232,6 +236,30 @@ export default function CreateUser() {
 										}}
 										mr={2.5}
 									/>
+								</FormControl>
+
+								<FormControl
+									id='role'
+									display={"flex"}
+									justifyContent={"center"}
+									alignItems={"center"}
+								>
+									<Select
+										id='role'
+										name='role'
+										placeholder='اختر الدور'
+										iconColor='transparent'
+										cursor={"pointer"}
+										value={role}
+										onChange={(e) => {
+											setRole(e.target.value);
+										}}
+										ml={2.5}
+									>
+										<option value='vet'>Vet</option>
+										<option value='secretary'>Secretary</option>
+										<option value='admin'>Admin</option>
+									</Select>
 								</FormControl>
 							</Box>
 

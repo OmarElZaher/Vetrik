@@ -7,10 +7,10 @@ import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Component Imports
 import Header from "../../components/General/Header";
-import Home from "../../components/General/Home";
+import VetHome from "../../components/General/VetHome";
 import Footer from "../../components/General/Footer";
 
-export default function HomePage() {
+export default function VetHomePage() {
 	return (
 		<>
 			<HelmetProvider>
@@ -20,7 +20,7 @@ export default function HomePage() {
 			</HelmetProvider>
 
 			<Header />
-			<Home />
+			<VetHome />
 			<Footer />
 		</>
 	);

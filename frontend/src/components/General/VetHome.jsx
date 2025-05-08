@@ -25,12 +25,11 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 
-import Spinner from "../General/Spinner";
+import Spinner from "./Spinner";
 
 import { FaPerson } from "react-icons/fa6";
 import { MdOutlinePets } from "react-icons/md";
 import { IoMdEye } from "react-icons/io";
-import { IoReload } from "react-icons/io5";
 
 import { VET_NAME as vetName, API_URL as api } from "../../utils/constants";
 
@@ -45,12 +44,13 @@ function titleCase(str) {
 		.join(" ");
 }
 
-export default function Home() {
+export default function VetHome() {
 	const toast = useToast();
 	const navigate = useNavigate();
 
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+
+	const [role, setRole] = useState("");
 
 	const [openCases, setOpenCases] = useState([]);
 	const [selectedCase, setSelectedCase] = useState(null);
@@ -68,17 +68,66 @@ export default function Home() {
 				if (response.status === 200) {
 					setOpenCases(response.data.cases);
 				} else {
-					setError(response.data.message);
+					toast({
+						title: "Error",
+						description: response.data.message,
+						status: "error",
+						duration: 3000,
+						isClosable: true,
+						position: "top",
+					});
 				}
 			} catch (error) {
-				setError(error.response.data.message);
+				toast({
+					title: "Error",
+					description: error.response.data.message,
+					status: "error",
+					duration: 3000,
+					isClosable: true,
+					position: "top",
+				});
 			} finally {
 				setLoading(false);
 			}
 		};
 
+		const fetchUserRole = async () => {
+			try {
+				const response = await axios.get(`${api}/user/getUserInfo`, {
+					withCredentials: true,
+				});
+				if (response.status === 200) {
+					setRole(response.data.role);
+				} else {
+					toast({
+						title: "Error",
+						description: response.data.message,
+						status: "error",
+						duration: 3000,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} catch (error) {
+				toast({
+					title: "Error",
+					description: error.response.data.message,
+					status: "error",
+					duration: 3000,
+					isClosable: true,
+					position: "top",
+				});
+			}
+		};
+
+		fetchUserRole();
+
+		if (role === "secretary") {
+			navigate("/secretary");
+		}
+
 		fetchOpenCases();
-	}, [toast]);
+	}, [navigate, role, toast]);
 
 	const handleShowDetails = (caseItem) => {
 		setSelectedCase(caseItem);
@@ -89,45 +138,6 @@ export default function Home() {
 		<>
 			{loading ? (
 				<Spinner />
-			) : error ? (
-				<>
-					<Box
-						dir='rtl'
-						display={"flex"}
-						flexDirection={"column"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						bg={"#F3F3F3"}
-						height={"87vh"}
-					>
-						<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-							ERROR
-						</Text>
-						<Text fontSize={"40px"} textDecoration={"underline"}>
-							{error}
-						</Text>
-						<Button
-							_hover={{
-								bg: "yellowgreen",
-								color: "#000",
-								transform: "scale(1.01)",
-							}}
-							_active={{
-								transform: "scale(0.99)",
-								opacity: "0.5",
-							}}
-							onClick={() => {
-								window.location.reload();
-							}}
-							rightIcon={<IoReload />}
-							bg={"#FFF"}
-							width={"25vw"}
-							mt={10}
-						>
-							Reload Page
-						</Button>
-					</Box>
-				</>
 			) : (
 				<>
 					{/* Welcome Box */}
@@ -142,9 +152,7 @@ export default function Home() {
 							{"Welcome to " + vetName + " Vet Clinic"}
 						</Text>
 					</Box>
-
 					<hr />
-
 					{/* Search Box */}
 					<Box
 						display={"flex"}
@@ -247,10 +255,8 @@ export default function Home() {
 							</Box>
 						</Box>
 					</Box>
-
 					<hr />
 
-					{/* Open Cases Box */}
 					<Box
 						display={"flex"}
 						justifyContent={"center"}
@@ -340,6 +346,7 @@ export default function Home() {
 					</Box>
 
 					{/* Modal for Case Details */}
+
 					<Modal isOpen={isOpen} onClose={onClose}>
 						<ModalOverlay />
 						<ModalContent dir='rtl'>
