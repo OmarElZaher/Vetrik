@@ -8,6 +8,9 @@ import axios from "axios";
 // API URL Import
 import { API_URL as api } from "../../utils/constants";
 
+// Hook Import
+import useIsMobile from "../../hooks/useIsMobile";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -22,6 +25,7 @@ import {
 	Select,
 	Text,
 	useToast,
+	Flex,
 } from "@chakra-ui/react";
 
 // React Icons Imports
@@ -35,6 +39,7 @@ import Footer from "../General/Footer";
 export default function AddOwner() {
 	const navigate = useNavigate();
 	const toast = useToast();
+	const isMobile = useIsMobile();
 
 	// Form useStates
 	const [fullName, setFullName] = useState("");
@@ -134,6 +139,181 @@ export default function AddOwner() {
 			setPreferredContactMethod("");
 		}
 	}, [receiveNotifications]);
+
+	if (isMobile) {
+		return (
+			<>
+			  {isLoading ? (
+				<Spinner />
+			  ) : (
+				<>
+				  <Box
+					dir='rtl'
+					display='flex'
+					justifyContent='center'
+					alignItems='center'
+					bg='#F3F3F3'
+					minHeight='90vh'
+					px={[2, 5]}
+					py={[4, 8]}
+				  >
+					<Card width={['100%', '95%', '80%']} height='auto'>
+					  <CardBody
+						display='flex'
+						flexDirection='column'
+						justifyContent='center'
+						alignItems='center'
+						width='100%'
+						px={[2, 4, 10]}
+						py={5}
+					  >
+						{/* Header Icon */}
+						<Icon as={FaPerson} fontSize={["40px", "50px", "60px"]} mt={2} />
+		  
+						{/* Title */}
+						<Text
+						  fontSize={["xl", "2xl", "3xl"]}
+						  fontWeight='bold'
+						  mt={4}
+						  textAlign='center'
+						>
+						  إضافة مالك جديد
+						</Text>
+		  
+						{/* Form */}
+						<Box
+						  width='100%'
+						  mt={8}
+						  display='flex'
+						  flexDirection='column'
+						  gap={5}
+						>
+						  {/* Full Name & Gender */}
+						  <Flex
+							flexDirection={['column', 'row']}
+							justifyContent='space-between'
+							gap={[3, 5]}
+						  >
+							<Input
+							  id='fullName'
+							  type='text'
+							  name='fullName'
+							  placeholder='الاسم كامل (الاسم الأول واسم العائلة)'
+							  value={fullName}
+							  onChange={(e) => setFullName(e.target.value)}
+							  flex='1'
+							/>
+							<Select
+							  id='gender'
+							  name='gender'
+							  placeholder='اختر الجنس'
+							  cursor='pointer'
+							  value={gender}
+							  onChange={(e) => setGender(e.target.value)}
+							  flex='1'
+							>
+							  <option value='Male'>ذكر</option>
+							  <option value='Female'>أنثى</option>
+							</Select>
+						  </Flex>
+		  
+						  {/* Email */}
+						  <FormControl id='email'>
+							<InputGroup>
+							  <InputRightAddon>@</InputRightAddon>
+							  <Input
+								id='email'
+								type='email'
+								name='email'
+								placeholder='البريد الإلكتروني'
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+							  />
+							</InputGroup>
+						  </FormControl>
+		  
+						  {/* Mobile Number */}
+						  <FormControl id='mobileNumber'>
+							<InputGroup>
+							  <InputRightAddon>+٢</InputRightAddon>
+							  <Input
+								id='mobileNumber'
+								type='tel'
+								name='mobileNumber'
+								placeholder='رقم الموبايل'
+								value={mobileNumber}
+								onChange={(e) => setMobileNumber(e.target.value)}
+							  />
+							</InputGroup>
+						  </FormControl>
+		  
+						  {/* Notifications & Preferred Contact */}
+						  <Flex
+							flexDirection={['column', 'row']}
+							gap={[3, 5]}
+						  >
+							<Select
+							  id='receiveNotifications'
+							  name='receiveNotifications'
+							  placeholder='استقبال الإشعارات؟'
+							  cursor='pointer'
+							  value={receiveNotifications}
+							  onChange={(e) => setReceiveNotifications(e.target.value)}
+							  flex='1'
+							>
+							  <option value='true'>نعم</option>
+							  <option value='false'>لا</option>
+							</Select>
+		  
+							<Select
+							  id='preferredContactMethod'
+							  name='preferredContactMethod'
+							  placeholder='طريقة التواصل المفضلة'
+							  cursor='pointer'
+							  value={preferredContactMethod}
+							  onChange={(e) =>
+								setPreferredContactMethod(e.target.value)
+							  }
+							  isDisabled={
+								!receiveNotifications || receiveNotifications === 'false'
+							  }
+							  flex='1'
+							>
+							  <option value='Email'>بريد إلكتروني</option>
+							  <option value='Phone'>مكالمة</option>
+							  <option value='Both'>الاثنين</option>
+							</Select>
+						  </Flex>
+		  
+						  {/* Submit Button */}
+						  <Button
+							_hover={{
+							  bg: 'yellowgreen',
+							  color: '#000',
+							  transform: 'scale(1.01)',
+							}}
+							_active={{
+							  transform: 'scale(0.99)',
+							  opacity: '0.5',
+							}}
+							onClick={handleAdd}
+							rightIcon={<IoMdAdd />}
+							width={['100%', '60%', '25%']}
+							alignSelf='center'
+							mt={4}
+						  >
+							إضافة
+						  </Button>
+						</Box>
+					  </CardBody>
+					</Card>
+				  </Box>
+				  <Footer />
+				</>
+			  )}
+			</>
+		  );
+	}		  
 
 	return (
 		<>

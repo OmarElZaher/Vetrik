@@ -386,32 +386,36 @@ export default function PetHealthRecords() {
 								</TableContainer>
 							</Box>
 							<Box
-								display={"flex"}
-								flexDirection={"column"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								width={"90%"}
-								height={"15%"}
-							>
+								display="flex"
+								flexDirection="column"
+								justifyContent="center"
+								alignItems="center"
+								width={["100%", "90%"]} // 100% on small screens, 90% on larger
+								height="auto"
+								px={[4, 0]} // Padding on small screens
+								py={5}
+								>
 								<Input
-									type={"file"}
+									type="file"
 									onChange={handleFileChange}
-									cursor={"pointer"}
-									width={"40%"}
-									mb={5}
+									cursor="pointer"
+									width={["100%", "60%", "40%"]} // Full width on mobile, narrower on larger screens
+									mb={4}
 								/>
 								<Button
 									_hover={{
-										bg: "yellowgreen",
-										color: "#000",
-										transform: "scale(1.01)",
+									bg: "yellowgreen",
+									color: "#000",
+									transform: "scale(1.01)",
 									}}
 									_active={{
-										transform: "scale(0.99)",
-										opacity: "0.5",
+									transform: "scale(0.99)",
+									opacity: "0.5",
 									}}
 									onClick={handleUpload}
 									rightIcon={<MdUpload />}
+									width={["100%", "auto"]}
+									fontSize={["sm", "md"]}
 								>
 									رفع
 								</Button>

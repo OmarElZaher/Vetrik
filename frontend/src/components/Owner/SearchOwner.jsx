@@ -8,6 +8,9 @@ import axios from "axios";
 // API URL Import
 import { API_URL as api } from "../../utils/constants";
 
+// Hook Import
+import useIsMobile from "../../hooks/useIsMobile";
+
 // Chakra UI Imports
 import {
 	Box,
@@ -24,6 +27,7 @@ import {
 	ListItem,
 	ListIcon,
 	useToast,
+	VStack,
 } from "@chakra-ui/react";
 
 // React Icons Imports
@@ -38,6 +42,7 @@ import Spinner from "../General/Spinner";
 export default function SearchOwner() {
 	const toast = useToast();
 	const navigate = useNavigate();
+	const isMobile = useIsMobile();
 
 	// Form useStates
 	const [fullName, setFullName] = useState("");
@@ -107,6 +112,148 @@ export default function SearchOwner() {
 		event.preventDefault();
 		handleSearch();
 	};
+
+	if (isMobile) {
+		return (
+			<>
+			  {isLoading ? (
+				<Spinner />
+			  ) : (
+				<>
+				  <Box
+					dir='rtl'
+					display='flex'
+					justifyContent='center'
+					alignItems='center'
+					bg='#F3F3F3'
+					width='100%'
+					minHeight='87vh'
+					px={[3, 5]} // horizontal padding for small screens
+					py={[4, 8]} // vertical padding for small screens
+				  >
+					<Card width={["100%", "90%", "80%"]} height='auto' p={[4, 6]}>
+					  <Box
+						display='flex'
+						flexDirection='column'
+						justifyContent='center'
+						alignItems='center'
+						height='auto'
+						textAlign='center'
+					  >
+						<Icon as={FaPerson} fontSize='60px' />
+						<Heading size='lg' mt={2}>
+						  بحث عن المالك
+						</Heading>
+					  </Box>
+		  
+					  <Box my={[5, 7]} mx={[2, 10]}>
+						<List spacing={3}>
+						  <ListItem>
+							<ListIcon as={MdSettings} color='yellowgreen' />
+							أدخل اسم أو أكتر علشان توصل للمالك اللي بتدور عليه.
+						  </ListItem>
+						  <ListItem>
+							<ListIcon as={MdSettings} color='yellowgreen' />
+							لو عايز تشوف كل المالكين، دوس{" "}
+							<Text display='inline' color='yellowgreen'>
+							  بحث
+							</Text>{" "}
+							من غير ما تكتب حاجة.
+						  </ListItem>
+						</List>
+					  </Box>
+		  
+					  <hr />
+		  
+					  <Box dir='rtl' mt={6}>
+						{/* Search Form */}
+						<VStack spacing={5} align='stretch'>
+						  <FormControl id='fullName'>
+							<Input
+							  id='fullName'
+							  type='text'
+							  name='fullName'
+							  placeholder='(الاسم كامل (الاسم الأول واسم العائلة'
+							  value={fullName}
+							  onChange={handleFullNameChange}
+							  width='100%'
+							/>
+						  </FormControl>
+		  
+						  <FormControl id='email'>
+							<InputGroup>
+							  <InputRightAddon
+								display='flex'
+								justifyContent='center'
+								alignItems='center'
+								px={3}
+							  >
+								@
+							  </InputRightAddon>
+							  <Input
+								id='email'
+								type='email'
+								name='email'
+								placeholder='البريد الإلكتروني'
+								value={email}
+								onChange={handleEmailChange}
+							  />
+							</InputGroup>
+						  </FormControl>
+		  
+						  <FormControl id='mobileNumber'>
+							<InputGroup>
+							  <InputRightAddon
+								dir='rtl'
+								display='flex'
+								justifyContent='center'
+								alignItems='center'
+								px={3}
+							  >
+								+٢
+							  </InputRightAddon>
+							  <Input
+								dir='rtl'
+								id='mobileNumber'
+								type='tel'
+								name='mobileNumber'
+								placeholder='رقم الموبايل'
+								value={mobileNumber}
+								onChange={handleMobileNumberChange}
+							  />
+							</InputGroup>
+						  </FormControl>
+		  
+						  <FormControl>
+							<Button
+							  _hover={{
+								bg: 'yellowgreen',
+								color: '#000',
+								transform: 'scale(1.01)',
+							  }}
+							  _active={{
+								transform: 'scale(0.99)',
+								opacity: '0.5',
+							  }}
+							  onClick={handleSubmit}
+							  rightIcon={<Icon as={IoMdSearch} />}
+							  width={['100%', '50%']}
+							  alignSelf='center'
+							  mt={4}
+							>
+							  بحث
+							</Button>
+						  </FormControl>
+						</VStack>
+					  </Box>
+					</Card>
+				  </Box>
+				  <Footer />
+				</>
+			  )}
+			</>
+		  );
+	}		  
 
 	return (
 		<>
