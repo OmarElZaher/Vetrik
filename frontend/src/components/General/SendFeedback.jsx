@@ -184,7 +184,6 @@ export default function SendFeedback() {
 								placeholder='اكتب اللي في بالك...'
 								value={feedback}
 								onChange={(e) => {
-									console.log(e.target.value);
 									setFeedback(e.target.value);
 								}}
 							/>

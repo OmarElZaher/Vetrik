@@ -52,7 +52,6 @@ export default function ResetPassword() {
 	const handleChange = async () => {
 		try {
 			setIsLoading(true);
-			console.log(newPassword, " ", confirmPassword);
 			const response = await axios.post(`${api}/user/resetPassword`, {
 				email: localStorage.getItem("email"),
 				newPassword: newPassword,

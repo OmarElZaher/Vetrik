@@ -50,8 +50,7 @@ export default function VetDrawer() {
 	const [isAddHovered, setIsAddHovered] = useState(false);
 	const [isEditHovered, setIsEditHovered] = useState(false);
 	const [isHomeHovered, setIsHomeHovered] = useState(false);
-	const [isChangePasswordHovered, setIsChangePasswordHovered] =
-		useState(false);
+	const [isChangePasswordHovered, setIsChangePasswordHovered] = useState(false);
 	const [isFeedbackHovered, setIsFeedbackHovered] = useState(false);
 	const [isCasesHovered, setIsCasesHovered] = useState(false);
 
@@ -126,26 +125,24 @@ export default function VetDrawer() {
 				onClick={onOpen}
 				icon={<HamburgerIcon />}
 				ref={btnRef}
-				variant="transparent"
-				size="xxl"
-				width="50px"
-				height="50px"
+				variant='transparent'
+				size='xxl'
+				width='50px'
+				height='50px'
 			/>
 
 			<Drawer
 				isOpen={isOpen}
-				placement="left"
+				placement='left'
 				onClose={onClose}
 				finalFocusRef={btnRef}
 			>
 				<DrawerOverlay />
-				<DrawerContent bg="#121211">
+				<DrawerContent bg='#121211'>
 					<DrawerCloseButton
 						_hover={{
 							color: "#D4F500",
-							transform: isCloseHovered
-								? "rotate(90deg)"
-								: "rotate(0deg)",
+							transform: isCloseHovered ? "rotate(90deg)" : "rotate(0deg)",
 							transition: "transform 0.3s ease",
 						}}
 						onMouseOver={() => {
@@ -154,24 +151,24 @@ export default function VetDrawer() {
 						onMouseOut={() => {
 							handleMouseOut("close");
 						}}
-						color="#8F8F8F"
+						color='#8F8F8F'
 					/>
 
 					<DrawerHeader
-						color="#8F8F8F"
-						fontSize="20px"
-						textDecoration="underline"
-						pl="20px"
+						color='#8F8F8F'
+						fontSize='20px'
+						textDecoration='underline'
+						pl='20px'
 					>
 						القائمة
 					</DrawerHeader>
 
 					<DrawerBody>
-						<Flex gap="middle" vertical>
+						<Flex gap='middle' vertical>
 							{/* Home Button */}
 							<Box>
 								<Box
-									dir="rtl"
+									dir='rtl'
 									display={"flex"}
 									justifyContent={"flex-start"}
 									alignItems={"center"}
@@ -198,19 +195,15 @@ export default function VetDrawer() {
 										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
-										transition="all 0.15s ease"
-										bg="#121211"
-										color="#8F8F8F"
-										fontSize="18px"
-										width="100%"
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
 										leftIcon={
 											<Icon
 												as={GoHome}
-												color={
-													isHomeHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												color={isHomeHovered ? "#000" : "#8F8F8F"}
 											/>
 										}
 									>
@@ -223,10 +216,10 @@ export default function VetDrawer() {
 							<Box>
 								{/* Search Button */}
 								<Box
-									dir="rtl"
-									display="flex"
-									justifyContent="flex-start"
-									alignItems="center"
+									dir='rtl'
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
 								>
 									<Button
 										_hover={{
@@ -250,36 +243,26 @@ export default function VetDrawer() {
 										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
-										transition="all 0.15s ease"
-										bg="#121211"
-										color="#8F8F8F"
-										width="100%"
-										fontSize="20px"
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										width='100%'
+										fontSize='20px'
 										leftIcon={
 											<Icon
 												as={IoMdSearch}
-												color={
-													isSearchHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												color={isSearchHovered ? "#000" : "#8F8F8F"}
 											/>
 										}
 										rightIcon={
 											<Icon
 												as={IoIosArrowDropdown}
-												fontSize="18px"
-												color={
-													isSearchHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												fontSize='18px'
+												color={isSearchHovered ? "#000" : "#8F8F8F"}
 												transform={
-													isSearchOpen
-														? "rotate(-180deg)"
-														: "rotate(0deg)"
+													isSearchOpen ? "rotate(-180deg)" : "rotate(0deg)"
 												}
-												transition="transform 0.15s ease"
+												transition='transform 0.15s ease'
 											/>
 										}
 									>
@@ -290,32 +273,28 @@ export default function VetDrawer() {
 								{/* Additional Buttons For Search */}
 								<Box>
 									{isSearchOpen ? (
-										<Flex
-											gap="middle"
-											vertical
-											align="center"
-										>
+										<Flex gap='middle' vertical align='center'>
 											<Box
-												dir="rtl"
-												display="flex"
-												flexDirection="column"
-												alignItems="flex-start"
-												justifyContent="flex-start"
+												dir='rtl'
+												display='flex'
+												flexDirection='column'
+												alignItems='flex-start'
+												justifyContent='flex-start'
 											>
 												<NavigationLinkDrawer
 													icon={FaPerson}
 													text={"بحث عن المالك"}
 													to={"/search-owner"}
-													justifyContent="flex-end"
-													alignItems="center"
+													justifyContent='flex-end'
+													alignItems='center'
 												/>
 
 												<NavigationLinkDrawer
 													icon={MdOutlinePets}
 													text={"بحث عن حيوان أليف"}
 													to={"/search-pet"}
-													justifyContent="flex-end"
-													alignItems="center"
+													justifyContent='flex-end'
+													alignItems='center'
 												/>
 											</Box>
 										</Flex>
@@ -329,10 +308,10 @@ export default function VetDrawer() {
 							<Box>
 								{/* Add Button */}
 								<Box
-									dir="rtl"
-									display="flex"
-									justifyContent="flex-start"
-									alignItems="center"
+									dir='rtl'
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
 								>
 									<Button
 										_hover={{
@@ -356,36 +335,26 @@ export default function VetDrawer() {
 										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
-										transition="all 0.15s ease"
-										bg="#121211"
-										color="#8F8F8F"
-										fontSize="20px"
-										width="100%"
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='20px'
+										width='100%'
 										leftIcon={
 											<Icon
 												as={IoAdd}
-												color={
-													isAddHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												color={isAddHovered ? "#000" : "#8F8F8F"}
 											/>
 										}
 										rightIcon={
 											<Icon
 												as={IoIosArrowDropdown}
-												fontSize="18px"
-												color={
-													isAddHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												fontSize='18px'
+												color={isAddHovered ? "#000" : "#8F8F8F"}
 												transform={
-													isAddOpen
-														? "rotate(-180deg)"
-														: "rotate(0deg)"
+													isAddOpen ? "rotate(-180deg)" : "rotate(0deg)"
 												}
-												transition="transform 0.15s ease"
+												transition='transform 0.15s ease'
 											/>
 										}
 									>
@@ -394,33 +363,29 @@ export default function VetDrawer() {
 								</Box>
 
 								{/* Additional Buttons For Add */}
-								<Box dir="rtl">
+								<Box dir='rtl'>
 									{isAddOpen ? (
-										<Flex
-											gap="middle"
-											vertical
-											align="center"
-										>
+										<Flex gap='middle' vertical align='center'>
 											<Box
-												display="flex"
-												flexDirection="column"
-												alignItems="flex-start"
-												justifyContent="flex-start"
+												display='flex'
+												flexDirection='column'
+												alignItems='flex-start'
+												justifyContent='flex-start'
 											>
 												<NavigationLinkDrawer
 													icon={FaPerson}
 													text={"إضافة مالك"}
 													to={"/add-owner"}
-													justifyContent="flex-end"
-													alignItems="flex-start"
+													justifyContent='flex-end'
+													alignItems='flex-start'
 												/>
 
 												<NavigationLinkDrawer
 													icon={MdOutlinePets}
 													text={"إضافة حيوان أليف"}
 													to={"/add-pet"}
-													justifyContent="flex-end"
-													alignItems="flex-start"
+													justifyContent='flex-end'
+													alignItems='flex-start'
 												/>
 											</Box>
 										</Flex>
@@ -434,10 +399,10 @@ export default function VetDrawer() {
 							<Box>
 								{/* Cases Button */}
 								<Box
-									dir="rtl"
-									display="flex"
-									justifyContent="flex-start"
-									alignItems="center"
+									dir='rtl'
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
 								>
 									<Button
 										_hover={{
@@ -461,36 +426,26 @@ export default function VetDrawer() {
 										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
-										transition="all 0.15s ease"
-										bg="#121211"
-										color="#8F8F8F"
-										fontSize="20px"
-										width="100%"
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='20px'
+										width='100%'
 										leftIcon={
 											<Icon
 												as={FaBuffer}
-												color={
-													isCasesHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												color={isCasesHovered ? "#000" : "#8F8F8F"}
 											/>
 										}
 										rightIcon={
 											<Icon
 												as={IoIosArrowDropdown}
-												fontSize="18px"
-												color={
-													isCasesHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												fontSize='18px'
+												color={isCasesHovered ? "#000" : "#8F8F8F"}
 												transform={
-													isCasesOpen
-														? "rotate(-180deg)"
-														: "rotate(0deg)"
+													isCasesOpen ? "rotate(-180deg)" : "rotate(0deg)"
 												}
-												transition="transform 0.15s ease"
+												transition='transform 0.15s ease'
 											/>
 										}
 									>
@@ -501,37 +456,29 @@ export default function VetDrawer() {
 								{/* Additional Buttons For Cases */}
 								{role === "secretary" ? (
 									<>
-										<Box dir="rtl">
+										<Box dir='rtl'>
 											{isCasesOpen ? (
-												<Flex
-													gap="middle"
-													vertical
-													align="center"
-												>
+												<Flex gap='middle' vertical align='center'>
 													<Box
-														display="flex"
-														flexDirection="column"
-														alignItems="flex-start"
-														justifyContent="flex-start"
+														display='flex'
+														flexDirection='column'
+														alignItems='flex-start'
+														justifyContent='flex-start'
 													>
 														<NavigationLinkDrawer
 															icon={FaBookMedical}
 															text={"testing"}
 															to={"/view-cases"}
-															justifyContent="flex-end"
-															alignItems="flex-start"
+															justifyContent='flex-end'
+															alignItems='flex-start'
 														/>
 
 														<NavigationLinkDrawer
 															icon={BsFileMedical}
-															text={
-																"Check Assigned Cases"
-															}
-															to={
-																"/assigned-cases"
-															}
-															justifyContent="flex-end"
-															alignItems="flex-start"
+															text={"Check Assigned Cases"}
+															to={"/assigned-cases"}
+															justifyContent='flex-end'
+															alignItems='flex-start'
 														/>
 													</Box>
 												</Flex>
@@ -541,37 +488,29 @@ export default function VetDrawer() {
 										</Box>
 									</>
 								) : (
-									<Box dir="rtl">
+									<Box dir='rtl'>
 										{isCasesOpen ? (
-											<Flex
-												gap="middle"
-												vertical
-												align="center"
-											>
+											<Flex gap='middle' vertical align='center'>
 												<Box
-													display="flex"
-													flexDirection="column"
-													alignItems="flex-start"
-													justifyContent="flex-start"
+													display='flex'
+													flexDirection='column'
+													alignItems='flex-start'
+													justifyContent='flex-start'
 												>
 													<NavigationLinkDrawer
 														icon={FaBookMedical}
-														text={
-															"Check Open Cases"
-														}
+														text={"الحالات المفتوحة"}
 														to={"/view-cases"}
-														justifyContent="flex-end"
-														alignItems="flex-start"
+														justifyContent='flex-end'
+														alignItems='flex-start'
 													/>
 
 													<NavigationLinkDrawer
 														icon={BsFileMedical}
-														text={
-															"Check Assigned Cases"
-														}
+														text={"الحالات الخاصة بي"}
 														to={"/assigned-cases"}
-														justifyContent="flex-end"
-														alignItems="flex-start"
+														justifyContent='flex-end'
+														alignItems='flex-start'
 													/>
 												</Box>
 											</Flex>
@@ -585,10 +524,10 @@ export default function VetDrawer() {
 							{/* Send Feedback Button */}
 							<Box>
 								<Box
-									dir="rtl"
-									display="flex"
-									justifyContent="flex-start"
-									alignItems="center"
+									dir='rtl'
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
 								>
 									<Button
 										_hover={{
@@ -612,19 +551,15 @@ export default function VetDrawer() {
 										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
-										transition="all 0.15s ease"
-										bg="#121211"
-										color="#8F8F8F"
-										fontSize="18px"
-										width="100%"
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
 										leftIcon={
 											<Icon
 												as={VscFeedback}
-												color={
-													isFeedbackHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												color={isFeedbackHovered ? "#000" : "#8F8F8F"}
 											/>
 										}
 									>
@@ -636,10 +571,10 @@ export default function VetDrawer() {
 							{/* Edit Profile Button */}
 							<Box>
 								<Box
-									dir="rtl"
-									display="flex"
-									justifyContent="flex-start"
-									alignItems="center"
+									dir='rtl'
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
 								>
 									<Button
 										_hover={{
@@ -663,19 +598,15 @@ export default function VetDrawer() {
 										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
-										transition="all 0.15s ease"
-										bg="#121211"
-										color="#8F8F8F"
-										fontSize="18px"
-										width="100%"
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
 										leftIcon={
 											<Icon
 												as={CiEdit}
-												color={
-													isEditHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												color={isEditHovered ? "#000" : "#8F8F8F"}
 											/>
 										}
 									>
@@ -687,10 +618,10 @@ export default function VetDrawer() {
 							{/* Change Password Button */}
 							<Box>
 								<Box
-									dir="rtl"
-									display="flex"
-									justifyContent="flex-start"
-									alignItems="center"
+									dir='rtl'
+									display='flex'
+									justifyContent='flex-start'
+									alignItems='center'
 								>
 									<Button
 										_hover={{
@@ -714,19 +645,15 @@ export default function VetDrawer() {
 										}}
 										justifyContent={"flex-start"}
 										alignItems={"center"}
-										transition="all 0.15s ease"
-										bg="#121211"
-										color="#8F8F8F"
-										fontSize="18px"
-										width="100%"
+										transition='all 0.15s ease'
+										bg='#121211'
+										color='#8F8F8F'
+										fontSize='18px'
+										width='100%'
 										leftIcon={
 											<Icon
 												as={MdOutlinePassword}
-												color={
-													isChangePasswordHovered
-														? "#000"
-														: "#8F8F8F"
-												}
+												color={isChangePasswordHovered ? "#000" : "#8F8F8F"}
 											/>
 										}
 									>
@@ -737,7 +664,7 @@ export default function VetDrawer() {
 						</Flex>
 					</DrawerBody>
 
-					<DrawerFooter color="#8F8F8F">® Vetrik</DrawerFooter>
+					<DrawerFooter color='#8F8F8F'>® Vetrik</DrawerFooter>
 				</DrawerContent>
 			</Drawer>
 		</>

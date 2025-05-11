@@ -152,7 +152,7 @@ export default function UserDetails() {
 
 				if (response.status === 200) {
 					setUser(response.data.user);
-					setIsAdmin(response.data.user.isAdmin);
+					setIsAdmin(response?.data?.user?.role === "admin");
 					setGotData(true);
 				} else {
 					setError(response.data.message);
@@ -308,12 +308,51 @@ export default function UserDetails() {
 							width={"20%"}
 							height={"80%"}
 						>
-							<Text fontWeight={"bold"}>
-								هل هو مشرف؟{" "}
-								{isAdmin ? (
-									<Badge colorScheme='green'>True</Badge>
+							<Text fontWeight={"bold"} textDecoration={"underline"} mb={1}>
+								تاريخ التسجيل
+							</Text>
+							<Text fontSize={"20px"}>
+								{new Date(user.createdAt).toLocaleDateString("ar-EG", {
+									year: "numeric",
+									month: "2-digit",
+									day: "2-digit",
+								})}
+							</Text>
+
+							<Text
+								fontWeight={"bold"}
+								textDecoration={"underline"}
+								mt={3}
+								mb={1}
+							>
+								الوقت
+							</Text>
+							<Text fontSize={"20px"}>
+								{new Date(user.createdAt).toLocaleTimeString("ar-EG", {
+									hour: "2-digit",
+									minute: "2-digit",
+								})}
+							</Text>
+
+							<Text fontWeight={"bold"} textDecoration={"underline"} mt={3}>
+								الدور
+							</Text>
+							<Text fontSize={"30px"}>
+								{user.role === "admin" ? (
+									<Badge colorScheme='green' size={"lg"}>
+										{" "}
+										أدمن
+									</Badge>
+								) : user.role === "vet" ? (
+									<Badge colorScheme='blue' size={"lg"}>
+										{" "}
+										طبيب بيطرى
+									</Badge>
 								) : (
-									<Badge colorScheme='red'>False</Badge>
+									<Badge colorScheme='purple' size={"lg"}>
+										{" "}
+										سكرتير
+									</Badge>
 								)}
 							</Text>
 						</Box>

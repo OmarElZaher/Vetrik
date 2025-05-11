@@ -101,17 +101,17 @@ const getCaseById = asyncHandler(async (req, res) => {
 const updateCase = asyncHandler(async (req, res) => {
 	try {
 		const { caseId } = req.params;
-		const { status, actionsTaken } = req.body;
+		const { status, actionsTaken, reasonForVisit } = req.body;
 
 		if (!mongoose.Types.ObjectId.isValid(caseId)) {
 			return res.status(400).json({ message: "Invalid case ID" });
 		}
 
-		const updatedCase = await Case.findByIdAndUpdate(
-			caseId,
-			{ status, actionsTaken },
-			{ new: true }
-		);
+		const updatedCase = await Case.findByIdAndUpdate(caseId, {
+			status,
+			actionsTaken,
+			reasonForVisit,
+		});
 
 		if (!updatedCase) {
 			return res.status(404).json({ message: "Case not found" });

@@ -97,12 +97,32 @@ export default function SecretaryHome() {
 		if (role === "vet") {
 			navigate("/vet");
 		}
-
 	}, [navigate, role, toast]);
 
 	const handleGetOwnerPets = async () => {
 		try {
 			setLoading(true);
+
+			if (!ownerMobileNumber || ownerMobileNumber.trim() === "") {
+				toast({
+					title: "برجاء إدخال رقم هاتف المالك",
+					status: "error",
+					duration: 2500,
+					position: "top",
+					isClosable: true,
+				});
+				return;
+			}
+			if (ownerMobileNumber.length < 10) {
+				toast({
+					title: "برجاء إدخال رقم هاتف صالح",
+					status: "error",
+					duration: 2500,
+					position: "top",
+					isClosable: true,
+				});
+				return;
+			}
 
 			const response = await axios.post(
 				`${api}/user/getOwner`,
@@ -201,6 +221,7 @@ export default function SecretaryHome() {
 				<>
 					{/* Welcome Box */}
 					<Box
+						dir='rtl'
 						height={"10vh"}
 						display={"flex"}
 						justifyContent={"center"}
@@ -208,12 +229,13 @@ export default function SecretaryHome() {
 						bg={"#F3F3F3"}
 					>
 						<Text fontSize={"30px"} fontWeight={"bold"}>
-							{"Welcome to " + vetName + " Vet Clinic"}
+							{"مرحبًا بكم في عيادة " + vetName + " البيطرية"}
 						</Text>
 					</Box>
 					<hr />
 					{/* Search Box */}
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -237,7 +259,7 @@ export default function SecretaryHome() {
 								height={"80%"}
 							>
 								<Text fontSize={"28px"} fontWeight={"bold"} my={10}>
-									Want to search for an owner?
+									هل تريد البحث عن مالك؟
 								</Text>
 								<Button
 									_hover={{
@@ -262,7 +284,7 @@ export default function SecretaryHome() {
 									my={5}
 									rightIcon={<FaPerson />}
 								>
-									Go To Owner Search Page
+									ذهاب إلى صفحة البحث عن المالك
 								</Button>
 							</Box>
 						</Box>
@@ -284,7 +306,7 @@ export default function SecretaryHome() {
 								height={"80%"}
 							>
 								<Text fontSize={"28px"} fontWeight={"bold"} my={10}>
-									Want to search for a pet?
+									هل تريد البحث عن حيوان أليف؟
 								</Text>
 								<Button
 									_hover={{
@@ -309,7 +331,7 @@ export default function SecretaryHome() {
 									my={5}
 									rightIcon={<MdOutlinePets />}
 								>
-									Go To Pet Search Page
+									ذهاب إلى صفحة البحث عن الحيوان الأليف
 								</Button>
 							</Box>
 						</Box>
@@ -317,6 +339,7 @@ export default function SecretaryHome() {
 					<hr />
 
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -336,7 +359,7 @@ export default function SecretaryHome() {
 								fontWeight={"bold"}
 								decoration={"underline"}
 							>
-								Open A Case
+								افتح حالة جديدة
 							</Text>
 						</Box>
 
@@ -351,69 +374,102 @@ export default function SecretaryHome() {
 						>
 							{gotOwnerPets ? (
 								<>
-									<TableContainer
-										width={"80%"}
-										maxHeight={"70vh"}
-										overflowY={"auto"}
+									<Box
+										display={"flex"}
+										justifyContent={"center"}
+										alignItems={"center"}
+										flexDirection={"column"}
+										width={"100%"}
+										height={"100%"}
 									>
-										<Table variant='simple' size='md'>
-											<Thead>
-												<Tr>
-													<Th textAlign={"right"}>اسم الحيوان</Th>
-													<Th textAlign={"center"}>السلالة</Th>
-													<Th textAlign={"center"}>النوع</Th>
-													<Th textAlign={"center"}>فئة الوزن</Th>
-													<Th textAlign={"center"}>أفعال</Th>
-												</Tr>
-											</Thead>
-											<Tbody>
-												{ownerPets.map((row) => (
-													<Tr key={row._id}>
-														<Td textAlign={"right"}>{`${row.name}`}</Td>
-
-														<Td textAlign={"center"}>
-															{`${titleCase(row.breed)}`}
-														</Td>
-
-														<Td textAlign={"center"}>
-															{`${titleCase(row.type)}`}
-														</Td>
-
-														<Td textAlign={"center"}>{`${row.weightClass}`}</Td>
-
-														<Td textAlign={"center"}>
-															<Button
-																_hover={{
-																	bg: "#D4F500",
-																	borderColor: "#D4F500",
-																	color: "#000",
-																	transform: "scale(1.05)",
-																}}
-																_active={{
-																	transform: "scale(0.98)",
-																	opacity: "0.5",
-																}}
-																onClick={() => {
-																	setPetId(row._id);
-																	onOpen();
-																}}
-																justifyContent={"flex-start"}
-																alignItems={"center"}
-																transition='all 0.15s ease'
-																bg='#FFF'
-																color='#000'
-																fontSize='18px'
-																my={5}
-																rightIcon={<IoMdEye />}
-															>
-																Open Case
-															</Button>
-														</Td>
+										<TableContainer
+											width={"80%"}
+											height={"60%"}
+											maxHeight={"70vh"}
+											overflowY={"auto"}
+											py={5}
+											mb={3}
+										>
+											<Table variant='simple' size='md'>
+												<Thead>
+													<Tr>
+														<Th textAlign={"right"}>اسم الحيوان</Th>
+														<Th textAlign={"center"}>السلالة</Th>
+														<Th textAlign={"center"}>النوع</Th>
+														<Th textAlign={"center"}>فئة الوزن</Th>
+														<Th textAlign={"center"}>أفعال</Th>
 													</Tr>
-												))}
-											</Tbody>
-										</Table>
-									</TableContainer>
+												</Thead>
+												<Tbody>
+													{ownerPets.map((row) => (
+														<Tr key={row._id}>
+															<Td textAlign={"right"}>{`${row.name}`}</Td>
+
+															<Td textAlign={"center"}>
+																{`${titleCase(row.breed)}`}
+															</Td>
+
+															<Td textAlign={"center"}>
+																{`${titleCase(row.type)}`}
+															</Td>
+
+															<Td
+																textAlign={"center"}
+															>{`${row.weightClass}`}</Td>
+
+															<Td textAlign={"center"}>
+																<Button
+																	_hover={{
+																		bg: "#D4F500",
+																		borderColor: "#D4F500",
+																		color: "#000",
+																		transform: "scale(1.05)",
+																	}}
+																	_active={{
+																		transform: "scale(0.98)",
+																		opacity: "0.5",
+																	}}
+																	onClick={() => {
+																		setPetId(row._id);
+																		onOpen();
+																	}}
+																	justifyContent={"flex-start"}
+																	alignItems={"center"}
+																	transition='all 0.15s ease'
+																	bg='#FFF'
+																	color='#000'
+																	fontSize='18px'
+																	my={5}
+																	rightIcon={<IoMdEye />}
+																>
+																	فتح
+																</Button>
+															</Td>
+														</Tr>
+													))}
+												</Tbody>
+											</Table>
+										</TableContainer>
+										<Button
+											_hover={{
+												bg: "#D4F500",
+												transform: "scale(1.05)",
+											}}
+											onClick={() => {
+												setGotOwnerPets(false);
+												setOwnerPets([]);
+											}}
+											justifyContent={"flex-start"}
+											alignItems={"center"}
+											transition='all 0.15s ease'
+											bg='#FFF'
+											color='#000'
+											fontSize='18px'
+											my={5}
+										>
+											إعادة البحث
+										</Button>
+									</Box>
 								</>
 							) : (
 								<>
@@ -428,13 +484,13 @@ export default function SecretaryHome() {
 										height={"80%"}
 									>
 										<Text fontSize={"20px"} fontWeight={"bold"} mb={5}>
-											Enter Owner's Mobile Number
+											أدخل رقم هاتف المالك للبحث عن حيواناته الأليفة
 										</Text>
 										<Input
 											id='ownerMobileNumber'
 											type='text'
 											name='ownerMobileNumber'
-											placeholder='Mobile Number'
+											placeholder='...'
 											value={ownerMobileNumber}
 											onChange={(e) => {
 												setOwnerMobileNumber(e.target.value);
@@ -467,7 +523,7 @@ export default function SecretaryHome() {
 											my={5}
 											rightIcon={<FaPerson />}
 										>
-											Search
+											بحث
 										</Button>
 									</FormControl>
 								</>
@@ -477,15 +533,15 @@ export default function SecretaryHome() {
 					{/* Modal for Case Details */}
 					<Modal isOpen={isOpen} onClose={onClose} isCentered size={"xl"}>
 						<ModalOverlay />
-						<ModalContent>
-							<ModalHeader textAlign={"center"}>Reason For Visit</ModalHeader>
+						<ModalContent dir='rtl'>
+							<ModalHeader textAlign={"center"}>سبب الزيارة</ModalHeader>
 							<ModalCloseButton />
 							<ModalBody>
 								<Textarea
 									id='reasonForVisit'
 									type='text'
 									name='reasonForVisit'
-									placeholder='Reason For Visit'
+									placeholder='السبب...'
 									value={reasonForVisit}
 									scrollBehavior={"smooth"}
 									resize={"none"}
@@ -527,7 +583,7 @@ export default function SecretaryHome() {
 										handleSubmitCase();
 									}}
 								>
-									Submit
+									فتح الحالة
 								</Button>
 								<Button
 									onClick={onClose}
@@ -537,7 +593,7 @@ export default function SecretaryHome() {
 										transform: "scale(1.05)",
 									}}
 								>
-									Cancel
+									إلغاء
 								</Button>
 							</ModalFooter>
 						</ModalContent>

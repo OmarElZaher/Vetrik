@@ -65,6 +65,7 @@ export default function AssignedCases() {
 
 	const [cases, setCases] = useState([]);
 	const [selectedCase, setSelectedCase] = useState(null);
+	const [existsCases, setExistsCases] = useState(false);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
@@ -83,27 +84,20 @@ export default function AssignedCases() {
 				});
 				if (response.status === 200) {
 					setCases(response.data.cases);
-					console.log(response.data.cases);
 					setGotData(true);
-				} else {
-					setError(response.data.message);
-					toast({
-						title: "Error",
-						description: "Failed to fetch cases.",
-						status: "error",
-						duration: 3000,
-						isClosable: true,
-					});
+					setExistsCases(response.data.cases.length > 0);
 				}
 			} catch (error) {
-				setError(error.response.data.message);
-				toast({
-					title: error.response.data.message,
-					status: "error",
-					duration: 2500,
-					isClosable: true,
-					position: "top",
-				});
+				if (error.response.status === 500) {
+					setError(error.response.data.message);
+					toast({
+						title: error.response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
 			} finally {
 				setIsLoading(false);
 			}
@@ -216,7 +210,12 @@ export default function AssignedCases() {
 						opacity: "0.5",
 					}}
 					onClick={() => {
-						navigate("/");
+						if (localStorage.getItem("userRole") === "vet") {
+							navigate("/vet");
+						}
+						if (localStorage.getItem("userRole") === "secretary") {
+							navigate("/secretary");
+						}
 					}}
 					rightIcon={<IoMdArrowRoundBack />}
 					bg={"#FFF"}
@@ -227,6 +226,70 @@ export default function AssignedCases() {
 				</Button>
 			</Box>
 			<Footer />
+		</>
+	) : !existsCases ? (
+		<>
+			<Box dir='rtl' width={"100%"} height={"87vh"}>
+				<Box
+					display={"flex"}
+					flexDirection={"column"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					height={"15%"}
+					my={5}
+				>
+					<Text
+						fontSize={"35px"}
+						color={"#121211"}
+						fontWeight={500}
+						textDecoration={"underline"}
+					>
+						الحالت المفتوحة
+					</Text>
+				</Box>
+				<Box
+					display={"flex"}
+					flexDirection={"column"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					width={"100%"}
+					height={"70%"}
+				>
+					<Text fontSize={"20px"} color={"#121211"}>
+						لا توجد حالات متاحة
+					</Text>
+				</Box>
+				<Box
+					display={"flex"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					height={"10%"}
+				>
+					<Button
+						_hover={{
+							bg: "yellowgreen",
+							color: "#000",
+							transform: "scale(1.01)",
+						}}
+						_active={{
+							transform: "scale(0.99)",
+							opacity: "0.5",
+						}}
+						onClick={() => {
+							localStorage.removeItem("ownerFilterData");
+							localStorage.getItem("userRole") === "vet"
+								? navigate("/vet")
+								: localStorage.getItem("userRole") === "secretary"
+								? navigate("/secretary")
+								: navigate("/admin");
+						}}
+						rightIcon={<IoMdArrowRoundBack />}
+						width={"25vw"}
+					>
+						الرجوع
+					</Button>
+				</Box>
+			</Box>
 		</>
 	) : gotData ? (
 		<>
@@ -360,7 +423,12 @@ export default function AssignedCases() {
 						}}
 						onClick={() => {
 							localStorage.removeItem("ownerFilterData");
-							navigate("/");
+							if (localStorage.getItem("userRole") === "vet") {
+								navigate("/vet");
+							}
+							if (localStorage.getItem("userRole") === "secretary") {
+								navigate("/secretary");
+							}
 						}}
 						rightIcon={<IoMdArrowRoundBack />}
 						width={"25vw"}

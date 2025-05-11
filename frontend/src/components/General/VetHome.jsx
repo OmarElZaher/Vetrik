@@ -67,25 +67,18 @@ export default function VetHome() {
 
 				if (response.status === 200) {
 					setOpenCases(response.data.cases);
-				} else {
+				}
+			} catch (error) {
+				if (error.response.status === 500) {
 					toast({
 						title: "Error",
-						description: response.data.message,
+						description: error.response.data.message,
 						status: "error",
 						duration: 3000,
 						isClosable: true,
 						position: "top",
 					});
 				}
-			} catch (error) {
-				toast({
-					title: "Error",
-					description: error.response.data.message,
-					status: "error",
-					duration: 3000,
-					isClosable: true,
-					position: "top",
-				});
 			} finally {
 				setLoading(false);
 			}
@@ -140,8 +133,9 @@ export default function VetHome() {
 				<Spinner />
 			) : (
 				<>
-					{/* Welcome Box */}
+					{/* صندوق الترحيب */}
 					<Box
+						dir='rtl'
 						height={"10vh"}
 						display={"flex"}
 						justifyContent={"center"}
@@ -149,12 +143,13 @@ export default function VetHome() {
 						bg={"#F3F3F3"}
 					>
 						<Text fontSize={"30px"} fontWeight={"bold"}>
-							{"Welcome to " + vetName + " Vet Clinic"}
+							{"مرحبًا بكم في عيادة " + vetName + " البيطرية"}
 						</Text>
 					</Box>
 					<hr />
-					{/* Search Box */}
+					{/* صندوق البحث */}
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -178,7 +173,7 @@ export default function VetHome() {
 								height={"80%"}
 							>
 								<Text fontSize={"28px"} fontWeight={"bold"} my={10}>
-									Want to search for an owner?
+									هل تريد البحث عن مالك؟
 								</Text>
 								<Button
 									_hover={{
@@ -203,7 +198,7 @@ export default function VetHome() {
 									my={5}
 									rightIcon={<FaPerson />}
 								>
-									Go To Owner Search Page
+									ذهاب إلى صفحة البحث عن المالك
 								</Button>
 							</Box>
 						</Box>
@@ -225,7 +220,7 @@ export default function VetHome() {
 								height={"80%"}
 							>
 								<Text fontSize={"28px"} fontWeight={"bold"} my={10}>
-									Want to search for a pet?
+									هل تريد البحث عن حيوان أليف؟
 								</Text>
 								<Button
 									_hover={{
@@ -250,14 +245,14 @@ export default function VetHome() {
 									my={5}
 									rightIcon={<MdOutlinePets />}
 								>
-									Go To Pet Search Page
+									ذهاب إلى صفحة البحث عن الحيوان الأليف
 								</Button>
 							</Box>
 						</Box>
 					</Box>
 					<hr />
-
 					<Box
+						dir='rtl'
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -273,7 +268,7 @@ export default function VetHome() {
 							height={"10%"}
 						>
 							<Text fontSize={"28px"} fontWeight={"bold"}>
-								Open Cases
+								الحالات المفتوحة
 							</Text>
 						</Box>
 						<Box
@@ -344,9 +339,7 @@ export default function VetHome() {
 							)}
 						</Box>
 					</Box>
-
 					{/* Modal for Case Details */}
-
 					<Modal isOpen={isOpen} onClose={onClose}>
 						<ModalOverlay />
 						<ModalContent dir='rtl'>
@@ -372,7 +365,7 @@ export default function VetHome() {
 										transform: "scale(1.05)",
 									}}
 								>
-									Open Cases Page
+									عرض جميع الحالات
 								</Button>
 								<Button
 									onClick={onClose}

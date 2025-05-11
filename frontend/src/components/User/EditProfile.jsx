@@ -55,7 +55,7 @@ export default function EditProfile() {
 			if (response.status === 200) {
 				setEmail(response.data.email);
 				setUsername(response.data.username);
-				setIsAdmin(response.data.isAdmin);
+				setIsAdmin(response.data.role === "admin");
 				setGotData(true);
 			} else {
 				setError(response.data.message);

@@ -33,7 +33,7 @@ export default function EditProfilePage() {
 			});
 
 			if (response.status === 200) {
-				setIsAdmin(response.data.isAdmin);
+				setIsAdmin(response.data.role === "admin");
 			} else {
 				toast({
 					title: response.data.message,

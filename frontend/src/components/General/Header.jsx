@@ -9,7 +9,7 @@ import axios from "axios";
 import { API_URL as api } from "../../utils/constants";
 
 // Chakra UI Imports
-import { Box, IconButton, useToast } from "@chakra-ui/react";
+import { Box, IconButton, Icon, Tooltip, useToast } from "@chakra-ui/react";
 
 // React Icons Imports
 import { IoMdLogOut } from "react-icons/io";
@@ -96,24 +96,24 @@ export default function Header() {
 		<Spinner />
 	) : (
 		<Box
-			as="nav"
-			bg="#121211"
-			width="100%"
-			height="50px"
-			position="sticky"
+			as='nav'
+			bg='#121211'
+			width='100%'
+			height='50px'
+			position='sticky'
 			top={0}
-			color="#FFFFFF"
+			color='#FFFFFF'
 			zIndex={10}
 		>
-			<Box display="flex" justifyContent="center" alignItems="center">
+			<Box display='flex' justifyContent='center' alignItems='center'>
 				<Box
-					width="33vw"
-					height="50px"
-					display="flex"
-					justifyContent="flex-start"
-					alignItems="center"
+					width='33vw'
+					height='50px'
+					display='flex'
+					justifyContent='flex-start'
+					alignItems='center'
 					key={1}
-					fontSize="25px"
+					fontSize='25px'
 				>
 					{role === "secretary" ? (
 						<SecretaryDrawer />
@@ -122,11 +122,11 @@ export default function Header() {
 					) : null}
 				</Box>
 				<Box
-					width="33vw"
-					height="50px"
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
+					width='33vw'
+					height='50px'
+					display='flex'
+					justifyContent='center'
+					alignItems='center'
 					key={2}
 				>
 					<Link
@@ -142,29 +142,33 @@ export default function Header() {
 					</Link>
 				</Box>
 				<Box
-					width="33vw"
-					height="50px"
-					display="flex"
-					justifyContent="flex-end"
-					alignItems="center"
+					width='33vw'
+					height='50px'
+					display='flex'
+					justifyContent='flex-end'
+					alignItems='center'
 					key={3}
 				>
-					<IconButton
-						as={IoMdLogOut}
-						size={"sm"}
-						bg="#121211"
-						color="FFF"
-						onClick={handleLogout}
-						cursor={"pointer"}
-						aria-label="تسجيل الخروج"
-						_hover={{
-							color: "#D4F500",
-						}}
-						_active={{
-							opacity: "0.5",
-						}}
-						transition="all 0.05s ease"
-					/>
+					<Tooltip label='تسجيل الخروج' hasArrow placement='bottom'>
+						<IconButton
+							icon={<Icon as={IoMdLogOut} boxSize={7} />} // Bigger icon
+							aria-label='تسجيل الخروج'
+							onClick={handleLogout}
+							bg='#121211'
+							color='#FFF'
+							_hover={{
+								color: "#D4F500",
+							}}
+							_active={{
+								bg: "#121211",
+								transform: "scale(0.95)",
+							}}
+							boxSize='50px'
+							boxShadow='lg'
+							transition='all 0.2s ease'
+							mr={4}
+						/>
+					</Tooltip>
 				</Box>
 			</Box>
 		</Box>

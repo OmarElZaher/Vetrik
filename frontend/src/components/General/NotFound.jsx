@@ -77,7 +77,7 @@ export default function NotFound() {
 				height={"87vh"}
 			>
 				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-					404 ERROR
+					ERROR
 				</Text>
 				<Text fontSize={"40px"} textDecoration={"underline"}>
 					الصفحة مش موجودة
@@ -93,11 +93,11 @@ export default function NotFound() {
 						opacity: "0.5",
 					}}
 					onClick={() => {
-						if (isAdmin) {
-							navigate("/admin");
-						} else {
-							navigate("/");
-						}
+						localStorage.getItem("userRole") === "admin"
+							? navigate("/admin")
+							: localStorage.getItem("userRole") === "vet"
+							? navigate("/vet")
+							: navigate("/secretary");
 					}}
 					leftIcon={<Icon as={IoMdHome} />}
 					bg={"#FFF"}

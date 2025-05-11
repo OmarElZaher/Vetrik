@@ -33,6 +33,7 @@ import {
 	ModalBody,
 	ModalFooter,
 	Text,
+	Textarea,
 	useDisclosure,
 	useToast,
 } from "@chakra-ui/react";
@@ -65,6 +66,10 @@ export default function ViewCases() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [gotData, setGotData] = useState(false);
+	const [existsCases, setExistsCases] = useState(false);
+
+	const [editMode, setEditMode] = useState(false);
+	const [updatedReason, setUpdatedReason] = useState("");
 
 	const {
 		isOpen: isModalOpen,
@@ -78,39 +83,40 @@ export default function ViewCases() {
 	} = useDisclosure();
 	const cancelRef = React.useRef();
 
+	const handleCloseModal = () => {
+		setEditMode(false);
+		setSelectedCase(null);
+		setUpdatedReason("");
+		closeModal();
+	};
+	const handleCloseAlert = () => {
+		setSelectedCase(null);
+		closeAlert();
+	};
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(
-					`${api}/case/getUnassignedCases`,
-					{
-						withCredentials: true,
-					}
-				);
+				const response = await axios.get(`${api}/case/getUnassignedCases`, {
+					withCredentials: true,
+				});
 				if (response.status === 200) {
 					setCases(response.data.cases);
-					console.log(response.data.cases);
 					setGotData(true);
-				} else {
-					setError(response.data.message);
-					toast({
-						title: "Error",
-						description: "Failed to fetch cases.",
-						status: "error",
-						duration: 3000,
-						isClosable: true,
-					});
+					setExistsCases(response.data.cases.length > 0);
 				}
 			} catch (error) {
-				setError(error.response.data.message);
-				toast({
-					title: error.response.data.message,
-					status: "error",
-					duration: 2500,
-					isClosable: true,
-					position: "top",
-				});
+				if (error.response.status === 500) {
+					setError(error.response.data.message);
+					toast({
+						title: error.response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
 			} finally {
 				setIsLoading(false);
 			}
@@ -155,8 +161,7 @@ export default function ViewCases() {
 		} catch (err) {
 			toast({
 				title: "Failed to delete case.",
-				description:
-					err?.response?.data?.message || "Something went wrong.",
+				description: err?.response?.data?.message || "Something went wrong.",
 				status: "error",
 				duration: 2500,
 				isClosable: true,
@@ -186,8 +191,39 @@ export default function ViewCases() {
 		} catch (err) {
 			toast({
 				title: "Failed to accept case.",
-				description:
-					err?.response?.data?.message || "Something went wrong.",
+				description: err?.response?.data?.message || "Something went wrong.",
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		}
+	};
+
+	const handleUpdateCase = async (caseId) => {
+		try {
+			await axios.put(
+				`${api}/case/updateCase/${caseId}`,
+				{ reasonForVisit: updatedReason },
+				{ withCredentials: true }
+			);
+			toast({
+				title: "Case updated.",
+				status: "success",
+				duration: 2000,
+				isClosable: true,
+				position: "top",
+			});
+			handleCloseModal();
+			setCases((prev) =>
+				prev.map((c) =>
+					c._id === caseId ? { ...c, reasonForVisit: updatedReason } : c
+				)
+			);
+		} catch (err) {
+			toast({
+				title: "Failed to update case.",
+				description: err?.response?.data?.message || "Something went wrong.",
 				status: "error",
 				duration: 2500,
 				isClosable: true,
@@ -201,7 +237,7 @@ export default function ViewCases() {
 	) : error ? (
 		<>
 			<Box
-				dir="rtl"
+				dir='rtl'
 				display={"flex"}
 				flexDirection={"column"}
 				justifyContent={"center"}
@@ -238,9 +274,73 @@ export default function ViewCases() {
 			</Box>
 			<Footer />
 		</>
+	) : !existsCases ? (
+		<>
+			<Box dir='rtl' width={"100%"} height={"87vh"}>
+				<Box
+					display={"flex"}
+					flexDirection={"column"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					height={"15%"}
+					my={5}
+				>
+					<Text
+						fontSize={"35px"}
+						color={"#121211"}
+						fontWeight={500}
+						textDecoration={"underline"}
+					>
+						الحالت المفتوحة
+					</Text>
+				</Box>
+				<Box
+					display={"flex"}
+					flexDirection={"column"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					width={"100%"}
+					height={"70%"}
+				>
+					<Text fontSize={"20px"} color={"#121211"}>
+						لا توجد حالات متاحة
+					</Text>
+				</Box>
+				<Box
+					display={"flex"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					height={"10%"}
+				>
+					<Button
+						_hover={{
+							bg: "yellowgreen",
+							color: "#000",
+							transform: "scale(1.01)",
+						}}
+						_active={{
+							transform: "scale(0.99)",
+							opacity: "0.5",
+						}}
+						onClick={() => {
+							localStorage.removeItem("ownerFilterData");
+							localStorage.getItem("userRole") === "vet"
+								? navigate("/vet")
+								: localStorage.getItem("userRole") === "secretary"
+								? navigate("/secretary")
+								: navigate("/admin");
+						}}
+						rightIcon={<IoMdArrowRoundBack />}
+						width={"25vw"}
+					>
+						الرجوع
+					</Button>
+				</Box>
+			</Box>
+		</>
 	) : gotData ? (
 		<>
-			<Box dir="rtl" width={"100%"} height={"87vh"}>
+			<Box dir='rtl' width={"100%"} height={"87vh"}>
 				<Box
 					display={"flex"}
 					flexDirection={"column"}
@@ -277,78 +377,72 @@ export default function ViewCases() {
 								maxHeight={"70vh"}
 								overflowY={"auto"}
 							>
-								<Table variant="simple" size="md">
+								<Table variant='simple' size='md'>
 									<Thead>
 										<Tr>
-											<Th textAlign={"right"}>
-												اسم الحيوان
-											</Th>
-											<Th textAlign={"center"}>
-												السلالة
-											</Th>
+											<Th textAlign={"right"}>اسم الحيوان</Th>
+											<Th textAlign={"center"}>السلالة</Th>
 											<Th textAlign={"center"}>النوع</Th>
-											<Th textAlign={"center"}>
-												فئة الوزن
-											</Th>
-											<Th textAlign={"left"}>تفاصيل</Th>
+											<Th textAlign={"center"}>فئة الوزن</Th>
+											<Th textAlign={"center"}>تفاصيل</Th>
 										</Tr>
 									</Thead>
 									<Tbody>
 										{cases.map((row) => (
 											<Tr key={row._id}>
-												<Td
-													textAlign={"right"}
-												>{`${row.petId.name}`}</Td>
-												<Td
-													textAlign={"center"}
-												>{`${titleCase(
+												<Td textAlign={"right"}>{`${row.petId.name}`}</Td>
+												<Td textAlign={"center"}>{`${titleCase(
 													row.petId.breed
 												)}`}</Td>
-												<Td
-													textAlign={"center"}
-												>{`${titleCase(
+												<Td textAlign={"center"}>{`${titleCase(
 													row.petId.type
 												)}`}</Td>
 												<Td
 													textAlign={"center"}
 												>{`${row.petId.weightClass}`}</Td>
 
-												<Td textAlign={"left"}>
-													{localStorage.getItem(
-														"userRole"
-													) === "vet" ? (
+												<Td textAlign={"center"}>
+													{localStorage.getItem("userRole") === "vet" ? (
 														<Button
-															rightIcon={
-																<IoMdEye />
-															}
-															onClick={() =>
-																handleShowDetails(
-																	row
-																)
-															}
-															variant="solid"
+															rightIcon={<IoMdEye />}
+															onClick={() => handleShowDetails(row)}
+															variant='solid'
 														>
 															عرض
 														</Button>
 													) : (
 														<>
 															<Button
-																rightIcon={
-																	<IoMdEye />
-																}
+																rightIcon={<IoMdEye />}
+																onClick={() => {
+																	setEditMode(true);
+																	setSelectedCase(row);
+																	openModal();
+																}}
+																_hover={{
+																	bg: "blue.500",
+																	color: "#FFF",
+																	transform: "scale(1.01)",
+																}}
+																variant='solid'
+																ml={2}
+															>
+																Edit
+															</Button>
+
+															<Button
+																rightIcon={<IoMdEye />}
 																onClick={() => {
 																	openAlert();
-																	setSelectedCase(
-																		row
-																	);
+																	setSelectedCase(row);
 																}}
 																_hover={{
 																	bg: "red.500",
 																	color: "#FFF",
-																	transform:
-																		"scale(1.01)",
+																	transform: "scale(1.01)",
 																}}
-																variant="solid"
+																variant='solid'
+																mr={2}
 															>
 																Delete
 															</Button>
@@ -383,8 +477,7 @@ export default function ViewCases() {
 							localStorage.removeItem("ownerFilterData");
 							localStorage.getItem("userRole") === "vet"
 								? navigate("/vet")
-								: localStorage.getItem("userRole") ===
-								  "secretary"
+								: localStorage.getItem("userRole") === "secretary"
 								? navigate("/secretary")
 								: navigate("/admin");
 						}}
@@ -400,26 +493,56 @@ export default function ViewCases() {
 			{/* Modal for Case Details */}
 			<Modal isOpen={isModalOpen} onClose={closeModal}>
 				<ModalOverlay />
-				<ModalContent dir="rtl">
-					<ModalHeader textAlign={"center"}>
-						تفاصيل الحالة
-					</ModalHeader>
+				<ModalContent dir='rtl'>
+					<ModalHeader textAlign={"center"}>تفاصيل الحالة</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<Text fontSize="lg">
-							<strong>السبب للزيارة:</strong>
-							<br />
-							{selectedCase?.reasonForVisit || "غير متوفر"}
-						</Text>
+						{editMode ? (
+							<>
+								<Textarea
+									placeholder={selectedCase?.reasonForVisit}
+									onChange={(e) => {
+										setUpdatedReason(e.target.value);
+									}}
+									resize={"none"}
+									scrollBehavior={"smooth"}
+								/>
+							</>
+						) : (
+							<>
+								<Text fontSize='lg'>
+									<strong>السبب للزيارة:</strong>
+									<br />
+									{selectedCase?.reasonForVisit || "غير متوفر"}
+								</Text>
+							</>
+						)}
 					</ModalBody>
 					<ModalFooter>
-						<Button
-							colorScheme="green"
-							ml={3}
-							onClick={() => handleAcceptCase(selectedCase._id)}
-						>
-							قبول الحالة
-						</Button>
+						{editMode ? (
+							<Button
+								colorScheme='green'
+								ml={3}
+								onClick={() => {
+									handleUpdateCase(selectedCase._id);
+									handleCloseModal();
+								}}
+							>
+								تحديث
+							</Button>
+						) : (
+							<Button
+								colorScheme='green'
+								ml={3}
+								onClick={() => {
+									handleAcceptCase(selectedCase._id);
+									handleCloseModal();
+								}}
+							>
+								قبول
+							</Button>
+						)}
+
 						<Button onClick={closeModal}>إلغاء</Button>
 					</ModalFooter>
 				</ModalContent>
@@ -432,7 +555,7 @@ export default function ViewCases() {
 			>
 				<AlertDialogOverlay>
 					<AlertDialogContent>
-						<AlertDialogHeader fontSize="lg" fontWeight="bold">
+						<AlertDialogHeader fontSize='lg' fontWeight='bold'>
 							Delete Case
 						</AlertDialogHeader>
 
@@ -441,14 +564,14 @@ export default function ViewCases() {
 						</AlertDialogBody>
 
 						<AlertDialogFooter>
-							<Button ref={cancelRef} onClick={closeAlert}>
+							<Button ref={cancelRef} onClick={() => handleCloseAlert()}>
 								Cancel
 							</Button>
 							<Button
-								colorScheme="red"
+								colorScheme='red'
 								onClick={() => {
 									handleDeleteCase(selectedCase);
-									closeAlert();
+									handleCloseAlert();
 								}}
 								ml={3}
 							>
