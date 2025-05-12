@@ -33,6 +33,7 @@ import Spinner from "./Spinner";
 import { FaPerson } from "react-icons/fa6";
 import { MdOutlinePets } from "react-icons/md";
 import { IoMdEye } from "react-icons/io";
+import { IoReload } from "react-icons/io5";
 
 import { VET_NAME as vetName, API_URL as api } from "../../utils/constants";
 
@@ -459,6 +460,7 @@ export default function SecretaryHome() {
 												setGotOwnerPets(false);
 												setOwnerPets([]);
 											}}
+											rightIcon={<IoReload />}
 											justifyContent={"flex-start"}
 											alignItems={"center"}
 											transition='all 0.15s ease'

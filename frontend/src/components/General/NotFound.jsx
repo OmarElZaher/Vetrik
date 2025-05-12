@@ -39,8 +39,11 @@ export default function NotFound() {
 				if (response.status === 200) {
 					setIsAdmin(response.data.role === "admin");
 				} else {
+					console.log("hena");
+
 					toast({
 						title: response.data.message,
+						description: "Please try again later.",
 						status: "error",
 						duration: 2500,
 						isClosable: true,
@@ -48,13 +51,16 @@ export default function NotFound() {
 					});
 				}
 			} catch (error) {
-				toast({
-					title: error.response.data.message,
-					status: "error",
-					duration: 2500,
-					isClosable: true,
-					position: "top",
-				});
+				if (error.response.status === 500) {
+					toast({
+						title: error.response.data.message,
+						description: "حدث خطأ ما",
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
 			} finally {
 				setIsLoading(false);
 			}

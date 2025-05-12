@@ -78,19 +78,24 @@ export default function Header() {
 					});
 				}
 			} catch (error) {
-				toast({
-					title: error?.response?.data?.message,
-					status: "error",
-					duration: 2500,
-					isClosable: true,
-					position: "top",
-				});
+				if (error.response.status === 500) {
+					toast({
+						title: error?.response?.data?.message,
+						description: "حدث خطأ ما",
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				} else {
+					navigate("/login");
+				}
 			} finally {
 				setIsLoading(false);
 			}
 		};
 		fetchData();
-	}, [toast]);
+	}, [navigate, toast]);
 
 	return isLoading ? (
 		<Spinner />

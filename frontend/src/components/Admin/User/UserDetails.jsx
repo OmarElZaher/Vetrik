@@ -43,7 +43,6 @@ export default function UserDetails() {
 
 	// User useStates
 	const [user, setUser] = useState(null);
-	const [isAdmin, setIsAdmin] = useState(false);
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
@@ -111,7 +110,6 @@ export default function UserDetails() {
 					{ withCredentials: true }
 				);
 				if (response.status === 200) {
-					setIsAdmin(true);
 					toast({
 						title: response.data.message,
 						status: "success",
@@ -152,7 +150,6 @@ export default function UserDetails() {
 
 				if (response.status === 200) {
 					setUser(response.data.user);
-					setIsAdmin(response?.data?.user?.role === "admin");
 					setGotData(true);
 				} else {
 					setError(response.data.message);

@@ -22,6 +22,8 @@ import LoginPage from "./pages/General/Login";
 import NotFoundPage from "./pages/General/NotFound";
 import SendFeedbackPage from "./pages/General/SendFeedback";
 
+import RootRedirect from "./components/General/RootRedirect";
+
 import EditProfilePage from "./pages/User/EditProfile";
 import ChangePasswordPage from "./pages/User/ChangePassword";
 import ForgotUsernamePage from "./pages/User/ForgotUsername";
@@ -64,6 +66,7 @@ function App() {
 				<Router>
 					<Routes>
 						{/* General Routes */}
+						<Route path='/' element={<RootRedirect />} />
 						<Route path='/vet' element={<VetHomePage />} />
 						<Route path='/secretary' element={<SecretaryHomePage />} />
 						<Route path='/login' element={<LoginPage />} />

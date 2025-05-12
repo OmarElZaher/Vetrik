@@ -170,7 +170,7 @@ export default function SearchOwner() {
 										id='fullName'
 										type='text'
 										name='fullName'
-										placeholder='(الاسم كامل (الاسم الأول واسم العائلة'
+										placeholder='اسم المالك'
 										value={fullName}
 										onChange={handleFullNameChange}
 										ml={2.5}
