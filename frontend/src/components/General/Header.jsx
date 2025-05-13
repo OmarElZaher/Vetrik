@@ -9,7 +9,21 @@ import axios from "axios";
 import { API_URL as api } from "../../utils/constants";
 
 // Chakra UI Imports
-import { Box, IconButton, Icon, useToast } from "@chakra-ui/react";
+import {
+	Box,
+	IconButton,
+	Icon,
+	Popover,
+	PopoverTrigger,
+	PopoverContent,
+	PopoverHeader,
+	PopoverBody,
+	PopoverFooter,
+	PopoverArrow,
+	PopoverCloseButton,
+	useToast,
+	Text,
+} from "@chakra-ui/react";
 
 // React Icons Imports
 import { IoMdLogOut } from "react-icons/io";
@@ -128,6 +142,9 @@ export default function Header() {
 
 		fetchData();
 		fetchNotifications();
+
+		const interval = setInterval(fetchNotifications, 10000);
+		return () => clearInterval(interval);
 	}, [navigate, toast]);
 
 	return isLoading ? (
@@ -188,39 +205,138 @@ export default function Header() {
 					key={3}
 				>
 					{notificationCount > 0 ? (
-						<IconButton
-							icon={<Icon as={FaBell} boxSize={7} />}
-							bg='#121211'
-							color='#FFF'
-							_hover={{
-								color: "#D4F500",
-							}}
-							_active={{
-								bg: "#121211",
-								transform: "scale(0.95)",
-							}}
-							boxSize='50px'
-							boxShadow='lg'
-							transition='all 0.2s ease'
-							mr={4}
-						/>
+						<>
+							<Popover>
+								<PopoverTrigger>
+									<IconButton
+										icon={<Icon as={FaBell} boxSize={7} />}
+										aria-label='Notifications'
+										bg='#121211'
+										color='#FFF'
+										_hover={{
+											color: "#D4F500",
+										}}
+										_active={{
+											bg: "#121211",
+											transform: "scale(0.95)",
+										}}
+										boxSize='50px'
+										boxShadow='lg'
+										transition='all 0.2s ease'
+										mr={4}
+									/>
+								</PopoverTrigger>
+
+								<PopoverContent borderRadius={"10px"}>
+									<PopoverArrow />
+									<PopoverCloseButton />
+									<PopoverHeader
+										display={"flex"}
+										justifyContent={"center"}
+										alignItems={"center"}
+										color={"#000"}
+									>
+										الإشعارات
+									</PopoverHeader>
+
+									<PopoverBody
+										display={"flex"}
+										justifyContent={"center"}
+										alignItems={"center"}
+										flexDirection={"column"}
+										color={"#000"}
+										overflowY={"auto"}
+										maxHeight={"300px"}
+									>
+										{notifications.map((notification) => (
+											<Box
+												key={notification._id}
+												p={2}
+												borderBottom='1px'
+												borderColor='gray.200'
+											>
+												<Text>{notification.message}</Text>
+											</Box>
+										))}
+									</PopoverBody>
+
+									<PopoverFooter>
+										<Text
+											color='blue.500'
+											cursor='pointer'
+											onClick={() => {
+												setNotifications([]);
+												setNotificationCount(0);
+											}}
+										>
+											مسح جميع الإشعارات
+										</Text>
+									</PopoverFooter>
+								</PopoverContent>
+							</Popover>
+						</>
 					) : (
-						<IconButton
-							icon={<Icon as={FaRegBell} boxSize={7} />}
-							bg='#121211'
-							color='#FFF'
-							_hover={{
-								color: "#D4F500",
-							}}
-							_active={{
-								bg: "#121211",
-								transform: "scale(0.95)",
-							}}
-							boxSize='50px'
-							boxShadow='lg'
-							transition='all 0.2s ease'
-							mr={4}
-						/>
+						<>
+							<Popover>
+								<PopoverTrigger>
+									<IconButton
+										icon={<Icon as={FaRegBell} boxSize={7} />}
+										aria-label='Notifications'
+										bg='#121211'
+										color='#FFF'
+										_hover={{
+											color: "#D4F500",
+										}}
+										_active={{
+											bg: "#121211",
+											transform: "scale(0.95)",
+										}}
+										boxSize='50px'
+										boxShadow='lg'
+										transition='all 0.2s ease'
+										mr={4}
+									/>
+								</PopoverTrigger>
+
+								<PopoverContent>
+									<PopoverArrow />
+									<PopoverCloseButton />
+									<PopoverHeader
+										display={"flex"}
+										justifyContent={"center"}
+										alignItems={"center"}
+										color={"#000"}
+									>
+										الإشعارات
+									</PopoverHeader>
+
+									<PopoverBody
+										display={"flex"}
+										justifyContent={"center"}
+										alignItems={"center"}
+										flexDirection={"column"}
+										color={"#000"}
+										overflowY={"auto"}
+										maxHeight={"300px"}
+									>
+										<Text>لا توجد إشعارات جديدة</Text>
+									</PopoverBody>
+
+									<PopoverFooter>
+										<Text
+											color='blue.500'
+											cursor='pointer'
+											onClick={() => {
+												setNotifications([]);
+												setNotificationCount(0);
+											}}
+										>
+											مسح جميع الإشعارات
+										</Text>
+									</PopoverFooter>
+								</PopoverContent>
+							</Popover>
+						</>
 					)}
 
 					<IconButton

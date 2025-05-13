@@ -346,12 +346,11 @@ const completeCase = asyncHandler(async (req, res) => {
 		});
 
 		const secretaryId = updatedCase.secretaryId;
-		const vetId = updatedCase.vetId;
 
 		await Notification.create({
 			user: secretaryId,
-			message: `تم إنهاء الحالة للحيوان ${updateCase.petId}`,
-			case: updateCase._id,
+			message: `تم إنهاء الحالة للحيوان ${updatedCase.petId}`,
+			case: updatedCase._id,
 			type: "case_completed",
 		});
 
