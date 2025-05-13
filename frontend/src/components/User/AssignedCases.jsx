@@ -42,7 +42,7 @@ import {
 // React Icons Imports
 import { IoMdArrowRoundBack, IoMdClose, IoMdEye } from "react-icons/io";
 import { FaTrash } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaFile } from "react-icons/fa6";
 
 // Custom Component Imports
 import Footer from "../General/Footer";
@@ -358,7 +358,11 @@ export default function AssignedCases() {
 												<Td textAlign={"center"}>
 													<Popover placement='right'>
 														<PopoverTrigger>
-															<Button rightIcon={<IoMdEye />}>
+															<Button
+																rightIcon={<IoMdEye />}
+																ml={2}
+																_hover={{ bg: "blue.600", color: "#fff" }}
+															>
 																عرض تفاصيل
 															</Button>
 														</PopoverTrigger>
@@ -369,6 +373,17 @@ export default function AssignedCases() {
 															<PopoverBody>{row.reasonForVisit}</PopoverBody>
 														</PopoverContent>
 													</Popover>
+
+													<Button
+														mr={2}
+														rightIcon={<FaFile />}
+														variant='outline'
+														onClick={() => {
+															navigate(`/pet-details/${row.petId._id}`);
+														}}
+													>
+														ملف الحيوان
+													</Button>
 												</Td>
 
 												<Td textAlign={"center"}>
@@ -388,7 +403,8 @@ export default function AssignedCases() {
 														mr={2}
 														rightIcon={<FaTrash />}
 														onClick={() => handleUnassignCase(row)}
-														variant='solid'
+														variant='outline'
+														borderColor={"red.500"}
 														_hover={{
 															bg: "red.600",
 															color: "#fff",
