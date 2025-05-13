@@ -22,6 +22,8 @@ import LoginPage from "./pages/General/Login";
 import NotFoundPage from "./pages/General/NotFound";
 import SendFeedbackPage from "./pages/General/SendFeedback";
 
+import CompletedCasesPage from "./pages/User/CompletedCases";
+
 import RootRedirect from "./components/General/RootRedirect";
 
 import EditProfilePage from "./pages/User/EditProfile";
@@ -83,6 +85,8 @@ function App() {
 						{/* User Routes */}
 						<Route path='/search-owner' element={<SearchOwnerPage />} />
 						<Route path='/search-pet' element={<SearchPetPage />} />
+
+						<Route path='/completed-cases' element={<CompletedCasesPage />} />
 
 						<Route path='/owner-table' element={<OwnerTablePage />} />
 						<Route path='/pet-table' element={<PetTablePage />} />

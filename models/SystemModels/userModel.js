@@ -33,26 +33,6 @@ const userSchema = mongoose.Schema(
 			required: true,
 			default: "vet",
 		},
-		notifications: [
-			{
-				message: {
-					type: String,
-					required: true,
-				},
-				read: {
-					type: Boolean,
-					default: false,
-				},
-				caseId: {
-					type: mongoose.Schema.Types.ObjectId,
-					ref: "Case",
-				},
-				createdAt: {
-					type: Date,
-					default: Date.now,
-				},
-			},
-		],
 	},
 	{
 		timestamps: true,

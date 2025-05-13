@@ -13,6 +13,7 @@ const {
 	completeCase,
 	unassignCase,
 	getAssignedCases,
+	closeCase,
 } = require("../controllers/caseController");
 const { authenticate } = require("../middleware/authMiddleware");
 
@@ -41,6 +42,7 @@ router.put("/updateCase/:caseId", authenticate, updateCase);
 router.patch("/:caseId/acceptCase", authenticate, acceptCase);
 router.patch("/:caseId/unassignCase", authenticate, unassignCase);
 router.patch("/:caseId/completeCase", authenticate, completeCase);
+router.patch("/:caseId/closeCase", authenticate, closeCase);
 
 // ----------------------------------------------------------------
 // DELETE methods for /case

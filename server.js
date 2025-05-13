@@ -33,6 +33,7 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use("/user", require("./routes/userRoutes"));
 app.use("/case", require("./routes/caseRoutes"));
+app.use("/notification", require("./routes/notificationRoutes"));
 
 app.use(errorHandler);
 

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const Case = require("../models/SystemModels/caseModel");
 const User = require("../models/SystemModels/userModel");
+const Notification = require("../models/SystemModels/notificationModel");
 
 // @desc Create A New Case
 // @route POST /case/createCase
@@ -339,11 +340,20 @@ const completeCase = asyncHandler(async (req, res) => {
 			return res.status(400).json({ message: "Case is not in progress" });
 		}
 
-		const updatedCase = await Case.findByIdAndUpdate(
-			caseId,
-			{ status: "completed", actionsTaken },
-			{ new: true }
-		);
+		const updatedCase = await Case.findByIdAndUpdate(caseId, {
+			status: "completed",
+			actionsTaken,
+		});
+
+		const secretaryId = updatedCase.secretaryId;
+		const vetId = updatedCase.vetId;
+
+		await Notification.create({
+			user: secretaryId,
+			message: `تم إنهاء الحالة للحيوان ${updateCase.petId}`,
+			case: updateCase._id,
+			type: "case_completed",
+		});
 
 		if (!updatedCase) {
 			return res.status(404).json({ message: "Case not found" });
@@ -374,7 +384,7 @@ const completeCase = asyncHandler(async (req, res) => {
 const getCompletedCases = asyncHandler(async (req, res) => {
 	try {
 		if (!req.user || req.user.role !== "secretary") {
-			return res.status(403).json({ message: "Unauthorized" });
+			return res.status(400).json({ message: "Unauthorized" });
 		}
 
 		const completedCases = await Case.find({ status: "completed" })
@@ -383,11 +393,57 @@ const getCompletedCases = asyncHandler(async (req, res) => {
 			.exec();
 
 		if (completedCases.length === 0) {
-			return res.status(404).json({ message: "No completed cases found" });
+			return res.status(400).json({ message: "No completed cases found" });
 		}
 		return res.status(200).json({
 			message: "Completed cases retrieved successfully",
 			cases: completedCases,
+		});
+	} catch (error) {
+		res.status(500);
+		throw new Error(error.message);
+	}
+});
+
+// @desc Secretary closes a case
+// @route PATCH /case/:caseId/closeCase
+// @access Private
+const closeCase = asyncHandler(async (req, res) => {
+	try {
+		const caseId = req.params.caseId;
+
+		if (!caseId) {
+			return res.status(400).json({ message: "Case ID is required" });
+		}
+
+		if (!req.user || req.user.role !== "secretary") {
+			return res.status(403).json({ message: "Unauthorized" });
+		}
+
+		const caseData = await Case.findById(caseId);
+
+		if (!caseData) {
+			return res.status(404).json({ message: "Case not found" });
+		}
+
+		if (!mongoose.Types.ObjectId.isValid(caseId)) {
+			return res.status(400).json({ message: "Invalid case ID" });
+		}
+
+		if (caseData.status === "closed") {
+			return res.status(400).json({ message: "Case already closed" });
+		}
+
+		const updatedCase = await Case.findByIdAndUpdate(caseId, {
+			status: "closed",
+		});
+
+		if (!updatedCase) {
+			return res.status(404).json({ message: "Case not found" });
+		}
+		return res.status(200).json({
+			message: "Case closed successfully",
+			case: updatedCase,
 		});
 	} catch (error) {
 		res.status(500);
@@ -407,4 +463,5 @@ module.exports = {
 	getAssignedCases,
 	completeCase,
 	getCompletedCases,
+	closeCase,
 };

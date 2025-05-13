@@ -31,6 +31,7 @@ import { MdOutlinePets, MdOutlinePassword } from "react-icons/md";
 import { VscFeedback } from "react-icons/vsc";
 import { BsFileMedical } from "react-icons/bs";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import { MdIncompleteCircle } from "react-icons/md";
 
 // Custom Component Imports
 import NavigationLinkDrawer from "./NavigationLinkDrawer";
@@ -453,6 +454,14 @@ export default function SecretaryDrawer() {
 														icon={BsFileMedical}
 														text={"عرض الحالاات المفتوحة"}
 														to={"/view-cases"}
+														justifyContent='flex-end'
+														alignItems='flex-start'
+													/>
+
+													<NavigationLinkDrawer
+														icon={MdIncompleteCircle}
+														text={"عرض الحالات المكتملة"}
+														to={"/completed-cases"}
 														justifyContent='flex-end'
 														alignItems='flex-start'
 													/>

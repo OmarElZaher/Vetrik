@@ -9,10 +9,12 @@ import axios from "axios";
 import { API_URL as api } from "../../utils/constants";
 
 // Chakra UI Imports
-import { Box, IconButton, Icon, Tooltip, useToast } from "@chakra-ui/react";
+import { Box, IconButton, Icon, useToast } from "@chakra-ui/react";
 
 // React Icons Imports
 import { IoMdLogOut } from "react-icons/io";
+import { FaBell } from "react-icons/fa";
+import { FaRegBell } from "react-icons/fa6";
 
 // Custom Component Imports
 import VetDrawer from "./VetDrawer";
@@ -27,6 +29,9 @@ export default function Header() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [role] = useState(localStorage.getItem("userRole") || "user");
+
+	const [notificationCount, setNotificationCount] = useState(0);
+	const [notifications, setNotifications] = useState([]);
 
 	const handleLogout = async () => {
 		try {
@@ -61,6 +66,32 @@ export default function Header() {
 	};
 
 	useEffect(() => {
+		const fetchNotifications = async () => {
+			try {
+				const response = await axios.get(`${api}/notification/`, {
+					withCredentials: true,
+				});
+
+				if (response.status === 200) {
+					setNotificationCount(response.data.length);
+					setNotifications(response.data);
+				}
+			} catch (error) {
+				if (error.response.status === 500) {
+					toast({
+						title: error?.response?.data?.message,
+						description: "حدث خطأ ما",
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				} else {
+					navigate("/login");
+				}
+			}
+		};
+
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
@@ -94,7 +125,9 @@ export default function Header() {
 				setIsLoading(false);
 			}
 		};
+
 		fetchData();
+		fetchNotifications();
 	}, [navigate, toast]);
 
 	return isLoading ? (
@@ -154,11 +187,9 @@ export default function Header() {
 					alignItems='center'
 					key={3}
 				>
-					<Tooltip label='تسجيل الخروج' hasArrow placement='bottom'>
+					{notificationCount > 0 ? (
 						<IconButton
-							icon={<Icon as={IoMdLogOut} boxSize={7} />} // Bigger icon
-							aria-label='تسجيل الخروج'
-							onClick={handleLogout}
+							icon={<Icon as={FaBell} boxSize={7} />}
 							bg='#121211'
 							color='#FFF'
 							_hover={{
@@ -173,7 +204,43 @@ export default function Header() {
 							transition='all 0.2s ease'
 							mr={4}
 						/>
-					</Tooltip>
+					) : (
+						<IconButton
+							icon={<Icon as={FaRegBell} boxSize={7} />}
+							bg='#121211'
+							color='#FFF'
+							_hover={{
+								color: "#D4F500",
+							}}
+							_active={{
+								bg: "#121211",
+								transform: "scale(0.95)",
+							}}
+							boxSize='50px'
+							boxShadow='lg'
+							transition='all 0.2s ease'
+							mr={4}
+						/>
+					)}
+
+					<IconButton
+						icon={<Icon as={IoMdLogOut} boxSize={7} />}
+						aria-label='تسجيل الخروج'
+						onClick={handleLogout}
+						bg='#121211'
+						color='#FFF'
+						_hover={{
+							color: "#D4F500",
+						}}
+						_active={{
+							bg: "#121211",
+							transform: "scale(0.95)",
+						}}
+						boxSize='50px'
+						boxShadow='lg'
+						transition='all 0.2s ease'
+						mr={4}
+					/>
 				</Box>
 			</Box>
 		</Box>
