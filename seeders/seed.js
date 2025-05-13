@@ -159,20 +159,18 @@ async function seedDatabase() {
 		// Create some health records
 		const healthRecords = [
 			{
+				filename: "max_annual_checkup.pdf",
+				data: Buffer.from("Sample health record content for Max"), // Simplified for demo
+				contentType: "application/pdf",
 				pet: createdPets[0]._id,
-				date: new Date(),
-				diagnosis: "Annual checkup",
-				treatment: "No issues found",
-				notes: "Healthy dog, maintaining good weight",
-				vet: createdUsers.find((u) => u.role === "vet")._id,
 			},
 			{
+				filename: "luna_skin_treatment.pdf",
+				data: Buffer.from(
+					"Sample health record content for Luna's skin condition"
+				), // Simplified for demo
+				contentType: "application/pdf",
 				pet: createdPets[1]._id,
-				date: new Date(),
-				diagnosis: "Mild skin irritation",
-				treatment: "Prescribed medicated shampoo",
-				notes: "Follow up in 2 weeks",
-				vet: createdUsers.find((u) => u.role === "vet")._id,
 			},
 		];
 
@@ -180,25 +178,62 @@ async function seedDatabase() {
 		console.log(`Seeded ${createdRecords.length} health records`);
 
 		// Create some vaccinations
-		const vaccinations = [
+		const vaccinationCards = [
 			{
 				pet: createdPets[0]._id,
-				name: "Rabies",
-				date: new Date(),
-				expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
-				vet: createdUsers.find((u) => u.role === "vet")._id,
+				vaccine: [
+					{
+						vaccineName: "Rabies",
+						vaccineBatch: "RB12345",
+						vaccineGivenDate: new Date(),
+						vaccineRenewalDate: new Date(
+							Date.now() + 365 * 24 * 60 * 60 * 1000
+						), // 1 year from now
+					},
+					{
+						vaccineName: "Distemper",
+						vaccineBatch: "DT67890",
+						vaccineGivenDate: new Date(),
+						vaccineRenewalDate: new Date(
+							Date.now() + 730 * 24 * 60 * 60 * 1000
+						), // 2 years from now
+					},
+				],
 			},
 			{
-				pet: createdPets[0]._id,
-				name: "Distemper",
-				date: new Date(),
-				expirationDate: new Date(Date.now() + 730 * 24 * 60 * 60 * 1000), // 2 years from now
-				vet: createdUsers.find((u) => u.role === "vet")._id,
+				pet: createdPets[1]._id,
+				vaccine: [
+					{
+						vaccineName: "Rabies",
+						vaccineBatch: "RB54321",
+						vaccineGivenDate: new Date(),
+						vaccineRenewalDate: new Date(
+							Date.now() + 365 * 24 * 60 * 60 * 1000
+						), // 1 year from now
+					},
+					{
+						vaccineName: "Feline Distemper (Panleukopenia)",
+						vaccineBatch: "FD98765",
+						vaccineGivenDate: new Date(),
+						vaccineRenewalDate: new Date(
+							Date.now() + 365 * 24 * 60 * 60 * 1000
+						), // 1 year from now
+					},
+				],
 			},
 		];
 
-		const createdVaccinations = await Vaccination.insertMany(vaccinations);
-		console.log(`Seeded ${createdVaccinations.length} vaccinations`);
+		const createdVaccinationCards = await mongoose
+			.model("VaccinationCard")
+			.insertMany(vaccinationCards);
+		console.log(
+			`Seeded ${
+				createdVaccinationCards.length
+			} vaccination cards with ${createdVaccinationCards.reduce(
+				(total, card) => total + card.vaccine.length,
+				0
+			)} vaccines`
+		);
 
 		// Create some cases
 		const cases = [

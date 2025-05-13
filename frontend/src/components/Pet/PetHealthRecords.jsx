@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // React Imports
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Axios Import
 import axios from "axios";
@@ -30,7 +30,7 @@ import {
 
 // React Icon Imports
 import { BiHealth } from "react-icons/bi";
-import { IoMdDownload } from "react-icons/io";
+import { IoMdDownload, IoMdArrowRoundBack } from "react-icons/io";
 import { MdDelete, MdUpload } from "react-icons/md";
 
 // Custom Component Imports
@@ -40,6 +40,7 @@ import Spinner from "../General/Spinner";
 export default function PetHealthRecords() {
 	const { petId } = useParams();
 	const toast = useToast();
+	const navigate = useNavigate();
 
 	// File useStates
 	const [selectedFile, setSelectedFile] = useState(null);
@@ -395,26 +396,54 @@ export default function PetHealthRecords() {
 							>
 								<Input
 									type={"file"}
+									disabled={isLoading}
 									onChange={handleFileChange}
 									cursor={"pointer"}
 									width={"40%"}
 									mb={5}
 								/>
-								<Button
-									_hover={{
-										bg: "yellowgreen",
-										color: "#000",
-										transform: "scale(1.01)",
-									}}
-									_active={{
-										transform: "scale(0.99)",
-										opacity: "0.5",
-									}}
-									onClick={handleUpload}
-									rightIcon={<MdUpload />}
+								<Box
+									display={"flex"}
+									justifyContent={"center"}
+									alignItems={"center"}
 								>
-									رفع
-								</Button>
+									<Button
+										_hover={{
+											bg: "yellowgreen",
+											color: "#000",
+											transform: "scale(1.01)",
+										}}
+										_active={{
+											transform: "scale(0.99)",
+											opacity: "0.5",
+										}}
+										onClick={handleUpload}
+										rightIcon={<MdUpload />}
+										ml={2.5}
+									>
+										رفع
+									</Button>
+
+									<Button
+										_hover={{
+											bg: "yellowgreen",
+											color: "#000",
+											transform: "scale(1.01)",
+										}}
+										_active={{
+											transform: "scale(0.99)",
+											opacity: "0.5",
+										}}
+										rightIcon={<IoMdArrowRoundBack />}
+										onClick={() => {
+											navigate(-1);
+										}}
+										variant={"outline"}
+										mr={2.5}
+									>
+										رجوع
+									</Button>
+								</Box>
 							</Box>
 						</Card>
 					</Box>
