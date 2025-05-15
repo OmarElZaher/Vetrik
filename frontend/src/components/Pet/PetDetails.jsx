@@ -921,7 +921,28 @@ export default function PetDetails() {
 					</ModalBody>
 
 					<ModalFooter>
-						<Button colorScheme="blue" mr={3} onClick={closeModal}>
+						{localStorage.getItem("userRole") === "secretary" && (
+							<>
+								<Button
+									_hover={{
+										bg: "#D4F500",
+										color: "#000",
+										transition: "all 0.2s",
+										transform: "scale(1.05)",
+									}}
+									_active={{
+										transform: "scale(0.98)",
+										opacity: "0.5",
+									}}
+									onClick={() => {
+										navigate(`/open-case/${pet._id}`);
+									}}
+								>
+									Open Case
+								</Button>
+							</>
+						)}
+						<Button colorScheme="blue" ml={3} onClick={closeModal}>
 							Close
 						</Button>
 					</ModalFooter>

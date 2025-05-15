@@ -45,6 +45,7 @@ import AddOwnerPage from "./pages/Owner/AddOwner";
 
 import ViewCasesPage from "./pages/User/ViewCases";
 import AssignedCasesPage from "./pages/User/AssignedCases";
+import OpenCasePage from "./pages/User/OpenCase";
 // }
 
 // Pet Imports {
@@ -114,6 +115,7 @@ function App() {
 
 						<Route path='/view-cases' element={<ViewCasesPage />} />
 						<Route path='/assigned-cases' element={<AssignedCasesPage />} />
+						<Route path='/open-case/:petId' element={<OpenCasePage />} />
 
 						{/* Admin Routes */}
 						<Route path='/admin' element={<AdminHomePage />} />

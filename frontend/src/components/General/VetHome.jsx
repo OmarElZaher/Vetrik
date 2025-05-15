@@ -61,9 +61,12 @@ export default function VetHome() {
 		const fetchOpenCases = async () => {
 			try {
 				setLoading(true);
-				const response = await axios.get(`${api}/case/getUnassignedCases`, {
-					withCredentials: true,
-				});
+				const response = await axios.get(
+					`${api}/case/getUnassignedCases`,
+					{
+						withCredentials: true,
+					}
+				);
 
 				if (response.status === 200) {
 					setOpenCases(response.data.cases);
@@ -135,7 +138,7 @@ export default function VetHome() {
 				<>
 					{/* صندوق الترحيب */}
 					<Box
-						dir='rtl'
+						dir="rtl"
 						height={"10vh"}
 						display={"flex"}
 						justifyContent={"center"}
@@ -149,7 +152,7 @@ export default function VetHome() {
 					<hr />
 					{/* صندوق البحث */}
 					<Box
-						dir='rtl'
+						dir="rtl"
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -172,7 +175,11 @@ export default function VetHome() {
 								flexDirection={"column"}
 								height={"80%"}
 							>
-								<Text fontSize={"28px"} fontWeight={"bold"} my={10}>
+								<Text
+									fontSize={"28px"}
+									fontWeight={"bold"}
+									my={10}
+								>
 									هل تريد البحث عن مالك؟
 								</Text>
 								<Button
@@ -191,10 +198,10 @@ export default function VetHome() {
 									}}
 									justifyContent={"flex-start"}
 									alignItems={"center"}
-									transition='all 0.15s ease'
-									bg='#FFF'
-									color='#000'
-									fontSize='18px'
+									transition="all 0.15s ease"
+									bg="#FFF"
+									color="#000"
+									fontSize="18px"
 									my={5}
 									rightIcon={<FaPerson />}
 								>
@@ -219,7 +226,11 @@ export default function VetHome() {
 								flexDirection={"column"}
 								height={"80%"}
 							>
-								<Text fontSize={"28px"} fontWeight={"bold"} my={10}>
+								<Text
+									fontSize={"28px"}
+									fontWeight={"bold"}
+									my={10}
+								>
 									هل تريد البحث عن حيوان أليف؟
 								</Text>
 								<Button
@@ -238,10 +249,10 @@ export default function VetHome() {
 									}}
 									justifyContent={"flex-start"}
 									alignItems={"center"}
-									transition='all 0.15s ease'
-									bg='#FFF'
-									color='#000'
-									fontSize='18px'
+									transition="all 0.15s ease"
+									bg="#FFF"
+									color="#000"
+									fontSize="18px"
 									my={5}
 									rightIcon={<MdOutlinePets />}
 								>
@@ -252,7 +263,7 @@ export default function VetHome() {
 					</Box>
 					<hr />
 					<Box
-						dir='rtl'
+						dir="rtl"
 						display={"flex"}
 						justifyContent={"center"}
 						alignItems={"center"}
@@ -272,7 +283,7 @@ export default function VetHome() {
 							</Text>
 						</Box>
 						<Box
-							dir='rtl'
+							dir="rtl"
 							display={"flex"}
 							justifyContent={"center"}
 							alignItems={"center"}
@@ -288,27 +299,43 @@ export default function VetHome() {
 								<>
 									<TableContainer
 										width={"80%"}
-										maxHeight={"70vh"}
+										maxHeight={"80%"}
 										overflowY={"auto"}
 									>
-										<Table variant='simple' size='md'>
+										<Table variant="simple" size="md">
 											<Thead>
 												<Tr>
-													<Th textAlign={"right"}>اسم الحيوان</Th>
-													<Th textAlign={"center"}>السلالة</Th>
-													<Th textAlign={"center"}>النوع</Th>
-													<Th textAlign={"center"}>فئة الوزن</Th>
-													<Th textAlign={"left"}>تفاصيل</Th>
+													<Th textAlign={"right"}>
+														اسم الحيوان
+													</Th>
+													<Th textAlign={"center"}>
+														السلالة
+													</Th>
+													<Th textAlign={"center"}>
+														النوع
+													</Th>
+													<Th textAlign={"center"}>
+														فئة الوزن
+													</Th>
+													<Th textAlign={"left"}>
+														تفاصيل
+													</Th>
 												</Tr>
 											</Thead>
 											<Tbody>
 												{openCases.map((row) => (
 													<Tr key={row._id}>
-														<Td textAlign={"right"}>{`${row.petId.name}`}</Td>
-														<Td textAlign={"center"}>{`${titleCase(
+														<Td
+															textAlign={"right"}
+														>{`${row.petId.name}`}</Td>
+														<Td
+															textAlign={"center"}
+														>{`${titleCase(
 															row.petId.breed
 														)}`}</Td>
-														<Td textAlign={"center"}>{`${titleCase(
+														<Td
+															textAlign={"center"}
+														>{`${titleCase(
 															row.petId.type
 														)}`}</Td>
 														<Td
@@ -317,14 +344,22 @@ export default function VetHome() {
 
 														<Td textAlign={"left"}>
 															<Button
-																rightIcon={<IoMdEye />}
-																onClick={() => handleShowDetails(row)}
-																variant='solid'
+																rightIcon={
+																	<IoMdEye />
+																}
+																onClick={() =>
+																	handleShowDetails(
+																		row
+																	)
+																}
+																variant="solid"
 																_hover={{
 																	bg: "#D4F500",
-																	borderColor: "#D4F500",
+																	borderColor:
+																		"#D4F500",
 																	color: "#000",
-																	transform: "scale(1.05)",
+																	transform:
+																		"scale(1.05)",
 																}}
 															>
 																عرض
@@ -342,21 +377,24 @@ export default function VetHome() {
 					{/* Modal for Case Details */}
 					<Modal isOpen={isOpen} onClose={onClose}>
 						<ModalOverlay />
-						<ModalContent dir='rtl'>
-							<ModalHeader textAlign={"center"}>تفاصيل الحالة</ModalHeader>
+						<ModalContent dir="rtl">
+							<ModalHeader textAlign={"center"}>
+								تفاصيل الحالة
+							</ModalHeader>
 							<ModalCloseButton />
 							<ModalBody>
-								<Text fontSize='lg'>
+								<Text fontSize="lg">
 									<strong>السبب للزيارة:</strong>
 									<br />
-									{selectedCase?.reasonForVisit || "غير متوفر"}
+									{selectedCase?.reasonForVisit ||
+										"غير متوفر"}
 								</Text>
 							</ModalBody>
 							<ModalFooter>
 								<Button
 									rightIcon={<IoMdEye />}
 									onClick={() => navigate("/view-cases")}
-									variant='solid'
+									variant="solid"
 									mx={5}
 									_hover={{
 										bg: "#D4F500",
