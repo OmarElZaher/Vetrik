@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 import {
 	Box,
@@ -81,7 +80,6 @@ export default function CompletedCases() {
 
 	const toast = useToast();
 
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchCompletedCases = async () => {

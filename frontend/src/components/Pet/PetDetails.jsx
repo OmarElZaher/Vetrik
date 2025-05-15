@@ -19,6 +19,12 @@ import {
 	FormControl,
 	Icon,
 	Input,
+	AlertDialog,
+	AlertDialogBody,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogContent,
+	AlertDialogOverlay,
 	Tag,
 	Table,
 	TableContainer,
@@ -28,6 +34,7 @@ import {
 	Td,
 	Tr,
 	Text,
+	Textarea,
 	Tooltip,
 	Modal,
 	ModalOverlay,
@@ -103,7 +110,22 @@ export default function PetDetails() {
 	const [gotData, setGotData] = useState(false);
 	const [error, setIsError] = useState(null);
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [actionsTaken, setActionsTaken] = useState("");
+	const [caseToClose, setCaseToClose] = useState(null);
+
+	const {
+		isOpen: isModalOpen,
+		onOpen: openModal,
+		onClose: closeModal,
+	} = useDisclosure();
+
+	const {
+		isOpen: isAlertOpen,
+		onOpen: openAlert,
+		onClose: closeAlert,
+	} = useDisclosure();
+
+	const cancelRef = React.useRef();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -362,6 +384,39 @@ export default function PetDetails() {
 		}
 	};
 
+	const handleCloseCase = async (caseId) => {
+		try {
+			setIsLoading(true);
+			const response = await axios.patch(
+				`${api}/case/${caseId}/completeCase`,
+				{ actionsTaken },
+				{ withCredentials: true }
+			);
+
+			if (response.status === 200) {
+				toast({
+					title: response.data.message,
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			}
+		} catch (error) {
+			if (error.response.status === 500) {
+				toast({
+					title: error?.response?.data?.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			}
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	const handleGetCases = async () => {
 		try {
 			setIsLoading(true);
@@ -577,7 +632,7 @@ export default function PetDetails() {
 								rightIcon={<FaBookMedical />}
 								onClick={() => {
 									handleGetCases();
-									onOpen();
+									openModal();
 								}}
 							>
 								{pet.name
@@ -725,7 +780,7 @@ export default function PetDetails() {
 				</Card>
 			</Box>
 
-			<Modal isOpen={isOpen} onClose={onClose} size={"full"}>
+			<Modal isOpen={isModalOpen} onClose={closeModal} size="xxl">
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader>
@@ -833,7 +888,12 @@ export default function PetDetails() {
 															</Tag>
 															<Button
 																size="sm"
-																onClick={() => {}}
+																onClick={() => {
+																	setCaseToClose(
+																		caseItem._id
+																	);
+																	openAlert();
+																}}
 															>
 																Close Case
 															</Button>
@@ -861,12 +921,55 @@ export default function PetDetails() {
 					</ModalBody>
 
 					<ModalFooter>
-						<Button colorScheme="blue" mr={3} onClick={onClose}>
+						<Button colorScheme="blue" mr={3} onClick={closeModal}>
 							Close
 						</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
+
+			<AlertDialog
+				isOpen={isAlertOpen}
+				leastDestructiveRef={cancelRef}
+				onClose={closeAlert}
+				size={"xl"}
+			>
+				<AlertDialogOverlay>
+					<AlertDialogContent>
+						<AlertDialogHeader fontSize="lg" fontWeight="bold">
+							Close Case
+						</AlertDialogHeader>
+
+						<AlertDialogBody>
+							<Textarea
+								placeholder="Actions Taken"
+								resize={"none"}
+								onChange={(e) =>
+									setActionsTaken(e.target.value)
+								}
+							/>
+						</AlertDialogBody>
+
+						<AlertDialogFooter>
+							<Button ref={cancelRef} onClick={closeAlert}>
+								Cancel
+							</Button>
+							<Button
+								colorScheme="green"
+								onClick={() => {
+									handleCloseCase(caseToClose);
+									closeAlert();
+									setActionsTaken("");
+									window.location.reload();
+								}}
+								ml={3}
+							>
+								Submit
+							</Button>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialogOverlay>
+			</AlertDialog>
 		</>
 	) : null;
 }
