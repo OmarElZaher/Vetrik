@@ -566,166 +566,441 @@ export default function PetDetails() {
 							))}
 						</Box>
 
-					<Text fontSize='xl' fontWeight='bold' mb={2}>
-						المالكين
-					</Text>
-					<TableContainer overflowX='auto'>
-						<Table size='sm' minWidth='600px'>
-							<Thead>
-								<Tr>
-									<Th>الاسم الكامل</Th>
-									<Th>البريد الإلكتروني</Th>
-									<Th>رقم المحمول</Th>
-									<Th>الإجراءات</Th>
-								</Tr>
-							</Thead>
-							<Tbody>
-								{pet.owners.map((owner) => (
-									<Tr key={owner._id}>
-										<Td>{owner.fullName}</Td>
-										<Td>{owner.email}</Td>
-										<Td>{owner.mobileNumber}</Td>
-										<Td>
-											<Button
-												size='sm'
-												onClick={() => navigate(`/owner-details/${owner._id}`)}
-												rightIcon={<IoMdEye />}
-												mr={2}
-											>
-												عرض
-											</Button>
-											<Tooltip label='إزالة المالك' hasArrow>
-												<Button
-													size='sm'
-													variant='outline'
-													colorScheme='red'
-													onClick={() =>
-														handleRemovePetFromOwner(owner._id, pet._id)
-													}
-													rightIcon={<TbTrashXFilled />}
-												>
-													حذف
-												</Button>
-											</Tooltip>
-										</Td>
+						<Text fontSize="xl" fontWeight="bold" mb={2}>
+							المالكين
+						</Text>
+						<TableContainer overflowX="auto">
+							<Table size="sm" minWidth="600px">
+								<Thead>
+									<Tr>
+										<Th>الاسم الكامل</Th>
+										<Th>البريد الإلكتروني</Th>
+										<Th>رقم المحمول</Th>
+										<Th>الإجراءات</Th>
 									</Tr>
-								))}
-							</Tbody>
-						</Table>
-					</TableContainer>
+								</Thead>
+								<Tbody>
+									{pet.owners.map((owner) => (
+										<Tr key={owner._id}>
+											<Td>{owner.fullName}</Td>
+											<Td>{owner.email}</Td>
+											<Td>{owner.mobileNumber}</Td>
+											<Td>
+												<Button
+													size="sm"
+													onClick={() =>
+														navigate(
+															`/owner-details/${owner._id}`
+														)
+													}
+													rightIcon={<IoMdEye />}
+													mr={2}
+												>
+													عرض
+												</Button>
+												<Tooltip
+													label="إزالة المالك"
+													hasArrow
+												>
+													<Button
+														size="sm"
+														variant="outline"
+														colorScheme="red"
+														onClick={() =>
+															handleRemovePetFromOwner(
+																owner._id,
+																pet._id
+															)
+														}
+														rightIcon={
+															<TbTrashXFilled />
+														}
+													>
+														حذف
+													</Button>
+												</Tooltip>
+											</Td>
+										</Tr>
+									))}
+								</Tbody>
+							</Table>
+						</TableContainer>
 
-					<Box
-						mt={6}
-						display='flex'
-						flexDirection={{ base: "column", md: "row" }}
-						gap={4}
-						justifyContent='center'
-					>
-						<Button
-							onClick={() =>
-								navigate(
-									localStorage.getItem("petFilterData")
-										? "/pet-table"
-										: "/search-pet"
-								)
-							}
-							rightIcon={<IoMdArrowRoundBack />}
-						>
-							رجوع
-						</Button>
-						<Button
-							onClick={() => navigate(`/pet-vaccination/${pet._id}`)}
-							rightIcon={<IoMdMedical />}
-						>
-							كارت التطعيمات
-						</Button>
-						<Button
-							onClick={() => navigate(`/pet-records/${pet._id}`)}
-							rightIcon={<IoMdDocument />}
-						>
-							السجلات الصحية
-						</Button>
-						<Tooltip label='حذف الحيوان' hasArrow>
+						<Box display={"flex"} justifyContent={"center"} mt={4}>
 							<Button
-								variant='outline'
-								colorScheme='red'
-								onClick={() => handleDeletePet(pet._id)}
-								rightIcon={<TbTrashXFilled />}
+								_hover={{
+									bg: "#D4F500",
+									borderColor: "#D4F500",
+									color: "#000",
+									transform: "scale(1.05)",
+								}}
+								_active={{
+									transform: "scale(0.98)",
+									opacity: "0.5",
+								}}
+								transition="all 0.2s"
+								rightIcon={<FaBookMedical />}
+								onClick={() => {
+									handleGetCases();
+									openModal();
+								}}
 							>
-								حذف
+								{pet.name
+									? titleCase(pet.name) +
+									  (pet.name
+											.trim()
+											.toLowerCase()
+											.endsWith("s")
+											? "' Cases"
+											: "'s Cases")
+									: "See All Cases"}
 							</Button>
-						</Tooltip>
-					</Box>
-				</CardBody>
-			</Card>
+						</Box>
 
-			{/* Side Card: Add Owner */}
-			<Card width={{ base: "100%", md: "30%" }}>
-				<CardBody>
-					<Text fontSize='2xl' fontWeight='bold' textAlign='center' mb={4}>
-						إضافة مالك موجود
-					</Text>
-					<Text fontSize='md' textAlign='center' mb={4}>
-						أدخل رقم المحمول للمالك ثم اضغط زر البحث.
-					</Text>
-
-					{owner !== null ? (
-						<Box>
-							<Text fontWeight='bold'>الاسم</Text>
-							<Text>{owner[0].fullName}</Text>
-							<Text fontWeight='bold' mt={2}>
-								رقم المحمول
-							</Text>
-							<Text>{owner[0].mobileNumber}</Text>
-							<Text fontWeight='bold' mt={2}>
-								البريد الإلكتروني
-							</Text>
-							<Text>{owner[0].email}</Text>
-
-							<Box
-								mt={4}
-								display='flex'
-								flexDirection={{ base: "column", md: "row" }}
-								gap={3}
+						<Box
+							mt={6}
+							display="flex"
+							flexDirection={{ base: "column", md: "row" }}
+							gap={4}
+							justifyContent="center"
+						>
+							<Button
+								onClick={() =>
+									navigate(
+										localStorage.getItem("petFilterData")
+											? "/pet-table"
+											: "/search-pet"
+									)
+								}
+								rightIcon={<IoMdArrowRoundBack />}
 							>
+								رجوع
+							</Button>
+							<Button
+								onClick={() =>
+									navigate(`/pet-vaccination/${pet._id}`)
+								}
+								rightIcon={<IoMdMedical />}
+							>
+								كارت التطعيمات
+							</Button>
+							<Button
+								onClick={() =>
+									navigate(`/pet-records/${pet._id}`)
+								}
+								rightIcon={<IoMdDocument />}
+							>
+								السجلات الصحية
+							</Button>
+							<Tooltip label="حذف الحيوان" hasArrow>
 								<Button
-									onClick={() => handleAddOwnerToPet(owner[0]._id, pet._id)}
-									rightIcon={<IoMdAdd />}
+									variant="outline"
+									colorScheme="red"
+									onClick={() => handleDeletePet(pet._id)}
+									rightIcon={<TbTrashXFilled />}
 								>
-									إضافة
+									حذف
 								</Button>
-								<Button
-									onClick={() => {
-										setOwner(null);
-										setownerMobileNumber(null);
+							</Tooltip>
+						</Box>
+					</CardBody>
+				</Card>
+
+				{/* Side Card: Add Owner */}
+				<Card width={{ base: "100%", md: "30%" }}>
+					<CardBody>
+						<Text
+							fontSize="2xl"
+							fontWeight="bold"
+							textAlign="center"
+							mb={4}
+						>
+							إضافة مالك موجود
+						</Text>
+						<Text fontSize="md" textAlign="center" mb={4}>
+							أدخل رقم المحمول للمالك ثم اضغط زر البحث.
+						</Text>
+
+						{owner !== null ? (
+							<Box>
+								<Text fontWeight="bold">الاسم</Text>
+								<Text>{owner[0].fullName}</Text>
+								<Text fontWeight="bold" mt={2}>
+									رقم المحمول
+								</Text>
+								<Text>{owner[0].mobileNumber}</Text>
+								<Text fontWeight="bold" mt={2}>
+									البريد الإلكتروني
+								</Text>
+								<Text>{owner[0].email}</Text>
+
+								<Box
+									mt={4}
+									display="flex"
+									flexDirection={{
+										base: "column",
+										md: "row",
 									}}
-									rightIcon={<IoMdRefresh />}
+									gap={3}
 								>
-									بحث مرة أخرى
+									<Button
+										onClick={() =>
+											handleAddOwnerToPet(
+												owner[0]._id,
+												pet._id
+											)
+										}
+										rightIcon={<IoMdAdd />}
+									>
+										إضافة
+									</Button>
+									<Button
+										onClick={() => {
+											setOwner(null);
+											setownerMobileNumber(null);
+										}}
+										rightIcon={<IoMdRefresh />}
+									>
+										بحث مرة أخرى
+									</Button>
+								</Box>
+							</Box>
+						) : (
+							<Box>
+								<FormControl mb={4}>
+									<Input
+										type="text"
+										placeholder="رقم المحمول"
+										value={ownerMobileNumber}
+										onChange={(e) =>
+											setownerMobileNumber(e.target.value)
+										}
+									/>
+								</FormControl>
+								<Button
+									onClick={handleSearchOwner}
+									width="100%"
+									rightIcon={<IoMdSearch />}
+								>
+									بحث
 								</Button>
 							</Box>
-						</Box>
-					) : (
-						<Box>
-							<FormControl mb={4}>
-								<Input
-									type='text'
-									placeholder='رقم المحمول'
-									value={ownerMobileNumber}
-									onChange={(e) => setownerMobileNumber(e.target.value)}
-								/>
-							</FormControl>
-							<Button
-								onClick={handleSearchOwner}
-								width='100%'
-								rightIcon={<IoMdSearch />}
-							>
-								بحث
+						)}
+					</CardBody>
+				</Card>
+			</Box>
+
+			<Modal isOpen={isModalOpen} onClose={closeModal} size="xxl">
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>
+						{pet.name
+							? titleCase(pet.name) +
+							  (pet.name.trim().toLowerCase().endsWith("s")
+									? "' Cases"
+									: "'s Cases")
+							: "Cases"}
+					</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
+						<TableContainer>
+							<Table size="sm" overflow={"auto"}>
+								<Thead>
+									<Tr>
+										<Th>Reason For Visit</Th>
+										<Th>Actions Taken</Th>
+										<Th>Case Date</Th>
+										<Th textAlign={"center"}>
+											Case Status
+										</Th>
+									</Tr>
+								</Thead>
+								<Tbody>
+									{petCases.map((caseItem) => (
+										<Tr key={caseItem._id}>
+											<Td>{caseItem.reasonForVisit}</Td>
+											<Td>
+												{caseItem.actionsTaken
+													? caseItem.actionsTaken
+													: "–"}
+											</Td>
+											<Td>
+												{formatDate(caseItem.updatedAt)}
+											</Td>
+											<Td
+												justifyContent={"center"}
+												display={"flex"}
+												alignContent={"center"}
+											>
+												{caseItem.status ===
+													"waiting" &&
+												localStorage.getItem(
+													"userRole"
+												) === "vet" ? (
+													<>
+														<Tag
+															colorScheme="yellow"
+															mr={2}
+														>
+															{titleCase(
+																caseItem.status
+															)}
+														</Tag>
+														<Button
+															ml={2}
+															size="sm"
+															_hover={{
+																backgroundColor:
+																	"green.400",
+																color: "white",
+																transition:
+																	"all 0.2s",
+																transform:
+																	"scale(1.05)",
+															}}
+															onClick={() => {
+																handleAcceptCase(
+																	caseItem._id
+																);
+																window.location.reload();
+															}}
+														>
+															Accept Case
+														</Button>
+													</>
+												) : caseItem.status ===
+														"waiting" &&
+												  localStorage.getItem(
+														"userRole"
+												  ) === "secretary" ? (
+													<Tag
+														colorScheme="yellow"
+														mr={2}
+													>
+														{titleCase(
+															caseItem.status
+														)}
+													</Tag>
+												) : caseItem.status ===
+												  "in-progress" ? (
+													caseItem.vetId._id ===
+													localStorage.getItem(
+														"userId"
+													) ? (
+														<>
+															<Tag
+																colorScheme="green"
+																mr={2}
+															>
+																{titleCase(
+																	caseItem.status
+																)}
+															</Tag>
+															<Button
+																size="sm"
+																onClick={() => {
+																	setCaseToClose(
+																		caseItem._id
+																	);
+																	openAlert();
+																}}
+															>
+																Close Case
+															</Button>
+														</>
+													) : (
+														<Tag colorScheme="green">
+															{titleCase(
+																caseItem.status
+															)}
+														</Tag>
+													)
+												) : (
+													<Tag colorScheme="blue">
+														{titleCase(
+															caseItem.status
+														)}
+													</Tag>
+												)}
+											</Td>
+										</Tr>
+									))}
+								</Tbody>
+							</Table>
+						</TableContainer>
+					</ModalBody>
+
+					<ModalFooter>
+						{localStorage.getItem("userRole") === "secretary" && (
+							<>
+								<Button
+									_hover={{
+										bg: "#D4F500",
+										color: "#000",
+										transition: "all 0.2s",
+										transform: "scale(1.05)",
+									}}
+									_active={{
+										transform: "scale(0.98)",
+										opacity: "0.5",
+									}}
+									onClick={() => {
+										navigate(`/open-case/${pet._id}`);
+									}}
+								>
+									Open Case
+								</Button>
+							</>
+						)}
+						<Button colorScheme="blue" ml={3} onClick={closeModal}>
+							Close
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+
+			<AlertDialog
+				isOpen={isAlertOpen}
+				leastDestructiveRef={cancelRef}
+				onClose={closeAlert}
+				size={"xl"}
+			>
+				<AlertDialogOverlay>
+					<AlertDialogContent>
+						<AlertDialogHeader fontSize="lg" fontWeight="bold">
+							Close Case
+						</AlertDialogHeader>
+
+						<AlertDialogBody>
+							<Textarea
+								placeholder="Actions Taken"
+								resize={"none"}
+								onChange={(e) =>
+									setActionsTaken(e.target.value)
+								}
+							/>
+						</AlertDialogBody>
+
+						<AlertDialogFooter>
+							<Button ref={cancelRef} onClick={closeAlert}>
+								Cancel
 							</Button>
-						</Box>
-					)}
-				</CardBody>
-			</Card>
-		</Box>
+							<Button
+								colorScheme="green"
+								onClick={() => {
+									handleCloseCase(caseToClose);
+									closeAlert();
+									setActionsTaken("");
+									window.location.reload();
+								}}
+								ml={3}
+							>
+								Submit
+							</Button>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialogOverlay>
+			</AlertDialog>
+		</>
 	) : null;
 }
