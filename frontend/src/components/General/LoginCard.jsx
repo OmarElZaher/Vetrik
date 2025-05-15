@@ -71,6 +71,7 @@ export default function LoginCard() {
 
 			if (response.status === 200) {
 				localStorage.setItem("userRole", response.data.role);
+				localStorage.setItem("userId", response.data.userId);
 				toast({
 					title: response.data.message,
 					status: "success",
@@ -124,45 +125,67 @@ export default function LoginCard() {
 				<Spinner />
 			) : (
 				<>
-					<Flex minH={"93vh"} align={"center"} justify={"center"} bg='#F6F9FB'>
-						<Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+					<Flex
+						minH={"93vh"}
+						align={"center"}
+						justify={"center"}
+						bg="#F6F9FB"
+					>
+						<Stack
+							spacing={8}
+							mx={"auto"}
+							maxW={"lg"}
+							py={12}
+							px={6}
+						>
 							<Stack align={"center"}>
-								<Icon as={FiLogIn} fontSize='100px' />
-								<Heading dir='rtl' fontSize={"4xl"}>
+								<Icon as={FiLogIn} fontSize="100px" />
+								<Heading dir="rtl" fontSize={"4xl"}>
 									مرحباً بعودتك يا دكتور! 👋🏽
 								</Heading>
 								<Text
-									dir='rtl'
+									dir="rtl"
 									fontSize={"lg"}
 									color={"gray.600"}
 									align={"center"}
 								>
-									قم بتسجيل الدخول باستخدام بياناتك للوصول إلى لوحة التحكم
-									الخاصة بك
+									قم بتسجيل الدخول باستخدام بياناتك للوصول إلى
+									لوحة التحكم الخاصة بك
 								</Text>
 							</Stack>
 
-							<Box rounded={"lg"} bg='#F6F9FB' boxShadow={"lg"} p={8}>
+							<Box
+								rounded={"lg"}
+								bg="#F6F9FB"
+								boxShadow={"lg"}
+								p={8}
+							>
 								<Stack spacing={4}>
-									<FormControl id='username'>
-										<FormLabel dir='rtl'>
+									<FormControl id="username">
+										<FormLabel dir="rtl">
 											اسم المستخدم{" "}
-											<Text display={"inline"} color='red'>
+											<Text
+												display={"inline"}
+												color="red"
+											>
 												*
 											</Text>
 										</FormLabel>
 										<Input
-											type='text'
-											name='username'
+											type="text"
+											name="username"
 											value={formData.username}
 											onChange={handleInputChange}
 										/>
 									</FormControl>
 
-									<FormControl id='password'>
-										<FormLabel dir='rtl'>
+									<FormControl id="password">
+										<FormLabel dir="rtl">
 											كلمة السر{" "}
-											<Text display={"inline"} color='red'>
+											<Text
+												display={"inline"}
+												color="red"
+											>
 												*
 											</Text>
 										</FormLabel>
@@ -174,7 +197,9 @@ export default function LoginCard() {
 															_hover={{}}
 															_active={{}}
 															onClick={() => {
-																setShowPassword(!showPassword);
+																setShowPassword(
+																	!showPassword
+																);
 															}}
 															as={FaEye}
 															cursor={"pointer"}
@@ -190,7 +215,9 @@ export default function LoginCard() {
 															_hover={{}}
 															_active={{}}
 															onClick={() => {
-																setShowPassword(!showPassword);
+																setShowPassword(
+																	!showPassword
+																);
 															}}
 															as={FaEyeSlash}
 															cursor={"pointer"}
@@ -201,9 +228,13 @@ export default function LoginCard() {
 												/>
 											)}
 											<Input
-												id='password'
-												type={showPassword ? "text" : "password"}
-												name='password'
+												id="password"
+												type={
+													showPassword
+														? "text"
+														: "password"
+												}
+												name="password"
 												value={formData.password}
 												onChange={handleInputChange}
 											/>
@@ -221,10 +252,11 @@ export default function LoginCard() {
 										>
 											<Link to={"/forgot-username"}>
 												<Text
-													dir='rtl'
+													dir="rtl"
 													color={"blue.400"}
 													_hover={{
-														textDecoration: "underline",
+														textDecoration:
+															"underline",
 													}}
 												>
 													نسيت اسم المستخدم؟
@@ -232,10 +264,11 @@ export default function LoginCard() {
 											</Link>
 											<Link to={"/forgot-password"}>
 												<Text
-													dir='rtl'
+													dir="rtl"
 													color={"blue.400"}
 													_hover={{
-														textDecoration: "underline",
+														textDecoration:
+															"underline",
 													}}
 												>
 													نسيت كلمة السر؟
@@ -243,7 +276,7 @@ export default function LoginCard() {
 											</Link>
 										</Stack>
 										<Button
-											dir='rtl'
+											dir="rtl"
 											_hover={{
 												bg: "blue.500",
 											}}

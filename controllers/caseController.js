@@ -210,7 +210,6 @@ const acceptCase = asyncHandler(async (req, res) => {
 		const updatedCase = await Case.findByIdAndUpdate(
 			caseId,
 			{ vetId: req.user._id, status: "in-progress" },
-
 			{ new: true }
 		);
 
@@ -450,6 +449,40 @@ const closeCase = asyncHandler(async (req, res) => {
 	}
 });
 
+// @desc Get all pet cases
+// @route GET /case/getPetCases/:petId
+// @access Private
+const getPetCases = asyncHandler(async (req, res) => {
+	try {
+		const { petId } = req.params;
+
+		if (!petId) {
+			return res.status(400).json({ message: "Pet ID is required" });
+		}
+
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			return res.status(400).json({ message: "Invalid pet ID" });
+		}
+
+		const petCases = await Case.find({ petId })
+			.populate("petId", "name type breed")
+			.populate("secretaryId", "username email")
+			.populate("vetId", "username email")
+			.exec();
+		if (petCases.length === 0) {
+			return res.status(404).json({ message: "No cases found for this pet" });
+		}
+		return res.status(200).json({
+			message: "Cases retrieved successfully",
+			cases: petCases,
+		});
+	} catch (error) {
+		res.status(500);
+		throw new Error(error.message);
+	}
+}
+);
+
 module.exports = {
 	createCase,
 	getAllCases,
@@ -463,4 +496,5 @@ module.exports = {
 	completeCase,
 	getCompletedCases,
 	closeCase,
+	getPetCases,
 };

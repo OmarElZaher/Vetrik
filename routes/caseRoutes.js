@@ -14,6 +14,7 @@ const {
 	unassignCase,
 	getAssignedCases,
 	closeCase,
+	getPetCases,
 } = require("../controllers/caseController");
 const { authenticate } = require("../middleware/authMiddleware");
 
@@ -25,6 +26,7 @@ router.get("/getCaseById/:caseId", authenticate, getCaseById);
 router.get("/getUnassignedCases", authenticate, getUnassignedCases);
 router.get("/getAssignedCases", authenticate, getAssignedCases);
 router.get("/getCompletedCases", authenticate, getCompletedCases);
+router.get("/getPetCases/:petId", authenticate, getPetCases);
 
 // ----------------------------------------------------------------
 // POST methods for /case

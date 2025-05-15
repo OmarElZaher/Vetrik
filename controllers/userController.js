@@ -557,6 +557,7 @@ const loginUser = asyncHandler(async (req, res) => {
 					message: "تم تسجيل الدخول بنجاح",
 					token: token,
 					role: user.role,
+					userId: user._id,
 				});
 			} else {
 				res.status(400).json({ message: "كلمة المرور غير صحيحة" });
