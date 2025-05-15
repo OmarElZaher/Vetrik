@@ -30,7 +30,7 @@ const users = [
 		phone: "1234567890",
 	},
 	{
-		username: "vet1",
+		username: "vet",
 		password: "Vv123456",
 		email: "vet1@modernvet.com",
 		role: "vet",
@@ -39,7 +39,7 @@ const users = [
 		phone: "1234567891",
 	},
 	{
-		username: "secretary1",
+		username: "secretary",
 		password: "Ss123456",
 		email: "secretary1@modernvet.com",
 		role: "secretary",
@@ -55,25 +55,31 @@ const owners = [
 		lastName: "Johnson",
 		fullName: "Michael Johnson",
 		email: "michael@example.com",
-		phone: "5551234567",
 		mobileNumber: "5551234567",
-		address: "123 Main St",
-		gender: "male", // Changed to lowercase
-		preferredContactMethod: "phone", // Changed to lowercase
-		receiveNotifications: true, // Added required field
+		gender: "male",
+		preferredContactMethod: "phone",
+		receiveNotifications: true,
 	},
 	{
 		firstName: "Sarah",
 		lastName: "Williams",
 		fullName: "Sarah Williams",
 		email: "sarah@example.com",
-		phone: "5559876543",
 		mobileNumber: "5559876543",
-		address: "456 Oak Ave",
-		gender: "female", // Changed to lowercase
-		preferredContactMethod: "email", // Changed to lowercase
-		receiveNotifications: true, // Added required field
+		gender: "female",
+		preferredContactMethod: "email",
+		receiveNotifications: true,
 	},
+	{
+		firstName: "David",
+		lastName: "Brown",
+		fullName: "David Brown",
+		email: "david@examnple.com",
+		mobileNumber: "5555555555",
+		gender: "male",
+		preferredContactMethod: "phone",
+		receiveNotifications: false,
+	}
 ];
 
 const pets = [
@@ -99,6 +105,17 @@ const pets = [
 		dob: new Date("2021-03-10"),
 		// Will link to owner after creation
 	},
+	{
+		name: "Buddy",
+		species: "Dog",
+		breed: "Beagle",
+		age: 4,
+		gender: "male",
+		weight: 12,
+		type: "dog", // Changed to match the enum values in the schema
+		dob: new Date("2019-08-20"),
+		// Will link to owner after creation
+	}
 ];
 
 // Seed data function
@@ -265,6 +282,12 @@ async function seedDatabase() {
 				vetId: createdUsers.find((u) => u.role === "vet")._id,
 				reasonForVisit: "Follow-up on skin condition",
 				status: "in-progress",
+			},
+			{
+				petId: createdPets[2]._id,
+				secretaryId: createdUsers.find((u) => u.role === "secretary")._id,
+				reasonForVisit: "Follow-up on skin condition",
+				status: "waiting",
 			},
 		];
 

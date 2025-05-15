@@ -79,9 +79,12 @@ export default function AssignedCases() {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(`${api}/case/getAssignedCases`, {
-					withCredentials: true,
-				});
+				const response = await axios.get(
+					`${api}/case/getAssignedCases`,
+					{
+						withCredentials: true,
+					}
+				);
 				if (response.status === 200) {
 					setCases(response.data.cases);
 					setGotData(true);
@@ -114,7 +117,8 @@ export default function AssignedCases() {
 		if (!actionsTaken) {
 			toast({
 				title: "Actions Taken Required",
-				description: "Please provide actions taken before closing the case.",
+				description:
+					"Please provide actions taken before closing the case.",
 				status: "warning",
 				duration: 2500,
 				isClosable: true,
@@ -123,6 +127,7 @@ export default function AssignedCases() {
 			return;
 		}
 		try {
+			setIsLoading(true);
 			await axios.patch(
 				`${api}/case/${caseItem._id}/completeCase`,
 				{ actionsTaken: actionsTaken },
@@ -140,13 +145,15 @@ export default function AssignedCases() {
 		} catch (error) {
 			toast({
 				title: "Failed to complete case.",
-				description: error?.response?.data?.message || "Something went wrong.",
+				description:
+					error?.response?.data?.message || "Something went wrong.",
 				status: "error",
 				duration: 2500,
 				isClosable: true,
 				position: "top",
 			});
 		} finally {
+			setIsLoading(false);
 			setActionsTaken("");
 			onClose();
 		}
@@ -171,7 +178,8 @@ export default function AssignedCases() {
 		} catch (error) {
 			toast({
 				title: "Failed to unassign case.",
-				description: error?.response?.data?.message || "Something went wrong.",
+				description:
+					error?.response?.data?.message || "Something went wrong.",
 				status: "error",
 				duration: 2500,
 				isClosable: true,
@@ -185,7 +193,7 @@ export default function AssignedCases() {
 	) : error ? (
 		<>
 			<Box
-				dir='rtl'
+				dir="rtl"
 				display={"flex"}
 				flexDirection={"column"}
 				justifyContent={"center"}
@@ -229,7 +237,7 @@ export default function AssignedCases() {
 		</>
 	) : !existsCases ? (
 		<>
-			<Box dir='rtl' width={"100%"} height={"87vh"}>
+			<Box dir="rtl" width={"100%"} height={"87vh"}>
 				<Box
 					display={"flex"}
 					flexDirection={"column"}
@@ -279,7 +287,8 @@ export default function AssignedCases() {
 							localStorage.removeItem("ownerFilterData");
 							localStorage.getItem("userRole") === "vet"
 								? navigate("/vet")
-								: localStorage.getItem("userRole") === "secretary"
+								: localStorage.getItem("userRole") ===
+								  "secretary"
 								? navigate("/secretary")
 								: navigate("/admin");
 						}}
@@ -293,7 +302,7 @@ export default function AssignedCases() {
 		</>
 	) : gotData ? (
 		<>
-			<Box dir='rtl' width={"100%"} height={"87vh"}>
+			<Box dir="rtl" width={"100%"} height={"87vh"}>
 				<Box
 					display={"flex"}
 					flexDirection={"column"}
@@ -330,25 +339,39 @@ export default function AssignedCases() {
 								maxHeight={"70vh"}
 								overflowY={"auto"}
 							>
-								<Table variant='simple' size='md'>
+								<Table variant="simple" size="md">
 									<Thead>
 										<Tr>
-											<Th textAlign={"right"}>اسم الحيوان</Th>
-											<Th textAlign={"center"}>السلالة</Th>
+											<Th textAlign={"right"}>
+												اسم الحيوان
+											</Th>
+											<Th textAlign={"center"}>
+												السلالة
+											</Th>
 											<Th textAlign={"center"}>النوع</Th>
-											<Th textAlign={"center"}>فئة الوزن</Th>
-											<Th textAlign={"center"}>الأفعال المطلوبة</Th>
+											<Th textAlign={"center"}>
+												فئة الوزن
+											</Th>
+											<Th textAlign={"center"}>
+												الأفعال المطلوبة
+											</Th>
 											<Th textAlign={"center"}>أفعال</Th>
 										</Tr>
 									</Thead>
 									<Tbody>
 										{cases.map((row) => (
 											<Tr key={row._id}>
-												<Td textAlign={"right"}>{`${row.petId.name}`}</Td>
-												<Td textAlign={"center"}>{`${titleCase(
+												<Td
+													textAlign={"right"}
+												>{`${row.petId.name}`}</Td>
+												<Td
+													textAlign={"center"}
+												>{`${titleCase(
 													row.petId.breed
 												)}`}</Td>
-												<Td textAlign={"center"}>{`${titleCase(
+												<Td
+													textAlign={"center"}
+												>{`${titleCase(
 													row.petId.type
 												)}`}</Td>
 												<Td
@@ -356,12 +379,12 @@ export default function AssignedCases() {
 												>{`${row.petId.weightClass}`}</Td>
 
 												<Td textAlign={"center"}>
-													<Popover placement='right'>
+													<Popover placement="right">
 														<PopoverTrigger>
 															<Button
-																rightIcon={<IoMdEye />}
-																ml={2}
-																_hover={{ bg: "blue.600", color: "#fff" }}
+																rightIcon={
+																	<IoMdEye />
+																}
 															>
 																عرض تفاصيل
 															</Button>
@@ -369,8 +392,14 @@ export default function AssignedCases() {
 														<PopoverContent>
 															<PopoverArrow />
 															<PopoverCloseButton />
-															<PopoverHeader>الأفعال المطلوبة</PopoverHeader>
-															<PopoverBody>{row.reasonForVisit}</PopoverBody>
+															<PopoverHeader>
+																الأفعال المطلوبة
+															</PopoverHeader>
+															<PopoverBody>
+																{
+																	row.reasonForVisit
+																}
+															</PopoverBody>
 														</PopoverContent>
 													</Popover>
 
@@ -390,8 +419,10 @@ export default function AssignedCases() {
 													<Button
 														ml={2}
 														rightIcon={<FaCheck />}
-														onClick={() => handleOpenModal(row)}
-														variant='solid'
+														onClick={() =>
+															handleOpenModal(row)
+														}
+														variant="solid"
 														_hover={{
 															bg: "green.600",
 															color: "#fff",
@@ -402,9 +433,12 @@ export default function AssignedCases() {
 													<Button
 														mr={2}
 														rightIcon={<FaTrash />}
-														onClick={() => handleUnassignCase(row)}
-														variant='outline'
-														borderColor={"red.500"}
+														onClick={() =>
+															handleUnassignCase(
+																row
+															)
+														}
+														variant="solid"
 														_hover={{
 															bg: "red.600",
 															color: "#fff",
@@ -442,7 +476,9 @@ export default function AssignedCases() {
 							if (localStorage.getItem("userRole") === "vet") {
 								navigate("/vet");
 							}
-							if (localStorage.getItem("userRole") === "secretary") {
+							if (
+								localStorage.getItem("userRole") === "secretary"
+							) {
 								navigate("/secretary");
 							}
 						}}
@@ -459,21 +495,23 @@ export default function AssignedCases() {
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				motionPreset='slideInBottom'
+				motionPreset="slideInBottom"
 				size={"xl"}
 			>
 				<ModalOverlay
-					bg='blackAlpha.300'
-					backdropFilter='blur(10px) hue-rotate(90deg)'
+					bg="blackAlpha.300"
+					backdropFilter="blur(10px) hue-rotate(90deg)"
 				/>
-				<ModalContent dir='rtl'>
-					<ModalHeader textAlign={"center"}>تفاصيل الحالة</ModalHeader>
+				<ModalContent dir="rtl">
+					<ModalHeader textAlign={"center"}>
+						تفاصيل الحالة
+					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						<Textarea
 							resize={"none"}
 							autoresize
-							placeholder='الأفعال التي تم اتأخذها'
+							placeholder="الأفعال التي تم اتأخذها"
 							value={actionsTaken}
 							onChange={(e) => setActionsTaken(e.target.value)}
 						/>

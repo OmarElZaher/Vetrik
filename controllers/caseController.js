@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const Case = require("../models/SystemModels/caseModel");
 const User = require("../models/SystemModels/userModel");
+const Notification = require("../models/SystemModels/notificationModel");
 
 // @desc Create A New Case
 // @route POST /case/createCase
@@ -16,7 +17,7 @@ const createCase = asyncHandler(async (req, res) => {
 		}
 
 		if (!req.user || req.user.role !== "secretary") {
-			return res.status(403).json({ message: "Unauthorized" });
+			return res.status(400).json({ message: "Unauthorized" });
 		}
 		if (!mongoose.Types.ObjectId.isValid(petId)) {
 			return res.status(400).json({ message: "Invalid pet ID" });
@@ -31,7 +32,7 @@ const createCase = asyncHandler(async (req, res) => {
 		if (!newCase) {
 			return res.status(500).json({ message: "Failed to create case" });
 		}
-		return res.status(201).json({
+		return res.status(200).json({
 			message: "Case created successfully",
 			case: newCase,
 		});
@@ -209,7 +210,6 @@ const acceptCase = asyncHandler(async (req, res) => {
 		const updatedCase = await Case.findByIdAndUpdate(
 			caseId,
 			{ vetId: req.user._id, status: "in-progress" },
-
 			{ new: true }
 		);
 
@@ -297,7 +297,7 @@ const getAssignedCases = asyncHandler(async (req, res) => {
 		res.status(500);
 		throw new Error(error.message);
 	}
-});
+}); 
 
 // @desc Vet completes case and reports to secretary
 // @route PATCH /case/:caseId/completeCase
@@ -313,6 +313,106 @@ const completeCase = asyncHandler(async (req, res) => {
 		}
 
 		if (!req.user || req.user.role !== "vet") {
+			return res.status(400).json({ message: "Unauthorized" });
+		}
+
+		const caseData = await Case.findById(caseId);
+
+		if (!caseData) {
+			return res.status(400).json({ message: "Case not found" });
+		}
+
+		if (!mongoose.Types.ObjectId.isValid(caseId)) {
+			return res.status(400).json({ message: "Invalid case ID" });
+		}
+
+		if (req.user._id.toString() !== caseData.vetId.toString()) {
+			return res.status(400).json({ message: "Unauthorized" });
+		}
+
+		if (!actionsTaken) {
+			return res.status(400).json({ message: "Actions taken are required" });
+		}
+
+		if (caseData.status === "completed") {
+			return res.status(400).json({ message: "Case already completed" });
+		}
+
+		if (caseData.status !== "in-progress") {
+			return res.status(400).json({ message: "Case is not in progress" });
+		}
+
+		const updatedCase = await Case.findByIdAndUpdate(caseId, {
+			status: "completed",
+			actionsTaken,
+		}).populate("vetId", "firstName lastName")
+		.populate("petId", "name");
+		
+		if (!updatedCase) {
+			return res.status(400).json({ message: "Case not found" });
+		}
+
+		const notification = await Notification.create({
+			user: updatedCase.secretaryId,
+			message: `Case for pet ${updatedCase.petId.name} has been completed by ${updatedCase.vetId.firstName} ${updatedCase.vetId.lastName}`,
+			case: updatedCase._id,
+			type: "case_completed",
+		});
+
+		if (!notification) {
+			return res.status(500).json({
+				message: "Failed to create notification!"
+			})
+		}
+
+		return res.status(200).json({
+			message: "Case completed and secretary notified",
+			case: updatedCase,
+		})
+	} catch (error) {
+		res.status(500);
+		throw new Error(error.message);
+	}
+});
+// @desc Get completed cases for secretary
+// @route GET /case/getCompletedCases
+// @access Private
+const getCompletedCases = asyncHandler(async (req, res) => {
+	try {
+		if (!req.user || req.user.role !== "secretary") {
+			return res.status(400).json({ message: "Unauthorized" });
+		}
+
+		const completedCases = await Case.find({ status: "completed" })
+			.populate("petId vetId")
+			.sort({ updatedAt: -1 })
+			.exec();
+
+		if (completedCases.length === 0) {
+			return res.status(400).json({ message: "No completed cases found" });
+		}
+		return res.status(200).json({
+			message: "Completed cases retrieved successfully",
+			cases: completedCases,
+		});
+	} catch (error) {
+		res.status(500);
+		throw new Error(error.message);
+	}
+});
+
+// @desc Secretary closes a case
+// @route PATCH /case/:caseId/closeCase
+// @access Private
+const closeCase = asyncHandler(async (req, res) => {
+	try {
+		const caseId = req.params.caseId;
+
+		if (!caseId) {
+			return res.status(400).json({ message: "Case ID is required" });
+		}
+
+		if (!req.user || req.user.role !== "secretary") {
 			return res.status(403).json({ message: "Unauthorized" });
 		}
 
@@ -326,41 +426,19 @@ const completeCase = asyncHandler(async (req, res) => {
 			return res.status(400).json({ message: "Invalid case ID" });
 		}
 
-		if (req.user._id.toString() !== caseData.vetId.toString()) {
-			return res.status(403).json({ message: "Unauthorized" });
-		}
-		if (!actionsTaken) {
-			return res.status(400).json({ message: "Actions taken are required" });
-		}
-		if (caseData.status === "completed") {
-			return res.status(400).json({ message: "Case already completed" });
-		}
-		if (caseData.status !== "in-progress") {
-			return res.status(400).json({ message: "Case is not in progress" });
+		if (caseData.status === "closed") {
+			return res.status(400).json({ message: "Case already closed" });
 		}
 
-		const updatedCase = await Case.findByIdAndUpdate(
-			caseId,
-			{ status: "completed", actionsTaken },
-			{ new: true }
-		);
+		const updatedCase = await Case.findByIdAndUpdate(caseId, {
+			status: "closed",
+		});
 
 		if (!updatedCase) {
 			return res.status(404).json({ message: "Case not found" });
 		}
-
-		// Notify the secretary about the completed case
-		const secretary = await User.findById(updatedCase.secretaryId);
-		if (secretary) {
-			secretary.notifications.unshift({
-				message: `Case has been completed by ${req.user.fullName}`,
-				caseId: updatedCase._id,
-			});
-			await secretary.save();
-		}
-
 		return res.status(200).json({
-			message: "Case completed successfully",
+			message: "Case closed successfully",
 			case: updatedCase,
 		});
 	} catch (error) {
@@ -368,32 +446,40 @@ const completeCase = asyncHandler(async (req, res) => {
 		throw new Error(error.message);
 	}
 });
-// @desc Get completed cases for secretary
-// @route GET /case/getCompletedCases
+
+// @desc Get all pet cases
+// @route GET /case/getPetCases/:petId
 // @access Private
-const getCompletedCases = asyncHandler(async (req, res) => {
+const getPetCases = asyncHandler(async (req, res) => {
 	try {
-		if (!req.user || req.user.role !== "secretary") {
-			return res.status(403).json({ message: "Unauthorized" });
+		const { petId } = req.params;
+
+		if (!petId) {
+			return res.status(400).json({ message: "Pet ID is required" });
 		}
 
-		const completedCases = await Case.find({ status: "completed" })
-			.populate("petId vetId")
-			.sort({ updatedAt: -1 })
-			.exec();
+		if (!mongoose.Types.ObjectId.isValid(petId)) {
+			return res.status(400).json({ message: "Invalid pet ID" });
+		}
 
-		if (completedCases.length === 0) {
-			return res.status(404).json({ message: "No completed cases found" });
+		const petCases = await Case.find({ petId })
+			.populate("petId", "name type breed")
+			.populate("secretaryId", "username email")
+			.populate("vetId", "username email")
+			.exec();
+		if (petCases.length === 0) {
+			return res.status(404).json({ message: "No cases found for this pet" });
 		}
 		return res.status(200).json({
-			message: "Completed cases retrieved successfully",
-			cases: completedCases,
+			message: "Cases retrieved successfully",
+			cases: petCases,
 		});
 	} catch (error) {
 		res.status(500);
 		throw new Error(error.message);
 	}
-});
+}
+);
 
 module.exports = {
 	createCase,
@@ -407,4 +493,6 @@ module.exports = {
 	getAssignedCases,
 	completeCase,
 	getCompletedCases,
+	closeCase,
+	getPetCases,
 };

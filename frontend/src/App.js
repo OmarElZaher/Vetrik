@@ -22,6 +22,8 @@ import LoginPage from "./pages/General/Login";
 import NotFoundPage from "./pages/General/NotFound";
 import SendFeedbackPage from "./pages/General/SendFeedback";
 
+import CompletedCasesPage from "./pages/User/CompletedCases";
+
 import RootRedirect from "./components/General/RootRedirect";
 
 import EditProfilePage from "./pages/User/EditProfile";
@@ -43,6 +45,7 @@ import AddOwnerPage from "./pages/Owner/AddOwner";
 
 import ViewCasesPage from "./pages/User/ViewCases";
 import AssignedCasesPage from "./pages/User/AssignedCases";
+import OpenCasePage from "./pages/User/OpenCase";
 // }
 
 // Pet Imports {
@@ -84,6 +87,8 @@ function App() {
 						<Route path='/search-owner' element={<SearchOwnerPage />} />
 						<Route path='/search-pet' element={<SearchPetPage />} />
 
+						<Route path='/completed-cases' element={<CompletedCasesPage />} />
+
 						<Route path='/owner-table' element={<OwnerTablePage />} />
 						<Route path='/pet-table' element={<PetTablePage />} />
 
@@ -110,6 +115,7 @@ function App() {
 
 						<Route path='/view-cases' element={<ViewCasesPage />} />
 						<Route path='/assigned-cases' element={<AssignedCasesPage />} />
+						<Route path='/open-case/:petId' element={<OpenCasePage />} />
 
 						{/* Admin Routes */}
 						<Route path='/admin' element={<AdminHomePage />} />

@@ -13,6 +13,8 @@ const {
 	completeCase,
 	unassignCase,
 	getAssignedCases,
+	closeCase,
+	getPetCases,
 } = require("../controllers/caseController");
 const { authenticate } = require("../middleware/authMiddleware");
 
@@ -24,6 +26,7 @@ router.get("/getCaseById/:caseId", authenticate, getCaseById);
 router.get("/getUnassignedCases", authenticate, getUnassignedCases);
 router.get("/getAssignedCases", authenticate, getAssignedCases);
 router.get("/getCompletedCases", authenticate, getCompletedCases);
+router.get("/getPetCases/:petId", authenticate, getPetCases);
 
 // ----------------------------------------------------------------
 // POST methods for /case
@@ -41,6 +44,7 @@ router.put("/updateCase/:caseId", authenticate, updateCase);
 router.patch("/:caseId/acceptCase", authenticate, acceptCase);
 router.patch("/:caseId/unassignCase", authenticate, unassignCase);
 router.patch("/:caseId/completeCase", authenticate, completeCase);
+router.patch("/:caseId/closeCase", authenticate, closeCase);
 
 // ----------------------------------------------------------------
 // DELETE methods for /case
