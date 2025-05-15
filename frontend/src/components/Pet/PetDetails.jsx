@@ -13,7 +13,6 @@ import { API_URL as api } from "../../utils/constants";
 // Hook Import
 import useIsMobile from "../../hooks/useIsMobile";
 
-
 // Chakra-UI Imports
 import {
 	Box,
@@ -66,12 +65,8 @@ import {
 	IoMdRefresh,
 	IoMdSearch,
 } from "react-icons/io";
-  
-import { TbTrashXFilled } from "react-icons/tb";  
-import { BiHealth } from "react-icons/bi";
-import { FaRegEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import { RiHealthBookFill } from "react-icons/ri";
+
+import { TbTrashXFilled } from "react-icons/tb";
 
 // Custom Component Imports
 import Spinner from "../General/Spinner";
@@ -100,11 +95,11 @@ function formatDate(date) {
 }
 
 export default function PetDetails() {
-    const { petId } = useParams();
-    const navigate = useNavigate();
-    const toast = useToast();
+	const { petId } = useParams();
+	const navigate = useNavigate();
+	const toast = useToast();
 
-    const isMobile = useIsMobile();
+	const isMobile = useIsMobile();
 
 	// Pet useStates
 	const [pet, setPet] = useState({});
@@ -991,7 +986,6 @@ export default function PetDetails() {
 									handleCloseCase(caseToClose);
 									closeAlert();
 									setActionsTaken("");
-									window.location.reload();
 								}}
 								ml={3}
 							>
