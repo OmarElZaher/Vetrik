@@ -149,8 +149,8 @@ export default function EditPet() {
 							flexDirection={"column"}
 							justifyContent={"center"}
 							alignItems={"center"}
-							width={"90%"}
-							height={"90%"}
+							width={"95%"}
+							height={"95%"}
 						>
 							<Box
 								display={"flex"}
@@ -159,6 +159,8 @@ export default function EditPet() {
 								alignItems={"center"}
 								width={"90%"}
 								height={"33%"}
+								mt={5}
+								mb={5}
 							>
 								<Box
 									display={"flex"}
@@ -176,6 +178,7 @@ export default function EditPet() {
 									height={"15%"}
 									width={"100%"}
 									mt={5}
+									mb={5}
 								>
 									<Text fontSize={"3xl"} fontWeight={"bold"}>
 										تعديل ملف الحيوان
@@ -190,6 +193,8 @@ export default function EditPet() {
 								alignItems={"center"}
 								width={"90%"}
 								height={"33%"}
+								mb={5}
+
 							>
 								<FormControl
 									id='name'
@@ -205,6 +210,7 @@ export default function EditPet() {
 											justifyContent={"center"}
 											alignItems={"flex-start"}
 											width={"100%"}
+
 										>
 											<Text fontSize={"16px"} color={"#7F7F7F"} mr={1.5} mb={1}>
 												الاسم
@@ -218,6 +224,7 @@ export default function EditPet() {
 													setName(e.target.value);
 												}}
 												ml={2.5}
+												mb={3}
 											/>
 										</Box>
 									</InputGroup>
@@ -251,6 +258,7 @@ export default function EditPet() {
 												}}
 												iconColor='transparent'
 												ml={2.5}
+												mb={3}
 											>
 												<option value='dog'>كلب</option>
 												<option value='cat'>قطة</option>
@@ -281,6 +289,7 @@ export default function EditPet() {
 												setBreed(e.target.value);
 											}}
 											ml={2.5}
+											mb={3}
 										/>
 									</Box>
 								</FormControl>
@@ -311,7 +320,9 @@ export default function EditPet() {
 												onChange={(e) => {
 													setDob(e.target.value);
 												}}
+												textAlign={"right"}
 												ml={2.5}
+												mb={3}
 											/>
 										</InputGroup>
 									</Box>
@@ -344,6 +355,9 @@ export default function EditPet() {
 												onChange={(e) => {
 													setGender(e.target.value);
 												}}
+												textAlign={"right"}
+												ml={2.5}
+												mb={3}
 											>
 												<option value='male'>ذكر</option>
 												<option value='female'>أنثى</option>
@@ -356,7 +370,7 @@ export default function EditPet() {
 								display={"flex"}
 								justifyContent={"center"}
 								alignItems={"center"}
-								width={"90%"}
+								width={"100%"}
 								height={"33%"}
 							>
 								<Button

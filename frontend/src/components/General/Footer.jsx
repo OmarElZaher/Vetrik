@@ -1,26 +1,19 @@
-import { Box, Container, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 
 export default function Footer() {
 	return (
 		<Box
-			bg={"#121211"}
-			color={"#F3F3F3"}
-			display={"flex"}
-			flexDirection={"column"}
-			height={"8vh"}
+			as="footer"
+			bg="#121211"
+			color="#F3F3F3"
+			py={4}
+			px={6}
+			width="100%"
+			textAlign="center"
+			mt="auto"
 		>
-			<Box flex={"1"}></Box>
-			<Container
-				as={Box}
-				maxW={"26vw"}
-				py={4}
-				direction={{ base: "column", md: "row" }}
-				spacing={4}
-				justify={{ base: "center", md: "space-between" }}
-				align={{ base: "center", md: "center" }}
-			>
-				<Text>© 2024 Vetrik. All rights reserved.</Text>
-			</Container>
+			<Text fontSize="sm">© 2024 Vetrik. All rights reserved.</Text>
 		</Box>
 	);
 }
+

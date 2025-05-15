@@ -169,7 +169,7 @@ export default function OwnerTable() {
 								navigate("/search-owner");
 							}}
 							rightIcon={<IoMdArrowRoundBack />}
-							width={"25vw"}
+							width={["90%", "60%", "40%", "25vw"]}
 						>
 							الرجوع لصفحة البحث
 						</Button>
