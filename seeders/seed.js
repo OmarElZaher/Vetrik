@@ -12,9 +12,7 @@ const Case = require("../models/SystemModels/caseModel");
 
 // Connect to MongoDB
 mongoose
-	.connect(
-		"mongodb+srv://omar:omar@modernvetclinic.wsalpkd.mongodb.net/ModernVetDB?retryWrites=true&w=majority&appName=ModernVetClinic"
-	)
+	.connect("mongodb://localhost:27017/VetrikLocalDB")
 	.then(() => console.log("Connected to MongoDB"))
 	.catch((err) => console.error("Could not connect to MongoDB", err));
 
@@ -79,7 +77,7 @@ const owners = [
 		gender: "male",
 		preferredContactMethod: "phone",
 		receiveNotifications: false,
-	}
+	},
 ];
 
 const pets = [
@@ -115,13 +113,13 @@ const pets = [
 		type: "dog", // Changed to match the enum values in the schema
 		dob: new Date("2019-08-20"),
 		// Will link to owner after creation
-	}
+	},
 ];
 
 // Seed data function
 async function seedDatabase() {
 	try {
-		// Clear existing data
+		// // Clear existing data
 		await User.deleteMany({});
 		await Owner.deleteMany({});
 		await Pet.deleteMany({});

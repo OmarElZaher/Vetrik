@@ -19,6 +19,13 @@ import {
 	Tr,
 	Td,
 	Tbody,
+	AlertDialog,
+	Card,
+	AlertDialogBody,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogContent,
+	AlertDialogOverlay,
 	Modal,
 	ModalOverlay,
 	ModalContent,
@@ -26,13 +33,6 @@ import {
 	ModalCloseButton,
 	ModalBody,
 	ModalFooter,
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-	PopoverArrow,
-	PopoverCloseButton,
-	PopoverHeader,
-	PopoverBody,
 	Text,
 	Textarea,
 	useDisclosure,
@@ -73,18 +73,27 @@ export default function AssignedCases() {
 
 	const [actionsTaken, setActionsTaken] = useState("");
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const {
+		isOpen: isModalOpen,
+		onOpen: openModal,
+		onClose: closeModal,
+	} = useDisclosure();
+
+	const {
+		isOpen: isAlertOpen,
+		onOpen: openAlert,
+		onClose: closeAlert,
+	} = useDisclosure();
+
+	const cancelRef = React.useRef();
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(
-					`${api}/case/getAssignedCases`,
-					{
-						withCredentials: true,
-					}
-				);
+				const response = await axios.get(`${api}/case/getAssignedCases`, {
+					withCredentials: true,
+				});
 				if (response.status === 200) {
 					setCases(response.data.cases);
 					setGotData(true);
@@ -110,15 +119,14 @@ export default function AssignedCases() {
 
 	const handleOpenModal = (caseItem) => {
 		setSelectedCase(caseItem);
-		onOpen();
+		openModal();
 	};
 
 	const handleCompleteCase = async (caseItem) => {
 		if (!actionsTaken) {
 			toast({
 				title: "Actions Taken Required",
-				description:
-					"Please provide actions taken before closing the case.",
+				description: "Please provide actions taken before closing the case.",
 				status: "warning",
 				duration: 2500,
 				isClosable: true,
@@ -145,8 +153,7 @@ export default function AssignedCases() {
 		} catch (error) {
 			toast({
 				title: "Failed to complete case.",
-				description:
-					error?.response?.data?.message || "Something went wrong.",
+				description: error?.response?.data?.message || "Something went wrong.",
 				status: "error",
 				duration: 2500,
 				isClosable: true,
@@ -155,7 +162,7 @@ export default function AssignedCases() {
 		} finally {
 			setIsLoading(false);
 			setActionsTaken("");
-			onClose();
+			closeModal();
 		}
 	};
 
@@ -178,8 +185,7 @@ export default function AssignedCases() {
 		} catch (error) {
 			toast({
 				title: "Failed to unassign case.",
-				description:
-					error?.response?.data?.message || "Something went wrong.",
+				description: error?.response?.data?.message || "Something went wrong.",
 				status: "error",
 				duration: 2500,
 				isClosable: true,
@@ -193,7 +199,7 @@ export default function AssignedCases() {
 	) : error ? (
 		<>
 			<Box
-				dir="rtl"
+				dir='rtl'
 				display={"flex"}
 				flexDirection={"column"}
 				justifyContent={"center"}
@@ -237,7 +243,7 @@ export default function AssignedCases() {
 		</>
 	) : !existsCases ? (
 		<>
-			<Box dir="rtl" width={"100%"} height={"87vh"}>
+			<Box dir='rtl' width={"100%"} height={"87vh"}>
 				<Box
 					display={"flex"}
 					flexDirection={"column"}
@@ -287,8 +293,7 @@ export default function AssignedCases() {
 							localStorage.removeItem("ownerFilterData");
 							localStorage.getItem("userRole") === "vet"
 								? navigate("/vet")
-								: localStorage.getItem("userRole") ===
-								  "secretary"
+								: localStorage.getItem("userRole") === "secretary"
 								? navigate("/secretary")
 								: navigate("/admin");
 						}}
@@ -302,7 +307,7 @@ export default function AssignedCases() {
 		</>
 	) : gotData ? (
 		<>
-			<Box dir="rtl" width={"100%"} height={"87vh"}>
+			<Box dir='rtl' width={"100%"} height={"87vh"}>
 				<Box
 					display={"flex"}
 					flexDirection={"column"}
@@ -339,39 +344,25 @@ export default function AssignedCases() {
 								maxHeight={"70vh"}
 								overflowY={"auto"}
 							>
-								<Table variant="simple" size="md">
+								<Table variant='simple' size='md'>
 									<Thead>
 										<Tr>
-											<Th textAlign={"right"}>
-												اسم الحيوان
-											</Th>
-											<Th textAlign={"center"}>
-												السلالة
-											</Th>
+											<Th textAlign={"right"}>اسم الحيوان</Th>
+											<Th textAlign={"center"}>السلالة</Th>
 											<Th textAlign={"center"}>النوع</Th>
-											<Th textAlign={"center"}>
-												فئة الوزن
-											</Th>
-											<Th textAlign={"center"}>
-												الأفعال المطلوبة
-											</Th>
+											<Th textAlign={"center"}>فئة الوزن</Th>
+											<Th textAlign={"center"}>الأفعال المطلوبة</Th>
 											<Th textAlign={"center"}>أفعال</Th>
 										</Tr>
 									</Thead>
 									<Tbody>
 										{cases.map((row) => (
 											<Tr key={row._id}>
-												<Td
-													textAlign={"right"}
-												>{`${row.petId.name}`}</Td>
-												<Td
-													textAlign={"center"}
-												>{`${titleCase(
+												<Td textAlign={"right"}>{`${row.petId.name}`}</Td>
+												<Td textAlign={"center"}>{`${titleCase(
 													row.petId.breed
 												)}`}</Td>
-												<Td
-													textAlign={"center"}
-												>{`${titleCase(
+												<Td textAlign={"center"}>{`${titleCase(
 													row.petId.type
 												)}`}</Td>
 												<Td
@@ -379,29 +370,16 @@ export default function AssignedCases() {
 												>{`${row.petId.weightClass}`}</Td>
 
 												<Td textAlign={"center"}>
-													<Popover placement="right">
-														<PopoverTrigger>
-															<Button
-																rightIcon={
-																	<IoMdEye />
-																}
-															>
-																عرض تفاصيل
-															</Button>
-														</PopoverTrigger>
-														<PopoverContent>
-															<PopoverArrow />
-															<PopoverCloseButton />
-															<PopoverHeader>
-																الأفعال المطلوبة
-															</PopoverHeader>
-															<PopoverBody>
-																{
-																	row.reasonForVisit
-																}
-															</PopoverBody>
-														</PopoverContent>
-													</Popover>
+													<Button
+														rightIcon={<IoMdEye />}
+														onClick={() => {
+															openAlert();
+															setSelectedCase(row);
+															console.log(row);
+														}}
+													>
+														عرض تفاصيل
+													</Button>
 
 													<Button
 														mr={2}
@@ -419,10 +397,8 @@ export default function AssignedCases() {
 													<Button
 														ml={2}
 														rightIcon={<FaCheck />}
-														onClick={() =>
-															handleOpenModal(row)
-														}
-														variant="solid"
+														onClick={() => handleOpenModal(row)}
+														variant='solid'
 														_hover={{
 															bg: "green.600",
 															color: "#fff",
@@ -433,12 +409,16 @@ export default function AssignedCases() {
 													<Button
 														mr={2}
 														rightIcon={<FaTrash />}
-														onClick={() =>
-															handleUnassignCase(
-																row
+														onClick={() => {
+															if (
+																!window.confirm(
+																	"هل أنت متأكد أنك تريد إلغاء هذه الحالة؟"
+																)
 															)
-														}
-														variant="solid"
+																return;
+															handleUnassignCase(row);
+														}}
+														variant='solid'
 														_hover={{
 															bg: "red.600",
 															color: "#fff",
@@ -476,9 +456,7 @@ export default function AssignedCases() {
 							if (localStorage.getItem("userRole") === "vet") {
 								navigate("/vet");
 							}
-							if (
-								localStorage.getItem("userRole") === "secretary"
-							) {
+							if (localStorage.getItem("userRole") === "secretary") {
 								navigate("/secretary");
 							}
 						}}
@@ -493,25 +471,23 @@ export default function AssignedCases() {
 
 			{/* Modal for Case Details */}
 			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-				motionPreset="slideInBottom"
+				isOpen={isModalOpen}
+				onClose={closeModal}
+				motionPreset='slideInBottom'
 				size={"xl"}
 			>
 				<ModalOverlay
-					bg="blackAlpha.300"
-					backdropFilter="blur(10px) hue-rotate(90deg)"
+					bg='blackAlpha.300'
+					backdropFilter='blur(10px) hue-rotate(90deg)'
 				/>
-				<ModalContent dir="rtl">
-					<ModalHeader textAlign={"center"}>
-						تفاصيل الحالة
-					</ModalHeader>
+				<ModalContent dir='rtl'>
+					<ModalHeader textAlign={"center"}>تفاصيل الحالة</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						<Textarea
 							resize={"none"}
 							autoresize
-							placeholder="الأفعال التي تم اتأخذها"
+							placeholder='الأفعال التي تم اتأخذها'
 							value={actionsTaken}
 							onChange={(e) => setActionsTaken(e.target.value)}
 						/>
@@ -529,7 +505,7 @@ export default function AssignedCases() {
 							إغلاق الحالة
 						</Button>
 						<Button
-							onClick={onClose}
+							onClick={closeModal}
 							_hover={{
 								bg: "red.600",
 								color: "#fff",
@@ -541,6 +517,53 @@ export default function AssignedCases() {
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
+
+			<AlertDialog
+				isOpen={isAlertOpen}
+				leastDestructiveRef={cancelRef}
+				onClose={closeAlert}
+				size={"xl"}
+			>
+				<AlertDialogOverlay>
+					<AlertDialogContent>
+						<AlertDialogHeader fontSize='lg' fontWeight='bold'>
+							Case Details
+						</AlertDialogHeader>
+
+						<hr />
+
+						<AlertDialogBody
+							display={"flex"}
+							justifyContent={"center"}
+							alignItems={"center"}
+						>
+							<Card
+								display={"flex"}
+								justifyContent={"center"}
+								alignItems={"center"}
+								width={"80%"}
+								height={"100%"}
+								mt={5}
+							>
+								<Text
+									fontSize={"16px"}
+									color={"#121211"}
+									overflowY={"auto"}
+									scrollBehavior={"smooth"}
+								>
+									{selectedCase?.reasonForVisit}
+								</Text>
+							</Card>
+						</AlertDialogBody>
+
+						<AlertDialogFooter>
+							<Button ref={cancelRef} onClick={closeAlert}>
+								Close
+							</Button>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialogOverlay>
+			</AlertDialog>
 		</>
 	) : (
 		<></>

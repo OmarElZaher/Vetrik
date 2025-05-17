@@ -136,12 +136,9 @@ export default function PetDetails() {
 		const fetchData = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.get(
-					`${api}/user/getPetInfo/${petId}`,
-					{
-						withCredentials: true,
-					}
-				);
+				const response = await axios.get(`${api}/user/getPetInfo/${petId}`, {
+					withCredentials: true,
+				});
 				if (response.status === 200) {
 					setPetAge(response.data.petAge);
 					setPet(response.data.pet);
@@ -228,12 +225,9 @@ export default function PetDetails() {
 		if (confirmDelete) {
 			try {
 				setIsLoading(true);
-				const response = await axios.delete(
-					`${api}/user/deletePet/${petId}`,
-					{
-						withCredentials: true,
-					}
-				);
+				const response = await axios.delete(`${api}/user/deletePet/${petId}`, {
+					withCredentials: true,
+				});
 
 				if (response.status === 200) {
 					toast({
@@ -425,13 +419,14 @@ export default function PetDetails() {
 	const handleGetCases = async () => {
 		try {
 			setIsLoading(true);
-			const response = await axios.get(
-				`${api}/case/getPetCases/${petId}`,
-				{ withCredentials: true }
-			);
+			const response = await axios.get(`${api}/case/getPetCases/${petId}`, {
+				withCredentials: true,
+			});
 
 			if (response.status === 200) {
 				setPetCases(response.data.cases);
+				closeModal();
+				openModal();
 			}
 		} catch (error) {
 			if (error.response.status === 500) {
@@ -452,18 +447,18 @@ export default function PetDetails() {
 		<Spinner />
 	) : error ? (
 		<Box
-			dir="rtl"
-			display="flex"
-			flexDirection="column"
-			justifyContent="center"
-			alignItems="center"
-			bg="#F3F3F3"
-			minHeight="87vh"
+			dir='rtl'
+			display='flex'
+			flexDirection='column'
+			justifyContent='center'
+			alignItems='center'
+			bg='#F3F3F3'
+			minHeight='87vh'
 		>
-			<Text fontWeight="bold" fontSize="4xl" color="red">
+			<Text fontWeight='bold' fontSize='4xl' color='red'>
 				خطأ
 			</Text>
-			<Text fontSize="2xl" textDecoration="underline">
+			<Text fontSize='2xl' textDecoration='underline'>
 				{error}
 			</Text>
 			<Button
@@ -478,34 +473,31 @@ export default function PetDetails() {
 	) : gotData ? (
 		<>
 			<Box
-				dir="rtl"
-				display="flex"
+				dir='rtl'
+				display='flex'
 				flexDirection={{ base: "column", md: "row" }}
-				justifyContent="center"
-				alignItems="flex-start"
-				bg="#F3F3F3"
+				justifyContent='center'
+				alignItems='flex-start'
+				bg='#F3F3F3'
 				px={{ base: 2, md: 4 }}
 				py={6}
 			>
 				{/* Main Pet Card */}
-				<Card
-					width={{ base: "100%", md: "70%" }}
-					mb={{ base: 4, md: 0 }}
-				>
+				<Card width={{ base: "100%", md: "70%" }} mb={{ base: 4, md: 0 }}>
 					<CardBody>
 						<Text
 							fontSize={{ base: "2xl", md: "3xl" }}
-							fontWeight="bold"
-							textAlign="center"
+							fontWeight='bold'
+							textAlign='center'
 							mb={4}
 						>
 							{titleCase(pet.name)}
 						</Text>
 
 						<Box
-							display="flex"
-							flexWrap="wrap"
-							justifyContent="space-between"
+							display='flex'
+							flexWrap='wrap'
+							justifyContent='space-between'
 							mb={4}
 						>
 							{[
@@ -543,29 +535,23 @@ export default function PetDetails() {
 										lg: "30%",
 									}}
 									mb={3}
-									display="flex"
-									alignItems="center"
+									display='flex'
+									alignItems='center'
 								>
-									<Icon
-										as={item.icon.type}
-										boxSize={5}
-										ml={2}
-									/>
+									<Icon as={item.icon.type} boxSize={5} ml={2} />
 									<Box>
-										<Text fontWeight="bold">
-											{item.label}
-										</Text>
+										<Text fontWeight='bold'>{item.label}</Text>
 										<Text>{item.value}</Text>
 									</Box>
 								</Box>
 							))}
 						</Box>
 
-						<Text fontSize="xl" fontWeight="bold" mb={2}>
+						<Text fontSize='xl' fontWeight='bold' mb={2}>
 							المالكين
 						</Text>
-						<TableContainer overflowX="auto">
-							<Table size="sm" minWidth="600px">
+						<TableContainer overflowX='auto'>
+							<Table size='sm' minWidth='600px'>
 								<Thead>
 									<Tr>
 										<Th>الاسم الكامل</Th>
@@ -582,34 +568,24 @@ export default function PetDetails() {
 											<Td>{owner.mobileNumber}</Td>
 											<Td>
 												<Button
-													size="sm"
+													size='sm'
 													onClick={() =>
-														navigate(
-															`/owner-details/${owner._id}`
-														)
+														navigate(`/owner-details/${owner._id}`)
 													}
 													rightIcon={<IoMdEye />}
 													mr={2}
 												>
 													عرض
 												</Button>
-												<Tooltip
-													label="إزالة المالك"
-													hasArrow
-												>
+												<Tooltip label='إزالة المالك' hasArrow>
 													<Button
-														size="sm"
-														variant="outline"
-														colorScheme="red"
+														size='sm'
+														variant='outline'
+														colorScheme='red'
 														onClick={() =>
-															handleRemovePetFromOwner(
-																owner._id,
-																pet._id
-															)
+															handleRemovePetFromOwner(owner._id, pet._id)
 														}
-														rightIcon={
-															<TbTrashXFilled />
-														}
+														rightIcon={<TbTrashXFilled />}
 													>
 														حذف
 													</Button>
@@ -633,7 +609,7 @@ export default function PetDetails() {
 									transform: "scale(0.98)",
 									opacity: "0.5",
 								}}
-								transition="all 0.2s"
+								transition='all 0.2s'
 								rightIcon={<FaBookMedical />}
 								onClick={() => {
 									handleGetCases();
@@ -642,10 +618,7 @@ export default function PetDetails() {
 							>
 								{pet.name
 									? titleCase(pet.name) +
-									  (pet.name
-											.trim()
-											.toLowerCase()
-											.endsWith("s")
+									  (pet.name.trim().toLowerCase().endsWith("s")
 											? "' Cases"
 											: "'s Cases")
 									: "See All Cases"}
@@ -654,10 +627,10 @@ export default function PetDetails() {
 
 						<Box
 							mt={6}
-							display="flex"
+							display='flex'
 							flexDirection={{ base: "column", md: "row" }}
 							gap={4}
-							justifyContent="center"
+							justifyContent='center'
 						>
 							<Button
 								onClick={() =>
@@ -672,25 +645,21 @@ export default function PetDetails() {
 								رجوع
 							</Button>
 							<Button
-								onClick={() =>
-									navigate(`/pet-vaccination/${pet._id}`)
-								}
+								onClick={() => navigate(`/pet-vaccination/${pet._id}`)}
 								rightIcon={<IoMdMedical />}
 							>
 								كارت التطعيمات
 							</Button>
 							<Button
-								onClick={() =>
-									navigate(`/pet-records/${pet._id}`)
-								}
+								onClick={() => navigate(`/pet-records/${pet._id}`)}
 								rightIcon={<IoMdDocument />}
 							>
 								السجلات الصحية
 							</Button>
-							<Tooltip label="حذف الحيوان" hasArrow>
+							<Tooltip label='حذف الحيوان' hasArrow>
 								<Button
-									variant="outline"
-									colorScheme="red"
+									variant='outline'
+									colorScheme='red'
 									onClick={() => handleDeletePet(pet._id)}
 									rightIcon={<TbTrashXFilled />}
 								>
@@ -704,34 +673,29 @@ export default function PetDetails() {
 				{/* Side Card: Add Owner */}
 				<Card width={{ base: "100%", md: "30%" }}>
 					<CardBody>
-						<Text
-							fontSize="2xl"
-							fontWeight="bold"
-							textAlign="center"
-							mb={4}
-						>
+						<Text fontSize='2xl' fontWeight='bold' textAlign='center' mb={4}>
 							إضافة مالك موجود
 						</Text>
-						<Text fontSize="md" textAlign="center" mb={4}>
+						<Text fontSize='md' textAlign='center' mb={4}>
 							أدخل رقم المحمول للمالك ثم اضغط زر البحث.
 						</Text>
 
 						{owner !== null ? (
 							<Box>
-								<Text fontWeight="bold">الاسم</Text>
+								<Text fontWeight='bold'>الاسم</Text>
 								<Text>{owner[0].fullName}</Text>
-								<Text fontWeight="bold" mt={2}>
+								<Text fontWeight='bold' mt={2}>
 									رقم المحمول
 								</Text>
 								<Text>{owner[0].mobileNumber}</Text>
-								<Text fontWeight="bold" mt={2}>
+								<Text fontWeight='bold' mt={2}>
 									البريد الإلكتروني
 								</Text>
 								<Text>{owner[0].email}</Text>
 
 								<Box
 									mt={4}
-									display="flex"
+									display='flex'
 									flexDirection={{
 										base: "column",
 										md: "row",
@@ -739,12 +703,7 @@ export default function PetDetails() {
 									gap={3}
 								>
 									<Button
-										onClick={() =>
-											handleAddOwnerToPet(
-												owner[0]._id,
-												pet._id
-											)
-										}
+										onClick={() => handleAddOwnerToPet(owner[0]._id, pet._id)}
 										rightIcon={<IoMdAdd />}
 									>
 										إضافة
@@ -764,17 +723,15 @@ export default function PetDetails() {
 							<Box>
 								<FormControl mb={4}>
 									<Input
-										type="text"
-										placeholder="رقم المحمول"
+										type='text'
+										placeholder='رقم المحمول'
 										value={ownerMobileNumber}
-										onChange={(e) =>
-											setownerMobileNumber(e.target.value)
-										}
+										onChange={(e) => setownerMobileNumber(e.target.value)}
 									/>
 								</FormControl>
 								<Button
 									onClick={handleSearchOwner}
-									width="100%"
+									width='100%'
 									rightIcon={<IoMdSearch />}
 								>
 									بحث
@@ -785,7 +742,7 @@ export default function PetDetails() {
 				</Card>
 			</Box>
 
-			<Modal isOpen={isModalOpen} onClose={closeModal} size="xxl">
+			<Modal isOpen={isModalOpen} onClose={closeModal} size='xxl'>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader>
@@ -799,15 +756,13 @@ export default function PetDetails() {
 					<ModalCloseButton />
 					<ModalBody>
 						<TableContainer>
-							<Table size="sm" overflow={"auto"}>
+							<Table size='sm' overflow={"auto"}>
 								<Thead>
 									<Tr>
 										<Th>Reason For Visit</Th>
 										<Th>Actions Taken</Th>
 										<Th>Case Date</Th>
-										<Th textAlign={"center"}>
-											Case Status
-										</Th>
+										<Th textAlign={"center"}>Case Status</Th>
 									</Tr>
 								</Thead>
 								<Tbody>
@@ -815,88 +770,53 @@ export default function PetDetails() {
 										<Tr key={caseItem._id}>
 											<Td>{caseItem.reasonForVisit}</Td>
 											<Td>
-												{caseItem.actionsTaken
-													? caseItem.actionsTaken
-													: "–"}
+												{caseItem.actionsTaken ? caseItem.actionsTaken : "–"}
 											</Td>
-											<Td>
-												{formatDate(caseItem.updatedAt)}
-											</Td>
+											<Td>{formatDate(caseItem.updatedAt)}</Td>
 											<Td
 												justifyContent={"center"}
 												display={"flex"}
 												alignContent={"center"}
 											>
-												{caseItem.status ===
-													"waiting" &&
-												localStorage.getItem(
-													"userRole"
-												) === "vet" ? (
+												{caseItem.status === "waiting" &&
+												localStorage.getItem("userRole") === "vet" ? (
 													<>
-														<Tag
-															colorScheme="yellow"
-															mr={2}
-														>
-															{titleCase(
-																caseItem.status
-															)}
+														<Tag colorScheme='yellow' mr={2}>
+															{titleCase(caseItem.status)}
 														</Tag>
 														<Button
 															ml={2}
-															size="sm"
+															size='sm'
 															_hover={{
-																backgroundColor:
-																	"green.400",
+																backgroundColor: "green.400",
 																color: "white",
-																transition:
-																	"all 0.2s",
-																transform:
-																	"scale(1.05)",
+																transition: "all 0.2s",
+																transform: "scale(1.05)",
 															}}
 															onClick={() => {
-																handleAcceptCase(
-																	caseItem._id
-																);
+																handleAcceptCase(caseItem._id);
 																window.location.reload();
 															}}
 														>
 															Accept Case
 														</Button>
 													</>
-												) : caseItem.status ===
-														"waiting" &&
-												  localStorage.getItem(
-														"userRole"
-												  ) === "secretary" ? (
-													<Tag
-														colorScheme="yellow"
-														mr={2}
-													>
-														{titleCase(
-															caseItem.status
-														)}
+												) : caseItem.status === "waiting" &&
+												  localStorage.getItem("userRole") === "secretary" ? (
+													<Tag colorScheme='yellow' mr={2}>
+														{titleCase(caseItem.status)}
 													</Tag>
-												) : caseItem.status ===
-												  "in-progress" ? (
+												) : caseItem.status === "in-progress" ? (
 													caseItem.vetId._id ===
-													localStorage.getItem(
-														"userId"
-													) ? (
+													localStorage.getItem("userId") ? (
 														<>
-															<Tag
-																colorScheme="green"
-																mr={2}
-															>
-																{titleCase(
-																	caseItem.status
-																)}
+															<Tag colorScheme='green' mr={2}>
+																{titleCase(caseItem.status)}
 															</Tag>
 															<Button
-																size="sm"
+																size='sm'
 																onClick={() => {
-																	setCaseToClose(
-																		caseItem._id
-																	);
+																	setCaseToClose(caseItem._id);
 																	openAlert();
 																}}
 															>
@@ -904,17 +824,13 @@ export default function PetDetails() {
 															</Button>
 														</>
 													) : (
-														<Tag colorScheme="green">
-															{titleCase(
-																caseItem.status
-															)}
+														<Tag colorScheme='green'>
+															{titleCase(caseItem.status)}
 														</Tag>
 													)
 												) : (
-													<Tag colorScheme="blue">
-														{titleCase(
-															caseItem.status
-														)}
+													<Tag colorScheme='blue'>
+														{titleCase(caseItem.status)}
 													</Tag>
 												)}
 											</Td>
@@ -947,7 +863,7 @@ export default function PetDetails() {
 								</Button>
 							</>
 						)}
-						<Button colorScheme="blue" ml={3} onClick={closeModal}>
+						<Button colorScheme='blue' ml={3} onClick={closeModal}>
 							Close
 						</Button>
 					</ModalFooter>
@@ -962,17 +878,15 @@ export default function PetDetails() {
 			>
 				<AlertDialogOverlay>
 					<AlertDialogContent>
-						<AlertDialogHeader fontSize="lg" fontWeight="bold">
+						<AlertDialogHeader fontSize='lg' fontWeight='bold'>
 							Close Case
 						</AlertDialogHeader>
 
 						<AlertDialogBody>
 							<Textarea
-								placeholder="Actions Taken"
+								placeholder='Actions Taken'
 								resize={"none"}
-								onChange={(e) =>
-									setActionsTaken(e.target.value)
-								}
+								onChange={(e) => setActionsTaken(e.target.value)}
 							/>
 						</AlertDialogBody>
 
@@ -981,11 +895,10 @@ export default function PetDetails() {
 								Cancel
 							</Button>
 							<Button
-								colorScheme="green"
+								colorScheme='green'
 								onClick={() => {
 									handleCloseCase(caseToClose);
-									closeAlert();
-									setActionsTaken("");
+									window.location.reload();
 								}}
 								ml={3}
 							>
