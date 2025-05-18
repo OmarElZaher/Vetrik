@@ -387,40 +387,64 @@ export default function PetHealthRecords() {
 								</TableContainer>
 							</Box>
 							<Box
-								display="flex"
-								flexDirection="column"
-								justifyContent="center"
-								alignItems="center"
+								display='flex'
+								flexDirection='column'
+								justifyContent='center'
+								alignItems='center'
 								width={["100%", "90%"]} // 100% on small screens, 90% on larger
-								height="auto"
+								height='auto'
 								px={[4, 0]} // Padding on small screens
 								py={5}
-								>
+							>
 								<Input
 									type={"file"}
 									disabled={isLoading}
 									onChange={handleFileChange}
-									cursor="pointer"
+									cursor='pointer'
 									width={["100%", "60%", "40%"]} // Full width on mobile, narrower on larger screens
 									mb={4}
 								/>
-								<Button
-									_hover={{
-									bg: "yellowgreen",
-									color: "#000",
-									transform: "scale(1.01)",
-									}}
-									_active={{
-									transform: "scale(0.99)",
-									opacity: "0.5",
-									}}
-									onClick={handleUpload}
-									rightIcon={<MdUpload />}
-									width={["100%", "auto"]}
-									fontSize={["sm", "md"]}
-								>
-									رفع
-								</Button>
+								<Box>
+									<Button
+										_hover={{
+											bg: "yellowgreen",
+											color: "#000",
+											transform: "scale(1.01)",
+										}}
+										_active={{
+											transform: "scale(0.99)",
+											opacity: "0.5",
+										}}
+										onClick={handleUpload}
+										rightIcon={<MdUpload />}
+										width={["100%", "auto"]}
+										fontSize={["sm", "md"]}
+										ml={2.5}
+									>
+										رفع
+									</Button>
+
+									<Button
+										_hover={{
+											bg: "yellowgreen",
+											color: "#000",
+											transform: "scale(1.01)",
+										}}
+										_active={{
+											transform: "scale(0.99)",
+											opacity: "0.5",
+										}}
+										onClick={() => {
+											navigate(-1);
+										}}
+										rightIcon={<IoMdArrowRoundBack />}
+										width={["100%", "auto"]}
+										fontSize={["sm", "md"]}
+										mr={2.5}
+									>
+										رجوع
+									</Button>
+								</Box>
 							</Box>
 						</Card>
 					</Box>

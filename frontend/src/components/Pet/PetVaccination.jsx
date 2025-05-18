@@ -40,7 +40,6 @@ import {
 	useToast,
 	CardBody,
 	Stack,
-
 } from "@chakra-ui/react";
 
 // React Icon Imports
@@ -356,13 +355,15 @@ export default function PetVaccination() {
 				setVaccinationCardExists(false);
 			}
 		} catch (error) {
-			toast({
-				title: error.response.data.message,
-				status: "error",
-				duration: 2500,
-				isClosable: true,
-				position: "top",
-			});
+			if (error.response.status === 500) {
+				toast({
+					title: error.response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			}
 		} finally {
 			setIsLoading(false);
 		}
@@ -378,171 +379,110 @@ export default function PetVaccination() {
 				<Spinner />
 			) : vaccinationCardExists ? (
 				<>
-				<Box
-					dir='rtl'
-					display="flex"
-					flexDirection={{ base: "column", md: "row" }}
-					justifyContent="center"
-					alignItems="center"
-					bg="#F3F3F3"
-					minHeight="90vh"
-					py={4}
-					gap={4}
-				
-				>
-					<Card
-						display="flex"
-						flexDirection="column"
-						justifyContent="center"
-						alignItems="center"
-						width={{ base: "95%", md: "100%" }}
-						height={{ base: "auto", md: "90%" }}
-						mb={{ base: 6, md: 0 }}
-						my={4}
+					<Box
+						dir='rtl'
+						display='flex'
+						flexDirection={{ base: "column", md: "row" }}
+						justifyContent='center'
+						alignItems='center'
+						bg='#F3F3F3'
+						minHeight='90vh'
+						py={4}
+						gap={4}
 					>
-						<Box
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
-							width="90%"
-							height="auto"
-							my={6}
-							mb={4}
+						<Card
+							display='flex'
+							flexDirection='column'
+							justifyContent='center'
+							alignItems='center'
+							width={{ base: "95%", md: "100%" }}
+							height={{ base: "auto", md: "90%" }}
+							mb={{ base: 6, md: 0 }}
+							my={4}
 						>
-						<Text
-							fontSize={"35px"}
-							fontWeight="bold"
-							// textDecoration="underline"
-							textAlign="center"
-						>
-							{titleCase(pet.name)}
-						</Text>
-						</Box>
-						
-						<Box
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
-							width="95%"
-							height="auto"
-							my={6}
-							mb={4}
-						>
-						<TableContainer width="100%" maxHeight="80vh" overflowY="auto">
-							<Table variant='simple' size='md'>
-								<Thead>
-									<Tr>
-										<Th textAlign={"left"}>اسم اللقاح</Th>
-										<Th textAlign={"center"}>الدفعة</Th>
-										<Th textAlign={"center"}>تاريخ الإعطاء</Th>
-										<Th textAlign={"center"}>تاريخ التجديد</Th>
-										<Th textAlign={"center"}>الإجراءات</Th>
-									</Tr>
-								</Thead>
-								<Tbody>
-									{vaccinationCard.vaccine.map((row) => (
-										<Tr key={vaccinationCard._id}>
-											<Td textAlign={"left"}>
-												{titleCase(row.vaccineName)}
-											</Td>
-											<Td textAlign={"center"}>
-												{capitalizeEveryLetter(row.vaccineBatch)}
-											</Td>
-											<Td textAlign={"center"}>
-												{formatDate(row.vaccineGivenDate)}
-											</Td>
-											<Td textAlign={"center"}>
-												{row.vaccineRenewalDate === null
-													? "-"
-													: formatDate(row.vaccineRenewalDate)}
-											</Td>
-											<Td textAlign={"center"}>
-												<Button
-													_hover={{
-														bg: "yellowgreen",
-														color: "#000",
-														transform: "scale(1.01)",
-													}}
-													_active={{
-														transform: "scale(0.99)",
-														opacity: "0.5",
-													}}
-													onClick={() => {
-														setVaccineRenewalId(row._id);
-														onOpen();
-													}}
-													rightIcon={<MdAutorenew />}
-													ml={2.5}
-												>
-													تجديد
-												</Button>
-												<Tooltip
-													hasArrow
-													label='إزالة اللقاح من كارت التطعيمات'
-													bg={"#EF5350"}
-													placement='top'
-													openDelay={75}
-												>
-													<Button
-														_hover={{
-															bg: "#EF5350",
-															color: "#000",
-															transform: "scale(1.01)",
-														}}
-														_active={{
-															transform: "scale(0.99)",
-															opacity: "0.5",
-														}}
-														onClick={() => {
-															handleRemoveVaccine(row._id);
-														}}
-														rightIcon={<IoIosRemoveCircle />}
-														variant={"outline"}
-														borderColor={"#EF5350"}
-														mr={2.5}
-													>
-														إزالة
-													</Button>
-												</Tooltip>
-											</Td>
-											<>
-												<Modal
-													isOpen={isOpen}
-													onClose={onClose}
-													isCentered
-													size={"lg"}
-												>
-													<ModalOverlay />
+							<Box
+								display='flex'
+								justifyContent='center'
+								alignItems='center'
+								width='90%'
+								height='auto'
+								my={6}
+								mb={4}
+							>
+								<Text
+									fontSize={"35px"}
+									fontWeight='bold'
+									// textDecoration="underline"
+									textAlign='center'
+								>
+									{titleCase(pet.name)}
+								</Text>
+							</Box>
 
-													<ModalContent>
-														<ModalHeader textDecoration={"underline"}>
-															تاريخ تجديد اللقاح
-														</ModalHeader>
-														<ModalCloseButton />
-
-														<ModalBody>
-															<Text
-																fontSize={"18px"}
-																textAlign={"center"}
-																mb={3}
-															>
-																سيبها فاضية لو اللقاح مش قابل للتجديد
-															</Text>
-															<FormControl id='renewalDate'>
-																<Input
-																	id='renewalDate'
-																	type='date'
-																	name='renewalDate'
-																	placeholder='تاريخ تجديد اللقاح'
-																	value={vaccineRenewalDate}
-																	onChange={(e) => {
-																		setVaccineRenewalDate(e.target.value);
-																	}}
-																/>
-															</FormControl>
-														</ModalBody>
-
-														<ModalFooter>
+							<Box
+								display='flex'
+								justifyContent='center'
+								alignItems='center'
+								width='95%'
+								height='auto'
+								my={6}
+								mb={4}
+							>
+								<TableContainer width='100%' maxHeight='80vh' overflowY='auto'>
+									<Table variant='simple' size='md'>
+										<Thead>
+											<Tr>
+												<Th textAlign={"left"}>اسم اللقاح</Th>
+												<Th textAlign={"center"}>الدفعة</Th>
+												<Th textAlign={"center"}>تاريخ الإعطاء</Th>
+												<Th textAlign={"center"}>تاريخ التجديد</Th>
+												<Th textAlign={"center"}>الإجراءات</Th>
+											</Tr>
+										</Thead>
+										<Tbody>
+											{vaccinationCard.vaccine.map((row) => (
+												<Tr key={vaccinationCard._id}>
+													<Td textAlign={"left"}>
+														{titleCase(row.vaccineName)}
+													</Td>
+													<Td textAlign={"center"}>
+														{capitalizeEveryLetter(row.vaccineBatch)}
+													</Td>
+													<Td textAlign={"center"}>
+														{formatDate(row.vaccineGivenDate)}
+													</Td>
+													<Td textAlign={"center"}>
+														{row.vaccineRenewalDate === null
+															? "-"
+															: formatDate(row.vaccineRenewalDate)}
+													</Td>
+													<Td textAlign={"center"}>
+														<Button
+															_hover={{
+																bg: "yellowgreen",
+																color: "#000",
+																transform: "scale(1.01)",
+															}}
+															_active={{
+																transform: "scale(0.99)",
+																opacity: "0.5",
+															}}
+															onClick={() => {
+																setVaccineRenewalId(row._id);
+																onOpen();
+															}}
+															rightIcon={<MdAutorenew />}
+															ml={2.5}
+														>
+															تجديد
+														</Button>
+														<Tooltip
+															hasArrow
+															label='إزالة اللقاح من كارت التطعيمات'
+															bg={"#EF5350"}
+															placement='top'
+															openDelay={75}
+														>
 															<Button
 																_hover={{
 																	bg: "#EF5350",
@@ -553,84 +493,117 @@ export default function PetVaccination() {
 																	transform: "scale(0.99)",
 																	opacity: "0.5",
 																}}
-																onClick={onClose}
-																leftIcon={<MdDelete />}
+																onClick={() => {
+																	handleRemoveVaccine(row._id);
+																}}
+																rightIcon={<IoIosRemoveCircle />}
 																variant={"outline"}
 																borderColor={"#EF5350"}
-																ml={2.5}
-															>
-																إلغاء
-															</Button>
-															<Button
-																_hover={{
-																	bg: "yellowgreen",
-																	color: "#000",
-																	transform: "scale(1.01)",
-																}}
-																_active={{
-																	transform: "scale(0.99)",
-																	opacity: "0.5",
-																}}
-																onClick={() => {
-																	handleRenewVaccine(vaccineRenewalId);
-																	setVaccineRenewalDate(null);
-																	onClose();
-																}}
-																leftIcon={<FaCheckCircle />}
 																mr={2.5}
 															>
-																تجديد
+																إزالة
 															</Button>
-														</ModalFooter>
-													</ModalContent>
-												</Modal>
-											</>
-										</Tr>
-									))}
-								</Tbody>
-							</Table>
-						</TableContainer>
-						</Box>
+														</Tooltip>
+													</Td>
+													<>
+														<Modal
+															isOpen={isOpen}
+															onClose={onClose}
+															isCentered
+															size={"lg"}
+														>
+															<ModalOverlay />
 
-						<Box
-							display="flex"
-							flexWrap="wrap"
-							justifyContent="center"
-							alignItems="center"
-							width="90%"
-							mt={6}
-							my={6}
+															<ModalContent>
+																<ModalHeader textDecoration={"underline"}>
+																	تاريخ تجديد اللقاح
+																</ModalHeader>
+																<ModalCloseButton />
 
-						>
-							<Button
-								_hover={{
-									bg: "yellowgreen",
-									color: "#000",
-									transform: "scale(1.01)",
-								}}
-								_active={{
-									transform: "scale(0.99)",
-									opacity: "0.5",
-								}}
-								onClick={() => {
-									navigate(`/pet-details/${petId}`);
-								}}
-								rightIcon={<IoMdArrowRoundBack />}
-								ml={2.5}
-							>
-								تفاصيل الحيوان
-							</Button>
+																<ModalBody>
+																	<Text
+																		fontSize={"18px"}
+																		textAlign={"center"}
+																		mb={3}
+																	>
+																		سيبها فاضية لو اللقاح مش قابل للتجديد
+																	</Text>
+																	<FormControl id='renewalDate'>
+																		<Input
+																			id='renewalDate'
+																			type='date'
+																			name='renewalDate'
+																			placeholder='تاريخ تجديد اللقاح'
+																			value={vaccineRenewalDate}
+																			onChange={(e) => {
+																				setVaccineRenewalDate(e.target.value);
+																			}}
+																		/>
+																	</FormControl>
+																</ModalBody>
 
-							<Tooltip
-								hasArrow
-								label='حذف كارت تطعيم الحيوان'
-								placement='top'
-								bg={"#EF5350"}
-								openDelay={75}
+																<ModalFooter>
+																	<Button
+																		_hover={{
+																			bg: "#EF5350",
+																			color: "#000",
+																			transform: "scale(1.01)",
+																		}}
+																		_active={{
+																			transform: "scale(0.99)",
+																			opacity: "0.5",
+																		}}
+																		onClick={onClose}
+																		leftIcon={<MdDelete />}
+																		variant={"outline"}
+																		borderColor={"#EF5350"}
+																		ml={2.5}
+																	>
+																		إلغاء
+																	</Button>
+																	<Button
+																		_hover={{
+																			bg: "yellowgreen",
+																			color: "#000",
+																			transform: "scale(1.01)",
+																		}}
+																		_active={{
+																			transform: "scale(0.99)",
+																			opacity: "0.5",
+																		}}
+																		onClick={() => {
+																			handleRenewVaccine(vaccineRenewalId);
+																			setVaccineRenewalDate(null);
+																			onClose();
+																		}}
+																		leftIcon={<FaCheckCircle />}
+																		mr={2.5}
+																	>
+																		تجديد
+																	</Button>
+																</ModalFooter>
+															</ModalContent>
+														</Modal>
+													</>
+												</Tr>
+											))}
+										</Tbody>
+									</Table>
+								</TableContainer>
+							</Box>
+
+							<Box
+								display='flex'
+								flexWrap='wrap'
+								justifyContent='center'
+								alignItems='center'
+								width='90%'
+								mt={6}
+								my={6}
 							>
 								<Button
 									_hover={{
-										bg: "#EF5350",
+										bg: "yellowgreen",
 										color: "#000",
 										transform: "scale(1.01)",
 									}}
@@ -638,333 +611,363 @@ export default function PetVaccination() {
 										transform: "scale(0.99)",
 										opacity: "0.5",
 									}}
-									onClick={handleDelete}
-									rightIcon={<MdDelete />}
-									variant={"outline"}
-									borderColor={"#EF5350"}
-									mr={2.5}
+									onClick={() => {
+										navigate(`/pet-details/${petId}`);
+									}}
+									rightIcon={<IoMdArrowRoundBack />}
+									ml={2.5}
 								>
-									حذف
+									تفاصيل الحيوان
 								</Button>
-							</Tooltip>
-						</Box>
-					</Card>
 
-					<Card
-						display="flex"
-						flexDirection="column"
-						justifyContent="center"
-						alignItems="center"
-						width={{ base: "95%", md: "100%" }}
-						height={{ base: "auto", md: "90%" }}
-						mr={{ base: 0, md: 1.5 }}
-						mb={6}
-					>
-						<Box
-							display={"flex"}
-							flexDirection={"column"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							width={"95%"}
-							height={"100%"}
+								<Tooltip
+									hasArrow
+									label='حذف كارت تطعيم الحيوان'
+									placement='top'
+									bg={"#EF5350"}
+									openDelay={75}
+								>
+									<Button
+										_hover={{
+											bg: "#EF5350",
+											color: "#000",
+											transform: "scale(1.01)",
+										}}
+										_active={{
+											transform: "scale(0.99)",
+											opacity: "0.5",
+										}}
+										onClick={handleDelete}
+										rightIcon={<MdDelete />}
+										variant={"outline"}
+										borderColor={"#EF5350"}
+										mr={2.5}
+									>
+										حذف
+									</Button>
+								</Tooltip>
+							</Box>
+						</Card>
+
+						<Card
+							display='flex'
+							flexDirection='column'
+							justifyContent='center'
+							alignItems='center'
+							width={{ base: "95%", md: "100%" }}
+							height={{ base: "auto", md: "90%" }}
+							mr={{ base: 0, md: 1.5 }}
+							mb={6}
 						>
-							<Text
-								fontSize={"35px"}
-								fontWeight={"bold"}
-								textDecoration={"underline"}
-							>
-								أضف لقاح
-							</Text>
-							<Text fontSize={"18px"} textAlign={"center"} mt={2} mb={6}>
-								( اكتب كل بيانات اللقاح عشان تحفظها في كارت تطعيم الحيوان )
-							</Text>
-						</Box>
-
-						<Box
-							display={"flex"}
-							flexDirection={"column"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							width={"90%"}
-							height={"60%"}
-							// mb={10}
-						>
-							<FormControl id='vaccineName' mb={5}>
-								<Input
-									id='vaccineName'
-									type='text'
-									name='vaccineName'
-									placeholder='اسم اللقاح (زي المكتوب على اللقاح)'
-									value={vaccineName}
-									onChange={(e) => {
-										setVaccineName(e.target.value);
-									}}
-								/>
-							</FormControl>
-
-							<FormControl id='vaccineBatch' mb={5}>
-								<Input
-									id='vaccineBatch'
-									type='text'
-									name='vaccineBatch'
-									placeholder='رقم دفعة اللقاح'
-									value={vaccineBatch}
-									onChange={(e) => {
-										setVaccineBatch(e.target.value);
-									}}
-								/>
-							</FormControl>
-
-							<FormControl
-								id='givenDate'
+							<Box
 								display={"flex"}
 								flexDirection={"column"}
 								justifyContent={"center"}
-								mb={5}
+								alignItems={"center"}
+								width={"95%"}
+								height={"100%"}
 							>
-								<Text fontSize={"16px"} color={"#798296"} mr={1.5} mb={1.5}>
-									تاريخ إعطاء اللقاح (اليوم افتراضيًا)
+								<Text
+									fontSize={"35px"}
+									fontWeight={"bold"}
+									textDecoration={"underline"}
+								>
+									أضف لقاح
 								</Text>
-								<Input
-									id='givenDate'
-									type='date'
-									name='givenDate'
-									placeholder='تاريخ الإعطاء'
-									value={vaccineGivenDate}
-									onChange={(e) => {
-										setVaccineGivenDate(e.target.value);
-									}}
-									textAlign={"right"}
-								/>
-							</FormControl>
-							<Tooltip
-								hasArrow
-								placement='bottom'
-								label='سيبها فاضية لو اللقاح غير قابل للتجديد'
+								<Text fontSize={"18px"} textAlign={"center"} mt={2} mb={6}>
+									( اكتب كل بيانات اللقاح عشان تحفظها في كارت تطعيم الحيوان )
+								</Text>
+							</Box>
+
+							<Box
+								display={"flex"}
+								flexDirection={"column"}
+								justifyContent={"center"}
+								alignItems={"center"}
+								width={"90%"}
+								height={"60%"}
+								// mb={10}
 							>
+								<FormControl id='vaccineName' mb={5}>
+									<Input
+										id='vaccineName'
+										type='text'
+										name='vaccineName'
+										placeholder='اسم اللقاح (زي المكتوب على اللقاح)'
+										value={vaccineName}
+										onChange={(e) => {
+											setVaccineName(e.target.value);
+										}}
+									/>
+								</FormControl>
+
+								<FormControl id='vaccineBatch' mb={5}>
+									<Input
+										id='vaccineBatch'
+										type='text'
+										name='vaccineBatch'
+										placeholder='رقم دفعة اللقاح'
+										value={vaccineBatch}
+										onChange={(e) => {
+											setVaccineBatch(e.target.value);
+										}}
+									/>
+								</FormControl>
+
 								<FormControl
-									id='renewalDate'
+									id='givenDate'
 									display={"flex"}
 									flexDirection={"column"}
 									justifyContent={"center"}
 									mb={5}
 								>
-									<Text fontSize={"16px"} color={"#798296"} mr={1.5} mb={1}>
-										تاريخ تجديد اللقاح
+									<Text fontSize={"16px"} color={"#798296"} mr={1.5} mb={1.5}>
+										تاريخ إعطاء اللقاح (اليوم افتراضيًا)
 									</Text>
 									<Input
-										id='renewalDate'
+										id='givenDate'
 										type='date'
-										name='renewalDate'
-										placeholder='تاريخ التجديد'
-										value={vaccineRenewalDate}
+										name='givenDate'
+										placeholder='تاريخ الإعطاء'
+										value={vaccineGivenDate}
 										onChange={(e) => {
-											setVaccineRenewalDate(e.target.value);
+											setVaccineGivenDate(e.target.value);
 										}}
 										textAlign={"right"}
 									/>
 								</FormControl>
-							</Tooltip>
-						</Box>
+								<Tooltip
+									hasArrow
+									placement='bottom'
+									label='سيبها فاضية لو اللقاح غير قابل للتجديد'
+								>
+									<FormControl
+										id='renewalDate'
+										display={"flex"}
+										flexDirection={"column"}
+										justifyContent={"center"}
+										mb={5}
+									>
+										<Text fontSize={"16px"} color={"#798296"} mr={1.5} mb={1}>
+											تاريخ تجديد اللقاح
+										</Text>
+										<Input
+											id='renewalDate'
+											type='date'
+											name='renewalDate'
+											placeholder='تاريخ التجديد'
+											value={vaccineRenewalDate}
+											onChange={(e) => {
+												setVaccineRenewalDate(e.target.value);
+											}}
+											textAlign={"right"}
+										/>
+									</FormControl>
+								</Tooltip>
+							</Box>
 
-						<Box
-							display={"flex"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							width={"90%"}
-							height={"15%"}
-							mb={5}
-						>
-							<Button
-								_hover={{
-									bg: "yellowgreen",
-									color: "#000",
-									transform: "scale(1.01)",
-								}}
-								_active={{
-									transform: "scale(0.99)",
-									opacity: "0.5",
-								}}
-								onClick={handleAddVaccine}
-								rightIcon={<IoMdAdd />}
-								width={"50%"}
+							<Box
+								display={"flex"}
+								justifyContent={"center"}
+								alignItems={"center"}
+								width={"90%"}
+								height={"15%"}
+								mb={5}
 							>
-								إضافة
-							</Button>
-						</Box>
-					</Card>
+								<Button
+									_hover={{
+										bg: "yellowgreen",
+										color: "#000",
+										transform: "scale(1.01)",
+									}}
+									_active={{
+										transform: "scale(0.99)",
+										opacity: "0.5",
+									}}
+									onClick={handleAddVaccine}
+									rightIcon={<IoMdAdd />}
+									width={"50%"}
+								>
+									إضافة
+								</Button>
+							</Box>
+						</Card>
 					</Box>
 					<Footer />
 				</>
 			) : (
 				<>
-				<Box
-					dir="rtl"
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-					bg="#F3F3F3"
-					minHeight="100vh"
-					py={{ base: 5, md: 0 }}
-				>
-					<Card
-						display="flex"
-						flexDirection="column"
-						justifyContent="center"
-						alignItems="center"
-						width={{ base: "95%", md: "90%" }}
-						height={{ base: "auto", md: "90%" }}
-						py={{ base: 4, md: 0 }}
+					<Box
+						dir='rtl'
+						display='flex'
+						justifyContent='center'
+						alignItems='center'
+						bg='#F3F3F3'
+						minHeight='100vh'
+						py={{ base: 5, md: 0 }}
 					>
-						{/* Header */}
-						<Box
-							display="flex"
-							flexDirection="column"
-							justifyContent="center"
-							alignItems="center"
-							width="90%"
-							mb={{ base: 4, md: 0 }}
+						<Card
+							display='flex'
+							flexDirection='column'
+							justifyContent='center'
+							alignItems='center'
+							width={{ base: "95%", md: "90%" }}
+							height={{ base: "auto", md: "90%" }}
+							py={{ base: 4, md: 0 }}
 						>
-							<Icon as={RiHealthBookFill} fontSize={{ base: "40px", md: "60px" }} />
-							<Text
-								fontSize={{ base: "28px", md: "40px" }}
-								fontWeight="bold"
-								textDecoration="underline"
-								textAlign="center"
+							{/* Header */}
+							<Box
+								display='flex'
+								flexDirection='column'
+								justifyContent='center'
+								alignItems='center'
+								width='90%'
+								mb={{ base: 4, md: 0 }}
 							>
-								كارت التطعيمات
-							</Text>
-						</Box>
-
-						{/* Info Message */}
-						<Box
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
-							borderBottom="1px solid #000"
-							width="90%"
-							mb={4}
-						>
-							<Text
-								fontSize={{ base: "18px", md: "25px" }}
-								textAlign="center"
-								color="#F39C11"
-							>
-								الحيوان ده ماعندوش كارت تطعيم، اكتب بيانات اللقاح عشان تنشئ واحد.
-							</Text>
-						</Box>
-
-						{/* Form Fields */}
-						<Box
-							display="flex"
-							flexDirection="column"
-							justifyContent="center"
-							alignItems="center"
-							width="90%"
-							gap={4}
-						>
-							<FormControl id="vaccineName">
-								<Input
-									type="text"
-									name="vaccineName"
-									placeholder="اسم اللقاح (زي المكتوب على اللقاح)"
-									value={vaccineName}
-									onChange={(e) => setVaccineName(e.target.value)}
+								<Icon
+									as={RiHealthBookFill}
+									fontSize={{ base: "40px", md: "60px" }}
 								/>
-							</FormControl>
-
-							<FormControl id="vaccineBatch">
-								<Input
-									type="text"
-									name="vaccineBatch"
-									placeholder="رقم دفعة اللقاح"
-									value={vaccineBatch}
-									onChange={(e) => setVaccineBatch(e.target.value)}
-								/>
-							</FormControl>
-
-							{/* Dates */}
-							<FormControl id="date">
-								<Box
-									display="flex"
-									flexDirection={{ base: "column", md: "row" }}
-									gap={4}
+								<Text
+									fontSize={{ base: "28px", md: "40px" }}
+									fontWeight='bold'
+									textDecoration='underline'
+									textAlign='center'
 								>
-									<Box
-										display="flex"
-										flexDirection="column"
-										width={{ base: "100%", md: "50%" }}
-									>
-										<Text fontSize="16px" color="#798296" mb={1}>
-											تاريخ إعطاء اللقاح (اليوم افتراضيًا)
-										</Text>
-										<Input
-											type="date"
-											name="givenDate"
-											placeholder="تاريخ الإعطاء"
-											value={vaccineGivenDate}
-											onChange={(e) => setVaccineGivenDate(e.target.value)}
-										/>
-									</Box>
+									كارت التطعيمات
+								</Text>
+							</Box>
 
-									<Tooltip
-										hasArrow
-										placement="bottom"
-										label="سيبها فاضية لو اللقاح غير قابل للتجديد"
+							{/* Info Message */}
+							<Box
+								display='flex'
+								justifyContent='center'
+								alignItems='center'
+								borderBottom='1px solid #000'
+								width='90%'
+								mb={4}
+							>
+								<Text
+									fontSize={{ base: "18px", md: "25px" }}
+									textAlign='center'
+									color='#F39C11'
+								>
+									الحيوان ده ماعندوش كارت تطعيم، اكتب بيانات اللقاح عشان تنشئ
+									واحد.
+								</Text>
+							</Box>
+
+							{/* Form Fields */}
+							<Box
+								display='flex'
+								flexDirection='column'
+								justifyContent='center'
+								alignItems='center'
+								width='90%'
+								gap={4}
+							>
+								<FormControl id='vaccineName'>
+									<Input
+										type='text'
+										name='vaccineName'
+										placeholder='اسم اللقاح (زي المكتوب على اللقاح)'
+										value={vaccineName}
+										onChange={(e) => setVaccineName(e.target.value)}
+									/>
+								</FormControl>
+
+								<FormControl id='vaccineBatch'>
+									<Input
+										type='text'
+										name='vaccineBatch'
+										placeholder='رقم دفعة اللقاح'
+										value={vaccineBatch}
+										onChange={(e) => setVaccineBatch(e.target.value)}
+									/>
+								</FormControl>
+
+								{/* Dates */}
+								<FormControl id='date'>
+									<Box
+										display='flex'
+										flexDirection={{ base: "column", md: "row" }}
+										gap={4}
 									>
 										<Box
-											display="flex"
-											flexDirection="column"
+											display='flex'
+											flexDirection='column'
 											width={{ base: "100%", md: "50%" }}
 										>
-											<Text fontSize="16px" color="#798296" mb={1}>
-												تاريخ تجديد اللقاح
+											<Text fontSize='16px' color='#798296' mb={1}>
+												تاريخ إعطاء اللقاح (اليوم افتراضيًا)
 											</Text>
 											<Input
-												type="date"
-												name="renewalDate"
-												placeholder="تاريخ تجديد اللقاح"
-												value={vaccineRenewalDate}
-												onChange={(e) => setVaccineRenewalDate(e.target.value)}
+												type='date'
+												name='givenDate'
+												placeholder='تاريخ الإعطاء'
+												value={vaccineGivenDate}
+												onChange={(e) => setVaccineGivenDate(e.target.value)}
 											/>
 										</Box>
-									</Tooltip>
-								</Box>
-							</FormControl>
-						</Box>
 
-						{/* Submit Button */}
-						<Box
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
-							width="90%"
-							mt={6}
-						>
-							<Button
-								_hover={{
-									bg: "yellowgreen",
-									color: "#000",
-									transform: "scale(1.01)",
-								}}
-								_active={{
-									transform: "scale(0.99)",
-									opacity: "0.5",
-								}}
-								onClick={handleCreateVaccinationCard}
-								rightIcon={<TbVaccine />}
+										<Tooltip
+											hasArrow
+											placement='bottom'
+											label='سيبها فاضية لو اللقاح غير قابل للتجديد'
+										>
+											<Box
+												display='flex'
+												flexDirection='column'
+												width={{ base: "100%", md: "50%" }}
+											>
+												<Text fontSize='16px' color='#798296' mb={1}>
+													تاريخ تجديد اللقاح
+												</Text>
+												<Input
+													type='date'
+													name='renewalDate'
+													placeholder='تاريخ تجديد اللقاح'
+													value={vaccineRenewalDate}
+													onChange={(e) =>
+														setVaccineRenewalDate(e.target.value)
+													}
+												/>
+											</Box>
+										</Tooltip>
+									</Box>
+								</FormControl>
+							</Box>
+
+							{/* Submit Button */}
+							<Box
+								display='flex'
+								justifyContent='center'
+								alignItems='center'
+								width='90%'
+								mt={6}
 							>
-								إنشاء كارت التطعيمات
-							</Button>
-						</Box>
-					</Card>
-				</Box>
-				<Footer />
-			</>
-			)
-		};
-
-		  
+								<Button
+									_hover={{
+										bg: "yellowgreen",
+										color: "#000",
+										transform: "scale(1.01)",
+									}}
+									_active={{
+										transform: "scale(0.99)",
+										opacity: "0.5",
+									}}
+									onClick={handleCreateVaccinationCard}
+									rightIcon={<TbVaccine />}
+								>
+									إنشاء كارت التطعيمات
+								</Button>
+							</Box>
+						</Card>
+					</Box>
+					<Footer />
+				</>
+			);
+		}
 	}
 
 	return (

@@ -442,13 +442,6 @@ export default function SecretaryDrawer() {
 													alignItems='flex-start'
 													justifyContent='flex-start'
 												>
-													<NavigationLinkDrawer
-														icon={FaBookMedical}
-														text={"افتح حالة"}
-														to={"/open-case"}
-														justifyContent='flex-end'
-														alignItems='flex-start'
-													/>
 
 													<NavigationLinkDrawer
 														icon={BsFileMedical}
