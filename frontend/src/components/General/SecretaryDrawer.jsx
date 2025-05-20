@@ -111,7 +111,7 @@ export default function SecretaryDrawer() {
 
 			<Drawer
 				isOpen={isOpen}
-				placement='left'
+				placement='right'
 				onClose={onClose}
 				finalFocusRef={btnRef}
 			>
@@ -442,7 +442,6 @@ export default function SecretaryDrawer() {
 													alignItems='flex-start'
 													justifyContent='flex-start'
 												>
-
 													<NavigationLinkDrawer
 														icon={BsFileMedical}
 														text={"عرض الحالاات المفتوحة"}

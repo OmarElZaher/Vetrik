@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
@@ -10,32 +10,36 @@ import {
 	Button,
 	FormControl,
 	Input,
-	Table,
-	TableContainer,
-	Th,
-	Thead,
-	Tr,
-	Td,
-	Tbody,
+	Select,
 	Modal,
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
-	ModalCloseButton,
+	Flex,
+	Image,
+	HStack,
+	IconButton,
+	SimpleGrid,
 	ModalBody,
 	ModalFooter,
 	useDisclosure,
 	useToast,
+	useColorMode,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
-import Spinner from "./Spinner";
-
-import { FaPerson } from "react-icons/fa6";
+import { FaMoon, FaSun } from "react-icons/fa";
 import { MdOutlinePets } from "react-icons/md";
-import { IoMdEye } from "react-icons/io";
-import { IoReload } from "react-icons/io5";
+import {
+	FaFolderOpen,
+	FaUserPlus,
+	FaCheckCircle,
+	FaSearch,
+} from "react-icons/fa";
+import { HiOutlineBeaker } from "react-icons/hi";
 
-import { VET_NAME as vetName, API_URL as api } from "../../utils/constants";
+import Spinner from "../General/Spinner";
+import { API_URL as api } from "../../utils/constants";
 
 function titleCase(str) {
 	if (!str) return "";
@@ -52,7 +56,13 @@ export default function SecretaryHome() {
 	const toast = useToast();
 	const navigate = useNavigate();
 
+	const { colorMode, toggleColorMode } = useColorMode();
+
 	const [loading, setLoading] = useState(false);
+
+	const cardBg = useColorModeValue("white", "gray.700");
+	const flexBg = useColorModeValue("gray.50", "gray.900");
+	const iconColor = useColorModeValue("#2F80ED", "#56CCF2");
 
 	const [role, setRole] = useState("");
 
@@ -68,9 +78,12 @@ export default function SecretaryHome() {
 	useEffect(() => {
 		const fetchUserRole = async () => {
 			try {
+				setLoading(true);
+
 				const response = await axios.get(`${api}/user/getUserInfo`, {
 					withCredentials: true,
 				});
+
 				if (response.status === 200) {
 					setRole(response.data.role);
 				} else {
@@ -90,6 +103,8 @@ export default function SecretaryHome() {
 					position: "top",
 					isClosable: true,
 				});
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -214,459 +229,354 @@ export default function SecretaryHome() {
 		}
 	};
 
-	return (
+	return loading ? (
+		<Spinner />
+	) : (
 		<>
-			{loading ? (
-				<Spinner />
-			) : (
-				<>
-					{/* Welcome Box */}
-					<Box
-						dir="rtl"
-						height={"10vh"}
-						display={"flex"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						bg={"#F3F3F3"}
-					>
-						<Text fontSize={"30px"} fontWeight={"bold"}>
-							{"مرحبًا بكم في عيادة " + vetName + " البيطرية"}
+			<Flex
+				direction='column'
+				minH='100vh'
+				justify='space-between'
+				bg={flexBg}
+				dir='rtl'
+			>
+				<Box p={{ base: 4, md: 8 }} dir='rtl'>
+					{/* Header */}
+					<Flex justify='space-between' align='center' mb={6}>
+						<Text fontSize='2xl' fontWeight='bold'>
+							👋 مرحباً بك
 						</Text>
-					</Box>
-					<hr />
-					{/* Search Box */}
-					<Box
-						dir="rtl"
-						display={"flex"}
+						<HStack spacing={2}>
+							{/* Theme Toggle (icon button placeholder) */}
+							<IconButton
+								icon={colorMode === "light" ? <FaMoon /> : <FaSun />}
+								onClick={toggleColorMode}
+								aria-label='تبديل الثيم'
+								variant='ghost'
+								size='sm'
+							/>
+						</HStack>
+					</Flex>
+
+					<Text
+						fontSize='xl'
+						fontWeight='bold'
+						mt={8}
+						mb={4}
+						textAlign={"center"}
 						justifyContent={"center"}
-						alignItems={"center"}
-						bg={"#F3F3F3"}
-						height={"33vh"}
 					>
-						{/* Search Owner Block */}
+						👤 إدارة المالكين والحيوانات
+					</Text>
+					<SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
 						<Box
-							width={"50%"}
-							height={"95%"}
-							mx={5}
-							display={"flex"}
-							justifyContent={"center"}
-							alignItems={"center"}
+							bg={cardBg}
+							p={6}
+							rounded='lg'
+							boxShadow='md'
+							display='flex'
+							alignItems='center'
+							justifyContent='space-between'
+							cursor='pointer'
+							_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+							_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+							transition='all 0.2s'
+							onClick={() => navigate("/search-owner")}
 						>
-							<Box
-								display={"flex"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								flexDirection={"column"}
-								height={"80%"}
-							>
-								<Text
-									fontSize={"28px"}
-									fontWeight={"bold"}
-									my={10}
-								>
-									هل تريد البحث عن مالك؟
+							<Box>
+								<Text fontSize='lg' fontWeight='bold' mb={1}>
+									👤 البحث عن مالك
 								</Text>
-								<Button
-									_hover={{
-										bg: "#D4F500",
-										borderColor: "#D4F500",
-										color: "#000",
-										transform: "scale(1.05)",
-									}}
-									_active={{
-										transform: "scale(0.98)",
-										opacity: "0.5",
-									}}
-									onClick={() => {
-										navigate("/search-owner");
-									}}
-									justifyContent={"flex-start"}
-									alignItems={"center"}
-									transition="all 0.15s ease"
-									bg="#FFF"
-									color="#000"
-									fontSize="18px"
-									my={5}
-									rightIcon={<FaPerson />}
-								>
-									ذهاب إلى صفحة البحث عن المالك
-								</Button>
+								<Text color='gray.500' fontSize='sm'>
+									الوصول إلى معلومات بسرعة
+								</Text>
 							</Box>
+							<FaSearch size='32' color={iconColor} />
 						</Box>
 
-						{/* Search Pet Block */}
+						{/* عدد الحيوانات */}
 						<Box
-							width={"50%"}
-							height={"95%"}
-							mx={5}
-							display={"flex"}
-							justifyContent={"center"}
-							alignItems={"center"}
+							bg={cardBg}
+							p={6}
+							rounded='lg'
+							boxShadow='md'
+							display='flex'
+							alignItems='center'
+							justifyContent='space-between'
+							cursor={"pointer"}
+							onClick={() => navigate("/search-pet")}
+							_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+							_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+							transition='all 0.2s'
 						>
-							<Box
-								display={"flex"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								flexDirection={"column"}
-								height={"80%"}
-							>
-								<Text
-									fontSize={"28px"}
-									fontWeight={"bold"}
-									my={10}
-								>
-									هل تريد البحث عن حيوان أليف؟
+							<Box>
+								<Text fontSize='lg' fontWeight='bold' mb={1}>
+									🐾 بحث عن حيوان
 								</Text>
-								<Button
-									_hover={{
-										bg: "#D4F500",
-										borderColor: "#D4F500",
-										color: "#000",
-										transform: "scale(1.05)",
-									}}
-									_active={{
-										transform: "scale(0.98)",
-										opacity: "0.5",
-									}}
-									onClick={() => {
-										navigate("/search-pet");
-									}}
-									justifyContent={"flex-start"}
-									alignItems={"center"}
-									transition="all 0.15s ease"
-									bg="#FFF"
-									color="#000"
-									fontSize="18px"
-									my={5}
-									rightIcon={<MdOutlinePets />}
-								>
-									ذهاب إلى صفحة البحث عن الحيوان الأليف
-								</Button>
+								<Text color='gray.500' fontSize='sm'>
+									عرض جميع الحيوانات المسجلة
+								</Text>
 							</Box>
+							<FaSearch size='32' color={iconColor} />
 						</Box>
-					</Box>
-					<hr />
 
-					<Box
-						dir="rtl"
-						display={"flex"}
+						{/* إضافة مالك جديد */}
+						<Box
+							bg={cardBg}
+							p={6}
+							rounded='lg'
+							boxShadow='md'
+							display='flex'
+							alignItems='center'
+							justifyContent='space-between'
+							cursor='pointer'
+							_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+							_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+							transition='all 0.2s'
+							onClick={() => navigate("/add-owner")}
+						>
+							<Box>
+								<Text fontSize='lg' fontWeight='bold' mb={1}>
+									➕ إضافة مالك جديد
+								</Text>
+								<Text color='gray.500' fontSize='sm'>
+									تسجيل مالك جديد للنظام
+								</Text>
+							</Box>
+							<FaUserPlus size='32' color={iconColor} />
+						</Box>
+
+						{/* إضافة مالك جديد */}
+						<Box
+							bg={cardBg}
+							p={6}
+							rounded='lg'
+							boxShadow='md'
+							display='flex'
+							alignItems='center'
+							justifyContent='space-between'
+							cursor='pointer'
+							_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+							_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+							transition='all 0.2s'
+							onClick={() => navigate("/add-pet")}
+						>
+							<Box>
+								<Text fontSize='lg' fontWeight='bold' mb={1}>
+									➕ إضافة حيوان جديد
+								</Text>
+								<Text color='gray.500' fontSize='sm'>
+									تسجيل حيوان جديد للنظام
+								</Text>
+							</Box>
+							<MdOutlinePets size='32' color={iconColor} />
+						</Box>
+					</SimpleGrid>
+
+					{/* Grid of Dashboard Cards */}
+					<Text
+						fontSize='xl'
+						fontWeight='semibold'
+						mt={10}
+						mb={4}
+						textAlign={"center"}
 						justifyContent={"center"}
-						alignItems={"center"}
-						flexDirection={"column"}
-						bg={"#F3F3F3"}
-						height={"44vh"}
 					>
+						🗂 إدارة الحالات الطبية
+					</Text>
+					<SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
 						<Box
-							display={"flex"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							width={"95%"}
-							height={"10%"}
+							bg={cardBg}
+							p={6}
+							rounded='lg'
+							boxShadow='md'
+							display='flex'
+							alignItems='center'
+							justifyContent='space-between'
+							cursor='pointer'
+							_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+							_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+							transition='all 0.2s'
+							onClick={onOpen}
 						>
-							<Text
-								fontSize={"28px"}
-								fontWeight={"bold"}
-								decoration={"underline"}
-							>
-								افتح حالة جديدة
-							</Text>
+							<Box>
+								<Text fontSize='lg' fontWeight='bold' mb={1}>
+									🧪 فتح حالة جديدة
+								</Text>
+								<Text color='gray.500' fontSize='sm'>
+									إنشاء حالة لحيوان مسجل
+								</Text>
+							</Box>
+							<HiOutlineBeaker size='32' color={iconColor} />
 						</Box>
 
+						{/* عدد الحالات المفتوحة */}
 						<Box
-							dir="rtl"
-							display={"flex"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							width={"95%"}
-							height={"85%"}
-							mx={5}
+							bg={cardBg}
+							p={6}
+							rounded='lg'
+							boxShadow='md'
+							display='flex'
+							alignItems='center'
+							justifyContent='space-between'
+							cursor={"pointer"}
+							onClick={() => navigate("/view-cases")}
+							_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+							_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+							transition='all 0.2s'
 						>
-							{gotOwnerPets ? (
-								<>
-									<Box
-										display={"flex"}
-										justifyContent={"center"}
-										alignItems={"center"}
-										flexDirection={"column"}
-										width={"100%"}
-										height={"100%"}
-									>
-										<TableContainer
-											width={"80%"}
-											height={"60%"}
-											maxHeight={"70vh"}
-											overflowY={"auto"}
-											py={5}
-											mb={3}
-										>
-											<Table variant="simple" size="md">
-												<Thead>
-													<Tr>
-														<Th textAlign={"right"}>
-															اسم الحيوان
-														</Th>
-														<Th
-															textAlign={"center"}
-														>
-															السلالة
-														</Th>
-														<Th
-															textAlign={"center"}
-														>
-															النوع
-														</Th>
-														<Th
-															textAlign={"center"}
-														>
-															فئة الوزن
-														</Th>
-														<Th
-															textAlign={"center"}
-														>
-															أفعال
-														</Th>
-													</Tr>
-												</Thead>
-												<Tbody>
-													{ownerPets.map((row) => (
-														<Tr key={row._id}>
-															<Td
-																textAlign={
-																	"right"
-																}
-															>{`${row.name}`}</Td>
-
-															<Td
-																textAlign={
-																	"center"
-																}
-															>
-																{`${titleCase(
-																	row.breed
-																)}`}
-															</Td>
-
-															<Td
-																textAlign={
-																	"center"
-																}
-															>
-																{`${titleCase(
-																	row.type
-																)}`}
-															</Td>
-
-															<Td
-																textAlign={
-																	"center"
-																}
-															>{`${row.weightClass}`}</Td>
-
-															<Td
-																textAlign={
-																	"center"
-																}
-															>
-																<Button
-																	_hover={{
-																		bg: "#D4F500",
-																		borderColor:
-																			"#D4F500",
-																		color: "#000",
-																		transform:
-																			"scale(1.05)",
-																	}}
-																	_active={{
-																		transform:
-																			"scale(0.98)",
-																		opacity:
-																			"0.5",
-																	}}
-																	onClick={() => {
-																		setPetId(
-																			row._id
-																		);
-																		onOpen();
-																	}}
-																	justifyContent={
-																		"flex-start"
-																	}
-																	alignItems={
-																		"center"
-																	}
-																	transition="all 0.15s ease"
-																	bg="#FFF"
-																	color="#000"
-																	fontSize="18px"
-																	my={5}
-																	rightIcon={
-																		<IoMdEye />
-																	}
-																>
-																	فتح
-																</Button>
-															</Td>
-														</Tr>
-													))}
-												</Tbody>
-											</Table>
-										</TableContainer>
-										<Button
-											_hover={{
-												bg: "#D4F500",
-												transform: "scale(1.05)",
-											}}
-											onClick={() => {
-												setGotOwnerPets(false);
-												setOwnerPets([]);
-											}}
-											rightIcon={<IoReload />}
-											justifyContent={"flex-start"}
-											alignItems={"center"}
-											transition="all 0.15s ease"
-											bg="#FFF"
-											color="#000"
-											fontSize="18px"
-											my={5}
-										>
-											إعادة البحث
-										</Button>
-									</Box>
-								</>
-							) : (
-								<>
-									<FormControl
-										dir="ltr"
-										id="ownerMobileNumber"
-										display={"flex"}
-										justifyContent={"center"}
-										alignItems={"center"}
-										flexDirection={"column"}
-										width={"80%"}
-										height={"80%"}
-									>
-										<Text
-											fontSize={"20px"}
-											fontWeight={"bold"}
-											mb={5}
-										>
-											أدخل رقم هاتف المالك للبحث عن
-											حيواناته الأليفة
-										</Text>
-										<Input
-											id="ownerMobileNumber"
-											type="text"
-											name="ownerMobileNumber"
-											placeholder="..."
-											value={ownerMobileNumber}
-											onChange={(e) => {
-												setOwnerMobileNumber(
-													e.target.value
-												);
-											}}
-											width={"80%"}
-											mb={5}
-											ml={5}
-											disabled={loading}
-											bg={"#FFF"}
-										/>
-
-										<Button
-											_hover={{
-												bg: "#D4F500",
-												borderColor: "#D4F500",
-												color: "#000",
-												transform: "scale(1.05)",
-											}}
-											_active={{
-												transform: "scale(0.98)",
-												opacity: "0.5",
-											}}
-											onClick={handleGetOwnerPets}
-											justifyContent={"flex-start"}
-											alignItems={"center"}
-											transition="all 0.15s ease"
-											bg="#FFF"
-											color="#000"
-											fontSize="18px"
-											my={5}
-											rightIcon={<FaPerson />}
-										>
-											بحث
-										</Button>
-									</FormControl>
-								</>
-							)}
+							<Box>
+								<Text fontSize='lg' fontWeight='bold' mb={1}>
+									📂 الحالات المفتوحة
+								</Text>
+								<Text color='gray.500' fontSize='sm'>
+									متابعة الحالات الجارية
+								</Text>
+							</Box>
+							<FaFolderOpen size='32' color={iconColor} />
 						</Box>
-					</Box>
-					{/* Modal for Case Details */}
-					<Modal
-						isOpen={isOpen}
-						onClose={onClose}
-						isCentered
-						size={"xl"}
+					</SimpleGrid>
+
+					<Box h={6} />
+
+					<SimpleGrid columns={{ base: 1, md: 1 }} spacing={6}>
+						<Box
+							bg={cardBg}
+							p={6}
+							rounded='lg'
+							boxShadow='md'
+							display='flex'
+							alignItems='center'
+							justifyContent='space-between'
+							cursor='pointer'
+							_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+							_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+							transition='all 0.2s'
+							onClick={() => navigate("/completed-cases")}
+						>
+							<Box>
+								<Text fontSize='lg' fontWeight='bold' mb={1}>
+									✅ الحالات المكتملة
+								</Text>
+								<Text color='gray.500' fontSize='sm'>
+									عرض جميع الحالات المنتهية
+								</Text>
+							</Box>
+							<FaCheckCircle size='32' color={iconColor} />
+						</Box>
+					</SimpleGrid>
+
+					<Flex
+						direction='column'
+						align='center'
+						justify='center'
+						mt={12}
+						opacity={0.75}
 					>
+						<Image
+							src='https://cdn-icons-png.flaticon.com/512/616/616408.png'
+							alt='dog icon'
+							boxSize='100px'
+							mb={4}
+						/>
+						<Text fontSize='lg' color='gray.500' textAlign='center'>
+							ابدأ باختيار إجراء من الأعلى ⬆️
+						</Text>
+					</Flex>
+
+					<Modal isOpen={isOpen} onClose={onClose} isCentered>
 						<ModalOverlay />
-						<ModalContent dir="rtl">
-							<ModalHeader textAlign={"center"}>
-								سبب الزيارة
-							</ModalHeader>
-							<ModalCloseButton />
+						<ModalContent dir='rtl'>
+							<ModalHeader>🧪 فتح حالة جديدة</ModalHeader>
+							{/* <ModalCloseButton /> */}
 							<ModalBody>
-								<Textarea
-									id="reasonForVisit"
-									type="text"
-									name="reasonForVisit"
-									placeholder="السبب..."
-									value={reasonForVisit}
-									scrollBehavior={"smooth"}
-									resize={"none"}
-									bg={"#FFF"}
-									width={"100%"}
-									height={"20vh"}
-									onChange={(e) => {
-										setReasonForVisit(e.target.value);
-									}}
-								/>
+								{/* Owner Phone Input */}
+								<FormControl isRequired mb={4}>
+									<Text mb={1}>رقم موبايل المالك</Text>
+									<Input
+										placeholder='مثال: 01012345678'
+										value={ownerMobileNumber || ""}
+										onChange={(e) => setOwnerMobileNumber(e.target.value)}
+										textAlign='right'
+									/>
+								</FormControl>
+
+								<Button
+									colorScheme='blue'
+									mb={4}
+									width='100%'
+									onClick={handleGetOwnerPets}
+									isLoading={loading}
+								>
+									🔍 بحث عن الحيوانات
+								</Button>
+
+								{/* Pet Dropdown (only if pets were found) */}
+								{gotOwnerPets && ownerPets.length > 0 && (
+									<FormControl isRequired mb={4}>
+										<Text mb={1}>اختر الحيوان</Text>
+										<Select
+											placeholder='اختر حيواناً'
+											onChange={(e) => setPetId(e.target.value)}
+											textAlign='right'
+											iconColor='transparent'
+											cursor={"pointer"}
+										>
+											{ownerPets.map((pet) => (
+												<option key={pet._id} value={pet._id}>
+													{titleCase(pet.name)} ({titleCase(pet.type)})
+												</option>
+											))}
+										</Select>
+									</FormControl>
+								)}
+
+								{/* Reason For Visit */}
+								<FormControl isRequired>
+									<Text mb={1}>سبب الزيارة</Text>
+									<Textarea
+										placeholder='مثال: تطعيم، إسهال، استشارة عامة...'
+										value={reasonForVisit || ""}
+										onChange={(e) => setReasonForVisit(e.target.value)}
+										textAlign='right'
+										resize={"none"}
+										scrollBehavior={"smooth"}
+										height={"250px"}
+										overflow={"auto"}
+									/>
+								</FormControl>
 							</ModalBody>
+
 							<ModalFooter>
 								<Button
-									rightIcon={<IoMdEye />}
-									variant="solid"
-									mx={5}
-									_hover={{
-										bg: "#D4F500",
-										borderColor: "#D4F500",
-										color: "#000",
-										transform: "scale(1.05)",
-									}}
-									onClick={() => {
-										if (
-											!reasonForVisit ||
-											reasonForVisit.trim() === "" ||
-											reasonForVisit.length < 5
-										) {
-											toast({
-												title: "Please enter a reason for the visit",
-												status: "error",
-												duration: 2500,
-												position: "top",
-												isClosable: true,
-											});
-											return;
-										}
-
-										handleSubmitCase();
+									colorScheme='blue'
+									ml={3}
+									onClick={handleSubmitCase}
+									isLoading={loading}
+									isDisabled={!petId || !reasonForVisit}
+									_hover={{ transform: "scale(1.02)" }}
+									_active={{
+										bg: "blue.500",
+										color: "white",
+										opacity: 0.8,
+										transform: "scale(0.98)",
 									}}
 								>
-									فتح الحالة
+									إنشاء الحالة
 								</Button>
 								<Button
+									variant='subtle'
 									onClick={onClose}
 									_hover={{
-										bg: "red",
-										color: "#000",
-										transform: "scale(1.05)",
+										bg: "#EB5757",
+										color: "white",
+										transform: "scale(1.02)",
+									}}
+									_active={{
+										bg: "#EB5757",
+										color: "white",
+										opacity: 0.8,
+										transform: "scale(0.98)",
 									}}
 								>
 									إلغاء
@@ -674,8 +584,17 @@ export default function SecretaryHome() {
 							</ModalFooter>
 						</ModalContent>
 					</Modal>
-				</>
-			)}
+				</Box>
+				<Box
+					as='footer'
+					py={4}
+					textAlign='center'
+					fontSize='xs'
+					color='gray.500'
+				>
+					.Vetrik. All rights reserved 2025 ©
+				</Box>
+			</Flex>
 		</>
 	);
 }

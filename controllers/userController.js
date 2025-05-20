@@ -1661,8 +1661,6 @@ const changePassword = asyncHandler(async (req, res) => {
 
 		const { oldPassword, newPassword, confirmPassword } = req.body;
 
-		console.log(oldPassword, newPassword, confirmPassword);
-
 		if (!oldPassword || !newPassword || !confirmPassword) {
 			res.status(400).json({ message: "Enter All Fields" });
 			return;
@@ -1844,8 +1842,6 @@ const resetPassword = asyncHandler(async (req, res) => {
 	try {
 		const user = await User.findOne({ email: req.body.email });
 		const { newPassword, confirmPassword } = req.body;
-
-		console.log(newPassword, " ", confirmPassword);
 
 		if (!newPassword || !confirmPassword) {
 			res.status(400).json({ message: "يرجى إدخال جميع الحقول" });

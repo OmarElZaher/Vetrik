@@ -39,8 +39,6 @@ export default function NotFound() {
 				if (response.status === 200) {
 					setIsAdmin(response.data.role === "admin");
 				} else {
-					console.log("hena");
-
 					toast({
 						title: response.data.message,
 						description: "Please try again later.",

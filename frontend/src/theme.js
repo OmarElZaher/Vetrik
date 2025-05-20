@@ -1,9 +1,31 @@
+// theme.ts
 import { extendTheme } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
 
-const theme = extendTheme({
+const customTheme = extendTheme({
+	config: {
+		initialColorMode: "light",
+		useSystemColorMode: true,
+	},
 	fonts: {
-		color: "#D4F500",
+		heading: `'Inter', sans-serif`,
+		body: `'Inter', sans-serif`,
+	},
+	styles: {
+		global: (props) => ({
+			body: {
+				bg: mode("gray.50", "gray.900")(props),
+				color: mode("gray.800", "gray.200")(props),
+			},
+		}),
+	},
+	colors: {
+		brand: {
+			50: "#EBF5FF",
+			100: "#D6EFFF",
+			500: "#2F80ED",
+			600: "#1C6DD0",
+		},
 	},
 });
-
-export default theme;
+export default customTheme;

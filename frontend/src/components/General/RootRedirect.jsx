@@ -14,20 +14,15 @@ export default function RootRedirect() {
 
 		switch (userRole) {
 			case "vet":
-				console.log("Vet role detected");
 				setRedirectPath("/vet");
 				break;
 			case "secretary":
-				console.log("Secretary role detected");
 				setRedirectPath("/secretary");
 				break;
 			case "admin":
-				console.log("Admin role detected");
 				setRedirectPath("/admin");
 				break;
 			default:
-				console.log("Unknown role detected");
-				// Fallback to login if role is unknown
 				setRedirectPath("/login");
 		}
 	}, []);

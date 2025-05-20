@@ -375,7 +375,6 @@ export default function AssignedCases() {
 														onClick={() => {
 															openAlert();
 															setSelectedCase(row);
-															console.log(row);
 														}}
 													>
 														عرض تفاصيل

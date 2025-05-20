@@ -260,7 +260,6 @@ export default function CompletedCases() {
 															onClick={() => {
 																setSelectedCase(row);
 																openModal();
-																console.log(row);
 															}}
 															rightIcon={<FaEye />}
 														>

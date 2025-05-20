@@ -7,6 +7,18 @@ README.md file
 fix all little bugs and stuff in code. like general view and styling, unify everything like the icons on top of cards to all be in the space etc.
 fix all input checks, check all input fields are entered, handle in frontend not call backend and wait for it to reply with error
 
+| Role       | Color                                | Chakra Token Suggestion |
+| ---------- | ------------------------------------ | ----------------------- |
+| Primary    | `#2F80ED` (Tech Blue)                | `blue.500`              |
+| Secondary  | `#56CCF2` (Medical Aqua)             | `cyan.400`              |
+| Accent     | `#27AE60` (Success Green)            | `green.500`             |
+| Warning    | `#F2994A` (Amber)                    | `orange.400`            |
+| Danger     | `#EB5757` (Alert Red)                | `red.500`               |
+| Background | `#F8F9FB` (Light) / `#1A202C` (Dark) | `gray.50` / `gray.900`  |
+| Card Base  | `#FFFFFF` / `#2D3748`                | `white` / `gray.700`    |
+| Text       | `#333333` / `#E2E8F0`                | `gray.800` / `gray.200` |
+
+
 
 Revoking a token typically involves changing some property of the user (like the password or a token-related field) to invalidate the existing token. Here's a general outline of how you might approach token revocation:
 

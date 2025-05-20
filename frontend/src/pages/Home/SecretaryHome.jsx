@@ -21,7 +21,6 @@ export default function SecretaryHomePage() {
 
 			<Header />
 			<SecretaryHome />
-			<Footer />
 		</>
 	);
 }
