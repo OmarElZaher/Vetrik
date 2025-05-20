@@ -6,9 +6,8 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Component Imports
-import Header from "../../components/General/Header";
 import SecretaryHome from "../../components/General/SecretaryHome";
-import Footer from "../../components/General/Footer";
+import PageLayout from "../../components/Layout/PageLayout";
 
 export default function SecretaryHomePage() {
 	return (
@@ -19,8 +18,9 @@ export default function SecretaryHomePage() {
 				</Helmet>
 			</HelmetProvider>
 
-			<Header />
-			<SecretaryHome />
+			<PageLayout>
+				<SecretaryHome />
+			</PageLayout>
 		</>
 	);
 }

@@ -246,16 +246,6 @@ export default function SecretaryHome() {
 						<Text fontSize='2xl' fontWeight='bold'>
 							👋 مرحباً بك
 						</Text>
-						<HStack spacing={2}>
-							{/* Theme Toggle (icon button placeholder) */}
-							<IconButton
-								icon={colorMode === "light" ? <FaMoon /> : <FaSun />}
-								onClick={toggleColorMode}
-								aria-label='تبديل الثيم'
-								variant='ghost'
-								size='sm'
-							/>
-						</HStack>
 					</Flex>
 
 					<Text
@@ -384,7 +374,8 @@ export default function SecretaryHome() {
 					>
 						🗂 إدارة الحالات الطبية
 					</Text>
-					<SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+
+					<SimpleGrid columns={{ base: 1, md: 1 }} spacing={6}>
 						<Box
 							bg={cardBg}
 							p={6}
@@ -408,6 +399,35 @@ export default function SecretaryHome() {
 								</Text>
 							</Box>
 							<HiOutlineBeaker size='32' color={iconColor} />
+						</Box>
+					</SimpleGrid>
+					
+					<Box h={6} />
+
+					<SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+						<Box
+							bg={cardBg}
+							p={6}
+							rounded='lg'
+							boxShadow='md'
+							display='flex'
+							alignItems='center'
+							justifyContent='space-between'
+							cursor='pointer'
+							_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+							_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+							transition='all 0.2s'
+							onClick={() => navigate("/completed-cases")}
+						>
+							<Box>
+								<Text fontSize='lg' fontWeight='bold' mb={1}>
+									✅ الحالات المكتملة
+								</Text>
+								<Text color='gray.500' fontSize='sm'>
+									عرض جميع الحالات المنتهية
+								</Text>
+							</Box>
+							<FaCheckCircle size='32' color={iconColor} />
 						</Box>
 
 						{/* عدد الحالات المفتوحة */}
@@ -434,35 +454,6 @@ export default function SecretaryHome() {
 								</Text>
 							</Box>
 							<FaFolderOpen size='32' color={iconColor} />
-						</Box>
-					</SimpleGrid>
-
-					<Box h={6} />
-
-					<SimpleGrid columns={{ base: 1, md: 1 }} spacing={6}>
-						<Box
-							bg={cardBg}
-							p={6}
-							rounded='lg'
-							boxShadow='md'
-							display='flex'
-							alignItems='center'
-							justifyContent='space-between'
-							cursor='pointer'
-							_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
-							_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
-							transition='all 0.2s'
-							onClick={() => navigate("/completed-cases")}
-						>
-							<Box>
-								<Text fontSize='lg' fontWeight='bold' mb={1}>
-									✅ الحالات المكتملة
-								</Text>
-								<Text color='gray.500' fontSize='sm'>
-									عرض جميع الحالات المنتهية
-								</Text>
-							</Box>
-							<FaCheckCircle size='32' color={iconColor} />
 						</Box>
 					</SimpleGrid>
 

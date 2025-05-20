@@ -297,6 +297,7 @@ import {
 } from "@chakra-ui/react";
 import { FaMoon, FaSun, FaUser } from "react-icons/fa";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import Spinner from "./Spinner";
 
 const spin = keyframes`
 	from { transform: rotate(0deg); }
@@ -406,7 +407,7 @@ const LoginPage = () => {
 	};
 
 	return isLoading ? (
-		<></>
+		<Spinner />
 	) : (
 		<>
 			<Flex
