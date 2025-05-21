@@ -5,49 +5,35 @@ import { useNavigate, useParams } from "react-router-dom";
 // Axios Import
 import axios from "axios";
 
-import { FaBookMedical } from "react-icons/fa";
-
 // API URL Import
 import { API_URL as api } from "../../utils/constants";
-
-// Hook Import
-import useIsMobile from "../../hooks/useIsMobile";
 
 // Chakra-UI Imports
 import {
 	Box,
 	Button,
-	Card,
-	CardBody,
 	FormControl,
 	Icon,
 	Input,
 	AlertDialog,
 	AlertDialogBody,
 	AlertDialogFooter,
+	Center,
+	SimpleGrid,
 	AlertDialogHeader,
 	AlertDialogContent,
 	AlertDialogOverlay,
-	Tag,
-	Table,
-	TableContainer,
-	Thead,
-	Tbody,
-	Th,
-	Td,
-	Tr,
 	Text,
-	Textarea,
-	Tooltip,
+	Flex,
 	Modal,
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
 	ModalFooter,
 	ModalBody,
-	ModalCloseButton,
 	useToast,
 	useDisclosure,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
 // React Icons Imports
@@ -57,28 +43,21 @@ import {
 	IoMdMale,
 	IoMdCalendar,
 	IoMdTime,
-	IoMdEye,
-	IoMdArrowRoundBack,
-	IoMdMedical,
 	IoMdDocument,
-	IoMdAdd,
-	IoMdRefresh,
-	IoMdSearch,
 } from "react-icons/io";
 
 import { TbTrashXFilled } from "react-icons/tb";
+import { FaWeightScale } from "react-icons/fa6";
 
 // Custom Component Imports
 import Spinner from "../General/Spinner";
-import Footer from "../General/Footer";
 
 function titleCase(str) {
+	if (!str || typeof str !== "string") return "";
 	return str
 		.toLowerCase()
 		.split(" ")
-		.map((word) => {
-			return word.charAt(0).toUpperCase() + word.slice(1);
-		})
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(" ");
 }
 
@@ -99,12 +78,24 @@ export default function PetDetails() {
 	const navigate = useNavigate();
 	const toast = useToast();
 
-	const isMobile = useIsMobile();
-
 	// Pet useStates
 	const [pet, setPet] = useState({});
 	const [petAge, setPetAge] = useState("");
 	const [petCases, setPetCases] = useState([]);
+
+	const [petVaccinations, setPetVaccinations] = useState([]);
+	const [petHealthRecords, setPetHealthRecords] = useState([]);
+
+	const [editPetName, setEditPetName] = useState("");
+	const [editPetBreed, setEditPetBreed] = useState("");
+	const [editPetWeight, setEditPetWeight] = useState("");
+
+	const [newVaccine, setNewVaccine] = useState({
+		vaccineName: "",
+		vaccineBatch: "",
+		vaccineGivenDate: "",
+		// vaccineRenewalDate: "",
+	});
 
 	// Owner useStates
 	const [owner, setOwner] = useState(null);
@@ -112,25 +103,45 @@ export default function PetDetails() {
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
-	const [gotData, setGotData] = useState(false);
-	const [error, setIsError] = useState(null);
+	const [deletingPetId, setDeletingPetId] = useState(null);
+	const [deletingOwnerId, setDeletingOwnerId] = useState(null);
 
 	const [actionsTaken, setActionsTaken] = useState("");
-	const [caseToClose, setCaseToClose] = useState(null);
+
+	const [renewModalOpen, setRenewModalOpen] = useState(false);
+	const [selectedVaccineId, setSelectedVaccineId] = useState(null);
+	const [vaccineRenewalDate, setVaccineRenewalDate] = useState("");
+
+	const openCases = petCases.filter(
+		(c) => c.status === "waiting" || c.status === "in-progress"
+	);
+
+	const completedCases = petCases.filter((c) => c.status === "closed");
 
 	const {
-		isOpen: isModalOpen,
-		onOpen: openModal,
-		onClose: closeModal,
+		isOpen: isDeletePetOpen,
+		onOpen: openDeletePet,
+		onClose: closeDeletePet,
 	} = useDisclosure();
 
 	const {
-		isOpen: isAlertOpen,
-		onOpen: openAlert,
-		onClose: closeAlert,
+		isOpen: isDeleteOwnerOpen,
+		onOpen: openDeleteOwner,
+		onClose: closeDeleteOwner,
+	} = useDisclosure();
+
+	const {
+		isOpen: isEditOpen,
+		onOpen: openEditModal,
+		onClose: closeEditModal,
 	} = useDisclosure();
 
 	const cancelRef = React.useRef();
+
+	const cardBg = useColorModeValue("white", "gray.700");
+	const iconColor = useColorModeValue("blue.500", "blue.300");
+	const borderColor = useColorModeValue("gray.200", "gray.600");
+	const boxColor = useColorModeValue("gray.50", "gray.800");
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -140,11 +151,11 @@ export default function PetDetails() {
 					withCredentials: true,
 				});
 				if (response.status === 200) {
+					console.log(response.data);
+
 					setPetAge(response.data.petAge);
 					setPet(response.data.pet);
-					setGotData(true);
 				} else {
-					setIsError(response.data.message);
 					toast({
 						title: response.data.message,
 						status: "error",
@@ -154,7 +165,6 @@ export default function PetDetails() {
 					});
 				}
 			} catch (error) {
-				setIsError(error.response.data.message);
 				toast({
 					title: error.response.data.message,
 					status: "error",
@@ -169,95 +179,177 @@ export default function PetDetails() {
 		fetchData();
 	}, [petId, toast]);
 
-	const handleRemovePetFromOwner = async (ownerId, petId) => {
-		const confirmDelete = window.confirm(
-			"هل أنت متأكد أنك تريد إزالة هذا المالك من هذا الحيوان؟"
-		);
-		if (confirmDelete) {
+	useEffect(() => {
+		const handleGetCases = async () => {
 			try {
 				setIsLoading(true);
-				const response = await axios.delete(
-					`${api}/user/removePetFromOwner/${ownerId}/${petId}`,
-					{ withCredentials: true }
-				);
-
-				if (response.status === 200) {
-					toast({
-						title: response.data.message,
-						status: "success",
-						duration: 2500,
-						isClosable: true,
-						position: "top",
-					});
-					setPet((prev) => ({
-						...prev,
-						owners: prev.owners.filter(
-							(owner) => owner._id !== response.data.ownerId
-						),
-					}));
-				} else {
-					toast({
-						title: response.data.message,
-						status: "error",
-						duration: 2500,
-						isClosable: true,
-						position: "top",
-					});
-				}
-			} catch (error) {
-				toast({
-					title: error.response.data.message,
-					status: "error",
-					duration: 2500,
-					isClosable: true,
-					position: "top",
-				});
-			} finally {
-				setIsLoading(false);
-			}
-		}
-	};
-
-	const handleDeletePet = async (petId) => {
-		const confirmDelete = window.confirm(
-			"هل أنت متأكد أنك تريد حذف هذا الحيوان؟"
-		);
-		if (confirmDelete) {
-			try {
-				setIsLoading(true);
-				const response = await axios.delete(`${api}/user/deletePet/${petId}`, {
+				const response = await axios.get(`${api}/case/getPetCases/${petId}`, {
 					withCredentials: true,
 				});
 
 				if (response.status === 200) {
+					setPetCases(response.data.cases);
+				}
+			} catch (error) {
+				if (error.response.status === 500) {
 					toast({
-						title: response.data.message,
-						status: "success",
-						duration: 2500,
-						isClosable: true,
-						position: "top",
-					});
-					navigate("/search-pet");
-				} else {
-					toast({
-						title: response.data.message,
+						title: error.response.data.message,
 						status: "error",
 						duration: 2500,
 						isClosable: true,
 						position: "top",
 					});
 				}
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		handleGetCases();
+	}, [petId, toast]);
+
+	useEffect(() => {
+		const handleGetPetVaccinations = async () => {
+			try {
+				setIsLoading(true);
+
+				const response = await axios.get(
+					`${api}/user/getVaccinationCard/${petId}`,
+					{ withCredentials: true }
+				);
+
+				if (response.status === 200) {
+					console.log(response.data.vaccinationCard.vaccine);
+
+					setPetVaccinations(response.data.vaccinationCard.vaccine);
+				}
 			} catch (error) {
+				if (error.response.status === 500) {
+					toast({
+						title: error.response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		const handleGetPetHealthRecords = async () => {
+			try {
+				setIsLoading(true);
+
+				const response = await axios.get(
+					`${api}/user/getAllHealthRecords/${petId}`,
+					{ withCredentials: true }
+				);
+
+				if (response.status === 200) {
+					console.log(response.data.healthRecords);
+
+					setPetHealthRecords(response.data.healthRecords);
+				}
+			} catch (error) {
+				if (error.response.status === 500) {
+					toast({
+						title: error.response.data.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		handleGetPetVaccinations();
+		handleGetPetHealthRecords();
+	}, [petId, toast]);
+
+	const handleRemovePetFromOwner = async (ownerId, petId) => {
+		try {
+			setIsLoading(true);
+			const response = await axios.delete(
+				`${api}/user/removePetFromOwner/${ownerId}/${petId}`,
+				{ withCredentials: true }
+			);
+
+			if (response.status === 200) {
 				toast({
-					title: error.response.data.message,
+					title: response.data.message,
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				setPet((prev) => ({
+					...prev,
+					owners: prev.owners.filter(
+						(owner) => owner._id !== response.data.ownerId
+					),
+				}));
+			} else {
+				toast({
+					title: response.data.message,
 					status: "error",
 					duration: 2500,
 					isClosable: true,
 					position: "top",
 				});
-			} finally {
-				setIsLoading(false);
 			}
+		} catch (error) {
+			toast({
+				title: error.response.data.message,
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const handleDeletePet = async (petId) => {
+		try {
+			setIsLoading(true);
+			const response = await axios.delete(`${api}/user/deletePet/${petId}`, {
+				withCredentials: true,
+			});
+
+			if (response.status === 200) {
+				toast({
+					title: response.data.message,
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				navigate("/search-pet");
+			} else {
+				toast({
+					title: response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			}
+		} catch (error) {
+			toast({
+				title: error.response.data.message,
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -326,7 +418,9 @@ export default function PetDetails() {
 				);
 
 				if (response.status === 200) {
-					setOwner(response.data);
+					console.log(response.data);
+
+					setOwner(response.data[0]);
 				} else {
 					toast({
 						title: response.data.message,
@@ -416,22 +510,63 @@ export default function PetDetails() {
 		}
 	};
 
-	const handleGetCases = async () => {
+	const handleEditPet = async (petId) => {
 		try {
 			setIsLoading(true);
-			const response = await axios.get(`${api}/case/getPetCases/${petId}`, {
-				withCredentials: true,
-			});
+
+			// Construct payload with only changed fields
+			const updatedFields = {};
+
+			if (editPetName && editPetName !== pet.name) {
+				updatedFields.name = editPetName;
+			}
+			if (editPetBreed && editPetBreed !== pet.breed) {
+				updatedFields.breed = editPetBreed;
+			}
+			if (
+				editPetWeight &&
+				editPetWeight !== pet.weight &&
+				parseFloat(editPetWeight) !== parseFloat(pet.weight)
+			) {
+				updatedFields.weight = editPetWeight;
+			}
+
+			// No changes? Skip request
+			if (Object.keys(updatedFields).length === 0) {
+				toast({
+					title: "لم يتم تعديل أي بيانات.",
+					status: "info",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				return;
+			}
+
+			const response = await axios.patch(
+				`${api}/user/updatePet/${petId}`,
+				updatedFields,
+				{ withCredentials: true }
+			);
 
 			if (response.status === 200) {
-				setPetCases(response.data.cases);
-				closeModal();
-				openModal();
+				toast({
+					title: response.data.message,
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				setPet((prev) => ({
+					...prev,
+					...updatedFields,
+				}));
+				closeEditModal();
 			}
 		} catch (error) {
-			if (error.response.status === 500) {
+			if (error.response?.status === 500) {
 				toast({
-					title: error.response.data.message,
+					title: error?.response?.data?.message,
 					status: "error",
 					duration: 2500,
 					isClosable: true,
@@ -443,471 +578,784 @@ export default function PetDetails() {
 		}
 	};
 
+	const handleDownload = async (record) => {
+		try {
+			setIsLoading(true);
+			const response = await axios.get(
+				`${api}/user/downloadHealthRecord/${record.pet}/${record._id}`,
+				{
+					responseType: "arraybuffer",
+					withCredentials: true,
+				}
+			);
+
+			const contentDisposition = response.headers["content-disposition"];
+			const filenameMatch =
+				contentDisposition && contentDisposition.match(/filename="(.+)"/);
+			const filename = filenameMatch ? filenameMatch[1] : "HealthRecord.pdf";
+
+			const blob = new Blob([response.data]);
+
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = filename;
+			a.click();
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			toast({
+				title: error.response.data.message,
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const handleAddVaccine = async () => {
+		if (!newVaccine.name || !newVaccine.date) {
+			toast({
+				title: "الرجاء إدخال اسم التطعيم والتاريخ",
+				status: "warning",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+			return;
+		}
+
+		try {
+			setIsLoading(true);
+
+			const response = await axios.post(
+				`${api}/user/addVaccination/${pet._id}`,
+				{
+					vaccineName: newVaccine.vaccineName,
+					vaccineBatch: newVaccine.vaccineBatch,
+					notvaccineGivenDatees: newVaccine.vaccineGivenDate,
+				},
+				{ withCredentials: true }
+			);
+
+			if (response.status === 200) {
+				toast({
+					title: "تمت إضافة التطعيم بنجاح",
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				setPet((prev) => ({
+					...prev,
+					vaccinations: [...(prev.vaccinations || []), response.data.vaccine],
+				}));
+				setNewVaccine({ name: "", date: "", notes: "" });
+			}
+		} catch (error) {
+			toast({
+				title: "حدث خطأ أثناء الإضافة",
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const handleRenewVaccine = async (vaccineId) => {
+		try {
+			setIsLoading(true);
+			const response = await axios.put(
+				`${api}/user/renewVaccination/${petId}/${vaccineId}`,
+				{
+					vaccineRenewalDate,
+				},
+				{ withCredentials: true }
+			);
+
+			if (response.status === 200) {
+				toast({
+					title: response.data.message,
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				setVaccineRenewalDate("");
+				setSelectedVaccineId(null);
+			} else {
+				toast({
+					title: response.data.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+			}
+		} catch (error) {
+			toast({
+				title: error?.response?.data?.message || "حدث خطأ",
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	return isLoading ? (
 		<Spinner />
-	) : error ? (
-		<Box
-			dir='rtl'
-			display='flex'
-			flexDirection='column'
-			justifyContent='center'
-			alignItems='center'
-			bg='#F3F3F3'
-			minHeight='87vh'
-		>
-			<Text fontWeight='bold' fontSize='4xl' color='red'>
-				خطأ
+	) : (
+		<Box dir='rtl' p={6}>
+			{/* Page Title */}
+			<Text fontSize='2xl' fontWeight='bold' textAlign='center' mb={2}>
+				🐾 الملف الطبي
 			</Text>
-			<Text fontSize='2xl' textDecoration='underline'>
-				{error}
+			<Text fontSize='xl' fontWeight='bold' textAlign='center' mb={4}>
+				{titleCase(pet.name)}
 			</Text>
-			<Button
-				mt={10}
-				width={{ base: "80%", md: "25%" }}
-				onClick={() => navigate("/search-pet")}
+
+			<Flex
+				direction={{ base: "column", md: "row" }}
+				gap={6}
+				justify='center'
+				mb={10}
 			>
-				الرجوع للبحث
-			</Button>
-			<Footer />
-		</Box>
-	) : gotData ? (
-		<>
-			<Box
-				dir='rtl'
-				display='flex'
-				flexDirection={{ base: "column", md: "row" }}
-				justifyContent='center'
-				alignItems='flex-start'
-				bg='#F3F3F3'
-				px={{ base: 2, md: 4 }}
-				py={6}
-			>
-				{/* Main Pet Card */}
-				<Card width={{ base: "100%", md: "70%" }} mb={{ base: 4, md: 0 }}>
-					<CardBody>
-						<Text
-							fontSize={{ base: "2xl", md: "3xl" }}
-							fontWeight='bold'
-							textAlign='center'
-							mb={4}
-						>
-							{titleCase(pet.name)}
+				{/* Pet Info Card */}
+				<Box bg={boxColor} p={6} rounded='xl' boxShadow='md' flex='1'>
+					<Center mb={4}>
+						<Text fontSize='xl' fontWeight='semibold'>
+							✏️ معلومات الحيوان
 						</Text>
+					</Center>
 
-						<Box
-							display='flex'
-							flexWrap='wrap'
-							justifyContent='space-between'
-							mb={4}
-						>
-							{[
-								{
-									label: "نوع الحيوان",
-									value: titleCase(pet.type),
-									icon: <IoMdPaw />,
-								},
-								{
-									label: "السلالة",
-									value: titleCase(pet.breed),
-									icon: <IoMdPricetags />,
-								},
-								{
-									label: "الجنس",
-									value: titleCase(pet.gender),
-									icon: <IoMdMale />,
-								},
-								{
-									label: "تاريخ الميلاد",
-									value: formatDate(pet.dob),
-									icon: <IoMdCalendar />,
-								},
-								{
-									label: "العُمر",
-									value: petAge,
-									icon: <IoMdTime />,
-								},
-							].map((item, i) => (
-								<Box
-									key={i}
-									width={{
-										base: "100%",
-										md: "48%",
-										lg: "30%",
-									}}
-									mb={3}
-									display='flex'
-									alignItems='center'
-								>
-									<Icon as={item.icon.type} boxSize={5} ml={2} />
-									<Box>
-										<Text fontWeight='bold'>{item.label}</Text>
-										<Text>{item.value}</Text>
-									</Box>
-								</Box>
-							))}
-						</Box>
-
-						<Text fontSize='xl' fontWeight='bold' mb={2}>
-							المالكين
-						</Text>
-						<TableContainer overflowX='auto'>
-							<Table size='sm' minWidth='600px'>
-								<Thead>
-									<Tr>
-										<Th>الاسم الكامل</Th>
-										<Th>البريد الإلكتروني</Th>
-										<Th>رقم المحمول</Th>
-										<Th>الإجراءات</Th>
-									</Tr>
-								</Thead>
-								<Tbody>
-									{pet.owners.map((owner) => (
-										<Tr key={owner._id}>
-											<Td>{owner.fullName}</Td>
-											<Td>{owner.email}</Td>
-											<Td>{owner.mobileNumber}</Td>
-											<Td>
-												<Button
-													size='sm'
-													onClick={() =>
-														navigate(`/owner-details/${owner._id}`)
-													}
-													rightIcon={<IoMdEye />}
-													mr={2}
-												>
-													عرض
-												</Button>
-												<Tooltip label='إزالة المالك' hasArrow>
-													<Button
-														size='sm'
-														variant='outline'
-														colorScheme='red'
-														onClick={() =>
-															handleRemovePetFromOwner(owner._id, pet._id)
-														}
-														rightIcon={<TbTrashXFilled />}
-													>
-														حذف
-													</Button>
-												</Tooltip>
-											</Td>
-										</Tr>
-									))}
-								</Tbody>
-							</Table>
-						</TableContainer>
-
-						<Box display={"flex"} justifyContent={"center"} mt={4}>
-							<Button
-								_hover={{
-									bg: "#D4F500",
-									borderColor: "#D4F500",
-									color: "#000",
-									transform: "scale(1.05)",
-								}}
-								_active={{
-									transform: "scale(0.98)",
-									opacity: "0.5",
-								}}
-								transition='all 0.2s'
-								rightIcon={<FaBookMedical />}
-								onClick={() => {
-									handleGetCases();
-									openModal();
-								}}
+					<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
+						{[
+							{ icon: IoMdPaw, label: "النوع", value: titleCase(pet.type) },
+							{
+								icon: IoMdPricetags,
+								label: "السلالة",
+								value: titleCase(pet.breed),
+							},
+							{
+								icon: IoMdMale,
+								label: "الجنس",
+								value: pet.gender === "male" ? "ذكر" : "أنثى",
+							},
+							{ icon: IoMdTime, label: "العمر", value: `${petAge} سنة` },
+							{
+								icon: FaWeightScale,
+								label: "الوزن",
+								value: `${pet.weight || "غير محدد"} كجم`,
+							},
+							{
+								icon: IoMdCalendar,
+								label: "تاريخ الميلاد",
+								value: formatDate(pet.dob),
+							},
+						].map((item, i) => (
+							<Flex
+								key={i}
+								bg={cardBg}
+								p={3}
+								rounded='md'
+								align='center'
+								boxShadow='sm'
+								border='1px solid'
+								borderColor={borderColor}
+								gap={3}
 							>
-								{pet.name
-									? titleCase(pet.name) +
-									  (pet.name.trim().toLowerCase().endsWith("s")
-											? "' Cases"
-											: "'s Cases")
-									: "See All Cases"}
-							</Button>
-						</Box>
-
-						<Box
-							mt={6}
-							display='flex'
-							flexDirection={{ base: "column", md: "row" }}
-							gap={4}
-							justifyContent='center'
-						>
-							<Button
-								onClick={() =>
-									navigate(
-										localStorage.getItem("petFilterData")
-											? "/pet-table"
-											: "/search-pet"
-									)
-								}
-								rightIcon={<IoMdArrowRoundBack />}
-							>
-								رجوع
-							</Button>
-							<Button
-								onClick={() => navigate(`/pet-vaccination/${pet._id}`)}
-								rightIcon={<IoMdMedical />}
-							>
-								كارت التطعيمات
-							</Button>
-							<Button
-								onClick={() => navigate(`/pet-records/${pet._id}`)}
-								rightIcon={<IoMdDocument />}
-							>
-								السجلات الصحية
-							</Button>
-							<Tooltip label='حذف الحيوان' hasArrow>
-								<Button
-									variant='outline'
-									colorScheme='red'
-									onClick={() => handleDeletePet(pet._id)}
-									rightIcon={<TbTrashXFilled />}
-								>
-									حذف
-								</Button>
-							</Tooltip>
-						</Box>
-					</CardBody>
-				</Card>
-
-				{/* Side Card: Add Owner */}
-				<Card width={{ base: "100%", md: "30%" }}>
-					<CardBody>
-						<Text fontSize='2xl' fontWeight='bold' textAlign='center' mb={4}>
-							إضافة مالك موجود
-						</Text>
-						<Text fontSize='md' textAlign='center' mb={4}>
-							أدخل رقم المحمول للمالك ثم اضغط زر البحث.
-						</Text>
-
-						{owner !== null ? (
-							<Box>
-								<Text fontWeight='bold'>الاسم</Text>
-								<Text>{owner[0].fullName}</Text>
-								<Text fontWeight='bold' mt={2}>
-									رقم المحمول
+								<Icon as={item.icon} boxSize={5} color={iconColor} />
+								<Text>
+									<strong>{item.label}:</strong> {item.value}
 								</Text>
-								<Text>{owner[0].mobileNumber}</Text>
-								<Text fontWeight='bold' mt={2}>
-									البريد الإلكتروني
-								</Text>
-								<Text>{owner[0].email}</Text>
+							</Flex>
+						))}
+					</SimpleGrid>
 
-								<Box
-									mt={4}
-									display='flex'
-									flexDirection={{
-										base: "column",
-										md: "row",
-									}}
-									gap={3}
+					<Box h={6} />
+
+					<Center gap={3} mt={4}>
+						<Button
+							colorScheme='blue'
+							size='sm'
+							onClick={() => openEditModal()}
+							leftIcon={<Icon as={IoMdPaw} />}
+						>
+							تعديل الحيوان
+						</Button>
+						<Button
+							colorScheme='red'
+							size='sm'
+							onClick={() => {
+								setDeletingPetId(pet._id);
+								openDeletePet();
+							}}
+							leftIcon={<Icon as={TbTrashXFilled} />}
+						>
+							حذف الحيوان
+						</Button>
+					</Center>
+				</Box>
+
+				{/* Owners Card */}
+				<Box bg={boxColor} p={6} rounded='xl' boxShadow='md' flex='1'>
+					<Center mb={4}>
+						<Text fontSize='xl' fontWeight='semibold'>
+							👥 قائمة المالكين
+						</Text>
+					</Center>
+
+					{pet.owners?.length > 0 ? (
+						<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+							{pet.owners.map((owner) => (
+								<Flex
+									key={owner._id}
+									bg={cardBg}
+									p={4}
+									rounded='md'
+									boxShadow='sm'
+									border='1px solid'
+									borderColor={borderColor}
+									direction='column'
+									align='center'
+									textAlign='center'
+									gap={1}
 								>
-									<Button
-										onClick={() => handleAddOwnerToPet(owner[0]._id, pet._id)}
-										rightIcon={<IoMdAdd />}
-									>
-										إضافة
-									</Button>
-									<Button
-										onClick={() => {
-											setOwner(null);
-											setownerMobileNumber(null);
-										}}
-										rightIcon={<IoMdRefresh />}
-									>
-										بحث مرة أخرى
-									</Button>
-								</Box>
-							</Box>
-						) : (
-							<Box>
-								<FormControl mb={4}>
-									<Input
-										type='text'
-										placeholder='رقم المحمول'
-										value={ownerMobileNumber}
-										onChange={(e) => setownerMobileNumber(e.target.value)}
+									<Icon
+										as={IoMdDocument}
+										boxSize={6}
+										color={iconColor}
+										mb={2}
 									/>
-								</FormControl>
-								<Button
-									onClick={handleSearchOwner}
-									width='100%'
-									rightIcon={<IoMdSearch />}
-								>
-									بحث
-								</Button>
+									<Text>
+										<strong>الاسم:</strong> {owner.fullName}
+									</Text>
+									<Text>
+										<strong>الهاتف:</strong> {owner.mobileNumber}
+									</Text>
+									<Text>
+										<strong>الإيميل:</strong> {owner.email}
+									</Text>
+
+									<Button
+										size='sm'
+										colorScheme='red'
+										mt={2}
+										onClick={() => {
+											setDeletingOwnerId(owner._id);
+											openDeleteOwner();
+										}}
+										leftIcon={<Icon as={TbTrashXFilled} />}
+									>
+										إزالة هذا المالك
+									</Button>
+								</Flex>
+							))}
+						</SimpleGrid>
+					) : (
+						<Text color='gray.500' textAlign='center'>
+							لا يوجد مالكين مرتبطين.
+						</Text>
+					)}
+
+					<Box h={6} />
+
+					<Text fontWeight='medium' mb={2} textAlign='center'>
+						🔍 أضف مالكاً باستخدام رقم الهاتف
+					</Text>
+					<Flex
+						gap={2}
+						direction={{ base: "column", sm: "row" }}
+						align='center'
+					>
+						<Input
+							placeholder='أدخل رقم الهاتف'
+							value={ownerMobileNumber || ""}
+							onChange={(e) => setownerMobileNumber(e.target.value)}
+							variant='filled'
+							bg={cardBg}
+							_focus={{ bg: cardBg }}
+						/>
+						<Button
+							colorScheme='blue'
+							onClick={handleSearchOwner}
+							isDisabled={!ownerMobileNumber || isLoading}
+							isLoading={isLoading}
+							loadingText='جاري البحث...'
+						>
+							بحث
+						</Button>
+					</Flex>
+
+					{owner && (
+						<Box
+							mt={4}
+							p={3}
+							border='1px solid'
+							borderColor={borderColor}
+							borderRadius='md'
+							bg={cardBg}
+							textAlign='center'
+						>
+							<Text>الاسم: {owner.fullName}</Text>
+							<Text>رقم الهاتف: {owner.mobileNumber}</Text>
+							<Text>الإيميل: {owner.email}</Text>
+							<Button
+								size='sm'
+								colorScheme='green'
+								mt={2}
+								onClick={() => handleAddOwnerToPet(owner._id, pet._id)}
+								isLoading={isLoading}
+								isDisabled={isLoading}
+								loadingText='جاري الربط...'
+							>
+								ربط المالك بالحيوان
+							</Button>
+						</Box>
+					)}
+				</Box>
+			</Flex>
+
+			{/* Vaccination Card */}
+			<Box mb={12}>
+				<Text fontSize='xl' fontWeight='semibold' mb={4} textAlign='center'>
+					💉 بطاقة التطعيم
+				</Text>
+
+				<Box bg={boxColor} rounded='xl' boxShadow='md' p={4}>
+					{petVaccinations?.length > 0 ? (
+						<>
+							<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+								{petVaccinations.map((vaccine, i) => (
+									<Box
+										key={i}
+										p={4}
+										display='flex'
+										justifyContent='space-between'
+										alignItems='flex-start'
+										border='1px solid'
+										borderColor={borderColor}
+										borderRadius='md'
+										bg={cardBg}
+										boxShadow='sm'
+									>
+										<Box flex='1' pr={4}>
+											<Text fontWeight='bold' mb={1}>
+												🧪 {vaccine.vaccineName}
+											</Text>
+											<Text>
+												<strong>📦 رقم الدفعة:</strong>{" "}
+												{vaccine.vaccineBatch || "—"}
+											</Text>
+											<Text>
+												<strong>📅 تاريخ الإعطاء:</strong>{" "}
+												{formatDate(vaccine.vaccineGivenDate)}
+											</Text>
+											<Text>
+												<strong>♻️ تاريخ التجديد:</strong>{" "}
+												{formatDate(vaccine.vaccineRenewalDate) || "—"}
+											</Text>
+										</Box>
+
+										<Flex direction='column' align='center' gap={2}>
+											<Button
+												colorScheme='blue'
+												variant='outline'
+												size='sm'
+												onClick={() => {
+													setSelectedVaccineId(vaccine._id);
+													setRenewModalOpen(true);
+												}}
+											>
+												🔁 تجديد
+											</Button>
+
+											<Button
+												colorScheme='red'
+												variant='ghost'
+												size='sm'
+												isLoading={isLoading}
+												isDisabled={isLoading}
+												// onClick={() => handleDeleteVaccine(vaccine._id)}
+											>
+												🗑 حذف
+											</Button>
+										</Flex>
+									</Box>
+								))}
+							</SimpleGrid>
+
+							<Box h={6} />
+
+							{/* Add New Vaccine */}
+							<Box mt={6}>
+								<Text fontWeight='medium' mb={2} textAlign='center'>
+									➕ إضافة تطعيم جديد
+								</Text>
+								<SimpleGrid columns={{ base: 1, md: 3 }} spacing={3}>
+									<Input
+										placeholder='اسم التطعيم'
+										value={newVaccine.vaccineName}
+										onChange={(e) =>
+											setNewVaccine((prev) => ({
+												...prev,
+												vaccineName: e.target.value,
+											}))
+										}
+									/>
+									<Input
+										placeholder='رقم الدفعة'
+										value={newVaccine.vaccineBatch}
+										onChange={(e) =>
+											setNewVaccine((prev) => ({
+												...prev,
+												vaccineBatch: e.target.value,
+											}))
+										}
+									/>
+									<Input
+										type='date'
+										value={newVaccine.vaccineGivenDate}
+										onChange={(e) =>
+											setNewVaccine((prev) => ({
+												...prev,
+												vaccineGivenDate: e.target.value,
+											}))
+										}
+									/>
+								</SimpleGrid>
+								<Center mt={3}>
+									<Button
+										colorScheme='green'
+										onClick={handleAddVaccine}
+										isLoading={isLoading}
+										isDisabled={isLoading}
+										loadingText='جاري الإضافة...'
+									>
+										✅ إضافة التطعيم
+									</Button>
+								</Center>
 							</Box>
-						)}
-					</CardBody>
-				</Card>
+						</>
+					) : (
+						<Text textAlign='center' color='gray.500'>
+							لا توجد بيانات تطعيم مسجلة.
+						</Text>
+					)}
+				</Box>
 			</Box>
 
-			<Modal isOpen={isModalOpen} onClose={closeModal} size='xxl'>
-				<ModalOverlay />
-				<ModalContent>
-					<ModalHeader>
-						{pet.name
-							? titleCase(pet.name) +
-							  (pet.name.trim().toLowerCase().endsWith("s")
-									? "' Cases"
-									: "'s Cases")
-							: "Cases"}
-					</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody>
-						<TableContainer>
-							<Table size='sm' overflow={"auto"}>
-								<Thead>
-									<Tr>
-										<Th>Reason For Visit</Th>
-										<Th>Actions Taken</Th>
-										<Th>Case Date</Th>
-										<Th textAlign={"center"}>Case Status</Th>
-									</Tr>
-								</Thead>
-								<Tbody>
-									{petCases.map((caseItem) => (
-										<Tr key={caseItem._id}>
-											<Td>{caseItem.reasonForVisit}</Td>
-											<Td>
-												{caseItem.actionsTaken ? caseItem.actionsTaken : "–"}
-											</Td>
-											<Td>{formatDate(caseItem.updatedAt)}</Td>
-											<Td
-												justifyContent={"center"}
-												display={"flex"}
-												alignContent={"center"}
-											>
-												{caseItem.status === "waiting" &&
-												localStorage.getItem("userRole") === "vet" ? (
-													<>
-														<Tag colorScheme='yellow' mr={2}>
-															{titleCase(caseItem.status)}
-														</Tag>
-														<Button
-															ml={2}
-															size='sm'
-															_hover={{
-																backgroundColor: "green.400",
-																color: "white",
-																transition: "all 0.2s",
-																transform: "scale(1.05)",
-															}}
-															onClick={() => {
-																handleAcceptCase(caseItem._id);
-																window.location.reload();
-															}}
-														>
-															Accept Case
-														</Button>
-													</>
-												) : caseItem.status === "waiting" &&
-												  localStorage.getItem("userRole") === "secretary" ? (
-													<Tag colorScheme='yellow' mr={2}>
-														{titleCase(caseItem.status)}
-													</Tag>
-												) : caseItem.status === "in-progress" ? (
-													caseItem.vetId._id ===
-													localStorage.getItem("userId") ? (
-														<>
-															<Tag colorScheme='green' mr={2}>
-																{titleCase(caseItem.status)}
-															</Tag>
-															<Button
-																size='sm'
-																onClick={() => {
-																	setCaseToClose(caseItem._id);
-																	openAlert();
-																}}
-															>
-																Close Case
-															</Button>
-														</>
-													) : (
-														<Tag colorScheme='green'>
-															{titleCase(caseItem.status)}
-														</Tag>
-													)
-												) : (
-													<Tag colorScheme='blue'>
-														{titleCase(caseItem.status)}
-													</Tag>
-												)}
-											</Td>
-										</Tr>
-									))}
-								</Tbody>
-							</Table>
-						</TableContainer>
-					</ModalBody>
+			{/* Medical Records Summary */}
+			<Box mb={12}>
+				<Text fontSize='xl' fontWeight='semibold' mb={4} textAlign='center'>
+					📁 الملفات الطبية المرفقة
+				</Text>
 
-					<ModalFooter>
-						{localStorage.getItem("userRole") === "secretary" && (
-							<>
-								<Button
-									_hover={{
-										bg: "#D4F500",
-										color: "#000",
-										transition: "all 0.2s",
-										transform: "scale(1.05)",
-									}}
-									_active={{
-										transform: "scale(0.98)",
-										opacity: "0.5",
-									}}
-									onClick={() => {
-										navigate(`/open-case/${pet._id}`);
-									}}
+				<Box bg={boxColor} rounded='xl' boxShadow='md' p={4}>
+					{petHealthRecords?.length > 0 ? (
+						<SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+							{petHealthRecords.map((record) => (
+								<Box
+									key={record._id}
+									p={3}
+									border='1px solid'
+									borderColor={borderColor}
+									borderRadius='md'
+									bg={cardBg}
+									boxShadow='sm'
 								>
-									Open Case
-								</Button>
-							</>
-						)}
-						<Button colorScheme='blue' ml={3} onClick={closeModal}>
-							Close
+									<Text mb={1}>
+										<strong>📄 اسم الملف:</strong> {record.filename}
+									</Text>
+									<Text>
+										<strong>📅 تاريخ الرفع:</strong>{" "}
+										{formatDate(record.createdAt)}
+									</Text>
+									<Box h={3} />
+									<Button
+										isLoading={isLoading}
+										isDisabled={isLoading}
+										loadingText='جاري التحميل...'
+										leftIcon={<IoMdDocument />}
+										onClick={() => {
+											handleDownload(record);
+										}}
+									>
+										تحميل الملف
+									</Button>
+								</Box>
+							))}
+						</SimpleGrid>
+					) : (
+						<Text color='gray.500' textAlign='center'>
+							لا توجد ملفات طبية مرفقة.
+						</Text>
+					)}
+
+					<Center mt={6}>
+						<Button
+							colorScheme='blue'
+							onClick={() => navigate(`/pet-records/${petId}`)}
+						>
+							📂 إدارة الملفات الطبية
+						</Button>
+					</Center>
+				</Box>
+			</Box>
+
+			{/* Medical History */}
+			<Box mb={12}>
+				<Text fontSize='xl' fontWeight='semibold' mb={4} textAlign='center'>
+					🗂 السجل الطبي للحالات
+				</Text>
+
+				{/* Ongoing Cases */}
+				<Box bg={boxColor} rounded='xl' boxShadow='md' p={4} mb={6}>
+					<Text fontWeight='bold' mb={3}>
+						📌 الحالات الجارية
+					</Text>
+					{openCases.length > 0 ? (
+						<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+							{openCases.map((caseItem) => (
+								<Box
+									key={caseItem._id}
+									p={4}
+									border='1px solid'
+									borderColor={borderColor}
+									borderRadius='md'
+									bg={cardBg}
+									boxShadow='sm'
+								>
+									<Text fontWeight='bold' mb={1}>
+										📅 {formatDate(caseItem.updatedAt)}
+									</Text>
+									<Text>
+										<strong>🔍 السبب:</strong> {caseItem.reasonForVisit}
+									</Text>
+									<Text>
+										<strong>🧪 الإجراءات:</strong>{" "}
+										{caseItem.actionsTaken || "—"}
+									</Text>
+								</Box>
+							))}
+						</SimpleGrid>
+					) : (
+						<Text color='gray.500'>لا توجد حالات جارية حالياً.</Text>
+					)}
+				</Box>
+
+				{/* Completed Cases */}
+				<Box bg={boxColor} rounded='xl' boxShadow='md' p={4}>
+					<Text fontWeight='bold' mb={3}>
+						✅ الحالات المكتملة
+					</Text>
+					{completedCases.length > 0 ? (
+						<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+							{completedCases.map((caseItem) => (
+								<Box
+									key={caseItem._id}
+									p={4}
+									border='1px solid'
+									borderColor={borderColor}
+									borderRadius='md'
+									bg={cardBg}
+									boxShadow='sm'
+								>
+									<Text fontWeight='bold' mb={1}>
+										📅 {formatDate(caseItem.updatedAt)}
+									</Text>
+									<Text>
+										<strong>🔍 السبب:</strong> {caseItem.reasonForVisit}
+									</Text>
+									<Text>
+										<strong>🧪 الإجراءات:</strong>{" "}
+										{caseItem.actionsTaken || "—"}
+									</Text>
+								</Box>
+							))}
+						</SimpleGrid>
+					) : (
+						<Text color='gray.500'>لا توجد حالات مكتملة.</Text>
+					)}
+				</Box>
+			</Box>
+
+			{/* Delete Pet Confirmation */}
+			<AlertDialog
+				isOpen={isDeletePetOpen}
+				leastDestructiveRef={cancelRef}
+				onClose={closeDeletePet}
+				isCentered
+			>
+				<AlertDialogOverlay />
+				<AlertDialogContent dir='rtl'>
+					<AlertDialogHeader fontSize='lg' fontWeight='bold'>
+						تأكيد الحذف
+					</AlertDialogHeader>
+					<AlertDialogBody>
+						هل أنت متأكد أنك تريد حذف هذا الحيوان؟ هذا الإجراء لا يمكن التراجع
+						عنه.
+					</AlertDialogBody>
+					<AlertDialogFooter>
+						<Button ref={cancelRef} onClick={closeDeletePet} ml={2}>
+							إلغاء
+						</Button>
+						<Button
+							colorScheme='red'
+							isDisabled={isLoading}
+							isLoading={isLoading}
+							loadingText='جاري الحذف...'
+							onClick={() => {
+								handleDeletePet(deletingPetId);
+								closeDeletePet();
+							}}
+							mr={3}
+						>
+							تأكيد الحذف
+						</Button>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+
+			{/* Delete Owner Confirmation */}
+			<AlertDialog
+				isOpen={isDeleteOwnerOpen}
+				leastDestructiveRef={cancelRef}
+				onClose={closeDeleteOwner}
+				isCentered
+			>
+				<AlertDialogOverlay />
+				<AlertDialogContent dir='rtl'>
+					<AlertDialogHeader fontSize='lg' fontWeight='bold'>
+						تأكيد إزالة المالك
+					</AlertDialogHeader>
+					<AlertDialogBody>
+						هل أنت متأكد أنك تريد إزالة هذا المالك من الحيوان؟
+					</AlertDialogBody>
+					<AlertDialogFooter>
+						<Button ref={cancelRef} onClick={closeDeleteOwner} ml={2}>
+							إلغاء
+						</Button>
+						<Button
+							colorScheme='red'
+							isDisabled={isLoading}
+							isLoading={isLoading}
+							loadingText='جاري الإزالة...'
+							onClick={() => {
+								handleRemovePetFromOwner(deletingOwnerId, pet._id);
+								closeDeleteOwner();
+							}}
+							mr={3}
+						>
+							تأكيد الإزالة
+						</Button>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+
+			{/* Edit Pet Modal */}
+			<Modal isOpen={isEditOpen} onClose={closeEditModal} isCentered>
+				<ModalOverlay />
+				<ModalContent dir='rtl'>
+					<ModalHeader>✏️ تعديل بيانات الحيوان</ModalHeader>
+					<ModalBody>
+						<FormControl mb={3}>
+							<Text mb={1}>الاسم</Text>
+							<Input
+								defaultValue={pet.name}
+								onChange={(e) => {
+									setEditPetName(e.target.value);
+								}}
+							/>
+						</FormControl>
+
+						<FormControl mb={3}>
+							<Text mb={1}>السلالة</Text>
+							<Input
+								defaultValue={pet.breed}
+								onChange={(e) => {
+									setEditPetBreed(e.target.value);
+								}}
+							/>
+						</FormControl>
+
+						<FormControl mb={3}>
+							<Text mb={1}>الوزن (كجم)</Text>
+							<Input
+								type='number'
+								defaultValue={pet.weight}
+								onChange={(e) => {
+									setEditPetWeight(e.target.value);
+								}}
+							/>
+						</FormControl>
+						{/* Add more fields as needed */}
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							colorScheme='blue'
+							ml={3}
+							isDisabled={isLoading}
+							isLoading={isLoading}
+							loadingText='جاري الحفظ...'
+							onClick={() => {
+								handleEditPet(pet._id);
+							}}
+						>
+							حفظ التعديلات
+						</Button>
+						<Button variant='ghost' onClick={closeEditModal} mr={2}>
+							إلغاء
 						</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
 
-			<AlertDialog
-				isOpen={isAlertOpen}
-				leastDestructiveRef={cancelRef}
-				onClose={closeAlert}
-				size={"xl"}
+			<Modal
+				isOpen={renewModalOpen}
+				onClose={() => setRenewModalOpen(false)}
+				isCentered
 			>
-				<AlertDialogOverlay>
-					<AlertDialogContent>
-						<AlertDialogHeader fontSize='lg' fontWeight='bold'>
-							Close Case
-						</AlertDialogHeader>
-
-						<AlertDialogBody>
-							<Textarea
-								placeholder='Actions Taken'
-								resize={"none"}
-								onChange={(e) => setActionsTaken(e.target.value)}
+				<ModalOverlay />
+				<ModalContent dir='rtl'>
+					<ModalHeader>🔁 تجديد التطعيم</ModalHeader>
+					<ModalBody>
+						<FormControl isRequired>
+							<Text mb={1}>تاريخ التجديد الجديد</Text>
+							<Input
+								type='date'
+								value={vaccineRenewalDate}
+								onChange={(e) => setVaccineRenewalDate(e.target.value)}
 							/>
-						</AlertDialogBody>
+						</FormControl>
+					</ModalBody>
 
-						<AlertDialogFooter>
-							<Button ref={cancelRef} onClick={closeAlert}>
-								Cancel
-							</Button>
-							<Button
-								colorScheme='green'
-								onClick={() => {
-									handleCloseCase(caseToClose);
-									window.location.reload();
-								}}
-								ml={3}
-							>
-								Submit
-							</Button>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialogOverlay>
-			</AlertDialog>
-		</>
-	) : null;
+					<ModalFooter>
+						<Button
+							colorScheme='blue'
+							mr={3}
+							onClick={() => {
+								handleRenewVaccine(selectedVaccineId);
+								setRenewModalOpen(false);
+							}}
+							isDisabled={!vaccineRenewalDate}
+						>
+							تأكيد التجديد
+						</Button>
+						<Button variant='ghost' onClick={() => setRenewModalOpen(false)}>
+							إلغاء
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</Box>
+	);
 }
