@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import { formatDistanceToNow } from "date-fns";
+
 import {
 	Box,
 	Button,
@@ -12,6 +14,8 @@ import {
 	Tr,
 	Td,
 	Tbody,
+	Image,
+	Flex,
 	AlertDialog,
 	AlertDialogBody,
 	AlertDialogFooter,
@@ -22,19 +26,23 @@ import {
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
-	ModalCloseButton,
 	ModalBody,
 	ModalFooter,
+	Icon,
+	Input,
 	Text,
+	SimpleGrid,
 	useDisclosure,
 	useToast,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
 import { IoMdCheckmark } from "react-icons/io";
+import { FaHeart } from "react-icons/fa";
+
 import { FaEye } from "react-icons/fa";
 
 import Spinner from "../General/Spinner";
-import Footer from "../General/Footer";
 
 import { API_URL as api } from "../../utils/constants";
 
@@ -62,24 +70,45 @@ export default function CompletedCases() {
 	} = useDisclosure();
 
 	const {
-		isOpen: isAlertOpen,
-		onOpen: openAlert,
-		onClose: closeAlert,
+		isOpen: isConfirmCloseOpen,
+		onOpen: openConfirmClose,
+		onClose: closeConfirmClose,
 	} = useDisclosure();
 
-	const cancelRef = React.useRef();
+	const confirmCancelRef = React.useRef();
+	const [caseToClose, setCaseToClose] = useState(null);
+
+	const [fadingCaseId, setFadingCaseId] = useState(null);
+
+	const [searchTerm, setSearchTerm] = useState("");
+	const [filteredCases, setFilteredCases] = useState([]);
+
+	const tableBg = useColorModeValue("gray.100", "gray.700");
+
+	const StatCard = ({ icon, label, value, color = "blue.500" }) => (
+		<Box
+			p={5}
+			bg={useColorModeValue("white", "gray.800")}
+			borderRadius='lg'
+			boxShadow='md'
+			textAlign='center'
+		>
+			<Icon as={icon} boxSize={6} color={color} mb={2} />
+			<Text fontSize='lg' fontWeight='bold' color={color}>
+				{value}
+			</Text>
+			<Text fontSize='sm' color='gray.500'>
+				{label}
+			</Text>
+		</Box>
+	);
 
 	const handleCloseModal = () => {
 		setSelectedCase(null);
 		closeModal();
 	};
-	const handleCloseAlert = () => {
-		setSelectedCase(null);
-		closeAlert();
-	};
 
 	const toast = useToast();
-
 
 	useEffect(() => {
 		const fetchCompletedCases = async () => {
@@ -101,16 +130,14 @@ export default function CompletedCases() {
 					});
 				}
 			} catch (error) {
-				if (error.response.status === 500) {
-					toast({
-						title: "Error fetching completed cases",
-						description: error.message,
-						status: "error",
-						duration: 2500,
-						isClosable: true,
-						position: "top",
-					});
-				}
+				toast({
+					title: "Error fetching completed cases",
+					description: error.message,
+					status: "error",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
 			} finally {
 				setLoading(false);
 			}
@@ -119,30 +146,58 @@ export default function CompletedCases() {
 		fetchCompletedCases();
 	}, [toast]);
 
+	useEffect(() => {
+		const lower = searchTerm.toLowerCase();
+		const results = completedCases.filter((c) =>
+			c.petId?.name?.toLowerCase().includes(lower)
+		);
+		setFilteredCases(results);
+	}, [searchTerm, completedCases]);
+
+	const highlightMatch = (text, query) => {
+		if (!query) return titleCase(text);
+		const regex = new RegExp(`(${query})`, "gi");
+		const parts = text.split(regex);
+
+		return parts.map((part, i) =>
+			part.toLowerCase() === query.toLowerCase() ? (
+				<Text as='mark' key={i} color='blue.400' bg='transparent'>
+					{part}
+				</Text>
+			) : (
+				<React.Fragment key={i}>{part}</React.Fragment>
+			)
+		);
+	};
+
 	const handleCloseCase = async (caseId) => {
 		try {
 			const response = await axios.patch(
 				`${api}/case/${caseId}/closeCase`,
 				{},
-				{
-					withCredentials: true,
-				}
+				{ withCredentials: true }
 			);
 
 			if (response.status === 200) {
+				setFadingCaseId(caseId); // Start fade
 				toast({
-					title: "Case closed successfully",
+					title: " تم إغلاق الحالة بنجاح",
 					status: "success",
 					duration: 2500,
 					isClosable: true,
 					position: "top",
 				});
-				setCompletedCases((prevCases) =>
-					prevCases.filter((completedCase) => completedCase._id !== caseId)
-				);
+
+				// Wait for fade to complete, then remove
+				setTimeout(() => {
+					setCompletedCases((prev) =>
+						prev.filter((completedCase) => completedCase._id !== caseId)
+					);
+					setFadingCaseId(null);
+				}, 400); // fade duration
 			} else {
 				toast({
-					title: "Error closing case",
+					title: "خطأ في الإغلاق",
 					description: response.data.message,
 					status: "error",
 					duration: 2500,
@@ -152,7 +207,7 @@ export default function CompletedCases() {
 			}
 		} catch (error) {
 			toast({
-				title: "Error closing case",
+				title: "خطأ في الإغلاق",
 				description: error.message,
 				status: "error",
 				duration: 2500,
@@ -162,228 +217,212 @@ export default function CompletedCases() {
 		}
 	};
 
-	return (
-		<>
-			{loading ? (
-				<Spinner />
+	return loading ? (
+		<Spinner />
+	) : (
+		<Box dir='rtl'>
+			<Text fontSize='2xl' fontWeight='bold' mb={6} textAlign='center'>
+				✅ الحالات المكتملة
+			</Text>
+
+			<Box h={6} />
+
+			<Input
+				placeholder='🔍 ابحث باسم الحيوان...'
+				value={searchTerm}
+				onChange={(e) => setSearchTerm(e.target.value)}
+				mb={6}
+				w={{ base: "100%", md: "300px" }}
+				textAlign='right'
+				borderColor='gray.300'
+				_dark={{ borderColor: "gray.600" }}
+			/>
+
+			{completedCases.length === 0 ? (
+				<Flex
+					direction='column'
+					align='center'
+					justify='center'
+					mt={12}
+					opacity={0.7}
+				>
+					<Image
+						src='https://cdn-icons-png.flaticon.com/512/616/616408.png'
+						alt='dog icon'
+						boxSize='90px'
+						mb={4}
+					/>
+					<Text fontSize='lg' color='gray.500' textAlign='center'>
+						تم إغلاق جميع الحالات. استرح قليلاً ☕️
+					</Text>
+				</Flex>
 			) : (
 				<>
-					<Box
-						dir='rtl'
-						display={"flex"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						flexDirection={"column"}
-						w={"100%"}
-						h={"87vh"}
-					>
-						<Box
-							display={"flex"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							width={"100%"}
-							height={"20%"}
-						>
-							<Text fontSize={"2xl"} fontWeight={"bold"}>
-								Completed Cases
-							</Text>
-						</Box>
-
-						<Divider width={"90vw"} />
-
-						<Box
-							display={"flex"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							width={"100%"}
-							height={"80%"}
-						>
-							{completedCases.length === 0 ? (
-								<>
-									<Text
-										fontSize={"2xl"}
-										fontWeight={"bold"}
-										textAlign={"center"}
-										mb={4}
-										ml={2}
-										mr={2}
-										py={2}
-										px={4}
-										borderRadius={"10px"}
-									>
-										لا توجد حالات مكتملة في الوقت الحالي
-									</Text>
-								</>
-							) : (
-								<TableContainer
-									width={"90%"}
-									height={"100%"}
-									overflowX={"auto"}
-									overflowY={"auto"}
-									borderColor={"#D4FF32"}
-									borderRadius={"10px"}
-								>
-									<Table variant='simple' size='lg'>
-										<Thead>
-											<Tr>
-												<Th textAlign={"right"}>اسم الحيوان</Th>
-												<Th textAlign={"center"}>السلالة</Th>
-												<Th textAlign={"center"}>النوع</Th>
-												<Th textAlign={"center"}>فئة الوزن</Th>
-												<Th textAlign={"center"}>أفعال</Th>
-											</Tr>
-										</Thead>
-										<Tbody>
-											{completedCases.map((row) => (
-												<Tr key={row._id}>
-													<Td textAlign={"right"}>{`${row.petId.name}`}</Td>
-													<Td textAlign={"center"}>
-														{`${titleCase(row.petId.breed)}`}
-													</Td>
-
-													<Td textAlign={"center"}>
-														{`${titleCase(row.petId.type)}`}
-													</Td>
-
-													<Td textAlign={"center"}>
-														{`${row.petId.weightClass}`}
-													</Td>
-
-													<Td textAlign={"center"}>
-														<Button
-															ml={5}
-															variant='solid'
-															_hover={{
-																bg: "blue.600",
-																color: "#fff",
-															}}
-															onClick={() => {
-																setSelectedCase(row);
-																openModal();
-															}}
-															rightIcon={<FaEye />}
-														>
-															عرض الإجراءات المتخذة
-														</Button>
-
-														<Button
-															mr={5}
-															variant='solid'
-															_hover={{
-																bg: "green.600",
-																color: "#fff",
-															}}
-															onClick={() => {
-																setSelectedCase(row);
-																openAlert();
-															}}
-															rightIcon={<IoMdCheckmark />}
-														>
-															إغلاق الحالة
-														</Button>
-													</Td>
-												</Tr>
-											))}
-										</Tbody>
-									</Table>
-								</TableContainer>
-							)}
-						</Box>
-					</Box>
-					<Modal
-						isOpen={isModalOpen}
-						onClose={handleCloseModal}
-						motionPreset='slideInBottom'
-						size={"xl"}
-					>
-						<ModalOverlay
-							bg='blackAlpha.300'
-							backdropFilter='blur(10px) hue-rotate(90deg)'
-						/>
-						<ModalContent dir='rtl'>
-							<ModalHeader textAlign={"center"}>الإجرائت المتخذة</ModalHeader>
-							<ModalCloseButton />
-							<Divider />
-							<ModalBody>
-								<Text>{selectedCase?.actionsTaken}</Text>
-							</ModalBody>
-							<Divider />
-							<ModalFooter>
-								<Button
-									onClick={closeModal}
-									_hover={{
-										bg: "red.600",
-										color: "#fff",
-									}}
-								>
-									إغلاق
-								</Button>
-							</ModalFooter>
-						</ModalContent>
-					</Modal>
-
-					<AlertDialog
-						isOpen={isAlertOpen}
-						leastDestructiveRef={cancelRef}
-						onClose={closeAlert}
-					>
-						<AlertDialogOverlay>
-							<AlertDialogContent dir='rtl'>
-								<AlertDialogHeader fontSize='lg' fontWeight='bold'>
-									إغلاق الحالة
-								</AlertDialogHeader>
-
-								<AlertDialogBody>
-									<Text
-										fontSize={"l"}
-										fontWeight={"italic"}
-										display={"flex"}
-										justifyContent={"center"}
-										alignItems={"center"}
-									>
-										هل أنت متأكد أنك تريد إغلاق هذه الحالة؟
-									</Text>
-
-									<Text
-										fontWeight={"bold"}
-										color={"red.500"}
-										display={"flex"}
-										justifyContent={"center"}
-										alignItems={"center"}
-									>
-										لن تتمكن من إعادة فتحها مرة أخرى.
-									</Text>
-								</AlertDialogBody>
-
-								<AlertDialogFooter>
-									<Button
-										ref={cancelRef}
-										onClick={() => handleCloseAlert()}
+					<TableContainer overflowX='auto' width={"80%"} m='auto'>
+						<Table variant='simple'>
+							<Thead>
+								<Tr>
+									<Th textAlign={"center"}>اسم الحيوان</Th>
+									<Th textAlign={"center"}>النوع</Th>
+									<Th textAlign={"center"}>الإجراء</Th>
+									<Th textAlign={"center"}>الإجراءات المتخذة</Th>
+									<Th textAlign={"center"}>تاريخ الإغلاق</Th>
+								</Tr>
+							</Thead>
+							<Tbody>
+								{filteredCases.map((caseItem) => (
+									<Tr
+										key={caseItem._id}
+										opacity={fadingCaseId === caseItem._id ? 0 : 1}
 										_hover={{
-											bg: "red.600",
-											color: "#fff",
+											background: tableBg,
 										}}
-										ml={3}
+										transition='opacity background 0.4s'
 									>
-										إلغاء
-									</Button>
-									<Button
-										colorScheme='green'
-										onClick={() => {
-											handleCloseCase(selectedCase._id);
-											handleCloseAlert();
-										}}
-										mr={3}
-									>
-										إغلاق الحالة
-									</Button>
-								</AlertDialogFooter>
-							</AlertDialogContent>
-						</AlertDialogOverlay>
-					</AlertDialog>
-					<Footer />
+										<Td textAlign={"center"}>
+											{highlightMatch(caseItem.petId?.name, searchTerm)}
+										</Td>
+										<Td textAlign={"center"}>
+											{titleCase(caseItem.petId?.type)}
+										</Td>
+										<Td textAlign={"center"}>
+											<Button
+												size='sm'
+												colorScheme='gray'
+												leftIcon={<FaEye />}
+												onClick={() => {
+													setSelectedCase(caseItem);
+													openModal();
+												}}
+											>
+												عرض التفاصيل
+											</Button>
+										</Td>
+										<Td textAlign={"center"}>
+											<Text fontSize='sm' color='gray.600' noOfLines={2}>
+												{caseItem.actionsTaken}
+											</Text>
+										</Td>
+										<Td
+											fontSize='sm'
+											color='gray.500'
+											dir='ltr'
+											textAlign={"center"}
+										>
+											{formatDistanceToNow(new Date(caseItem.updatedAt), {
+												addSuffix: true,
+											})}
+										</Td>
+									</Tr>
+								))}
+							</Tbody>
+						</Table>
+					</TableContainer>
+
+					<Box h={6} />
+
+					<SimpleGrid
+						columns={{ base: 1, md: 2 }}
+						spacing={6}
+						mt={10}
+						width={"80%"}
+						m='auto'
+					>
+						<StatCard
+							label='عدد الحالات المكتملة'
+							value={completedCases.length}
+							icon={IoMdCheckmark}
+						/>
+						<StatCard
+							label='نصيحة اليوم'
+							value='تابع التطعيمات الدورية'
+							icon={FaHeart}
+							color='red.400'
+						/>
+					</SimpleGrid>
 				</>
 			)}
-		</>
+
+			{/* Case Detail Modal */}
+			<Modal isOpen={isModalOpen} onClose={handleCloseModal} isCentered>
+				<ModalOverlay />
+				<ModalContent dir='rtl'>
+					<ModalHeader>تفاصيل الحالة</ModalHeader>
+					<ModalBody>
+						{selectedCase && (
+							<>
+								<Text mb={2}>
+									<strong>اسم الحيوان:</strong>{" "}
+									{titleCase(selectedCase.petId?.name)}
+								</Text>
+								<Text mb={2}>
+									<strong>النوع:</strong> {titleCase(selectedCase.petId?.type)}
+								</Text>
+								<Divider my={3} />
+								<Text mb={2}>
+									<strong>سبب الزيارة:</strong> {selectedCase.reasonForVisit}
+								</Text>
+								<Text mb={2}>
+									<strong>الإجراءات المتخذة:</strong>{" "}
+									{selectedCase.actionsTaken}
+								</Text>
+							</>
+						)}
+					</ModalBody>
+					<ModalFooter>
+						<Button variant='ghost' onClick={handleCloseModal}>
+							إلغاء
+						</Button>
+						<Button
+							colorScheme='red'
+							mr={3}
+							leftIcon={<IoMdCheckmark />}
+							onClick={() => {
+								setCaseToClose(selectedCase);
+								openConfirmClose();
+							}}
+						>
+							إغلاق الحالة نهائياً
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+
+			<AlertDialog
+				isOpen={isConfirmCloseOpen}
+				leastDestructiveRef={confirmCancelRef}
+				onClose={closeConfirmClose}
+				isCentered
+			>
+				<AlertDialogOverlay />
+				<AlertDialogContent dir='rtl'>
+					<AlertDialogHeader fontSize='lg' fontWeight='bold'>
+						تأكيد إغلاق الحالة
+					</AlertDialogHeader>
+
+					<AlertDialogBody>
+						هل أنت متأكد أنك تريد إغلاق هذه الحالة نهائياً؟ هذا الإجراء لا يمكن
+						التراجع عنه.
+					</AlertDialogBody>
+
+					<AlertDialogFooter>
+						<Button ref={confirmCancelRef} onClick={closeConfirmClose} ml={2}>
+							إلغاء
+						</Button>
+						<Button
+							colorScheme='red'
+							onClick={() => {
+								handleCloseCase(caseToClose._id);
+								closeConfirmClose();
+								handleCloseModal();
+							}}
+							mr={3}
+						>
+							تأكيد الإغلاق
+						</Button>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+		</Box>
 	);
 }

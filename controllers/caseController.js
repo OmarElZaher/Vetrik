@@ -297,7 +297,7 @@ const getAssignedCases = asyncHandler(async (req, res) => {
 		res.status(500);
 		throw new Error(error.message);
 	}
-}); 
+});
 
 // @desc Vet completes case and reports to secretary
 // @route PATCH /case/:caseId/completeCase
@@ -345,9 +345,10 @@ const completeCase = asyncHandler(async (req, res) => {
 		const updatedCase = await Case.findByIdAndUpdate(caseId, {
 			status: "completed",
 			actionsTaken,
-		}).populate("vetId", "firstName lastName")
-		.populate("petId", "name");
-		
+		})
+			.populate("vetId", "firstName lastName")
+			.populate("petId", "name");
+
 		if (!updatedCase) {
 			return res.status(400).json({ message: "Case not found" });
 		}
@@ -361,14 +362,14 @@ const completeCase = asyncHandler(async (req, res) => {
 
 		if (!notification) {
 			return res.status(500).json({
-				message: "Failed to create notification!"
-			})
+				message: "Failed to create notification!",
+			});
 		}
 
 		return res.status(200).json({
 			message: "Case completed and secretary notified",
 			case: updatedCase,
-		})
+		});
 	} catch (error) {
 		res.status(500);
 		throw new Error(error.message);
@@ -478,8 +479,7 @@ const getPetCases = asyncHandler(async (req, res) => {
 		res.status(500);
 		throw new Error(error.message);
 	}
-}
-);
+});
 
 module.exports = {
 	createCase,
