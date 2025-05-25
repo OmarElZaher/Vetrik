@@ -24,9 +24,14 @@ import {
 	SimpleGrid,
 	useToast,
 	useColorModeValue,
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalFooter,
+	ModalBody,
+	useDisclosure,
 } from "@chakra-ui/react";
-
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
 	FaUser,
@@ -42,16 +47,23 @@ import {
 import { MdDelete, MdEdit } from "react-icons/md";
 import Spinner from "../../General/Spinner";
 
+function titleCase(str) {
+	if (!str || typeof str !== "string") return "";
+	return str
+		.toLowerCase()
+		.split(" ")
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(" ");
+}
+
 export default function AdminHome() {
 	const bg = useColorModeValue("gray.50", "gray.800");
 	const cardBg = useColorModeValue("white", "gray.700");
-	const boxBg = useColorModeValue("gray.100", "gray.700");
+	const boxBg = useColorModeValue("gray.100", "gray.800");
+	const rowBg = useColorModeValue("blue.50", "blue.500");
 	const toast = useToast();
 
-	const [staff, setStaff] = useState([
-		{ id: 1, name: "د. أحمد", email: "ahmed@vet.com", role: "vet" },
-		{ id: 2, name: "سارة", email: "sara@clinic.com", role: "secretary" },
-	]);
+	const [staff, setStaff] = useState([]);
 
 	const [newUser, setNewUser] = useState({
 		username: "",
@@ -63,19 +75,15 @@ export default function AdminHome() {
 		role: "",
 	});
 
+	const [reloadUsers, setReloadUsers] = useState(0);
+
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [editingUser, setEditingUser] = useState(null);
+	const [editRole, setEditRole] = useState("");
+
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [adminStats, setAdminStats] = useState(null);
-
-	// const chart = useChart({
-	// 	data: [
-	// 		{ label: "مكتملة", value: adminStats?.totalCompletedCases || 0 },
-	// 		{ label: "جارية", value: adminStats?.totalAssignedCases || 0 },
-	// 		{ label: "منتظرة", value: adminStats?.totalPendingCases || 0 },
-	// 		{ label: "مغلقة", value: adminStats?.totalClosedCases || 0 },
-	// 	],
-	// 	series: [{ name: "allocation", color: "teal.solid" }],
-	// });
 
 	useEffect(() => {
 		const fetchStats = async () => {
@@ -95,7 +103,7 @@ export default function AdminHome() {
 			}
 		};
 		fetchStats();
-	}, [toast]);
+	}, [toast, reloadUsers]);
 
 	useEffect(() => {
 		const fetchUsers = async () => {
@@ -103,7 +111,7 @@ export default function AdminHome() {
 				setIsLoading(true);
 				const response = await axios.post(
 					`${api}/user/getUsers`,
-					{}, // optionally send filters like { fullName: 'Ali' }
+					{},
 					{ withCredentials: true }
 				);
 				if (response.status === 200) {
@@ -123,7 +131,7 @@ export default function AdminHome() {
 			}
 		};
 		fetchUsers();
-	}, [toast]);
+	}, [toast, reloadUsers]);
 
 	const handleCreateUser = async () => {
 		try {
@@ -139,7 +147,6 @@ export default function AdminHome() {
 					isClosable: true,
 					position: "top",
 				});
-				// Optional: push to staff list or refresh
 				setNewUser({
 					username: "",
 					firstName: "",
@@ -149,6 +156,7 @@ export default function AdminHome() {
 					confirmPassword: "",
 					role: "",
 				});
+				setReloadUsers((prev) => prev + 1);
 			}
 		} catch (error) {
 			toast({
@@ -181,10 +189,55 @@ export default function AdminHome() {
 					position: "top",
 				});
 				setStaff((prev) => prev.filter((u) => u._id !== userId));
+				setReloadUsers((prev) => prev - 1);
 			}
 		} catch (error) {
 			toast({
 				title: error?.response?.data?.message || "فشل حذف المستخدم",
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const handleEditUser = async () => {
+		if (editRole === "admin") {
+			const confirm = window.confirm(
+				"هل أنت متأكد من تعيين هذا المستخدم كأدمن؟"
+			);
+
+			if (!confirm) return;
+		}
+
+		try {
+			setIsLoading(true);
+			await axios.patch(
+				editRole === "admin"
+					? `${api}/user/setAdmin/${editingUser._id}`
+					: editRole === "vet"
+					? `${api}/user/setVet/${editingUser._id}`
+					: `${api}/user/setSecretary/${editingUser._id}`,
+				{},
+				{ withCredentials: true }
+			);
+			toast({
+				title: "تم تحديث دور المستخدم بنجاح",
+				status: "success",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+			setEditingUser(null);
+			setEditRole("");
+			setReloadUsers((prev) => prev + 1); // Refresh users!
+			onClose();
+		} catch (error) {
+			toast({
+				title: error?.response?.data?.message || "فشل تحديث الدور",
 				status: "error",
 				duration: 2500,
 				isClosable: true,
@@ -300,34 +353,6 @@ export default function AdminHome() {
 							<Text fontSize='xl' fontWeight='bold' mb={4}>
 								📊 توزيع الحالات
 							</Text>
-							{/* <Chart.Root maxH='sm' chart={chart}>
-								<BarChart data={chart.data} barSize={40}>
-									<CartesianGrid
-										stroke={chart.color("border.muted")}
-										vertical={false}
-									/>
-									<XAxis
-										axisLine={false}
-										tickLine={false}
-										dataKey={chart.key("type")}
-									/>
-									<YAxis
-										axisLine={false}
-										tickLine={false}
-										domain={[0, 100]}
-										tickFormatter={(value) => `${value}%`}
-									/>
-									{chart.series.map((item) => (
-										<Bar
-											key={item.name}
-											isAnimationActive={false}
-											dataKey={chart.key(item.name)}
-											fill={chart.color(item.color)}
-											radius={10}
-										/>
-									))}
-								</BarChart>
-							</Chart.Root> */}
 						</CardBody>
 					</Card>
 				</>
@@ -343,29 +368,33 @@ export default function AdminHome() {
 						<Table variant='simple' size='sm' minW='600px'>
 							<Thead>
 								<Tr>
-									<Th>الاسم</Th>
-									<Th>البريد الإلكتروني</Th>
-									<Th>الدور</Th>
-									<Th>إجراءات</Th>
+									<Th textAlign={"center"}>الاسم</Th>
+									<Th textAlign={"center"}>البريد الإلكتروني</Th>
+									<Th textAlign={"center"}>الدور</Th>
+									<Th textAlign={"center"}>إجراءات</Th>
 								</Tr>
 							</Thead>
 							<Tbody>
 								{staff.map((user) => (
-									<Tr key={user._id}>
-										<Td>{`${user.firstName} ${user.lastName}`}</Td>
-										<Td>{user.email}</Td>
-										<Td>
+									<Tr key={user._id} _hover={{ bg: rowBg }}>
+										<Td textAlign={"center"}>{`${titleCase(
+											user.firstName
+										)} ${titleCase(user.lastName)}`}</Td>
+										<Td textAlign={"center"}>{user.email}</Td>
+										<Td textAlign={"center"}>
 											{user.role === "admin"
 												? "أدمن"
 												: user.role === "vet"
 												? "طبيب"
 												: "سكرتير"}
 										</Td>
-										<Td>
+										<Td textAlign={"center"}>
 											<Flex
 												direction={{ base: "column", sm: "row" }}
 												gap={2}
-												align='flex-start'
+												display={"flex"}
+												justifyContent={"center"}
+												alignItems={"center"}
 											>
 												<IconButton
 													icon={<MdEdit />}
@@ -373,7 +402,9 @@ export default function AdminHome() {
 													colorScheme='blue'
 													aria-label='تعديل'
 													onClick={() => {
-														// edit logic
+														setEditingUser(user);
+														setEditRole(user.role);
+														onOpen();
 													}}
 												/>
 												<IconButton
@@ -403,10 +434,22 @@ export default function AdminHome() {
 					<SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
 						<Input
 							placeholder='اسم المستخدم'
+							type='username'
 							value={newUser.username}
 							onChange={(e) =>
 								setNewUser({ ...newUser, username: e.target.value })
 							}
+							bg={boxBg}
+							_hover={{
+								transform: "scale(1.01)",
+								boxShadow: "md",
+							}}
+							_focus={{
+								borderColor: "blue.400",
+								boxShadow: "0 0 0 1px blue.400",
+								transform: "scale(1.02)",
+							}}
+							transition='0.2s'
 						/>
 						<Input
 							placeholder='البريد الإلكتروني'
@@ -415,20 +458,55 @@ export default function AdminHome() {
 							onChange={(e) =>
 								setNewUser({ ...newUser, email: e.target.value })
 							}
+							bg={boxBg}
+							_hover={{
+								transform: "scale(1.01)",
+								boxShadow: "md",
+							}}
+							_focus={{
+								borderColor: "blue.400",
+								boxShadow: "0 0 0 1px blue.400",
+								transform: "scale(1.02)",
+							}}
+							transition='0.2s'
 						/>
 						<Input
 							placeholder='الاسم الأول'
+							type='text'
 							value={newUser.firstName}
 							onChange={(e) =>
 								setNewUser({ ...newUser, firstName: e.target.value })
 							}
+							bg={boxBg}
+							_hover={{
+								transform: "scale(1.01)",
+								boxShadow: "md",
+							}}
+							_focus={{
+								borderColor: "blue.400",
+								boxShadow: "0 0 0 1px blue.400",
+								transform: "scale(1.02)",
+							}}
+							transition='0.2s'
 						/>
 						<Input
 							placeholder='الاسم الأخير'
+							type='text'
 							value={newUser.lastName}
 							onChange={(e) =>
 								setNewUser({ ...newUser, lastName: e.target.value })
 							}
+							bg={boxBg}
+							_hover={{
+								transform: "scale(1.01)",
+								boxShadow: "md",
+							}}
+							_focus={{
+								borderColor: "blue.400",
+								boxShadow: "0 0 0 1px blue.400",
+								transform: "scale(1.02)",
+							}}
+							transition='0.2s'
 						/>
 						<Input
 							placeholder='كلمة المرور'
@@ -437,6 +515,17 @@ export default function AdminHome() {
 							onChange={(e) =>
 								setNewUser({ ...newUser, password: e.target.value })
 							}
+							bg={boxBg}
+							_hover={{
+								transform: "scale(1.01)",
+								boxShadow: "md",
+							}}
+							_focus={{
+								borderColor: "blue.400",
+								boxShadow: "0 0 0 1px blue.400",
+								transform: "scale(1.02)",
+							}}
+							transition='0.2s'
 						/>
 						<Input
 							placeholder='تأكيد كلمة المرور'
@@ -445,6 +534,17 @@ export default function AdminHome() {
 							onChange={(e) =>
 								setNewUser({ ...newUser, confirmPassword: e.target.value })
 							}
+							bg={boxBg}
+							_hover={{
+								transform: "scale(1.01)",
+								boxShadow: "md",
+							}}
+							_focus={{
+								borderColor: "blue.400",
+								boxShadow: "0 0 0 1px blue.400",
+								transform: "scale(1.02)",
+							}}
+							transition='0.2s'
 						/>
 					</SimpleGrid>
 
@@ -453,6 +553,19 @@ export default function AdminHome() {
 						placeholder='اختر الدور'
 						value={newUser.role}
 						onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+						w={["100%", "100%", "50%"]}
+						cursor={"pointer"}
+						bg={boxBg}
+						_hover={{
+							transform: "scale(1.01)",
+							boxShadow: "md",
+						}}
+						_focus={{
+							borderColor: "blue.400",
+							boxShadow: "0 0 0 1px blue.400",
+							transform: "scale(1.02)",
+						}}
+						transition='0.2s'
 					>
 						<option value='vet'>طبيب</option>
 						<option value='secretary'>سكرتير</option>
@@ -464,6 +577,46 @@ export default function AdminHome() {
 					</Button>
 				</CardBody>
 			</Card>
+			<Modal isOpen={isOpen} onClose={onClose} isCentered>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>تعديل دور المستخدم</ModalHeader>
+					<ModalBody>
+						<Text mb={2}>
+							{editingUser &&
+								`${titleCase(editingUser.firstName)} ${titleCase(
+									editingUser.lastName
+								)}`}
+						</Text>
+						<Select
+							value={editRole}
+							onChange={(e) => setEditRole(e.target.value)}
+							placeholder='اختر الدور'
+							iconColor='transparent'
+							cursor={"pointer"}
+						>
+							<option value='vet'>طبيب</option>
+							<option value='secretary'>سكرتير</option>
+							<option value='admin'>أدمن</option>
+						</Select>
+					</ModalBody>
+					<ModalFooter>
+						<Button variant='ghost' ml={3} onClick={onClose}>
+							إلغاء
+						</Button>
+						<Button
+							colorScheme='blue'
+							onClick={() => {
+								handleEditUser();
+							}}
+							isLoading={isLoading}
+							disabled={!editRole || !editingUser}
+						>
+							حفظ التغييرات
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</Box>
 	);
 }
