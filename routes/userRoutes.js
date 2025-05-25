@@ -52,6 +52,7 @@ const {
 	updateOwnerProfile,
 
 	createPet,
+	getStats,
 } = require("../controllers/userController");
 
 const { authenticate } = require("../middleware/authMiddleware");
@@ -76,6 +77,7 @@ router.get(
 	"/downloadHealthRecord/:petId/:healthRecordId",
 	downloadHealthRecord
 );
+router.get("/stats", authenticate, getStats); // COMPLETE
 
 // POST methods for /user
 router.post("/getUsers", authenticate, getUsers); // COMPLETE

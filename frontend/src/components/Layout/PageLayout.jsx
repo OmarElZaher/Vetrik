@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
 	Box,
@@ -16,8 +16,8 @@ import {
 	DrawerCloseButton,
 	VStack,
 	Button,
-	Spacer,
 	HStack,
+	useToast,
 } from "@chakra-ui/react";
 
 import axios from "axios";
@@ -34,17 +34,61 @@ import {
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+import Spinner from "../General/Spinner";
+
 const PageLayout = ({ children }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { colorMode, toggleColorMode } = useColorMode();
+	const boxColor = useColorModeValue("gray.50", "gray.900");
 	const navigate = useNavigate();
+	const toast = useToast();
 
 	const [isLoading, setIsLoading] = useState(false);
 
 	const bg = useColorModeValue("white", "gray.800");
 
-	return (
-		<Box minH='100vh' dir='rtl' bg={useColorModeValue("gray.50", "gray.900")}>
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				setIsLoading(true);
+				const response = await axios.get(`${api}/user/getUserInfo`, {
+					withCredentials: true,
+				});
+
+				if (response.status !== 200) {
+					toast({
+						title: response?.data?.message,
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				}
+			} catch (error) {
+				if (error.response.status === 500) {
+					toast({
+						title: error?.response?.data?.message,
+						description: "حدث خطأ ما",
+						status: "error",
+						duration: 2500,
+						isClosable: true,
+						position: "top",
+					});
+				} else {
+					navigate("/login");
+				}
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchData();
+	}, [navigate, toast]);
+
+	return isLoading ? (
+		<Spinner />
+	) : (
+		<Box minH='100vh' dir='rtl' bg={boxColor}>
 			{/* Header */}
 			<Flex
 				as='header'
@@ -82,6 +126,9 @@ const PageLayout = ({ children }) => {
 					<IconButton
 						icon={<FaSignOutAlt />}
 						colorScheme='red'
+						isLoading={isLoading}
+						isDisabled={isLoading}
+						loadingText='جاري تسجيل الخروج...'
 						onClick={async () => {
 							setIsLoading(true);
 							await axios

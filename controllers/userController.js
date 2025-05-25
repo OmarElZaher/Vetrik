@@ -10,6 +10,7 @@ const Owner = require("../models/CustomerModels/ownerModel");
 const Pet = require("../models/CustomerModels/petModel");
 const VaccinationCard = require("../models/CustomerModels/vaccinationModel");
 const HealthRecord = require("../models/CustomerModels/healthRecordModel");
+const Case = require("../models/SystemModels/caseModel");
 
 // ----------------------------------------------------------------
 // Global Variables
@@ -433,6 +434,54 @@ const getUserInfoById = asyncHandler(async (req, res) => {
 				res.status(400).json({ message: "المستخدم غير موجود" });
 				return;
 			}
+		} else {
+			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
+			return;
+		}
+	} catch (error) {
+		res.status(500);
+		throw new Error(error);
+	}
+});
+
+// @desc Get Stats
+// @route GET /user/stats
+// @access Private
+const getStats = asyncHandler(async (req, res) => {
+	try {
+		if (req.user.role === "admin") {
+			const totalUsers = await User.countDocuments();
+			const totalOwners = await Owner.countDocuments();
+			const totalPets = await Pet.countDocuments();
+			const totalVaccinationCards = await VaccinationCard.countDocuments();
+			const totalHealthRecords = await HealthRecord.countDocuments();
+			const totalCases = await Case.countDocuments();
+			const totalCompletedCases = await Case.countDocuments({
+				status: "completed",
+			});
+			const totalAssignedCases = await Case.countDocuments({
+				status: "in-progress",
+			});
+			const totalPendingCases = await Case.countDocuments({
+				status: "waiting",
+			});
+			const totalClosedCases = await Case.countDocuments({
+				status: "closed",
+			});
+
+			res.status(200).json({
+				message: "تم استرجاع الإحصائيات بنجاح",
+				totalUsers,
+				totalOwners,
+				totalPets,
+				totalVaccinationCards,
+				totalHealthRecords,
+				totalCases,
+				totalCompletedCases,
+				totalAssignedCases,
+				totalPendingCases,
+				totalClosedCases,
+			});
 		} else {
 			res.status(400).json({ message: "غير مصرح: ليس لديك صلاحيات الأدمن" });
 			return;
@@ -1918,4 +1967,5 @@ module.exports = {
 	deleteOwnerProfile,
 
 	createPet,
+	getStats,
 };

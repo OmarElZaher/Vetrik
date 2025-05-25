@@ -17,18 +17,14 @@ import {
 	ModalHeader,
 	Flex,
 	Image,
-	HStack,
-	IconButton,
 	SimpleGrid,
 	ModalBody,
 	ModalFooter,
 	useDisclosure,
 	useToast,
-	useColorMode,
 	useColorModeValue,
 } from "@chakra-ui/react";
 
-import { FaMoon, FaSun } from "react-icons/fa";
 import { MdOutlinePets } from "react-icons/md";
 import {
 	FaFolderOpen,
@@ -55,8 +51,6 @@ function titleCase(str) {
 export default function SecretaryHome() {
 	const toast = useToast();
 	const navigate = useNavigate();
-
-	const { colorMode, toggleColorMode } = useColorMode();
 
 	const [loading, setLoading] = useState(false);
 

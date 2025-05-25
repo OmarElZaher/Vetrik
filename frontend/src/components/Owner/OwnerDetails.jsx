@@ -4,797 +4,626 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { API_URL as api } from "../../utils/constants";
-import useIsMobile from "../../hooks/useIsMobile";
 
 import {
-  Box,
-  Button,
-  Card,
-  CardBody,
-  FormControl,
-  Icon,
-  Input,
-  Table,
-  TableContainer,
-  Th,
-  Thead,
-  Tr,
-  Td,
-  Tbody,
-  Text,
-  Tooltip,
-  Select,
-  useToast,
-  Stack
+	Box,
+	Button,
+	Center,
+	Icon,
+	Text,
+	SimpleGrid,
+	Input,
+	Select,
+	Flex,
+	useDisclosure,
+	useColorModeValue,
+	useToast,
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
 } from "@chakra-ui/react";
 
-import { FaRegEdit } from "react-icons/fa";
-import { IoMdEye, IoMdAdd, IoMdArrowRoundBack } from "react-icons/io";
+import { IoMdEye } from "react-icons/io";
 import { TbTrashXFilled } from "react-icons/tb";
 
-import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
 function titleCase(str) {
-    return str
-        .toLowerCase()
-        .split(" ")
-        .map((word) => {
-            return word.charAt(0).toUpperCase() + word.slice(1);
-        })
-        .join(" ");
+	if (!str || typeof str !== "string") return "";
+	return str
+		.toLowerCase()
+		.split(" ")
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(" ");
+}
+
+function formatDate(date) {
+	const d = new Date(date);
+	let month = "" + (d.getMonth() + 1);
+	let day = "" + d.getDate();
+	let year = d.getFullYear();
+
+	if (month.length < 2) month = "0" + month;
+	if (day.length < 2) day = "0" + day;
+
+	return [day, month, year].join("-");
 }
 
 export default function OwnerDetails() {
-    
-    const { ownerId } = useParams();
-    const toast = useToast();
-    const navigate = useNavigate();
+	const { ownerId } = useParams();
+	const toast = useToast();
+	const navigate = useNavigate();
 
-    const isMobile = useIsMobile();
+	const [owner, setOwner] = useState({});
 
-    const [owner, setOwner] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState(null);
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [gotData, setGotData] = useState(false);
-    const [error, setError] = useState(null);
+	const cardBg = useColorModeValue("white", "gray.700");
+	const iconColor = useColorModeValue("blue.500", "blue.300");
+	const borderColor = useColorModeValue("gray.200", "gray.600");
+	const boxColor = useColorModeValue("gray.50", "gray.800");
 
-    const [name, setName] = useState("");
-    const [type, setType] = useState("");
-    const [breed, setBreed] = useState("");
-    const [gender, setGender] = useState("");
-    const [dob, setDob] = useState(null);
-    const [weight, setWeight] = useState("");
+	const handleRemovePet = async (petId) => {
+		const confirmDelete = window.confirm(
+			"هل أنت متأكد أنك تريد حذف هذا الحيوان؟"
+		);
 
-    const handleRemovePet = async (petId) => {
+		if (!confirmDelete) return;
 
-        const confirmDelete = window.confirm("هل أنت متأكد أنك تريد حذف هذا الحيوان؟");
+		try {
+			setIsLoading(true);
 
-        if (!confirmDelete) return;
+			const response = await axios.delete(
+				`${api}/user/removePetFromOwner/${owner._id}/${petId}`,
+				{
+					withCredentials: true,
+				}
+			);
 
-        try {
+			if (response.status === 200) {
+				toast({
+					title: response.data.message,
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				setOwner((prev) => ({
+					...prev,
+					pets: prev.pets.filter((pet) => pet._id !== response.data.petId),
+				}));
+			}
+		} catch (error) {
+			toast({
+				title: error.response.data.message,
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-            setIsLoading(true);
+	const handleDeleteOwner = async () => {
+		const confirmDelete = window.confirm(
+			"هل أنت متأكد أنك تريد حذف هذا المالك؟"
+		);
 
-            const response = await axios.delete(
-                `${api}/user/removePetFromOwner/${owner._id}/${petId}`, 
-                { 
-                    withCredentials: true 
-                });
+		if (!confirmDelete) return;
 
-            if (response.status === 200) {
-                toast({ title: response.data.message, status: "success", duration: 2500, isClosable: true, position: "top" });
-                setOwner((prev) => ({ ...prev, pets: prev.pets.filter((pet) => pet._id !== response.data.petId) }));
-            }
-        } catch (error) {
-            toast({ 
-                title: error.response.data.message, 
-                status: "error", duration: 2500, 
-                isClosable: true, 
-                position: "top" 
-            });
+		try {
+			setIsLoading(true);
+			const response = await axios.delete(
+				`${api}/user/deleteOwner/${owner._id}`,
+				{ withCredentials: true }
+			);
 
-        } finally {
-            setIsLoading(false);
-        }
-    };
+			if (response.status === 200) {
+				toast({
+					title: response.data.message,
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				navigate("/search-owner");
+			}
+		} catch (error) {
+			toast({
+				title: error.response.data.message,
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-    const handleDeleteOwner = async () => {
+	const {
+		isOpen: isEditOpen,
+		onOpen: openEditModal,
+		onClose: closeEditModal,
+	} = useDisclosure();
 
-        const confirmDelete = window.confirm("هل أنت متأكد أنك تريد حذف هذا المالك؟");
+	const [updatedOwner, setUpdatedOwner] = useState({
+		fullName: "",
+		gender: "",
+		mobileNumber: "",
+		preferredContactMethod: "",
+	});
 
-        if (!confirmDelete) return;
+	const [newPet, setNewPet] = useState({
+		name: "",
+		type: "",
+		breed: "",
+		gender: "",
+		weight: "",
+		dob: "",
+	});
 
-        try {
-            setIsLoading(true);
-            const response = await axios.delete(`${api}/user/deleteOwner/${owner._id}`, { withCredentials: true });
+	const handleCreatePet = async () => {
+		if (
+			!newPet.name ||
+			!newPet.type ||
+			!newPet.breed ||
+			!newPet.gender ||
+			!newPet.weight ||
+			!newPet.dob
+		) {
+			toast({
+				title: "يرجى ملء جميع الحقول",
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+			return;
+		}
+		try {
+			setIsLoading(true);
+			const response = await axios.post(
+				`${api}/user/createPet`,
+				{
+					...newPet,
+					owners: [owner._id],
+				},
+				{ withCredentials: true }
+			);
+			if (response.status === 200) {
+				toast({
+					title: "تم إضافة الحيوان بنجاح",
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				setOwner((prev) => ({
+					...prev,
+					pets: [...prev.pets, response.data.pet],
+				}));
+				setNewPet({
+					name: "",
+					type: "",
+					breed: "",
+					gender: "",
+					weight: "",
+					dob: "",
+				});
+			}
+		} catch (error) {
+			toast({
+				title: error?.response?.data?.message || "حدث خطأ",
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-            if (response.status === 200) {
-                toast({ title: response.data.message, status: "success", duration: 2500, isClosable: true, position: "top" });
-                navigate("/search-owner");
-        }
+	useEffect(() => {
+		if (owner?._id) {
+			setUpdatedOwner({
+				fullName: owner.fullName || "",
+				gender: owner.gender || "",
+				mobileNumber: owner.mobileNumber || "",
+				preferredContactMethod: owner.preferredContactMethod || "",
+			});
+		}
+	}, [owner]);
 
-        } catch (error) {
-            toast({ title: error.response.data.message, status: "error", duration: 2500, isClosable: true, position: "top" });
-        
-        } finally {
-            setIsLoading(false);
-        }
-    };
+	const handleUpdateOwner = async () => {
+		try {
+			setIsLoading(true);
+			const response = await axios.patch(
+				`${api}/user/updateOwner/${owner._id}`,
+				updatedOwner,
+				{ withCredentials: true }
+			);
+			if (response.status === 200) {
+				toast({
+					title: "تم تحديث بيانات المالك بنجاح",
+					status: "success",
+					duration: 2500,
+					isClosable: true,
+					position: "top",
+				});
+				setOwner((prev) => ({
+					...prev,
+					...updatedOwner,
+				}));
+				closeEditModal();
+			}
+		} catch (error) {
+			toast({
+				title: error?.response?.data?.message || "حدث خطأ أثناء التحديث",
+				status: "error",
+				duration: 2500,
+				isClosable: true,
+				position: "top",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-    const handleAddPet = async () => {
-        if (!name || !type || !breed || !gender || !weight || !dob) {
-            toast({ title: "من فضلك أدخل جميع الحقول", status: "error", duration: 2500, isClosable: true, position: "top" });
-            return;
-        }
-        try {
-            setIsLoading(true);
-            const response = await axios.post(`${api}/user/createPet`, {
-            owners: [owner._id], name, type, breed, gender, weight, dob
-            }, { withCredentials: true });
-            if (response.status === 200) {
-                toast({ title: response.data.message, status: "success", duration: 2500, isClosable: true, position: "top" });
-                setOwner((prev) => ({ ...prev, pets: prev.pets.concat(response.data.pet) }));
-                setName(""); setType(""); setBreed(""); setGender(""); setWeight(""); setDob(null);
-            }
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				setIsLoading(true);
+				const response = await axios.get(
+					`${api}/user/getOwnerInfo/${ownerId}`,
+					{ withCredentials: true }
+				);
+				if (response.status === 200) {
+					setOwner(response.data);
+				} else {
+					setError(response.data.message);
+				}
+			} catch (error) {
+				setError(error.response.data.message);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		fetchData();
+	}, [ownerId]);
 
-        } catch (error) {
+	if (isLoading) return <Spinner />;
+	if (error) return <Text color='red.500'>{error}</Text>;
 
-            toast({ title: error.response.data.message, status: "error", duration: 2500, isClosable: true, position: "top" });
-        
-        } finally {
-            setIsLoading(false);
-        }
-    };
+	return (
+		<>
+			<Box dir='rtl' p={6}>
+				{/* Page Title */}
+				<Text fontSize='2xl' fontWeight='bold' mb={2} textAlign='center'>
+					تفاصيل المالك
+				</Text>
+				<Text fontSize={"xl"} fontWeight={"bold"} textAlign={"center"} mb={4}>
+					{titleCase(owner?.fullName)}
+				</Text>
 
-    useEffect(() => {
-        const fetchData = async () => {
-        try {
-            setIsLoading(true);
-            const response = await axios.get(`${api}/user/getOwnerInfo/${ownerId}`, { withCredentials: true });
-            if (response.status === 200) {
-                setOwner(response.data);
-                setGotData(true);
-            } else {
-                setError(response.data.message);
-            }
-        } catch (error) {
-            setError(error.response.data.message);
-        } finally {
-            setIsLoading(false);
-        }
-        };
-        fetchData();
-    }, [ownerId]);
+				<Flex
+					direction={{ base: "column", md: "row" }}
+					gap={6}
+					justify='center'
+					mb={10}
+				>
+					<Box bg={boxColor} p={6} rounded='xl' boxShadow='md' flex='1'>
+						<Center>
+							<Text fontSize='lg' fontWeight='semibold' mb={4}>
+								معلومات المالك
+							</Text>
+						</Center>
 
-    if (isLoading) return <Spinner />;
-    if (error) return <Text color="red.500">{error}</Text>;
-    if (!gotData) return null;
+						<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
+							{[
+								{
+									// icon: IoMdPaw,
+									label: "الاسم",
+									value: titleCase(owner?.fullName),
+								},
+								{
+									// icon: IoMdMale,
+									label: "الجنس",
+									value: owner?.gender === "male" ? "ذكر" : "أنثى",
+								},
+								{
+									// icon: IoMdPricetags,
+									label: "رقم الهاتف",
+									value: owner?.mobileNumber,
+								},
+								{
+									// icon: FaWeightScale,
+									label: "طريقة التواصل المفضلة",
+									value:
+										owner?.preferredContactMethod === "phone"
+											? "الهاتف"
+											: owner?.preferredContactMethod === "email"
+											? "البريد الإلكتروني"
+											: owner?.preferredContactMethod === "both"
+											? "الهاتف والبريد الإلكتروني"
+											: "لا تواصل",
+								},
+							].map((item, i) => (
+								<Flex
+									key={i}
+									bg={cardBg}
+									p={3}
+									rounded='md'
+									align='center'
+									boxShadow='sm'
+									border='1px solid'
+									borderColor={borderColor}
+									gap={3}
+								>
+									<Icon as={item.icon} boxSize={5} color={iconColor} />
+									<Text>
+										<strong>{item.label}:</strong> {item.value}
+									</Text>
+								</Flex>
+							))}
+						</SimpleGrid>
 
-    if (isMobile) {
-        return (
-            <><Box
-                dir="rtl"
-                display="flex"
-                flexDirection={{ base: "column", md: "row" }}
-                alignItems="flex-start"
-                justifyContent="center"
-                px={{ base: 2, md: 4 }}
-                pt={6}
-                width="100%"
-            >
-                {/* Main Content */}
-                <Card width={{ base: "100%", md: "60%" }} mb={{ base: 4, md: 0 }} mr={{ md: 4 }}>
-                    <CardBody>
-                        <Box display="flex" flexDirection={{ base: "column", md: "row" }} justifyContent="space-between" mb={4}>
-                            <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="bold" textDecoration="underline" textAlign="center">
-                                {owner.fullName}
-                            </Text>
-                            <Text
-                                cursor="pointer"
-                                onClick={() => navigate(`/edit-owner/${owner._id}`)}
-                                _hover={{ color: "yellowgreen", textDecoration: "underline" }}
-                                _active={{ transform: "scale(0.99)", opacity: 0.5 }}
-                                display="flex"
-                                alignItems="center"
-                                fontSize="lg"
-                            >
-                                <Icon as={FaRegEdit} ml={1} /> تعديل الملف الشخصي
-                            </Text>
-                        </Box>
+						<Box h={6} />
 
-                        <Stack spacing={4} mb={4}>
-                            <Box>
-                                <Text fontWeight="bold">البريد الإلكتروني</Text>
-                                <Text>{owner.email}</Text>
-                            </Box>
-                            <Box>
-                                <Text fontWeight="bold">رقم الموبايل</Text>
-                                <Text>{owner.mobileNumber}</Text>
-                            </Box>
-                            <Box>
-                                <Text fontWeight="bold">طريقة التواصل</Text>
-                                <Text>{owner.preferredContactMethod}</Text>
-                            </Box>
-                        </Stack>
+						<Center gap={3} mt={4}>
+							<Button colorScheme='blue' size='sm' onClick={openEditModal}>
+								تعديل المالك
+							</Button>
+							<Button
+								colorScheme='red'
+								size='sm'
+								onClick={() => {
+									handleDeleteOwner();
+									navigate("/search-owner");
+								}}
+								leftIcon={<Icon as={TbTrashXFilled} />}
+							>
+								حذف المالك
+							</Button>
+						</Center>
+					</Box>
 
-                        <Box>
-                            <Text fontWeight="bold" fontSize="xl" mb={2}>الحيوانات المسجلة</Text>
-                            <TableContainer overflowX="auto">
-                                <Table size="sm" variant="simple" minWidth="600px">
-                                    <Thead>
-                                        <Tr>
-                                            <Th>الاسم</Th>
-                                            <Th>النوع</Th>
-                                            <Th>السلالة</Th>
-                                            <Th>الجنس</Th>
-                                            <Th>الإجراءات</Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {owner.pets.map((pet) => (
-                                            <Tr key={pet._id}>
-                                                <Td>{pet.name}</Td>
-                                                <Td>{pet.type}</Td>
-                                                <Td>{pet.breed}</Td>
-                                                <Td>{pet.gender}</Td>
-                                                <Td>
-                                                    <Button size="sm" onClick={() => navigate(`/pet-details/${pet._id}`)} rightIcon={<IoMdEye />} mr={2}>عرض</Button>
-                                                    <Tooltip label="حذف الحيوان" hasArrow>
-                                                        <Button size="sm" variant="outline" borderColor="#EF5350" onClick={() => handleRemovePet(pet._id)} rightIcon={<TbTrashXFilled />}>حذف</Button>
-                                                    </Tooltip>
-                                                </Td>
-                                            </Tr>
-                                        ))}
-                                    </Tbody>
-                                </Table>
-                            </TableContainer>
-                        </Box>
+					<Box bg={boxColor} p={6} rounded='xl' boxShadow='md' flex='1'>
+						<Text fontSize='lg' fontWeight='semibold' mb={4} textAlign='center'>
+							➕ إضافة حيوان جديد
+						</Text>
 
-                        <Box mt={6} display="flex" flexDirection={{ base: "column", md: "row" }} gap={4} justifyContent="center">
-                            <Button onClick={() => navigate("/search-owner")} rightIcon={<IoMdArrowRoundBack />}>الرجوع</Button>
-                            <Tooltip label="حذف المالك" hasArrow>
-                                <Button variant="outline" borderColor="#EF5350" colorScheme="red" rightIcon={<TbTrashXFilled />} onClick={handleDeleteOwner}>حذف</Button>
-                            </Tooltip>
-                        </Box>
-                    </CardBody>
-                </Card>
+						<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
+							<Input
+								placeholder='اسم الحيوان'
+								value={newPet.name}
+								onChange={(e) => setNewPet({ ...newPet, name: e.target.value })}
+							/>
+							<Select
+								placeholder='نوع الحيوان'
+								value={newPet.type}
+								iconColor='transparent'
+								cursor={"pointer"}
+								onChange={(e) => setNewPet({ ...newPet, type: e.target.value })}
+							>
+								<option value='dog'>كلب</option>
+								<option value='cat'>قط</option>
+								<option value='bird'>طائر</option>
+								<option value='turtle'>سلحفاة</option>
+								<option value='monkey'>قرد</option>
+								<option value='hamster'>هامستر</option>
+								<option value='fish'>سمكة</option>
+							</Select>
+							<Input
+								placeholder='السلالة'
+								value={newPet.breed}
+								onChange={(e) =>
+									setNewPet({ ...newPet, breed: e.target.value })
+								}
+							/>
+							<Select
+								placeholder='الجنس'
+								value={newPet.gender}
+								iconColor='transparent'
+								cursor={"pointer"}
+								onChange={(e) =>
+									setNewPet({ ...newPet, gender: e.target.value })
+								}
+							>
+								<option value='male'>ذكر</option>
+								<option value='female'>أنثى</option>
+							</Select>
+							<Input
+								placeholder='الوزن (كجم)'
+								type='number'
+								value={newPet.weight}
+								onChange={(e) =>
+									setNewPet({ ...newPet, weight: e.target.value })
+								}
+							/>
+							<Input
+								type='date'
+								placeholder='تاريخ الميلاد'
+								value={newPet.dob}
+								onChange={(e) => setNewPet({ ...newPet, dob: e.target.value })}
+							/>
+						</SimpleGrid>
 
-                <Card width={{ base: "100%", md: "35%" }}>
-                    <CardBody>
-                        <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb={4}>إضافة حيوان أليف</Text>
-                        <Stack spacing={4}>
-                            <Input placeholder="اسم الحيوان" value={name} onChange={(e) => setName(e.target.value)} />
-                            <Select placeholder="نوع الحيوان" value={type} onChange={(e) => setType(e.target.value)}>
-                                <option value="Dog">كلب</option>
-                                <option value="Cat">قطة</option>
-                                <option value="Bird">طائر</option>
-                                <option value="Turtle">سلحفاة</option>
-                                <option value="Monkey">قرد</option>
-                                <option value="Hamster">هامستر</option>
-                                <option value="Fish">سمكة</option>
-                            </Select>
-                            <Input placeholder="سلالة الحيوان" value={breed} onChange={(e) => setBreed(e.target.value)} />
-                            <Select placeholder="اختيار الجنس" value={gender} onChange={(e) => setGender(e.target.value)}>
-                                <option value="Male">ذكر</option>
-                                <option value="Female">أنثى</option>
-                            </Select>
-                            <Input placeholder="وزن الحيوان (كجم)" type="number" value={weight} onChange={(e) => setWeight(e.target.value)} />
-                            <Input type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
-                            <Button onClick={handleAddPet} rightIcon={<IoMdAdd />}>إضافة</Button>
-                        </Stack>
-                    </CardBody>
-                </Card>
-            </Box>
-            <Footer /></>
-        );
-    }
+						<Flex justifyContent='center'>
+							<Button
+								colorScheme='green'
+								onClick={handleCreatePet}
+								isLoading={isLoading}
+								isDisabled={isLoading}
+							>
+								إضافة الحيوان
+							</Button>
+						</Flex>
+					</Box>
+				</Flex>
 
-    return isLoading ? (
-        <Spinner />
-    ) : error ? (
-        <>
-            <Box
-                dir='rtl'
-                display={"flex"}
-                flexDirection={"column"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                bg={"#F3F3F3"}
-                height={"87vh"}
-            >
-                <Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-                    ERROR
-                </Text>
-                <Text fontSize={"40px"} textDecoration={"underline"}>
-                    {error}
-                </Text>
-                <Button
-                    _hover={{
-                        bg: "yellowgreen",
-                        color: "#000",
-                        transform: "scale(1.01)",
-                    }}
-                    _active={{
-                        transform: "scale(0.99)",
-                        opacity: "0.5",
-                    }}
-                    onClick={() => {
-                        navigate("/search-owner");
-                    }}
-                    leftIcon={<IoMdArrowRoundBack />}
-                    bg={"#FFF"}
-                    width={"25vw"}
-                    mt={10}
-                >
-                    الرجوع لصفحة البحث
-                </Button>
-            </Box>
-            <Footer />
-        </>
-    ) : gotData ? (
-        <>
-            <Box
-                dir='rtl'
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                width={"100vw"}
-                height={"87vh"}
-            >
-                {/* Owner Information */}
-                <Card dir='rtl' width='60vw' height='80vh' mt={15} ml={2}>
-                    <CardBody
-                        display={"flex"}
-                        flexDirection={"column"}
-                        justifyContent={"center"}
-                    >
-                        <Box
-                            display={"flex"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            height={"15%"}
-                            mb={2}
-                        >
-                            <Box width={"33%"} />
+				<Box mb={12}>
+					<Text fontSize='lg' fontWeight='semibold' mb={4}>
+						معلومات الحيوانات
+					</Text>
 
-                            <Box
-                                display={"flex"}
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                width={"33%"}
-                                height={"100%"}
-                            >
-                                <Text
-                                    fontSize={"30px"}
-                                    fontWeight={"bold"}
-                                    textDecoration={"underline"}
-                                >{`${titleCase(owner.fullName)}`}
-                                </Text>
-                            </Box>
+					<Box bg={boxColor} rounded='xl' boxShadow='md' p={4}>
+						{owner?.pets?.length > 0 ? (
+							<>
+								<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+									{owner.pets.map((pet, i) => (
+										<Box
+											key={i}
+											p={4}
+											display='flex'
+											justifyContent='space-between'
+											alignItems='flex-start'
+											border='1px solid'
+											borderColor={borderColor}
+											borderRadius='md'
+											bg={cardBg}
+											boxShadow='sm'
+										>
+											<Box flex='1' pr={4}>
+												<Text fontWeight='bold' mb={1}>
+													🧪 {pet?.name}
+												</Text>
+												<Text>
+													<strong>نوع الحيوان:</strong>{" "}
+													{titleCase(pet?.type) || "—"}
+												</Text>
+												<Text>
+													<strong>السلالة:</strong>{" "}
+													{titleCase(pet?.breed) || "—"}
+												</Text>
+												<Text>
+													<strong>الجنس:</strong>{" "}
+													{pet?.gender === "male" ? "ذكر" : "أنثى"}
+												</Text>
+												<Text>
+													<strong>تاريخ الميلاد:</strong>{" "}
+													{formatDate(pet?.dob) || "—"}
+												</Text>
+												<Text>
+													<strong>الوزن:</strong> {`${pet?.weight} كجم` || "—"}
+												</Text>
+											</Box>
 
-                            <Box
-                                display={"flex"}
-                                justifyContent={"flex-end"}
-                                alignItems={"center"}
-                                width={"33%"}
-                                height={"90%"}
-                                mr={5}
-                            >
-                                <Text
-                                    onClick={() => {
-                                        navigate(`/edit-owner/${owner._id}`);
-                                    }}
-                                    _hover={{
-                                        color: "yellowgreen",
-                                        textDecoration: "underline",
-                                    }}
-                                    _active={{
-                                        transform: "scale(0.99)",
-                                        opacity: "0.5",
-                                    }}
-                                    display={"flex"}
-                                    justifyContent={"center"}
-                                    alignItems={"center"}
-                                    cursor={"pointer"}
-                                    fontSize={"20x"}
-                                >
-                                    <Icon as={FaRegEdit} ml={1.5} />
-                                    تعديل الملف الشخصي
-                                </Text>
-                            </Box>
-                        </Box>
-                        <hr />
-                        <Box
-                            display={"flex"}
-                            justifyContent={"space-evenly"}
-                            height={"15%"}
-                            my={2}
-                        >
-                            <Box
-                                display={"flex"}
-                                flexDirection={"column"}
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                width={"33%"}
-                                m={2}
-                                p={2}
-                            >
-                                <Text fontSize={"24px"} fontWeight={"bold"}>
-                                    البريد الإلكتروني
-                                </Text>
-                                <Text fontSize={"20px"}>{owner.email}</Text>
-                            </Box>
-                            <Box
-                                display={"flex"}
-                                flexDirection={"column"}
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                width={"33%"}
-                                m={2}
-                            >
-                                <Text fontSize={"24px"} fontWeight={"bold"}>
-                                    رقم الموبايل
-                                </Text>
-                                <Text fontSize={"20px"}>{owner.mobileNumber}</Text>
-                            </Box>
+											<Flex direction='column' align='center' gap={2}>
+												<Button
+													colorScheme='blue'
+													// variant='outline'
+													size='sm'
+													isLoading={isLoading}
+													isDisabled={isLoading}
+													onClick={() => {
+														navigate(`/pet-details/${pet._id}`);
+													}}
+													leftIcon={<Icon as={IoMdEye} />}
+												>
+													عرض الحيوان
+												</Button>
+												<Button
+													colorScheme='red'
+													variant='ghost'
+													size='sm'
+													isLoading={isLoading}
+													isDisabled={isLoading}
+													onClick={() => {
+														handleRemovePet(pet._id);
+													}}
+													leftIcon={<Icon as={TbTrashXFilled} />}
+												>
+													حذف الحيوان
+												</Button>
+											</Flex>
+										</Box>
+									))}
+								</SimpleGrid>
+							</>
+						) : (
+							<Text textAlign='center' color='gray.500'>
+								لا توجد معلومات عن الحيوانات بعد. يمكنك إضافة حيوانات جديدة من
+								خلال زر "إضافة حيوان" أدناه.
+							</Text>
+						)}
+					</Box>
+				</Box>
 
-                            <Box
-                                display={"flex"}
-                                flexDirection={"column"}
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                width={"33%"}
-                                m={2}
-                                p={2}
-                            >
-                                <Text fontSize={"24px"} fontWeight={"bold"}>
-                                    طريقة التواصل
-                                </Text>
-                                <Text fontSize={"20px"}>
-                                    {owner.preferredContactMethod === "both"
-                                        ? "مكالمة وبريد"
-                                        : owner.preferredContactMethod === "neither"
-                                        ? "لا يفضل التواصل"
-                                        : titleCase(owner.preferredContactMethod)}
-                                </Text>
-                            </Box>
-                        </Box>
-
-                        {/* Pets Table */}
-                        <Box
-                            display={"flex"}
-                            flexDirection={"column"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            height={"60%"}
-                        >
-                            {owner.pets.length > 0 ? (
-                                <>
-                                    <Text fontSize={"24px"} fontWeight={"bold"}>
-                                        الحيوانات المسجلة
-                                    </Text>
-                                    <TableContainer
-                                        width={"92%"}
-                                        maxHeight={"30vh"}
-                                        overflowY={"auto"}
-                                    >
-                                        <Table variant='simple' size='md'>
-                                            <Thead>
-                                                <Th textAlign={"left"}>الاسم</Th>
-                                                <Th textAlign={"center"}>النوع</Th>
-                                                <Th textAlign={"center"}>السلالة</Th>
-                                                <Th textAlign={"center"}>الجنس</Th>
-                                                <Th textAlign={"center"}>إجراءات</Th>
-                                            </Thead>
-                                            <Tbody>
-                                                {owner.pets.map((pet) => (
-                                                    <Tr key={pet._id}>
-                                                        <Td textAlign={"left"}>{titleCase(pet.name)}</Td>
-                                                        <Td textAlign={"center"}>{titleCase(pet.type)}</Td>
-                                                        <Td textAlign={"center"}>{titleCase(pet.breed)}</Td>
-                                                        <Td textAlign={"center"}>
-                                                            {titleCase(pet.gender)}
-                                                        </Td>
-                                                        <Td textAlign={"center"}>
-                                                            <Button
-                                                                _hover={{
-                                                                    bg: "yellowgreen",
-                                                                    color: "#000",
-                                                                    transform: "scale(1.01)",
-                                                                }}
-                                                                _active={{
-                                                                    transform: "scale(0.99)",
-                                                                    opacity: "0.5",
-                                                                }}
-                                                                onClick={() => {
-                                                                    navigate(`/pet-details/${pet._id}`);
-                                                                }}
-                                                                rightIcon={<IoMdEye />}
-                                                                ml={2.5}
-                                                            >
-                                                                عرض
-                                                            </Button>
-
-                                                            <Tooltip
-                                                                hasArrow
-                                                                label='حذف الحيوان من حساب المالك'
-                                                                bg={"#EF5350"}
-                                                                placement='top'
-                                                                openDelay={75}
-                                                            >
-                                                                <Button
-                                                                    _hover={{
-                                                                        bg: "#EF5350",
-                                                                        color: "#000",
-                                                                        transform: "scale(1.01)",
-                                                                    }}
-                                                                    _active={{
-                                                                        transform: "scale(0.99)",
-                                                                        opacity: "0.5",
-                                                                    }}
-                                                                    onClick={() => {
-                                                                        handleRemovePet(pet._id);
-                                                                    }}
-                                                                    variant={"outline"}
-                                                                    borderColor={"#EF5350"}
-                                                                    rightIcon={<TbTrashXFilled />}
-                                                                    mr={2.5}
-                                                                >
-                                                                    حذف
-                                                                </Button>
-                                                            </Tooltip>
-                                                        </Td>
-                                                    </Tr>
-                                                ))}
-                                            </Tbody>
-                                        </Table>
-                                    </TableContainer>
-                                </>
-                            ) : (
-                                <Text
-                                    fontSize={"40px"}
-                                    textDecoration={"underline"}
-                                    color={"#EF5350"}
-                                >
-                                    لا يوجد حيوانات مسجلة
-                                </Text>
-                            )}
-                        </Box>
-
-                        {/* Back, Delete Button */}
-                        <Box
-                            dir='rtl'
-                            display={"flex"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            height={"10%"}
-                        >
-                            <Button
-                                onClick={() => {
-                                    if (localStorage.getItem("ownerFilterData")) {
-                                        navigate("/owner-table");
-                                    } else {
-                                        navigate("/search-owner");
-                                    }
-                                }}
-                                _hover={{
-                                    bg: "yellowgreen",
-                                    color: "#000",
-                                    transform: "scale(1.01)",
-                                }}
-                                _active={{
-                                    transform: "scale(0.99)",
-                                    opacity: "0.5",
-                                }}
-                                rightIcon={<IoMdArrowRoundBack />}
-                                width={"40%"}
-                                ml={2.5}
-                            >
-                                جدول المالكين المصفى
-                            </Button>
-                            <Tooltip
-                                hasArrow
-                                label='حذف المالك من النظام'
-                                bg={"#EF5350"}
-                                placement='top'
-                                openDelay={75}
-                            >
-                                <Button
-                                    _hover={{
-                                        bg: "#EF5350",
-                                        color: "#000",
-                                        transform: "scale(1.01)",
-                                    }}
-                                    _active={{
-                                        transform: "scale(0.99)",
-                                        opacity: "0.5",
-                                    }}
-                                    onClick={handleDeleteOwner}
-                                    rightIcon={<TbTrashXFilled />}
-                                    variant={"outline"}
-                                    borderColor={"#EF5350"}
-                                    width={"25%"}
-                                    mr={2.5}
-                                >
-                                    حذف
-                                </Button>
-                            </Tooltip>
-                        </Box>
-                    </CardBody>
-                </Card>
-
-                {/* Add a pet */}
-                <Card dir='rtl' width='35vw' height='80vh' mt={15} mr={2}>
-                    <CardBody
-                        display={"flex"}
-                        flexDirection={"column"}
-                        justifyContent={"center"}
-                    >
-                        <Box display={"flex"} justifyContent={"center"} height={"15%"}>
-                            <Text
-                                fontSize={"30px"}
-                                fontWeight={"bold"}
-                                textDecor={"underline"}
-                            >
-                                إضافة حيوان أليف
-                            </Text>
-                        </Box>
-                        <Box
-                            display={"flex"}
-                            flexDirection={"column"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            height={"15%"}
-                        >
-                            <Text fontSize={"20px"} textAlign={"center"}>
-                                لتسجيل{" "}
-                                <Text
-                                    fontSize={"20px"}
-                                    display={"inline"}
-                                    textDecoration={"underline"}
-                                    fontWeight={"bold"}
-                                >
-                                    حيوان جديد{" "}
-                                </Text>
-                                مش متسجل قبل كده، اكتب كل البيانات المطلوبة.
-                            </Text>
-                        </Box>
-                        <Box
-                            dir='rtl'
-                            display={"flex"}
-                            flexDirection={"column"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            height={"60%"}
-                            p={2}
-                            mb={2}
-                        >
-                            <FormControl id='name' mb={5}>
-                                <Input
-                                    id='name'
-                                    type='text'
-                                    name='name'
-                                    placeholder='اسم الحيوان'
-                                    value={name}
-                                    onChange={(e) => {
-                                        setName(e.target.value);
-                                    }}
-                                    mb={1.25}
-                                />
-                            </FormControl>
-
-                            <FormControl
-                                id='type'
-                                display={"flex"}
-                                justifyContent={"space-evenly"}
-                                mb={5}
-                            >
-                                <Select
-                                    id='type'
-                                    name='type'
-                                    placeholder='نوع الحيوان'
-                                    cursor={"pointer"}
-                                    value={type}
-                                    iconColor='transparent'
-                                    onChange={(e) => {
-                                        setType(e.target.value);
-                                    }}
-                                    ml={2}
-                                >
-                                    <option value='Dog'>كلب</option>
-                                    <option value='Cat'>قطة</option>
-                                    <option value='Bird'>طائر</option>
-                                    <option value='Turtle'>سلحفاة</option>
-                                    <option value='Monkey'>قرد</option>
-                                    <option value='Hamster'>هامستر</option>
-                                    <option value='Fish'>سمكة</option>
-                                </Select>
-
-                                <Input
-                                    id='breed'
-                                    type='text'
-                                    name='breed'
-                                    placeholder='سلالة الحيوان'
-                                    value={breed}
-                                    onChange={(e) => {
-                                        setBreed(e.target.value);
-                                    }}
-                                    mr={2}
-                                />
-                            </FormControl>
-                            <FormControl id='gender' mb={5}>
-                                <Select
-                                    id='gender'
-                                    name='gender'
-                                    placeholder='اختيار الجنس'
-                                    cursor={"pointer"}
-                                    value={gender}
-                                    iconColor='transparent'
-                                    onChange={(e) => {
-                                        setGender(e.target.value);
-                                    }}
-                                >
-                                    <option value='Male'>ذكر</option>
-                                    <option value='Female'>أنثى</option>
-                                </Select>
-                            </FormControl>
-                            <FormControl id='weight' mb={5}>
-                                <Input
-                                    id='weight'
-                                    type='number'
-                                    name='weight'
-                                    placeholder='وزن الحيوان (كجم)'
-                                    value={weight}
-                                    onChange={(e) => {
-                                        setWeight(e.target.value);
-                                    }}
-                                />
-                            </FormControl>
-                            <FormControl id='dob'>
-                                <Input
-                                    id='dob'
-                                    type='date'
-                                    name='dob'
-                                    placeholder='تاريخ الميلاد'
-                                    value={dob}
-                                    onChange={(e) => {
-                                        setDob(e.target.value);
-                                    }}
-                                />
-                            </FormControl>
-                        </Box>
-
-                        <Box
-                            display={"flex"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            height={"10%"}
-                        >
-                            <Button
-                                _hover={{
-                                    bg: "yellowgreen",
-                                    color: "#000",
-                                    transform: "scale(1.01)",
-                                }}
-                                _active={{
-                                    transform: "scale(0.99)",
-                                    opacity: "0.5",
-                                }}
-                                onClick={handleAddPet}
-                                rightIcon={<IoMdAdd />}
-                                width={"25%"}
-                            >
-                                إضافة
-                            </Button>
-                        </Box>
-                    </CardBody>
-                </Card>
-            </Box>
-            <Footer />
-        </>
-    ) : (
-        <></>
-    );
+				<Modal isOpen={isEditOpen} onClose={closeEditModal}>
+					<ModalOverlay />
+					<ModalContent>
+						<ModalHeader>تعديل بيانات المالك</ModalHeader>
+						<ModalBody>
+							<Input
+								placeholder='الاسم الكامل'
+								value={updatedOwner.fullName}
+								onChange={(e) =>
+									setUpdatedOwner({ ...updatedOwner, fullName: e.target.value })
+								}
+								mb={3}
+							/>
+							<Select
+								placeholder='الجنس'
+								value={updatedOwner.gender}
+								iconColor='transparent'
+								cursor={"pointer"}
+								onChange={(e) =>
+									setUpdatedOwner({ ...updatedOwner, gender: e.target.value })
+								}
+								mb={3}
+							>
+								<option value='male'>ذكر</option>
+								<option value='female'>أنثى</option>
+							</Select>
+							<Input
+								placeholder='رقم الهاتف'
+								value={updatedOwner.mobileNumber}
+								onChange={(e) =>
+									setUpdatedOwner({
+										...updatedOwner,
+										mobileNumber: e.target.value,
+									})
+								}
+								mb={3}
+							/>
+							<Select
+								placeholder='طريقة التواصل المفضلة'
+								value={updatedOwner.preferredContactMethod}
+								iconColor='transparent'
+								cursor={"pointer"}
+								onChange={(e) =>
+									setUpdatedOwner({
+										...updatedOwner,
+										preferredContactMethod: e.target.value,
+									})
+								}
+							>
+								<option value='phone'>الهاتف</option>
+								<option value='email'>البريد الإلكتروني</option>
+								<option value='both'>الاثنين</option>
+								<option value='neither'>لا تواصل</option>
+							</Select>
+						</ModalBody>
+						<ModalFooter>
+							<Button
+								colorScheme='blue'
+								onClick={handleUpdateOwner}
+								isLoading={isLoading}
+							>
+								حفظ التغييرات
+							</Button>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>
+			</Box>
+		</>
+	);
 }
-

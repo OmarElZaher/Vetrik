@@ -5,12 +5,9 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 // Vet Name Imports
 import { VET_NAME as vet_name } from "../../../utils/constants";
 
-// Chakra UI Imports
-import { Box } from "@chakra-ui/react";
-
 // Custom Component Imports
-import AdminHeader from "../../../components/Admin/General/AdminHeader";
-import Footer from "../../../components/General/Footer";
+import PageLayout from "../../../components/Layout/PageLayout";
+import AdminHome from "../../../components/Admin/General/AdminHome";
 
 export default function AdminHomePage() {
 	return (
@@ -21,15 +18,9 @@ export default function AdminHomePage() {
 				</Helmet>
 			</HelmetProvider>
 
-			<AdminHeader />
-			<Box
-				display={"flex"}
-				justifyContent={"center"}
-				alignItems={"center"}
-				bg={"#F3F3F3"}
-				height={"88vh"}
-			/>
-			<Footer />
+			<PageLayout>
+				<AdminHome />
+			</PageLayout>
 		</>
 	);
 }

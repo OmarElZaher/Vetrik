@@ -158,7 +158,7 @@ export default function OpenCase() {
 					</Text>
 				</Box>
 
-				<Divider />
+				<Box as={"hr"} />
 
 				<Card
 					display={"flex"}
@@ -203,7 +203,7 @@ export default function OpenCase() {
 							width={"100%"}
 							height={"100%"}
 							borderRadius={"5px"}
-							placeholder="Reason For Visit..."
+							placeholder='Reason For Visit...'
 							p={5}
 							onChange={(e) => {
 								setReasonForVisit(e.target.value);
