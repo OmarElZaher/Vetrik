@@ -12,18 +12,13 @@ import { API_URL as api } from "../../utils/constants";
 import {
 	Box,
 	Button,
-	Card,
 	FormControl,
-	Heading,
 	Input,
 	InputGroup,
 	InputRightAddon,
 	Icon,
 	Divider,
-	List,
 	Text,
-	ListItem,
-	ListIcon,
 	useToast,
 	VStack,
 	useColorModeValue,
@@ -43,9 +38,6 @@ export default function SearchOwner() {
 
 	const cardBg = useColorModeValue("white", "gray.700");
 	const iconColor = useColorModeValue("blue.500", "blue.300");
-	const textColor = useColorModeValue("gray.800", "gray.200");
-	const borderColor = useColorModeValue("gray.200", "gray.600");
-	const boxColor = useColorModeValue("gray.50", "gray.800");
 
 	// Form useStates
 	const [fullName, setFullName] = useState("");
@@ -102,8 +94,10 @@ export default function SearchOwner() {
 		}
 	};
 
-	return (
-		<Box p={6} maxH='87.7vh'>
+	return isLoading ? (
+		<Spinner />
+	) : (
+		<Box p={6}>
 			<Box
 				bg={cardBg}
 				rounded='xl'

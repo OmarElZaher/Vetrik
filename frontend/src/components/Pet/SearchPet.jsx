@@ -1,5 +1,5 @@
 // React Imports
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Axios Import
@@ -12,14 +12,9 @@ import { API_URL as api } from "../../utils/constants";
 import {
 	Box,
 	Button,
-	Card,
 	FormControl,
-	Heading,
 	Input,
 	Icon,
-	List,
-	ListItem,
-	ListIcon,
 	Select,
 	Text,
 	useToast,
@@ -30,7 +25,7 @@ import {
 
 // React Icons Imports
 import { IoMdSearch } from "react-icons/io";
-import { MdOutlinePets, MdSettings } from "react-icons/md";
+import { MdOutlinePets } from "react-icons/md";
 
 // Component Imports
 import Spinner from "../General/Spinner";
@@ -47,8 +42,6 @@ export default function SearchPet() {
 
 	const cardBg = useColorModeValue("white", "gray.700");
 	const iconColor = useColorModeValue("blue.500", "blue.300");
-	const textColor = useColorModeValue("gray.800", "gray.200");
-	const inputBg = useColorModeValue("gray.100", "gray.600");
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
@@ -100,29 +93,10 @@ export default function SearchPet() {
 		}
 	};
 
-	const handleNameChange = (e) => {
-		setName(e.target.value);
-	};
-
-	const handleTypeChange = (e) => {
-		setType(e.target.value);
-	};
-
-	const handleBreedChange = (e) => {
-		setBreed(e.target.value);
-	};
-
-	const handleGenderChange = (e) => {
-		setGender(e.target.value);
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		handleSearch();
-	};
-
-	return (
-		<Box p={6} maxH='87.7vh'>
+	return isLoading ? (
+		<Spinner />
+	) : (
+		<Box p={6}>
 			<Box
 				bg={cardBg}
 				rounded='xl'
@@ -135,7 +109,7 @@ export default function SearchPet() {
 				dir='rtl'
 			>
 				<Box textAlign='center' mb={4}>
-					<Icon as={IoMdSearch} boxSize={10} color={iconColor} mb={2} />
+					<Icon as={MdOutlinePets} boxSize={10} color={iconColor} mb={2} />
 					<Text fontSize='2xl' fontWeight='bold'>
 						بحث عن الحيوان الأليف
 					</Text>
