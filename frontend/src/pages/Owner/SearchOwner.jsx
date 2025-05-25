@@ -6,8 +6,8 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Component Imports
-import Header from "../../components/General/Header";
 import SearchOwner from "../../components/Owner/SearchOwner";
+import PageLayout from "../../components/Layout/PageLayout";
 
 export default function SearchOwnerPage() {
 	return (
@@ -18,8 +18,9 @@ export default function SearchOwnerPage() {
 				</Helmet>
 			</HelmetProvider>
 
-			<Header />
-			<SearchOwner />
+			<PageLayout>
+				<SearchOwner />
+			</PageLayout>
 		</>
 	);
 }

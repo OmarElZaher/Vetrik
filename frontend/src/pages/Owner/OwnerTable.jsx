@@ -6,8 +6,8 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Component Imports
-import Header from "../../components/General/Header";
 import OwnerTable from "../../components/Owner/OwnerTable";
+import PageLayout from "../../components/Layout/PageLayout";
 
 export default function OwnerTablePage() {
 	return (
@@ -18,8 +18,9 @@ export default function OwnerTablePage() {
 				</Helmet>
 			</HelmetProvider>
 
-			<Header />
-			<OwnerTable />
+			<PageLayout>
+				<OwnerTable />
+			</PageLayout>
 		</>
 	);
 }

@@ -23,6 +23,9 @@ import {
 	Select,
 	Text,
 	useToast,
+	VStack,
+	Divider,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
 // React Icons Imports
@@ -31,7 +34,6 @@ import { MdOutlinePets, MdSettings } from "react-icons/md";
 
 // Component Imports
 import Spinner from "../General/Spinner";
-import Footer from "../General/Footer";
 
 export default function SearchPet() {
 	const toast = useToast();
@@ -42,6 +44,11 @@ export default function SearchPet() {
 	const [type, setType] = useState("");
 	const [breed, setBreed] = useState("");
 	const [gender, setGender] = useState("");
+
+	const cardBg = useColorModeValue("white", "gray.700");
+	const iconColor = useColorModeValue("blue.500", "blue.300");
+	const textColor = useColorModeValue("gray.800", "gray.200");
+	const inputBg = useColorModeValue("gray.100", "gray.600");
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
@@ -114,153 +121,96 @@ export default function SearchPet() {
 		handleSearch();
 	};
 
-	return isLoading ? (
-		<Spinner />
-	) : (
-		<>
+	return (
+		<Box p={6} maxH='87.7vh'>
 			<Box
+				bg={cardBg}
+				rounded='xl'
+				boxShadow='md'
+				p={10}
+				maxW='1200px'
+				maxH='1000px'
+				mx='auto'
+				mt={8}
 				dir='rtl'
-				display={"flex"}
-				justifyContent={"space-around"}
-				alignItems={"center"}
-				bg={"#F3F3F3"}
-				width={"100%"}
-				height={"87vh"}
 			>
-				<Card width='80%' height='80%'>
-					<Box
-						display={"flex"}
-						flexDirection={"column"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						height={"20%"}
-						px={5}
-						pt={5}
+				<Box textAlign='center' mb={4}>
+					<Icon as={IoMdSearch} boxSize={10} color={iconColor} mb={2} />
+					<Text fontSize='2xl' fontWeight='bold'>
+						بحث عن الحيوان الأليف
+					</Text>
+				</Box>
+
+				<Box textAlign='right' fontSize='sm' mb={6}>
+					<Text>⚙️ اكتب اسم أو نوع أو سلالة الحيوان عشان توصل له.</Text>
+					<Text>
+						⚙️ لو عايز تشوف كل الحيوانات، دوس <strong>بحث</strong> من غير ما
+						تكتب حاجة.
+					</Text>
+				</Box>
+
+				<Divider />
+
+				<Box h={6} />
+
+				<VStack spacing={4} align='stretch'>
+					<FormControl>
+						<Input
+							placeholder='اسم الحيوان'
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+						/>
+					</FormControl>
+
+					<FormControl>
+						<Input
+							placeholder='سلالة الحيوان'
+							value={breed}
+							onChange={(e) => setBreed(e.target.value)}
+						/>
+					</FormControl>
+
+					<FormControl>
+						<Select
+							value={type}
+							onChange={(e) => setType(e.target.value)}
+							iconColor='transparent'
+							cursor={"pointer"}
+						>
+							<option value=''>اختر نوع الحيوان</option>
+							<option value='Dog'>كلب</option>
+							<option value='Cat'>قطة</option>
+							<option value='Bird'>عصفور</option>
+							<option value='Turtle'>سلحفاة</option>
+							<option value='Hamster'>هامستر</option>
+							<option value='Fish'>سمكة</option>
+						</Select>
+					</FormControl>
+
+					<FormControl>
+						<Select
+							value={gender}
+							onChange={(e) => setGender(e.target.value)}
+							iconColor='transparent'
+							cursor={"pointer"}
+						>
+							<option value=''>اختر الجنس</option>
+							<option value='Male'>ذكر</option>
+							<option value='Female'>أنثى</option>
+						</Select>
+					</FormControl>
+
+					<Button
+						mt={2}
+						colorScheme='blue'
+						leftIcon={<IoMdSearch />}
+						onClick={handleSearch}
+						isLoading={isLoading}
 					>
-						<Icon as={MdOutlinePets} fontSize={"60px"} />
-
-						<Heading size='lg' mt={2}>
-							ابحث عن حيوان أليف
-						</Heading>
-					</Box>
-
-					<Box height={"10%"} mr={10} my={7}>
-						<List>
-							<ListItem>
-								<ListIcon as={MdSettings} color='yellowgreen' />
-								أدخل اسم الحيوان أو أي بيانات إضافية للبحث عنه.
-							</ListItem>
-							<ListItem>
-								<ListIcon as={MdSettings} color='yellowgreen' />
-								للحصول على جميع الحيوانات، اضغط{" "}
-								<Text display={"inline"} color={"yellowgreen"}>
-									بحث
-								</Text>{" "}
-								بدون إدخال أي بيانات.
-							</ListItem>
-						</List>
-					</Box>
-
-					<hr />
-
-					<Box height={"50%"} p={10}>
-						{/* Search Form */}
-						<FormControl
-							id='name'
-							display={"flex"}
-							justifyContent={"space-evenly"}
-						>
-							<Input
-								id='name'
-								type='text'
-								name='name'
-								placeholder='اسم الحيوان'
-								value={name}
-								onChange={handleNameChange}
-							/>
-						</FormControl>
-
-						<FormControl
-							id='type'
-							display={"flex"}
-							justifyContent={"space-evenly"}
-							alignItems={"center"}
-						>
-							<Select
-								id='type'
-								name='type'
-								placeholder='اختر نوع الحيوان'
-								cursor={"pointer"}
-								value={type}
-								iconColor='transparent'
-								onChange={handleTypeChange}
-								mt={5}
-								ml={2.5}
-							>
-								<option value='Dog'>كلب</option>
-								<option value='Cat'>قطة</option>
-								<option value='Bird'>عصفور</option>
-								<option value='Turtle'>سلحفاة</option>
-								<option value='Monkey'>قرد</option>
-								<option value='Hamster'>هامستر</option>
-								<option value='Fish'>سمكة</option>
-							</Select>
-							<Input
-								id='breed'
-								type='text'
-								name='breed'
-								placeholder='سلالة الحيوان'
-								value={breed}
-								onChange={handleBreedChange}
-								mt={5}
-								mr={2.5}
-							/>
-						</FormControl>
-
-						<FormControl id='gender' mt={5} mr={"25%"}>
-							<Select
-								id='gender'
-								name='gender'
-								placeholder='اختر الجنس'
-								cursor={"pointer"}
-								iconColor='transparent'
-								width={"50%"}
-								value={gender}
-								onChange={handleGenderChange}
-							>
-								<option value='Male'>ذكر</option>
-								<option value='Female'>أنثى</option>
-							</Select>
-						</FormControl>
-
-						<FormControl
-							display={"flex"}
-							flexDirection={"column"}
-							justifyContent={"center"}
-							alignItems={"center"}
-						>
-							<Button
-								_hover={{
-									bg: "yellowgreen",
-									color: "#000",
-									transform: "scale(1.01)",
-								}}
-								_active={{
-									transform: "scale(0.99)",
-									opacity: "0.5",
-								}}
-								onClick={handleSubmit}
-								leftIcon={<Icon as={IoMdSearch} />}
-								width={"50%"}
-								mt={10}
-							>
-								بحث
-							</Button>
-						</FormControl>
-					</Box>
-				</Card>
+						بحث
+					</Button>
+				</VStack>
 			</Box>
-			<Footer />
-		</>
+		</Box>
 	);
 }

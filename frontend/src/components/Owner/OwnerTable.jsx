@@ -7,176 +7,154 @@ import {
 	Box,
 	Button,
 	Table,
-	TableContainer,
 	Thead,
 	Tbody,
 	Tr,
 	Th,
 	Td,
 	Text,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
 // React Icon Imports
 import { IoMdEye, IoMdArrowRoundBack } from "react-icons/io";
-
-// Custom Component Imports
-import Footer from "../General/Footer";
+import { IoMdAdd } from "react-icons/io";
 
 function titleCase(str) {
-    if (!str) return "";
-    return str
-        .toLowerCase()
-        .split(" ")
-        .map((word) => {
-            return word.charAt(0).toUpperCase() + word.slice(1);
-        })
-        .join(" ");
+	if (!str) return "";
+	return str
+		.toLowerCase()
+		.split(" ")
+		.map((word) => {
+			return word.charAt(0).toUpperCase() + word.slice(1);
+		})
+		.join(" ");
 }
 
 export default function OwnerTable() {
 	const navigate = useNavigate();
-	const data = localStorage.getItem("ownerFilterData");
+	const data = sessionStorage.getItem("ownerFilterData");
 
-	if (data === null) {
-		return (
-			<>
-				<Box
-					dir='rtl'
-					display={"flex"}
-					flexDirection={"column"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					height={"100vh"}
+	const bg = useColorModeValue("gray.50", "gray.800");
+	const cardBg = useColorModeValue("white", "gray.700");
+	const borderColor = useColorModeValue("gray.200", "gray.600");
+	const textColor = useColorModeValue("gray.800", "gray.100");
+	const rowBg = useColorModeValue("gray.100", "gray.700");
+
+	const owners = JSON.parse(data) || [];
+
+	return (
+		<>
+			<Box dir='rtl' bg={bg} px={6} py={10}>
+				<Text
+					fontSize='2xl'
+					fontWeight='bold'
+					textAlign='center'
+					mb={2}
+					textDecoration='underline'
+					color={textColor}
 				>
-					<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-						NOT FOUND
-					</Text>
-					<Text fontSize={"25px"} textDecoration={"underline"}>
-						من فضلك ابحث عن المالك قبل الدخول للصفحة دي
-					</Text>
-					<Button
-						_hover={{
-							bg: "yellowgreen",
-							color: "#000",
-							transform: "scale(1.01)",
-						}}
-						_active={{
-							transform: "scale(0.99)",
-							opacity: "0.5",
-						}}
-						onClick={() => {
-							navigate("/search-owner");
-						}}
-						leftIcon={<IoMdArrowRoundBack />}
-						width={"25vw"}
-						mt={10}
-					>
-						الرجوع لصفحة البحث
-					</Button>
-				</Box>
-			</>
-		);
-	} else {
-		return (
-			<>
-				<Box dir='rtl' width={"100%"} height={"87vh"}>
-					<Box
-						display={"flex"}
-						flexDirection={"column"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						height={"15%"}
-						my={5}
-					>
-						<Text
-							fontSize={"35px"}
-							color={"#121211"}
-							fontWeight={500}
-							textDecoration={"underline"}
+					المالكين اللي تم العثور عليهم
+				</Text>
+
+				<Text textAlign='center' color='gray.500' fontSize='sm' mb={6}>
+					عدد النتائج: {owners.length}
+				</Text>
+
+				<Box
+					rounded='lg'
+					bg={cardBg}
+					boxShadow='sm'
+					p={5}
+					maxW='95%'
+					mx='auto'
+					overflow='auto'
+					border='1px solid'
+					borderColor={borderColor}
+				>
+					<Table variant='simple' size='md'>
+						<Thead
+							bg={useColorModeValue("gray.100", "gray.600")}
+							position='sticky'
+							top={0}
+							zIndex={1}
 						>
-							المالكين اللي تم العثور عليهم
-						</Text>
-					</Box>
-					<Box
-						display={"flex"}
-						flexDirection={"column"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						width={"100%"}
-						height={"70%"}
-					>
-						<TableContainer width={"80%"} maxHeight={"70vh"} overflowY={"auto"}>
-							<Table variant='simple' size='md'>
-								<Thead>
-									<Tr>
-										<Th textAlign={"left"}>الاسم الكامل</Th>
-										<Th textAlign={"center"}>البريد الإلكتروني</Th>
-										<Th textAlign={"center"}>رقم الموبايل</Th>
-										<Th textAlign={"right"}>عرض التفاصيل</Th>
-									</Tr>
-								</Thead>
-								<Tbody>
-									{JSON.parse(data).map((row) => (
-										<Tr key={data._id}>
-											<Td textAlign={"left"}>{`${titleCase(
-												row.fullName
-											)}`}</Td>
-											<Td textAlign={"center"}>{row.email}</Td>
-											<Td textAlign={"center"}>{row.mobileNumber}</Td>
-											<Td textAlign={"right"}>
-												<Button
-													_hover={{
-														bg: "yellowgreen",
-														color: "#000",
-														transform: "scale(1.01)",
-													}}
-													_active={{
-														transform: "scale(0.99)",
-														opacity: "0.5",
-													}}
-													onClick={() => {
-														navigate(`/owner-details/${row._id}`);
-													}}
-													rightIcon={<IoMdEye />}
-												>
-													عرض
-												</Button>
-											</Td>
-										</Tr>
-									))}
-								</Tbody>
-							</Table>
-						</TableContainer>
-					</Box>
-					<Box
-						display={"flex"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						height={"10%"}
-					>
-						<Button
-							_hover={{
-								bg: "yellowgreen",
-								color: "#000",
-								transform: "scale(1.01)",
-							}}
-							_active={{
-								transform: "scale(0.99)",
-								opacity: "0.5",
-							}}
-							onClick={() => {
-								localStorage.removeItem("ownerFilterData");
-								navigate("/search-owner");
-							}}
-							rightIcon={<IoMdArrowRoundBack />}
-							width={["90%", "60%", "40%", "25vw"]}
-						>
-							الرجوع لصفحة البحث
-						</Button>
-					</Box>
+							<Tr>
+								<Th textAlign='center'>الاسم الكامل</Th>
+								<Th textAlign='center'>البريد الإلكتروني</Th>
+								<Th textAlign='center'>رقم الموبايل</Th>
+								<Th textAlign='center'>عرض التفاصيل</Th>
+							</Tr>
+						</Thead>
+						<Tbody>
+							{owners.map((row) => (
+								<Tr
+									key={row._id}
+									_hover={{ bg: rowBg }}
+									transition='background-color 0.2s'
+								>
+									<Td textAlign='center'>{titleCase(row.fullName)}</Td>
+									<Td textAlign='center'>{row.email}</Td>
+									<Td textAlign='center'>{row.mobileNumber}</Td>
+
+									<Td textAlign='center'>
+										<Button
+											size='sm'
+											colorScheme='blue'
+											rightIcon={<IoMdEye />}
+											onClick={() => navigate(`/owner-details/${row._id}`)}
+											_active={{ transform: "scale(0.98)", opacity: 0.7 }}
+										>
+											عرض
+										</Button>
+									</Td>
+								</Tr>
+							))}
+						</Tbody>
+					</Table>
 				</Box>
-				<Footer />
-			</>
-		);
-	}
+
+				<Box mt={10} textAlign='center' color='gray.500'>
+					<Text mb={1}>🔍 تمت عملية البحث بنجاح</Text>
+					<Text fontSize='sm'>
+						يمكنك الآن استعراض التفاصيل أو العودة للبحث من جديد
+					</Text>
+				</Box>
+			</Box>
+
+			<Box
+				mt={10}
+				p={6}
+				rounded='lg'
+				bg={useColorModeValue("gray.100", "gray.700")}
+				textAlign='center'
+				boxShadow='md'
+			>
+				<Text fontSize='lg' mb={3}>
+					لم تجد المالك الذي تبحث عنه؟
+				</Text>
+				<Button
+					colorScheme='green'
+					onClick={() => navigate("/add-owner")}
+					leftIcon={<IoMdAdd />}
+				>
+					إنشاء مالك جديد
+				</Button>
+			</Box>
+
+			<Box mt={8} display='flex' justifyContent='center'>
+				<Button
+					width={["90%", "60%", "40%", "25vw"]}
+					rightIcon={<IoMdArrowRoundBack />}
+					onClick={() => {
+						sessionStorage.removeItem("ownerFilterData");
+						navigate("/search-owner");
+					}}
+					_active={{ transform: "scale(0.97)", opacity: 0.8 }}
+				>
+					الرجوع لصفحة البحث
+				</Button>
+			</Box>
+		</>
+	);
 }

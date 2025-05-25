@@ -1,5 +1,5 @@
 // React Imports
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Axios Import
@@ -7,9 +7,6 @@ import axios from "axios";
 
 // API URL Import
 import { API_URL as api } from "../../utils/constants";
-
-// Hook Import
-import useIsMobile from "../../hooks/useIsMobile";
 
 // Chakra UI Imports
 import {
@@ -22,12 +19,14 @@ import {
 	InputGroup,
 	InputRightAddon,
 	Icon,
+	Divider,
 	List,
 	Text,
 	ListItem,
 	ListIcon,
 	useToast,
 	VStack,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
 // React Icons Imports
@@ -36,13 +35,17 @@ import { FaPerson } from "react-icons/fa6";
 import { MdSettings } from "react-icons/md";
 
 // Custom Components Imports
-import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
 export default function SearchOwner() {
 	const toast = useToast();
 	const navigate = useNavigate();
-	const isMobile = useIsMobile();
+
+	const cardBg = useColorModeValue("white", "gray.700");
+	const iconColor = useColorModeValue("blue.500", "blue.300");
+	const textColor = useColorModeValue("gray.800", "gray.200");
+	const borderColor = useColorModeValue("gray.200", "gray.600");
+	const boxColor = useColorModeValue("gray.50", "gray.800");
 
 	// Form useStates
 	const [fullName, setFullName] = useState("");
@@ -72,7 +75,10 @@ export default function SearchOwner() {
 			});
 
 			if (response.status === 200) {
-				localStorage.setItem("ownerFilterData", JSON.stringify(response.data));
+				sessionStorage.setItem(
+					"ownerFilterData",
+					JSON.stringify(response.data)
+				);
 				navigate("/owner-table");
 			} else {
 				toast({
@@ -96,309 +102,83 @@ export default function SearchOwner() {
 		}
 	};
 
-	const handleFullNameChange = (e) => {
-		setFullName(e.target.value);
-	};
+	return (
+		<Box p={6} maxH='87.7vh'>
+			<Box
+				bg={cardBg}
+				rounded='xl'
+				boxShadow='md'
+				p={10}
+				maxW='1200px'
+				maxH='1000px'
+				mx='auto'
+				mt={8}
+				dir='rtl'
+			>
+				<Box textAlign='center' mb={4}>
+					<Icon as={FaPerson} boxSize={10} color={iconColor} mb={2} />
+					<Text fontSize='2xl' fontWeight='bold'>
+						بحث عن المالك
+					</Text>
+				</Box>
 
-	const handleMobileNumberChange = (e) => {
-		setMobileNumber(e.target.value);
-	};
+				<Box textAlign='right' fontSize='sm' mb={6}>
+					<Text>⚙️ أدخل اسم أو أكثر عشان توصل للمالك اللي تقدر عليه.</Text>
+					<Text>
+						⚙️ لو عايز تشوف كل المالكين، دوس <strong>بحث</strong> من غير ما تكتب
+						حاجة.
+					</Text>
+				</Box>
 
-	const handleEmailChange = (e) => {
-		setEmail(e.target.value);
-	};
+				<Divider />
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		handleSearch();
-	};
+				<Box h={6} />
 
-	if (isMobile) {
-		return (
-			<>
-			  {isLoading ? (
-				<Spinner />
-			  ) : (
-				<>
-				  <Box
-					dir='rtl'
-					display='flex'
-					justifyContent='center'
-					alignItems='center'
-					bg='#F3F3F3'
-					width='100%'
-					minHeight='87vh'
-					px={[3, 5]} // horizontal padding for small screens
-					py={[4, 8]} // vertical padding for small screens
-				  >
-					<Card width={["100%", "90%", "80%"]} height='auto' p={[4, 6]}>
-					  <Box
-						display='flex'
-						flexDirection='column'
-						justifyContent='center'
-						alignItems='center'
-						height='auto'
-						textAlign='center'
-					  >
-						<Icon as={FaPerson} fontSize='60px' />
-						<Heading size='lg' mt={2}>
-						  بحث عن المالك
-						</Heading>
-					  </Box>
-		  
-					  <Box my={[5, 7]} mx={[2, 10]}>
-						<List spacing={3}>
-						  <ListItem>
-							<ListIcon as={MdSettings} color='yellowgreen' />
-							أدخل اسم أو أكتر علشان توصل للمالك اللي بتدور عليه.
-						  </ListItem>
-						  <ListItem>
-							<ListIcon as={MdSettings} color='yellowgreen' />
-							لو عايز تشوف كل المالكين، دوس{" "}
-							<Text display='inline' color='yellowgreen'>
-							  بحث
-							</Text>{" "}
-							من غير ما تكتب حاجة.
-						  </ListItem>
-						</List>
-					  </Box>
-		  
-					  <hr />
-		  
-					  <Box dir='rtl' mt={6}>
-						{/* Search Form */}
-						<VStack spacing={5} align='stretch'>
-						  <FormControl id='fullName'>
+				<VStack spacing={4} align='stretch'>
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<FaPerson />} />
 							<Input
-							  id='fullName'
-							  type='text'
-							  name='fullName'
-							  placeholder='(الاسم كامل (الاسم الأول واسم العائلة'
-							  value={fullName}
-							  onChange={handleFullNameChange}
-							  width='100%'
+								placeholder='اسم المالك'
+								value={fullName}
+								onChange={(e) => setFullName(e.target.value)}
 							/>
-						  </FormControl>
-		  
-						  <FormControl id='email'>
-							<InputGroup>
-							  <InputRightAddon
-								display='flex'
-								justifyContent='center'
-								alignItems='center'
-								px={3}
-							  >
-								@
-							  </InputRightAddon>
-							  <Input
-								id='email'
-								type='email'
-								name='email'
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<MdSettings />} />
+							<Input
 								placeholder='البريد الإلكتروني'
 								value={email}
-								onChange={handleEmailChange}
-							  />
-							</InputGroup>
-						  </FormControl>
-		  
-						  <FormControl id='mobileNumber'>
-							<InputGroup>
-							  <InputRightAddon
-								dir='rtl'
-								display='flex'
-								justifyContent='center'
-								alignItems='center'
-								px={3}
-							  >
-								+٢
-							  </InputRightAddon>
-							  <Input
-								dir='rtl'
-								id='mobileNumber'
-								type='tel'
-								name='mobileNumber'
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<IoMdSearch />} />
+							<Input
 								placeholder='رقم الموبايل'
 								value={mobileNumber}
-								onChange={handleMobileNumberChange}
-							  />
-							</InputGroup>
-						  </FormControl>
-		  
-						  <FormControl>
-							<Button
-							  _hover={{
-								bg: 'yellowgreen',
-								color: '#000',
-								transform: 'scale(1.01)',
-							  }}
-							  _active={{
-								transform: 'scale(0.99)',
-								opacity: '0.5',
-							  }}
-							  onClick={handleSubmit}
-							  rightIcon={<Icon as={IoMdSearch} />}
-							  width={['100%', '50%']}
-							  alignSelf='center'
-							  mt={4}
-							>
-							  بحث
-							</Button>
-						  </FormControl>
-						</VStack>
-					  </Box>
-					</Card>
-				  </Box>
-				  <Footer />
-				</>
-			  )}
-			</>
-		  );
-	}		  
+								onChange={(e) => setMobileNumber(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
 
-	return (
-		<>
-			{isLoading ? (
-				<Spinner />
-			) : (
-				<>
-					<Box
-						dir='rtl'
-						display={"flex"}
-						justifyContent={"space-around"}
-						alignItems={"center"}
-						bg={"#F3F3F3"}
-						width={"100%"}
-						height={"87vh"}
+					<Button
+						mt={2}
+						colorScheme='blue'
+						leftIcon={<IoMdSearch />}
+						onClick={handleSearch}
+						isLoading={isLoading}
 					>
-						<Card width='80%' height='80%'>
-							<Box
-								display={"flex"}
-								flexDirection={"column"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								height={"20%"}
-								px={5}
-								pt={5}
-							>
-								<Icon as={FaPerson} fontSize={"60px"} />
-
-								<Heading size='lg' mt={2}>
-									بحث عن المالك
-								</Heading>
-							</Box>
-
-							<Box height={"10%"} mr={10} my={7}>
-								<List>
-									<ListItem>
-										<ListIcon as={MdSettings} color='yellowgreen' />
-										أدخل اسم أو أكتر علشان توصل للمالك اللي بتدور عليه.
-									</ListItem>
-									<ListItem>
-										<ListIcon as={MdSettings} color='yellowgreen' />
-										لو عايز تشوف كل المالكين، دوس{" "}
-										<Text display={"inline"} color={"yellowgreen"}>
-											بحث
-										</Text>{" "}
-										من غير ما تكتب حاجة.
-									</ListItem>
-								</List>
-							</Box>
-
-							<hr />
-
-							<Box dir='rtl' height={"50%"} p={10}>
-								{/* Search Form */}
-								<FormControl
-									id='fullName'
-									display={"flex"}
-									justifyContent={"space-evenly"}
-								>
-									<Input
-										id='fullName'
-										type='text'
-										name='fullName'
-										placeholder='اسم المالك'
-										value={fullName}
-										onChange={handleFullNameChange}
-										ml={2.5}
-									/>
-								</FormControl>
-
-								<FormControl id='email'>
-									<InputGroup mt={5}>
-										<InputRightAddon
-											display={"flex"}
-											justifyContent={"center"}
-											alignItems={"center"}
-											width={"5%"}
-										>
-											@
-										</InputRightAddon>
-										<Input
-											id='email'
-											type='email'
-											name='email'
-											placeholder='البريد الإلكتروني'
-											value={email}
-											onChange={handleEmailChange}
-										/>
-									</InputGroup>
-								</FormControl>
-
-								<FormControl id='mobileNumber' mt={5}>
-									<InputGroup>
-										<InputRightAddon
-											dir='rtl'
-											display={"flex"}
-											justifyContent={"center"}
-											alignItems={"center"}
-											width={"5%"}
-										>
-											+٢
-										</InputRightAddon>
-										<Input
-											dir='rtl'
-											id='mobileNumber'
-											type='tel'
-											name='mobileNumber'
-											placeholder='رقم الموبايل'
-											value={mobileNumber}
-											onChange={handleMobileNumberChange}
-										/>
-									</InputGroup>
-								</FormControl>
-
-								<FormControl
-									dir='rtl'
-									display={"flex"}
-									flexDirection={"column"}
-									justifyContent={"center"}
-									alignItems={"center"}
-								>
-									<Button
-										_hover={{
-											bg: "yellowgreen",
-											color: "#000",
-											transform: "scale(1.01)",
-										}}
-										_active={{
-											transform: "scale(0.99)",
-											opacity: "0.5",
-										}}
-										onClick={handleSubmit}
-										rightIcon={<Icon as={IoMdSearch} />}
-										width={"50%"}
-										mt={10}
-									>
-										بحث
-									</Button>
-								</FormControl>
-							</Box>
-						</Card>
-					</Box>
-					<Footer />
-				</>
-			)}
-		</>
+						بحث
+					</Button>
+				</VStack>
+			</Box>
+		</Box>
 	);
 }

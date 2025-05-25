@@ -22,7 +22,7 @@ import {
 
 import axios from "axios";
 
-import { API_URL as api } from "../../utils/constants";
+import { API_URL as api, VET_NAME as vet } from "../../utils/constants";
 
 import {
 	FaBars,
@@ -88,7 +88,13 @@ const PageLayout = ({ children }) => {
 	return isLoading ? (
 		<Spinner />
 	) : (
-		<Box minH='100vh' dir='rtl' bg={boxColor}>
+		<Box
+			minH='100vh'
+			display='flex'
+			flexDirection='column'
+			dir='rtl'
+			bg={boxColor}
+		>
 			{/* Header */}
 			<Flex
 				as='header'
@@ -113,7 +119,7 @@ const PageLayout = ({ children }) => {
 					onClick={() => navigate("/")}
 					cursor={"pointer"}
 				>
-					Vetrik
+					{vet}
 				</Text>
 
 				<HStack spacing={3}>
@@ -184,7 +190,25 @@ const PageLayout = ({ children }) => {
 			</Drawer>
 
 			{/* Main content */}
-			<Box p={{ base: 4, md: 8 }}>{children}</Box>
+			<Box p={{ base: 4, md: 8 }} flexGrow={1}>
+				{children}
+			</Box>
+
+			<Flex
+				as='footer'
+				direction='column'
+				align='center'
+				justify='center'
+				bg={bg}
+				py={4}
+				mt={8}
+				fontSize='sm'
+				color='gray.500'
+				boxShadow='inner'
+			>
+				<Text>جميع الحقوق محفوظة © {new Date().getFullYear()}</Text>
+				<Text>منصة Vetrik لإدارة العيادات البيطرية</Text>
+			</Flex>
 		</Box>
 	);
 };
