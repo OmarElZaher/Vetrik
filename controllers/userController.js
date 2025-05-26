@@ -783,7 +783,7 @@ const getOwner = asyncHandler(async (req, res) => {
 			query.fullName = new RegExp(fullName, "i");
 		}
 		if (mobileNumber) {
-			query.mobileNumber = new RegExp(mobileNumber, "i");
+			query.mobileNumber = mobileNumber;
 		}
 		if (email) {
 			query.email = new RegExp(email, "i");
