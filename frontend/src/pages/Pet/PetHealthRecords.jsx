@@ -6,8 +6,8 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Component Imports
-import Header from "../../components/General/Header";
 import PetHealthRecords from "../../components/Pet/PetHealthRecords";
+import PageLayout from "../../components/Layout/PageLayout";
 
 export default function PetHealthRecordsPage() {
 	return (
@@ -16,10 +16,10 @@ export default function PetHealthRecordsPage() {
 				<Helmet>
 					<title>Health Records | {vet_name}</title>
 				</Helmet>
-				<Header />
 			</HelmetProvider>
-
-			<PetHealthRecords />
+			<PageLayout>
+				<PetHealthRecords />
+			</PageLayout>
 		</>
 	);
 }

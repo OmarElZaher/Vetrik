@@ -24,17 +24,18 @@ import {
 	Th,
 	Tr,
 	Text,
-	Tooltip,
 	useToast,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
 // React Icon Imports
 import { BiHealth } from "react-icons/bi";
-import { IoMdDownload, IoMdArrowRoundBack } from "react-icons/io";
-import { MdDelete, MdUpload } from "react-icons/md";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaFileDownload, FaFileUpload } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { MdDriveFileMoveRtl } from "react-icons/md";
 
 // Custom Component Imports
-import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
 export default function PetHealthRecords() {
@@ -50,6 +51,22 @@ export default function PetHealthRecords() {
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
+
+	const bg = useColorModeValue("gray.50", "gray.900");
+	const cardBg = useColorModeValue("white", "gray.800");
+	const cardBorderColor = useColorModeValue("gray.200", "gray.700");
+	const cardTextColor = useColorModeValue("gray.800", "gray.100");
+
+	const sectionBg = useColorModeValue("gray.100", "gray.700");
+	const sectionBorderColor = useColorModeValue("gray.200", "gray.600");
+
+	const sectionHeaderBg = useColorModeValue("gray.200", "gray.600");
+	const rowHoverBg = useColorModeValue("gray.50", "gray.900");
+	const iconColor = useColorModeValue("gray.400", "gray.600");
+	const emptyTextColor = useColorModeValue("gray.500", "gray.400");
+	const inputBg = useColorModeValue("white", "gray.800");
+	const inputTextColor = useColorModeValue("gray.800", "gray.100");
+	const inputBorderColor = useColorModeValue("gray.200", "gray.600");
 
 	const fetchData = async () => {
 		try {
@@ -258,199 +275,187 @@ export default function PetHealthRecords() {
 		fetchData();
 	}, []);
 
-	return (
+	return isLoading ? (
+		<Spinner />
+	) : (
 		<>
-			{isLoading ? (
-				<Spinner />
-			) : (
-				<>
-					<Box
-						dir='rtl'
-						display={"flex"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						bg={"#F3F3F3"}
-						height={"87vh"}
-					>
-						<Card
-							display={"flex"}
-							flexDirection={"column"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							width={"90%"}
-							height={"90%"}
+			<Box
+				bg={bg}
+				py={8}
+				px={{ base: 2, md: 0 }}
+				display='flex'
+				justifyContent='center'
+				alignItems='flex-start'
+			>
+				<Card
+					bg={cardBg}
+					p={{ base: 4, md: 10 }}
+					rounded='2xl'
+					shadow='lg'
+					maxW='900px'
+					w='100%'
+					mx='auto'
+					border='1px solid'
+					borderColor={cardBorderColor}
+				>
+					{/* Header */}
+					<Box textAlign='center' mb={6}>
+						<Icon as={BiHealth} boxSize={16} color='blue.500' mb={2} />
+						<Text
+							as='h1'
+							fontWeight='bold'
+							fontSize='3xl'
+							textDecoration='underline'
+							mb={2}
+							color={cardTextColor}
 						>
-							<Box
-								display={"flex"}
-								flexDirection={"column"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								width={"90%"}
-								height={"15%"}
-							>
-								<Icon as={BiHealth} fontSize={"60px"} />
-								<Text
-									fontSize={"40px"}
-									fontWeight={"bold"}
-									textDecoration={"underline"}
-								>
-									السجلات الصحية
-								</Text>
-							</Box>
-							<Box
-								display={"flex"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								width={"90%"}
-								height={"50%"}
-							>
-								<TableContainer
-									width={"100%"}
-									maxHeight={"80%"}
-									overflowY={"auto"}
-								>
-									<Table variant='simple' size='md'>
-										<Thead>
-											<Tr>
-												<Th textAlign={"left"}>اسم الملف</Th>
-												<Th textAlign={"center"}>آخر تعديل</Th>
-												<Th textAlign={"center"}>الإجراء</Th>
-											</Tr>
-										</Thead>
-										<Tbody>
-											{healthRecords.map((row) => (
-												<Tr key={row._id}>
-													<Td textAlign={"left"}>{row.filename}</Td>
-													<Td textAlign={"center"}>
-														{new Date(row.updatedAt).toLocaleString("en-UK", {
-															weekday: "long",
-															year: "2-digit",
-															month: "long",
-															day: "2-digit",
-															hour: "numeric",
-															minute: "numeric",
-															hour12: true,
-														})}
-													</Td>
-													<Td textAlign={"center"}>
-														<Button
-															_hover={{
-																bg: "yellowgreen",
-																color: "#000",
-																transform: "scale(1.01)",
-															}}
-															_active={{
-																transform: "scale(0.99)",
-																opacity: "0.5",
-															}}
-															onClick={() => {
-																handleDownload(row._id);
-															}}
-															rightIcon={<IoMdDownload />}
-															ml={2.5}
-														>
-															تحميل
-														</Button>
-														<Tooltip
-															hasArrow
-															label='حذف السجل الصحي للحيوان'
-															bg={"#EF5350"}
-															placement='top'
-															openDelay={75}
-														>
-															<Button
-																_hover={{
-																	bg: "#EF5350",
-																	color: "#000",
-																	transform: "scale(1.01)",
-																}}
-																_active={{
-																	transform: "scale(0.99)",
-																	opacity: "0.5",
-																}}
-																onClick={() => {
-																	handleDelete(row._id);
-																}}
-																variant={"outline"}
-																borderColor={"#EF5350"}
-																rightIcon={<MdDelete />}
-																mr={2.5}
-															>
-																حذف
-															</Button>
-														</Tooltip>
-													</Td>
-												</Tr>
-											))}
-										</Tbody>
-									</Table>
-								</TableContainer>
-							</Box>
-							<Box
-								display='flex'
-								flexDirection='column'
-								justifyContent='center'
-								alignItems='center'
-								width={["100%", "90%"]} // 100% on small screens, 90% on larger
-								height='auto'
-								px={[4, 0]} // Padding on small screens
-								py={5}
-							>
-								<Input
-									type={"file"}
-									disabled={isLoading}
-									onChange={handleFileChange}
-									cursor='pointer'
-									width={["100%", "60%", "40%"]} // Full width on mobile, narrower on larger screens
-									mb={4}
-								/>
-								<Box>
-									<Button
-										_hover={{
-											bg: "yellowgreen",
-											color: "#000",
-											transform: "scale(1.01)",
-										}}
-										_active={{
-											transform: "scale(0.99)",
-											opacity: "0.5",
-										}}
-										onClick={handleUpload}
-										rightIcon={<MdUpload />}
-										width={["100%", "auto"]}
-										fontSize={["sm", "md"]}
-										ml={2.5}
-									>
-										رفع
-									</Button>
-
-									<Button
-										_hover={{
-											bg: "yellowgreen",
-											color: "#000",
-											transform: "scale(1.01)",
-										}}
-										_active={{
-											transform: "scale(0.99)",
-											opacity: "0.5",
-										}}
-										onClick={() => {
-											navigate(-1);
-										}}
-										rightIcon={<IoMdArrowRoundBack />}
-										width={["100%", "auto"]}
-										fontSize={["sm", "md"]}
-										mr={2.5}
-									>
-										رجوع
-									</Button>
-								</Box>
-							</Box>
-						</Card>
+							السجلات الصحية
+						</Text>
 					</Box>
-					<Footer />
-				</>
-			)}
+
+					{/* Health Records Table */}
+					<Box
+						bg={sectionBg}
+						rounded='lg'
+						py={3}
+						px={{ base: 1, md: 5 }}
+						boxShadow='sm'
+						mb={8}
+						border='1px solid'
+						borderColor={sectionBorderColor}
+					>
+						<TableContainer>
+							<Table size='md' variant='unstyled'>
+								<Thead>
+									<Tr bg={sectionHeaderBg}>
+										<Th />
+										<Th textAlign='center' color={cardTextColor}>
+											اسم الملف
+										</Th>
+										<Th textAlign='center' color={cardTextColor}>
+											آخر تعديل
+										</Th>
+										<Th textAlign='center' color={cardTextColor}>
+											إجراء
+										</Th>
+									</Tr>
+								</Thead>
+								<Tbody>
+									{healthRecords.length === 0 ? (
+										<Tr>
+											<Td colSpan={4} textAlign='center' py={10}>
+												<Box>
+													<Icon
+														as={BiHealth}
+														boxSize={10}
+														color={iconColor}
+														mb={2}
+													/>
+													<Text color={emptyTextColor} fontWeight='bold'>
+														لا توجد سجلات صحية بعد
+													</Text>
+												</Box>
+											</Td>
+										</Tr>
+									) : (
+										healthRecords.map((rec) => (
+											<Tr key={rec._id} _hover={{ bg: rowHoverBg }}>
+												<Td textAlign='center'>
+													<Icon
+														as={MdDriveFileMoveRtl}
+														color='blue.400'
+														verticalAlign='middle'
+														ml={1}
+													/>
+												</Td>
+												<Td textAlign='center' color={cardTextColor}>
+													{rec.filename}
+												</Td>
+												<Td textAlign='center' color={cardTextColor}>
+													{rec.updatedAt
+														? new Date(rec.updatedAt).toLocaleString("ar-EG", {
+																dateStyle: "full",
+																timeStyle: "short",
+														  })
+														: "—"}
+												</Td>
+												<Td textAlign='center'>
+													<Button
+														size='sm'
+														variant='ghost'
+														colorScheme='blue'
+														rightIcon={<FaFileDownload />}
+														onClick={() => handleDownload(rec._id)}
+														mx={1}
+													>
+														تحميل
+													</Button>
+													<Button
+														size='sm'
+														variant='outline'
+														colorScheme='red'
+														rightIcon={<MdDelete />}
+														onClick={() => handleDelete(rec._id)}
+														mx={1}
+													>
+														حذف
+													</Button>
+												</Td>
+											</Tr>
+										))
+									)}
+								</Tbody>
+							</Table>
+						</TableContainer>
+					</Box>
+
+					{/* Upload Section */}
+					<Box
+						bg={bg}
+						p={4}
+						rounded='lg'
+						boxShadow='xs'
+						display='flex'
+						flexDirection={{ base: "column", md: "row" }}
+						alignItems='center'
+						justifyContent='center'
+						gap={3}
+						border='1px solid'
+						borderColor={cardBorderColor}
+					>
+						<Input
+							type='file'
+							onChange={handleFileChange}
+							accept='.pdf,.doc,.docx,.pages,.txt,.jpg,.jpeg,.png'
+							w={{ base: "100%", md: "auto" }}
+							bg={inputBg}
+							color={inputTextColor}
+							border='1px solid'
+							borderColor={inputBorderColor}
+						/>
+						<Button
+							colorScheme='blue'
+							rightIcon={<FaFileUpload />}
+							onClick={handleUpload}
+							mt={{ base: 3, md: 0 }}
+							px={6}
+							isLoading={isLoading}
+						>
+							رفع
+						</Button>
+						<Button
+							variant='outline'
+							colorScheme='gray'
+							rightIcon={<IoMdArrowRoundBack />}
+							onClick={() => navigate(-1)}
+							mt={{ base: 3, md: 0 }}
+							px={6}
+						>
+							رجوع
+						</Button>
+					</Box>
+				</Card>
+			</Box>
 		</>
 	);
 }
