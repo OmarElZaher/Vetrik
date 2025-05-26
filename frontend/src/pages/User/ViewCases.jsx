@@ -6,8 +6,8 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Component Imports
-import Header from "../../components/General/Header";
 import ViewCases from "../../components/User/ViewCases";
+import PageLayout from "../../components/Layout/PageLayout";
 
 export default function ViewCasesPage() {
 	return (
@@ -18,8 +18,9 @@ export default function ViewCasesPage() {
 				</Helmet>
 			</HelmetProvider>
 
-			<Header />
-			<ViewCases />
+			<PageLayout>
+				<ViewCases />
+			</PageLayout>
 		</>
 	);
 }

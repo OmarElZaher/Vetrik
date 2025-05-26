@@ -19,6 +19,7 @@ import {
 	Tr,
 	Td,
 	Tbody,
+	Icon,
 	AlertDialog,
 	AlertDialogBody,
 	AlertDialogFooter,
@@ -36,6 +37,7 @@ import {
 	Textarea,
 	useDisclosure,
 	useToast,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
 // React Icons Imports
@@ -70,6 +72,14 @@ export default function ViewCases() {
 
 	const [editMode, setEditMode] = useState(false);
 	const [updatedReason, setUpdatedReason] = useState("");
+
+	const bg = useColorModeValue("gray.50", "gray.900");
+	const cardBg = useColorModeValue("white", "gray.800");
+	const borderColor = useColorModeValue("gray.200", "gray.700");
+	const tableHeadBg = useColorModeValue("gray.100", "gray.700");
+	const tableRowHover = useColorModeValue("gray.50", "gray.900");
+	const titleColor = useColorModeValue("gray.900", "gray.100");
+	const btnBackBg = useColorModeValue("gray.100", "gray.700");
 
 	const {
 		isOpen: isModalOpen,
@@ -234,355 +244,227 @@ export default function ViewCases() {
 
 	return isLoading ? (
 		<Spinner />
-	) : error ? (
-		<>
-			<Box
-				dir='rtl'
-				display={"flex"}
-				flexDirection={"column"}
-				justifyContent={"center"}
-				alignItems={"center"}
-				bg={"#F3F3F3"}
-				height={"87vh"}
-			>
-				<Text fontWeight={"bold"} fontSize={"60px"} color={"red"}>
-					ERROR
-				</Text>
-				<Text fontSize={"40px"} textDecoration={"underline"}>
-					{error}
-				</Text>
-				<Button
-					_hover={{
-						bg: "yellowgreen",
-						color: "#000",
-						transform: "scale(1.01)",
-					}}
-					_active={{
-						transform: "scale(0.99)",
-						opacity: "0.5",
-					}}
-					onClick={() => {
-						navigate("/");
-					}}
-					rightIcon={<IoMdArrowRoundBack />}
-					bg={"#FFF"}
-					width={"25vw"}
-					mt={10}
-				>
-					الرجوع
-				</Button>
-			</Box>
-			<Footer />
-		</>
-	) : !existsCases ? (
-		<>
-			<Box dir='rtl' width={"100%"} height={"87vh"}>
-				<Box
-					display={"flex"}
-					flexDirection={"column"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					height={"15%"}
-					my={5}
-				>
-					<Text
-						fontSize={"35px"}
-						color={"#121211"}
-						fontWeight={500}
-						textDecoration={"underline"}
-					>
-						الحالت المفتوحة
-					</Text>
-				</Box>
-				<Box
-					display={"flex"}
-					flexDirection={"column"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					width={"100%"}
-					height={"70%"}
-				>
-					<Text fontSize={"20px"} color={"#121211"}>
-						لا توجد حالات متاحة
-					</Text>
-				</Box>
-				<Box
-					display={"flex"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					height={"10%"}
-				>
-					<Button
-						_hover={{
-							bg: "yellowgreen",
-							color: "#000",
-							transform: "scale(1.01)",
-						}}
-						_active={{
-							transform: "scale(0.99)",
-							opacity: "0.5",
-						}}
-						onClick={() => {
-							localStorage.removeItem("ownerFilterData");
-							localStorage.getItem("userRole") === "vet"
-								? navigate("/vet")
-								: localStorage.getItem("userRole") === "secretary"
-								? navigate("/secretary")
-								: navigate("/admin");
-						}}
-						rightIcon={<IoMdArrowRoundBack />}
-						width={"25vw"}
-					>
-						الرجوع
-					</Button>
-				</Box>
-			</Box>
-		</>
-	) : gotData ? (
-		<>
-			<Box dir='rtl' width={"100%"} height={"87vh"}>
-				<Box
-					display={"flex"}
-					flexDirection={"column"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					height={"15%"}
-					my={5}
-				>
-					<Text
-						fontSize={"35px"}
-						color={"#121211"}
-						fontWeight={500}
-						textDecoration={"underline"}
-					>
-						الحالات المستنية
-					</Text>
-				</Box>
-				<Box
-					display={"flex"}
-					flexDirection={"column"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					width={"100%"}
-					height={"70%"}
-				>
-					{cases.length === 0 ? (
-						<Text fontSize={"20px"} color={"#121211"}>
-							لا توجد حالات متاحة
-						</Text>
-					) : (
-						<>
-							<TableContainer
-								width={"80%"}
-								maxHeight={"70vh"}
-								overflowY={"auto"}
-							>
-								<Table variant='simple' size='md'>
-									<Thead>
-										<Tr>
-											<Th textAlign={"right"}>اسم الحيوان</Th>
-											<Th textAlign={"center"}>السلالة</Th>
-											<Th textAlign={"center"}>النوع</Th>
-											<Th textAlign={"center"}>فئة الوزن</Th>
-											<Th textAlign={"center"}>تفاصيل</Th>
-										</Tr>
-									</Thead>
-									<Tbody>
-										{cases.map((row) => (
-											<Tr key={row._id}>
-												<Td textAlign={"right"}>{`${row.petId.name}`}</Td>
-												<Td textAlign={"center"}>{`${titleCase(
-													row.petId.breed
-												)}`}</Td>
-												<Td textAlign={"center"}>{`${titleCase(
-													row.petId.type
-												)}`}</Td>
-												<Td
-													textAlign={"center"}
-												>{`${row.petId.weightClass}`}</Td>
-
-												<Td textAlign={"center"}>
-													{localStorage.getItem("userRole") === "vet" ? (
-														<Button
-															rightIcon={<IoMdEye />}
-															onClick={() => handleShowDetails(row)}
-															variant='solid'
-														>
-															عرض
-														</Button>
-													) : (
-														<>
-															<Button
-																rightIcon={<IoMdEye />}
-																onClick={() => {
-																	setEditMode(true);
-																	setSelectedCase(row);
-																	openModal();
-																}}
-																_hover={{
-																	bg: "blue.500",
-																	color: "#FFF",
-																	transform: "scale(1.01)",
-																}}
-																variant='solid'
-																ml={2}
-															>
-																Edit
-															</Button>
-
-															<Button
-																rightIcon={<IoMdEye />}
-																onClick={() => {
-																	openAlert();
-																	setSelectedCase(row);
-																}}
-																_hover={{
-																	bg: "red.500",
-																	color: "#FFF",
-																	transform: "scale(1.01)",
-																}}
-																variant='solid'
-																mr={2}
-															>
-																Delete
-															</Button>
-														</>
-													)}
-												</Td>
-											</Tr>
-										))}
-									</Tbody>
-								</Table>
-							</TableContainer>
-						</>
-					)}
-				</Box>
-				<Box
-					display={"flex"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					height={"10%"}
-				>
-					<Button
-						_hover={{
-							bg: "yellowgreen",
-							color: "#000",
-							transform: "scale(1.01)",
-						}}
-						_active={{
-							transform: "scale(0.99)",
-							opacity: "0.5",
-						}}
-						onClick={() => {
-							localStorage.removeItem("ownerFilterData");
-							localStorage.getItem("userRole") === "vet"
-								? navigate("/vet")
-								: localStorage.getItem("userRole") === "secretary"
-								? navigate("/secretary")
-								: navigate("/admin");
-						}}
-						rightIcon={<IoMdArrowRoundBack />}
-						width={"25vw"}
-					>
-						الرجوع
-					</Button>
-				</Box>
-			</Box>
-			<Footer />
-
-			{/* Modal for Case Details */}
-			<Modal isOpen={isModalOpen} onClose={closeModal}>
-				<ModalOverlay />
-				<ModalContent dir='rtl'>
-					<ModalHeader textAlign={"center"}>تفاصيل الحالة</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody>
-						{editMode ? (
-							<>
-								<Textarea
-									placeholder={selectedCase?.reasonForVisit}
-									onChange={(e) => {
-										setUpdatedReason(e.target.value);
-									}}
-									resize={"none"}
-									scrollBehavior={"smooth"}
-								/>
-							</>
-						) : (
-							<>
-								<Text fontSize='lg'>
-									<strong>السبب للزيارة:</strong>
-									<br />
-									{selectedCase?.reasonForVisit || "غير متوفر"}
-								</Text>
-							</>
-						)}
-					</ModalBody>
-					<ModalFooter>
-						{editMode ? (
-							<Button
-								colorScheme='green'
-								ml={3}
-								onClick={() => {
-									handleUpdateCase(selectedCase._id);
-									handleCloseModal();
-								}}
-							>
-								تحديث
-							</Button>
-						) : (
-							<Button
-								colorScheme='green'
-								ml={3}
-								onClick={() => {
-									handleAcceptCase(selectedCase._id);
-									handleCloseModal();
-								}}
-							>
-								قبول
-							</Button>
-						)}
-
-						<Button onClick={closeModal}>إلغاء</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-
-			<AlertDialog
-				isOpen={isAlertOpen}
-				leastDestructiveRef={cancelRef}
-				onClose={closeAlert}
-			>
-				<AlertDialogOverlay>
-					<AlertDialogContent>
-						<AlertDialogHeader fontSize='lg' fontWeight='bold'>
-							Delete Case
-						</AlertDialogHeader>
-
-						<AlertDialogBody>
-							Are you sure? You can't undo this action afterwards.
-						</AlertDialogBody>
-
-						<AlertDialogFooter>
-							<Button ref={cancelRef} onClick={() => handleCloseAlert()}>
-								Cancel
-							</Button>
-							<Button
-								colorScheme='red'
-								onClick={() => {
-									handleDeleteCase(selectedCase);
-									handleCloseAlert();
-								}}
-								ml={3}
-							>
-								Delete
-							</Button>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialogOverlay>
-			</AlertDialog>
-		</>
 	) : (
-		<></>
+		<>
+			<Box dir='rtl' bg={bg} minH='100vh' py={8} px={{ base: 2, md: 0 }}>
+				<Box
+					bg={cardBg}
+					rounded='2xl'
+					shadow='md'
+					maxW='1500px'
+					w='96vw'
+					mx='auto'
+					p={{ base: 4, md: 10 }}
+					border='1px solid'
+					borderColor={borderColor}
+				>
+					{/* Header */}
+					<Box textAlign='center' mb={7}>
+						{/* Use an eye icon, e.g., from react-icons */}
+						<Icon as={IoMdEye} boxSize={14} color='blue.500' mb={2} />
+						<Text
+							as='h1'
+							fontWeight='bold'
+							fontSize='3xl'
+							textDecoration='underline'
+							color={titleColor}
+							mb={1}
+						>
+							الحالات المنتظرة
+						</Text>
+					</Box>
+
+					{/* Table */}
+					<TableContainer>
+						<Table variant='simple' size='md'>
+							<Thead bg={tableHeadBg}>
+								<Tr>
+									<Th textAlign='center'>اسم الحيوان</Th>
+									<Th textAlign='center'>النوع</Th>
+									<Th textAlign='center'>السلالة</Th>
+									<Th textAlign='center'>فئة الوزن</Th>
+									<Th textAlign='center'>تفاصيل</Th>
+								</Tr>
+							</Thead>
+							<Tbody>
+								{cases.length === 0 ? (
+									<Tr>
+										<Td colSpan={5} textAlign='center' py={10}>
+											<Text color='gray.400' fontWeight='bold'>
+												لا توجد حالات متاحة
+											</Text>
+										</Td>
+									</Tr>
+								) : (
+									cases.map((row) => (
+										<Tr key={row._id} _hover={{ bg: tableRowHover }}>
+											<Td textAlign='center'>{row.petId?.name || ""}</Td>
+											<Td textAlign='center'>{row.petId?.type || ""}</Td>
+											<Td textAlign='center'>{row.petId?.breed || ""}</Td>
+											<Td textAlign='center'>{row.petId?.weightClass || ""}</Td>
+											<Td textAlign='center'>
+												<Button
+													size='sm'
+													colorScheme='blue'
+													rightIcon={<IoMdEye />}
+													onClick={() => handleShowDetails(row)}
+													mx={1}
+												>
+													عرض
+												</Button>
+												<Button
+													size='sm'
+													colorScheme='gray'
+													variant='outline'
+													onClick={() => {
+														setEditMode(true);
+														setSelectedCase(row);
+														openModal();
+													}}
+													mx={1}
+												>
+													تحرير
+												</Button>
+												<Button
+													size='sm'
+													colorScheme='red'
+													variant='outline'
+													onClick={() => {
+														openAlert();
+														setSelectedCase(row);
+													}}
+													mx={1}
+												>
+													حذف
+												</Button>
+											</Td>
+										</Tr>
+									))
+								)}
+							</Tbody>
+						</Table>
+					</TableContainer>
+
+					{/* Back Button */}
+					<Box mt={10} display='flex' justifyContent='center'>
+						<Button
+							bg={btnBackBg}
+							width={["90%", "60%", "40%", "25vw"]}
+							rightIcon={<IoMdArrowRoundBack />}
+							onClick={() => {
+								localStorage.removeItem("ownerFilterData");
+								const role = localStorage.getItem("userRole");
+								if (role === "vet") navigate("/vet");
+								else if (role === "secretary") navigate("/secretary");
+								else navigate("/admin");
+							}}
+							fontWeight='bold'
+							fontSize='lg'
+							rounded='lg'
+							_active={{ transform: "scale(0.97)", opacity: 0.8 }}
+							_hover={{
+								bg: "yellowgreen",
+								color: "#000",
+								transform: "scale(1.01)",
+							}}
+						>
+							رجوع
+						</Button>
+					</Box>
+				</Box>
+
+				{/* Modal for Case Details */}
+				<Modal isOpen={isModalOpen} onClose={closeModal}>
+					<ModalOverlay />
+					<ModalContent dir='rtl'>
+						<ModalHeader textAlign={"center"}>تفاصيل الحالة</ModalHeader>
+						<ModalCloseButton />
+						<ModalBody>
+							{editMode ? (
+								<>
+									<Textarea
+										placeholder={selectedCase?.reasonForVisit}
+										onChange={(e) => {
+											setUpdatedReason(e.target.value);
+										}}
+										resize={"none"}
+										scrollBehavior={"smooth"}
+									/>
+								</>
+							) : (
+								<>
+									<Text fontSize='lg'>
+										<strong>السبب للزيارة:</strong>
+										<br />
+										{selectedCase?.reasonForVisit || "غير متوفر"}
+									</Text>
+								</>
+							)}
+						</ModalBody>
+						<ModalFooter>
+							{editMode ? (
+								<Button
+									colorScheme='green'
+									ml={3}
+									onClick={() => {
+										handleUpdateCase(selectedCase._id);
+										handleCloseModal();
+									}}
+								>
+									تحديث
+								</Button>
+							) : (
+								<Button
+									colorScheme='green'
+									ml={3}
+									onClick={() => {
+										handleAcceptCase(selectedCase._id);
+										handleCloseModal();
+									}}
+								>
+									قبول
+								</Button>
+							)}
+
+							<Button onClick={closeModal}>إلغاء</Button>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>
+
+				<AlertDialog
+					isOpen={isAlertOpen}
+					leastDestructiveRef={cancelRef}
+					onClose={closeAlert}
+				>
+					<AlertDialogOverlay>
+						<AlertDialogContent>
+							<AlertDialogHeader fontSize='lg' fontWeight='bold'>
+								Delete Case
+							</AlertDialogHeader>
+
+							<AlertDialogBody>
+								Are you sure? You can't undo this action afterwards.
+							</AlertDialogBody>
+
+							<AlertDialogFooter>
+								<Button ref={cancelRef} onClick={() => handleCloseAlert()}>
+									Cancel
+								</Button>
+								<Button
+									colorScheme='red'
+									onClick={() => {
+										handleDeleteCase(selectedCase);
+										handleCloseAlert();
+									}}
+									ml={3}
+								>
+									Delete
+								</Button>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialogOverlay>
+				</AlertDialog>
+			</Box>
+		</>
 	);
 }
