@@ -6,8 +6,8 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Component Imports
-import Header from "../../components/General/Header";
 import PetTable from "../../components/Pet/PetTable";
+import PageLayout from "../../components/Layout/PageLayout";
 
 export default function PetTablePage() {
 	return (
@@ -18,8 +18,9 @@ export default function PetTablePage() {
 				</Helmet>
 			</HelmetProvider>
 
-			<Header />
-			<PetTable />
+			<PageLayout>
+				<PetTable />
+			</PageLayout>
 		</>
 	);
 }
