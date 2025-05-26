@@ -119,20 +119,11 @@ export default function CompletedCases() {
 
 				if (response.status === 200) {
 					setCompletedCases(response.data.cases);
-				} else {
-					toast({
-						title: "Error fetching completed cases",
-						description: response.data.message,
-						status: "error",
-						duration: 2500,
-						isClosable: true,
-						position: "top",
-					});
 				}
 			} catch (error) {
 				toast({
-					title: "Error fetching completed cases",
-					description: error.message,
+					title: "Cases Fetch Error",
+					description: error.response?.data?.message || error.message,
 					status: "error",
 					duration: 2500,
 					isClosable: true,

@@ -148,7 +148,7 @@ export default function OwnerTable() {
 					rightIcon={<IoMdArrowRoundBack />}
 					onClick={() => {
 						sessionStorage.removeItem("ownerFilterData");
-						navigate("/search-owner");
+						navigate(-1);
 					}}
 					_active={{ transform: "scale(0.97)", opacity: 0.8 }}
 				>

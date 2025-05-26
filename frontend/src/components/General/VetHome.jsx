@@ -31,7 +31,9 @@ import {
 
 import Spinner from "./Spinner";
 
-import { FaFolderOpen, FaUserMd, FaCheckCircle } from "react-icons/fa";
+import { FaFolderOpen, FaUserMd } from "react-icons/fa";
+import { FaSearch, FaUserPlus } from "react-icons/fa";
+import { MdOutlinePets } from "react-icons/md";
 
 import { IoMdEye } from "react-icons/io";
 
@@ -54,7 +56,7 @@ export default function VetHome() {
 
 	const [loading, setLoading] = useState(true);
 
-	const [role, setRole] = useState("");
+	const role = localStorage.getItem("userRole");
 
 	const [openCases, setOpenCases] = useState([]);
 	const [selectedCase, setSelectedCase] = useState(null);
@@ -92,39 +94,23 @@ export default function VetHome() {
 			}
 		};
 
-		const fetchUserRole = async () => {
-			try {
-				const response = await axios.get(`${api}/user/getUserInfo`, {
-					withCredentials: true,
-				});
-				if (response.status === 200) {
-					setRole(response.data.role);
-				} else {
-					toast({
-						title: "Error",
-						description: response.data.message,
-						status: "error",
-						duration: 3000,
-						isClosable: true,
-						position: "top",
-					});
-				}
-			} catch (error) {
+		if (role === "secretary") {
+			navigate("/secretary");
+		} else if (role === "admin") {
+			navigate("/admin");
+		} else {
+			if (role !== "vet") {
 				toast({
-					title: "Error",
-					description: error.response.data.message,
+					title: "Access Denied",
+					description: "You do not have permission to view this page.",
 					status: "error",
 					duration: 3000,
 					isClosable: true,
 					position: "top",
 				});
+				navigate("/");
+				return;
 			}
-		};
-
-		fetchUserRole();
-
-		if (role === "secretary") {
-			navigate("/secretary");
 		}
 
 		fetchOpenCases();
@@ -160,11 +146,6 @@ export default function VetHome() {
 		}
 	};
 
-	const handleShowDetails = (caseItem) => {
-		setSelectedCase(caseItem);
-		onOpen();
-	};
-
 	return loading ? (
 		<Spinner />
 	) : (
@@ -172,6 +153,80 @@ export default function VetHome() {
 			{/* Greeting */}
 			<Text fontSize='2xl' fontWeight='bold' mb={6} textAlign='center'>
 				👋 مرحباً دكتور
+			</Text>
+
+			<Text
+				fontSize='xl'
+				fontWeight='bold'
+				mt={8}
+				mb={4}
+				textAlign={"center"}
+				justifyContent={"center"}
+			>
+				👤 بحث عن المالكين أو الحيوانات
+			</Text>
+			<SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+				<Box
+					bg={cardBg}
+					p={6}
+					rounded='lg'
+					boxShadow='md'
+					display='flex'
+					alignItems='center'
+					justifyContent='space-between'
+					cursor='pointer'
+					_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+					_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+					transition='all 0.2s'
+					onClick={() => navigate("/search-owner")}
+				>
+					<Box>
+						<Text fontSize='lg' fontWeight='bold' mb={1}>
+							👤 البحث عن مالك
+						</Text>
+						<Text color='gray.500' fontSize='sm'>
+							الوصول إلى معلومات بسرعة
+						</Text>
+					</Box>
+					<FaSearch size='32' color={iconColor} />
+				</Box>
+
+				{/* عدد الحيوانات */}
+				<Box
+					bg={cardBg}
+					p={6}
+					rounded='lg'
+					boxShadow='md'
+					display='flex'
+					alignItems='center'
+					justifyContent='space-between'
+					cursor={"pointer"}
+					onClick={() => navigate("/search-pet")}
+					_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
+					_active={{ boxShadow: "xl", transform: "scale(0.98)" }}
+					transition='all 0.2s'
+				>
+					<Box>
+						<Text fontSize='lg' fontWeight='bold' mb={1}>
+							🐾 بحث عن حيوان
+						</Text>
+						<Text color='gray.500' fontSize='sm'>
+							عرض جميع الحيوانات المسجلة
+						</Text>
+					</Box>
+					<FaSearch size='32' color={iconColor} />
+				</Box>
+			</SimpleGrid>
+
+			<Text
+				fontSize='xl'
+				fontWeight='semibold'
+				mt={10}
+				mb={4}
+				textAlign={"center"}
+				justifyContent={"center"}
+			>
+				🗂 إدارة الحالات الطبية
 			</Text>
 
 			{/* Dashboard Quick Access Cards */}
@@ -225,36 +280,11 @@ export default function VetHome() {
 					</Box>
 					<FaUserMd size='32' color={iconColor} />
 				</Box>
-
-				{/* الحالات المكتملة */}
-				<Box
-					bg={cardBg}
-					p={6}
-					rounded='lg'
-					boxShadow='md'
-					display='flex'
-					alignItems='center'
-					justifyContent='space-between'
-					cursor='pointer'
-					onClick={() => navigate("/completed-cases")}
-					_hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
-					transition={"all 0.2s ease"}
-				>
-					<Box>
-						<Text fontSize='lg' fontWeight='bold' mb={1}>
-							✅ الحالات المكتملة
-						</Text>
-						<Text color='gray.500' fontSize='sm'>
-							عرض الحالات التي تم إنهاؤها
-						</Text>
-					</Box>
-					<FaCheckCircle size='32' color={iconColor} />
-				</Box>
 			</SimpleGrid>
 
-			<Text fontSize='xl' fontWeight='semibold' mb={4} textAlign='center'>
+			{/* <Text fontSize='xl' fontWeight='semibold' mb={4} textAlign='center'>
 				🗂 الحالات المتاحة للتعيين
-			</Text>
+			</Text> */}
 
 			{openCases.length === 0 ? (
 				<>
@@ -279,13 +309,12 @@ export default function VetHome() {
 								<Tr>
 									<Th textAlign={"center"}>اسم الحيوان</Th>
 									<Th textAlign={"center"}>النوع</Th>
-									<Th textAlign={"center"}>المالك</Th>
 									<Th textAlign={"center"} />
 									<Th textAlign={"center"}>الإجراء</Th>
 								</Tr>
 							</Thead>
 							<Tbody>
-								{openCases.map((caseItem) => (
+								{openCases.slice(0, 4).map((caseItem) => (
 									<Tr key={caseItem._id} _hover={{ bg: tableColor }}>
 										<Td textAlign={"center"}>
 											{titleCase(caseItem.petId?.name)}
@@ -311,9 +340,6 @@ export default function VetHome() {
 											</Tag>
 										</Td>
 										<Td textAlign={"center"}>
-											{caseItem.ownerId?.firstName || "—"}
-										</Td>
-										<Td textAlign={"center"}>
 											<Tag
 												colorScheme='blue'
 												variant='subtle'
@@ -326,7 +352,10 @@ export default function VetHome() {
 											<Button
 												size='sm'
 												colorScheme='blue'
-												onClick={() => handleShowDetails(caseItem)}
+												onClick={() => {
+													setSelectedCase(caseItem);
+													onOpen();
+												}}
 												leftIcon={<IoMdEye />}
 											>
 												عرض التفاصيل
@@ -337,6 +366,19 @@ export default function VetHome() {
 							</Tbody>
 						</Table>
 					</TableContainer>
+
+					{openCases.length > 4 && (
+						<Box textAlign='center' mt={3}>
+							<Button
+								colorScheme='blue'
+								variant='outline'
+								size='sm'
+								onClick={() => navigate("/view-cases")}
+							>
+								يوجد المزيد من الحالات المفتوحة... عرض الكل
+							</Button>
+						</Box>
+					)}
 
 					<Modal isOpen={isOpen} onClose={onClose} isCentered>
 						<ModalOverlay />

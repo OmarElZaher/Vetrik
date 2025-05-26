@@ -118,12 +118,12 @@ export default function AssignedCases() {
 			}
 		};
 
-		fetchData();
-
 		if (activeRowId) {
 			document
 				.getElementById(`case-${activeRowId}`)
 				?.scrollIntoView({ behavior: "smooth", block: "center" });
+		} else {
+			fetchData();
 		}
 	}, [toast, activeRowId]);
 
