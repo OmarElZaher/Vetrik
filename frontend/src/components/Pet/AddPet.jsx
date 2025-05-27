@@ -19,7 +19,9 @@ import {
 	Input,
 	Select,
 	Text,
+	Flex,
 	useToast,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
 // React Icons Imports
@@ -42,6 +44,20 @@ export default function AddPet() {
 	const [dob, setDob] = useState("");
 	const [weight, setWeight] = useState("");
 	const [ownerMobileNumber, setownerMobileNumber] = useState("");
+
+	const bg = useColorModeValue("gray.100", "gray.900");
+	const boxBg = useColorModeValue("gray.100", "gray.800");
+	const cardBg = useColorModeValue(
+		"rgba(255,255,255,0.75)",
+		"rgba(45,55,72,0.65)"
+	);
+	const flexBg = useColorModeValue("gray.50", "gray.900");
+	const borderColor = useColorModeValue("gray.200", "gray.600");
+
+	const iconColor = useColorModeValue("#2F80ED", "#56CCF2");
+
+	const tableColor = useColorModeValue("gray.100", "gray.700");
+	const rowBg = useColorModeValue("blue.50", "blue.500");
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
@@ -141,276 +157,263 @@ export default function AddPet() {
 				<>
 					<Box
 						dir='rtl'
-						display={"flex"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						bg={"#F3F3F3"}
-						height={"87vh"}
+						display='flex'
+						justifyContent='center'
+						alignItems='center'
+						px={[2, 5]}
+						py={[4, 8]}
 					>
 						<Card
-							display={"flex"}
-							justifyContent={"center"}
-							alignItems={"center"}
-							width={"80%"}
-							height={"80%"}
+							width={["100%", "95%", "70%"]}
+							p={[2, 6, 10]}
+							bg={cardBg}
+							border='1px solid'
+							borderColor={borderColor}
+							rounded='2xl'
+							boxShadow='md'
+							mx='auto'
+							display='flex'
+							flexDirection='column'
+							justifyContent='center'
+							alignItems='center'
 						>
-							<CardBody
-								display={"flex"}
-								flexDirection={"column"}
-								justifyContent={"center"}
-								width={"80%"}
+							{/* Header Icon */}
+							<Icon
+								as={MdOutlinePets}
+								fontSize='64px'
+								color={iconColor}
+								mt={2}
+							/>
+
+							{/* Title */}
+							<Text
+								fontSize={["2xl", "3xl"]}
+								fontWeight='bold'
+								mt={2}
+								mb={6}
+								textAlign='center'
 							>
-								<Box
-									display={"flex"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									height={"5%"}
-									mt={5}
-								>
-									<Icon as={MdOutlinePets} fontSize={"60px"} />
-								</Box>
+								إضافة حيوان
+							</Text>
 
-								<Box
-									display={"flex"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									height={"15%"}
-									mt={5}
-								>
-									<Text fontSize={"3xl"} fontWeight={"bold"}>
-										إضافة حيوان
-									</Text>
-								</Box>
-								<Box
-									display={"flex"}
-									flexDirection={"column"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									height={"60%"}
-								>
-									<FormControl id='name' mb={5}>
-										<Input
-											id='name'
-											type='text'
-											name='name'
-											placeholder='اسم الحيوان'
-											value={name}
-											onChange={(e) => {
-												setName(e.target.value);
-											}}
-											mb={1.25}
-										/>
-									</FormControl>
+							{/* Form */}
+							<Box w='100%'>
+								{/* Pet Name */}
+								<Input
+									id='name'
+									type='text'
+									name='name'
+									placeholder='اسم الحيوان'
+									value={name}
+									onChange={(e) => setName(e.target.value)}
+									rounded='lg'
+									fontSize='md'
+									mb={5}
+								/>
 
-									<FormControl
+								{/* Type & Breed */}
+								<Flex
+									gap={3}
+									mb={5}
+									flexDirection={["column", "row"]}
+									alignItems='center'
+								>
+									<Select
 										id='type'
-										display={"flex"}
-										justifyContent={"space-evenly"}
-										mb={5}
+										name='type'
+										placeholder='نوع الحيوان'
+										value={type}
+										onChange={(e) => setType(e.target.value)}
+										rounded='lg'
+										fontSize='md'
+										iconColor='transparent'
+										flex='1'
+										cursor='pointer'
 									>
-										<Select
-											id='type'
-											name='type'
-											placeholder='نوع الحيوان'
-											cursor={"pointer"}
-											value={type}
-											iconColor='transparent'
-											onChange={(e) => {
-												setType(e.target.value);
-											}}
-											ml={2}
-										>
-											<option value='Dog'>كلب</option>
-											<option value='Cat'>قطة</option>
-											<option value='Bird'>طائر</option>
-											<option value='Turtle'>سلحفاة</option>
-											<option value='Monkey'>قرد</option>
-											<option value='Hamster'>هامستر</option>
-											<option value='Fish'>سمكة</option>
-										</Select>
-
-										<Select
-											id='breed'
-											name='breed'
-											placeholder='سلالة الحيوان'
-											iconColor='transparent'
-											value={breed}
-											onChange={(e) => {
-												setBreed(e.target.value);
-											}}
-											mr={2}
-										>
-											{type === "Dog" && (
-												<>
-													<option value='Stray'>Stray</option>
-													<option value='Labrador'>Labrador</option>
-													<option value='German Shepherd'>
-														German Shepherd
-													</option>
-													<option value='Golden Retriever'>
-														Golden Retriever
-													</option>
-													<option value='Bulldog'>Bulldog</option>
-													<option value='Beagle'>Beagle</option>
-													<option value='Cocker Spaniel'>Cocker Spaniel</option>
-												</>
-											)}
-											{type === "Cat" && (
-												<>
-													<option value='Stray'>Stray</option>
-													<option value='Persian'>Persian</option>
-													<option value='Siamese'>Siamese</option>
-													<option value='Maine Coon'>Maine Coon</option>
-													<option value='Ragdoll'>Ragdoll</option>
-													<option value='Bengal'>Bengal</option>
-												</>
-											)}
-											{type === "Bird" && (
-												<>
-													<option value='Parrot'>Parrot</option>
-													<option value='Canary'>Canary</option>
-													<option value='Finch'>Finch</option>
-													<option value='Cockatiel'>Cockatiel</option>
-													<option value='Budgerigar'>Budgerigar</option>
-												</>
-											)}
-											{type === "Turtle" && (
-												<>
-													<option value='Red-Eared Slider'>
-														Red-Eared Slider
-													</option>
-													<option value='Box Turtle'>Box Turtle</option>
-													<option value='Painted Turtle'>Painted Turtle</option>
-													<option value='Snapping Turtle'>
-														Snapping Turtle
-													</option>
-													<option value='Wood Turtle'>Wood Turtle</option>
-												</>
-											)}
-											{type === "Monkey" && (
-												<>
-													<option value='Capuchin'>Capuchin</option>
-													<option value='Marmoset'>Marmoset</option>
-													<option value='Tamarin'>Tamarin</option>
-													<option value='Squirrel Monkey'>
-														Squirrel Monkey
-													</option>
-													<option value='Macaque'>Macaque</option>
-												</>
-											)}
-											{type === "Hamster" && (
-												<>
-													<option value='Syrian'>Syrian</option>
-													<option value='Dwarf Campbell Russian'>
-														Dwarf Campbell Russian
-													</option>
-													<option value='Dwarf Winter White Russian'>
-														Dwarf Winter White Russian
-													</option>
-													<option value='Chinese'>Chinese</option>
-													<option value='Roborovski'>Roborovski</option>
-												</>
-											)}
-											{type === "Fish" && (
-												<>
-													<option value='Goldfish'>Goldfish</option>
-													<option value='Betta'>Betta</option>
-													<option value='Guppy'>Guppy</option>
-													<option value='Angelfish'>Angelfish</option>
-													<option value='Molly'>Molly</option>
-												</>
-											)}
-										</Select>
-									</FormControl>
-
-									<FormControl id='gender' mb={5}>
-										<Select
-											id='gender'
-											name='gender'
-											placeholder='اختر الجنس'
-											cursor={"pointer"}
-											value={gender}
-											iconColor='transparent'
-											onChange={(e) => {
-												setGender(e.target.value);
-											}}
-										>
-											<option value='Male'>ذكر</option>
-											<option value='Female'>أنثى</option>
-										</Select>
-									</FormControl>
-
-									<FormControl
-										id='dob'
-										mb={5}
-										display={"flex"}
-										justifyContent={"space-evenly"}
+										<option value='Dog'>كلب</option>
+										<option value='Cat'>قطة</option>
+										<option value='Bird'>طائر</option>
+										<option value='Turtle'>سلحفاة</option>
+										<option value='Monkey'>قرد</option>
+										<option value='Hamster'>هامستر</option>
+										<option value='Fish'>سمكة</option>
+									</Select>
+									<Select
+										id='breed'
+										name='breed'
+										placeholder='سلالة الحيوان'
+										value={breed}
+										onChange={(e) => setBreed(e.target.value)}
+										rounded='lg'
+										fontSize='md'
+										flex='1'
+										iconColor='transparent'
+										cursor='pointer'
+										disabled={!type}
 									>
-										<Input
-											id='dob'
-											type='date'
-											name='dob'
-											placeholder='تاريخ الميلاد'
-											value={dob}
-											onChange={(e) => {
-												setDob(e.target.value);
-											}}
-											ml={2}
-										/>
+										{/* Breed options based on type */}
+										{type === "Dog" && (
+											<>
+												<option value='Stray'>Stray</option>
+												<option value='Labrador'>Labrador</option>
+												<option value='German Shepherd'>German Shepherd</option>
+												<option value='Golden Retriever'>
+													Golden Retriever
+												</option>
+												<option value='Bulldog'>Bulldog</option>
+												<option value='Beagle'>Beagle</option>
+												<option value='Cocker Spaniel'>Cocker Spaniel</option>
+											</>
+										)}
+										{type === "Cat" && (
+											<>
+												<option value='Stray'>Stray</option>
+												<option value='Persian'>Persian</option>
+												<option value='Siamese'>Siamese</option>
+												<option value='Maine Coon'>Maine Coon</option>
+												<option value='Ragdoll'>Ragdoll</option>
+												<option value='Bengal'>Bengal</option>
+											</>
+										)}
+										{type === "Bird" && (
+											<>
+												<option value='Parrot'>Parrot</option>
+												<option value='Canary'>Canary</option>
+												<option value='Finch'>Finch</option>
+												<option value='Cockatiel'>Cockatiel</option>
+												<option value='Budgerigar'>Budgerigar</option>
+											</>
+										)}
+										{type === "Turtle" && (
+											<>
+												<option value='Red-Eared Slider'>
+													Red-Eared Slider
+												</option>
+												<option value='Box Turtle'>Box Turtle</option>
+												<option value='Painted Turtle'>Painted Turtle</option>
+												<option value='Snapping Turtle'>Snapping Turtle</option>
+												<option value='Wood Turtle'>Wood Turtle</option>
+											</>
+										)}
+										{type === "Monkey" && (
+											<>
+												<option value='Capuchin'>Capuchin</option>
+												<option value='Marmoset'>Marmoset</option>
+												<option value='Tamarin'>Tamarin</option>
+												<option value='Squirrel Monkey'>Squirrel Monkey</option>
+												<option value='Macaque'>Macaque</option>
+											</>
+										)}
+										{type === "Hamster" && (
+											<>
+												<option value='Syrian'>Syrian</option>
+												<option value='Dwarf Campbell Russian'>
+													Dwarf Campbell Russian
+												</option>
+												<option value='Dwarf Winter White Russian'>
+													Dwarf Winter White Russian
+												</option>
+												<option value='Chinese'>Chinese</option>
+												<option value='Roborovski'>Roborovski</option>
+											</>
+										)}
+										{type === "Fish" && (
+											<>
+												<option value='Goldfish'>Goldfish</option>
+												<option value='Betta'>Betta</option>
+												<option value='Guppy'>Guppy</option>
+												<option value='Angelfish'>Angelfish</option>
+												<option value='Molly'>Molly</option>
+											</>
+										)}
+									</Select>
+								</Flex>
 
-										<Input
-											id='weight'
-											type='number'
-											name='weight'
-											placeholder='الوزن (كجم)'
-											value={weight}
-											onChange={(e) => {
-												setWeight(e.target.value);
-											}}
-										/>
-									</FormControl>
-
-									<FormControl id='ownerMobileNumber'>
-										<Input
-											id='ownerMobileNumber'
-											type='text'
-											name='owner'
-											placeholder='رقم هاتف المالك'
-											value={ownerMobileNumber}
-											onChange={(e) => {
-												setownerMobileNumber(e.target.value);
-											}}
-										/>
-									</FormControl>
-								</Box>
-
-								<Box
-									display={"flex"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									height={"10%"}
+								{/* Gender & DOB */}
+								<Flex
+									gap={3}
+									mb={5}
+									flexDirection={["column", "row"]}
+									alignItems='center'
 								>
-									<Button
-										_hover={{
-											bg: "yellowgreen",
-											color: "#000",
-											transform: "scale(1.01)",
-										}}
-										_active={{
-											transform: "scale(0.99)",
-											opacity: "0.5",
-										}}
-										onClick={handleAdd}
-										rightIcon={<IoMdAdd />}
-										width={"25%"}
+									<Select
+										id='gender'
+										name='gender'
+										placeholder='اختر الجنس'
+										value={gender}
+										onChange={(e) => setGender(e.target.value)}
+										rounded='lg'
+										fontSize='md'
+										flex='1'
+										cursor='pointer'
+										iconColor='transparent'
 									>
-										إضافة
-									</Button>
-								</Box>
-							</CardBody>
+										<option value='Male'>ذكر</option>
+										<option value='Female'>أنثى</option>
+									</Select>
+									<Input
+										id='dob'
+										type='date'
+										name='dob'
+										placeholder='تاريخ الميلاد'
+										value={dob}
+										onChange={(e) => setDob(e.target.value)}
+										rounded='lg'
+										fontSize='md'
+										flex='1'
+									/>
+								</Flex>
+
+								{/* Weight */}
+								<Input
+									id='weight'
+									type='number'
+									name='weight'
+									placeholder='الوزن (كجم)'
+									value={weight}
+									onChange={(e) => setWeight(e.target.value)}
+									rounded='lg'
+									fontSize='md'
+									mb={5}
+								/>
+
+								<Input
+									id='ownerMobileNumber'
+									type='text'
+									name='ownerMobileNumber'
+									placeholder='رقم هاتف المالك'
+									value={ownerMobileNumber}
+									onChange={(e) => setownerMobileNumber(e.target.value)}
+									rounded='lg'
+									fontSize='md'
+									mb={5}
+								/>
+
+								{/* Submit Button */}
+								<Button
+									mt={4}
+									w='60%'
+									mx='auto'
+									display='block'
+									fontWeight='bold'
+									fontSize='lg'
+									rounded='xl'
+									rightIcon={<IoMdAdd />}
+									onClick={handleAdd}
+									_hover={{
+										transform: "scale(1.02)",
+									}}
+									_active={{
+										transform: "scale(0.99)",
+										opacity: 0.7,
+									}}
+									isLoading={isLoading}
+								>
+									إضافة
+								</Button>
+							</Box>
 						</Card>
 					</Box>
-					<Footer />
 				</>
 			)}
 		</>

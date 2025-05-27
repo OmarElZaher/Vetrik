@@ -20,9 +20,6 @@ import {
 import { IoMdEye, IoMdArrowRoundBack } from "react-icons/io";
 import { IoMdAdd } from "react-icons/io";
 
-// Component Imports
-import Footer from "../General/Footer";
-
 function titleCase(str) {
 	if (!str) return "";
 	return str
@@ -41,7 +38,6 @@ export default function PetTable() {
 	const bg = useColorModeValue("gray.50", "gray.800");
 	const cardBg = useColorModeValue("white", "gray.700");
 	const borderColor = useColorModeValue("gray.200", "gray.600");
-	const textColor = useColorModeValue("gray.800", "gray.100");
 	const rowBg = useColorModeValue("gray.100", "gray.700");
 
 	const pets = JSON.parse(data) || [];
@@ -55,7 +51,6 @@ export default function PetTable() {
 					textAlign='center'
 					mb={2}
 					textDecoration='underline'
-					color={textColor}
 				>
 					الحيوانات اللي تم العثور عليها
 				</Text>

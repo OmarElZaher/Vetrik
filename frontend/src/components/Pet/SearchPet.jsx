@@ -40,8 +40,11 @@ export default function SearchPet() {
 	const [breed, setBreed] = useState("");
 	const [gender, setGender] = useState("");
 
-	const cardBg = useColorModeValue("white", "gray.700");
-	const iconColor = useColorModeValue("blue.500", "blue.300");
+	const cardBg = useColorModeValue(
+		"rgba(255,255,255,0.75)",
+		"rgba(45,55,72,0.65)"
+	);
+	const iconColor = useColorModeValue("#2F80ED", "#56CCF2");
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);

@@ -23,7 +23,7 @@ import { Flex } from "antd";
 
 // React Icons Imports
 import { CiEdit } from "react-icons/ci";
-import { FaPerson, FaBuffer, FaBookMedical } from "react-icons/fa6";
+import { FaPerson, FaBuffer } from "react-icons/fa6";
 import { GoHome } from "react-icons/go";
 import { IoMdSearch, IoIosArrowDropdown } from "react-icons/io";
 import { IoAdd } from "react-icons/io5";

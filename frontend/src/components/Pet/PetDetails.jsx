@@ -48,6 +48,7 @@ import {
 
 import { TbTrashXFilled } from "react-icons/tb";
 import { FaWeightScale } from "react-icons/fa6";
+import { IoMdEye } from "react-icons/io";
 
 // Custom Component Imports
 import Spinner from "../General/Spinner";
@@ -139,7 +140,7 @@ export default function PetDetails() {
 	const cardBg = useColorModeValue("white", "gray.700");
 	const iconColor = useColorModeValue("blue.500", "blue.300");
 	const borderColor = useColorModeValue("gray.200", "gray.600");
-	const boxColor = useColorModeValue("gray.50", "gray.800");
+	const boxColor = useColorModeValue("gray.100", "gray.800");
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -805,18 +806,32 @@ export default function PetDetails() {
 										<strong>الإيميل:</strong> {owner.email}
 									</Text>
 
-									<Button
-										size="sm"
-										colorScheme="red"
-										mt={2}
-										onClick={() => {
-											setDeletingOwnerId(owner._id);
-											openDeleteOwner();
-										}}
-										leftIcon={<Icon as={TbTrashXFilled} />}
-									>
-										إزالة هذا المالك
-									</Button>
+									<Flex>
+										<Button
+											size={"sm"}
+											mt={2}
+											ml={2}
+											leftIcon={<Icon as={IoMdEye} />}
+											onClick={() => {
+												navigate(`/owner-details/${owner._id}`);
+											}}
+										>
+											عرض المالك
+										</Button>
+
+										<Button
+											size='sm'
+											colorScheme='red'
+											mt={2}
+											onClick={() => {
+												setDeletingOwnerId(owner._id);
+												openDeleteOwner();
+											}}
+											leftIcon={<Icon as={TbTrashXFilled} />}
+										>
+											إزالة هذا المالك
+										</Button>
+									</Flex>
 								</Flex>
 							))}
 						</SimpleGrid>
@@ -1040,9 +1055,27 @@ export default function PetDetails() {
 							</Box>
 						</>
 					) : (
-						<Text textAlign="center" color="gray.500">
-							لا توجد بيانات تطعيم مسجلة.
-						</Text>
+						<>
+							<Flex
+								flexDirection={"column"}
+								justifyContent={"center"}
+								alignItems={"center"}
+							>
+								<Text textAlign='center' color='gray.500' mt={2}>
+									لا توجد بيانات تطعيم مسجلة.
+								</Text>
+								<Box h={6} />
+								<Button
+									colorScheme='blue'
+									size='sm'
+									onClick={() => {
+										navigate(`/pet-vaccination/${pet._id}`);
+									}}
+								>
+									إنشاء بطاقة تطعيم
+								</Button>
+							</Flex>
+						</>
 					)}
 				</Box>
 			</Box>

@@ -17,7 +17,6 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 
-import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
 export default function OpenCase() {

@@ -493,7 +493,7 @@ export default function OwnerDetails() {
 										>
 											<Box flex='1' pr={4}>
 												<Text fontWeight='bold' mb={1}>
-													🧪 {pet?.name}
+													🐾 {pet?.name}
 												</Text>
 												<Text>
 													<strong>نوع الحيوان:</strong>{" "}

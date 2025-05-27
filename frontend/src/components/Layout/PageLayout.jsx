@@ -160,7 +160,6 @@ const PageLayout = ({ children }) => {
 			<Drawer isOpen={isOpen} placement='right' onClose={onClose}>
 				<DrawerOverlay />
 				<DrawerContent dir='rtl'>
-					<DrawerCloseButton />
 					<DrawerHeader>القائمة</DrawerHeader>
 					<DrawerBody>
 						<VStack spacing={4} align='stretch'>

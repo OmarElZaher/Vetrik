@@ -6,8 +6,8 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 import { VET_NAME as vet_name } from "../../utils/constants";
 
 // Custom Component Imports
-import Header from "../../components/General/Header";
 import AddOwner from "../../components/Owner/AddOwner";
+import PageLayout from "../../components/Layout/PageLayout";
 
 export default function AddOwnerPage() {
 	return (
@@ -17,9 +17,9 @@ export default function AddOwnerPage() {
 					<title>Add Owner | {vet_name}</title>
 				</Helmet>
 			</HelmetProvider>
-
-			<Header />
-			<AddOwner />
+			<PageLayout>
+				<AddOwner />
+			</PageLayout>
 		</>
 	);
 }
