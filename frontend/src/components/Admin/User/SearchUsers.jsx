@@ -22,15 +22,20 @@ import {
 	ListItem,
 	Text,
 	useToast,
+	InputGroup,
+	InputRightAddon,
+	Divider,
+	VStack,
+	useColorModeValue,
 } from "@chakra-ui/react";
 
 // React Icons Imports
 import { FaPerson } from "react-icons/fa6";
 import { IoMdSearch } from "react-icons/io";
-import { MdSettings } from "react-icons/md";
+import { MdSettings, MdAlternateEmail } from "react-icons/md";
+import { FaUser, FaUserTag } from "react-icons/fa";
 
 // Custom Component Imports
-import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
 export default function SearchUsers() {
@@ -45,6 +50,15 @@ export default function SearchUsers() {
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = useState(false);
+
+	// Color mode values (move hooks to top level)
+	const cardBg = useColorModeValue(
+		"rgba(255,255,255,0.85)",
+		"rgba(45,55,72,0.85)"
+	);
+	const iconColor = useColorModeValue("#2F80ED", "#56CCF2");
+	const pageBg = useColorModeValue("gray.50", "gray.900");
+	const hintBg = useColorModeValue("blue.50", "blue.900");
 
 	const handleSearch = async () => {
 		try {
@@ -90,151 +104,105 @@ export default function SearchUsers() {
 		}
 	};
 
-	return (
-		<>
-			{isLoading ? (
-				<Spinner />
-			) : (
-				<>
-					<Box
-						dir='rtl'
-						display={"flex"}
-						justifyContent={"space-around"}
-						alignItems={"center"}
-						bg={"#F3F3F3"}
-						width={"100%"}
-						height={"87vh"}
+	return isLoading ? (
+		<Spinner />
+	) : (
+		<Box p={6} bg={pageBg}>
+			<Box
+				bg={cardBg}
+				rounded='xl'
+				boxShadow='md'
+				p={10}
+				maxW='75vw'
+				mx='auto'
+				mt={12}
+				dir='rtl'
+			>
+				<Box textAlign='center' mb={4}>
+					<Icon as={FaPerson} boxSize={12} color={iconColor} mb={2} />
+					<Text fontSize='2xl' fontWeight='bold'>
+						بحث عن مستخدم
+					</Text>
+				</Box>
+
+				<Box
+					textAlign='right'
+					fontSize='sm'
+					mb={6}
+					bg={hintBg}
+					p={3}
+					rounded='md'
+				>
+					<Text>
+						🔎 أدخل اسم أو أكثر أو البريد الإلكتروني أو اسم المستخدم للبحث عن
+						المستخدم.
+					</Text>
+					<Text>
+						🔎 لعرض جميع المستخدمين، اضغط <b>بحث</b> بدون إدخال بيانات.
+					</Text>
+				</Box>
+
+				<Divider />
+				<Box h={6} />
+
+				<VStack spacing={4} align='stretch'>
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<FaUser />} />
+							<Input
+								placeholder='الاسم الأول'
+								value={firstName}
+								onChange={(e) => setFirstName(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<FaUserTag />} />
+							<Input
+								placeholder='اسم العائلة'
+								value={lastName}
+								onChange={(e) => setLastName(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<IoMdSearch />} />
+							<Input
+								placeholder='اسم المستخدم'
+								value={username}
+								onChange={(e) => setUsername(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<MdAlternateEmail />} />
+							<Input
+								placeholder='البريد الإلكتروني'
+								type='email'
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<Button
+						colorScheme='blue'
+						leftIcon={<IoMdSearch />}
+						onClick={handleSearch}
+						isLoading={isLoading}
+						mt={2}
+						w='100%'
 					>
-						<Card width='80%' height='80%'>
-							<Box
-								display={"flex"}
-								flexDirection={"column"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								height={"20%"}
-								px={5}
-								pt={5}
-							>
-								<Icon as={FaPerson} fontSize={"60px"} />
-
-								<Heading size='lg' mt={2}>
-									ابحث عن مستخدم
-								</Heading>
-							</Box>
-
-							<Box mr={10} my={7} height={"10%"}>
-								<List>
-									<ListItem>
-										<ListIcon as={MdSettings} color='yellowgreen' />
-										اكتب اسم أو أكتر علشان تلاقي المستخدم اللي بتدور عليه.
-									</ListItem>
-									<ListItem>
-										<ListIcon as={MdSettings} color='yellowgreen' />
-										لو عايز تظهر كل المستخدمين، دوس{" "}
-										<Text display={"inline"} color={"yellowgreen"}>
-											بحث
-										</Text>{" "}
-										من غير ما تكتب أي حاجة.
-									</ListItem>
-								</List>
-							</Box>
-
-							<hr />
-
-							<Box p={10} height={"50%"} width={"100%"}>
-								{/* Search Form */}
-								<FormControl
-									id='name'
-									display={"flex"}
-									justifyContent={"space-evenly"}
-									mb={5}
-								>
-									<Input
-										id='firstName'
-										type='text'
-										name='firstName'
-										placeholder='الاسم الأول'
-										value={firstName}
-										onChange={(e) => {
-											setFirstName(e.target.value);
-										}}
-										ml={2.5}
-									/>
-									<Input
-										id='lastName'
-										type='text'
-										name='lastName'
-										placeholder='اسم العائلة'
-										value={lastName}
-										onChange={(e) => {
-											setLastName(e.target.value);
-										}}
-										mr={2.5}
-									/>
-								</FormControl>
-
-								<FormControl
-									id='username'
-									display={"flex"}
-									justifyContent={"space-evenly"}
-								>
-									<Input
-										id='username'
-										type='text'
-										name='username'
-										placeholder='اسم المستخدم'
-										value={username}
-										onChange={(e) => {
-											setUsername(e.target.value);
-										}}
-									/>
-								</FormControl>
-
-								<FormControl id='email'>
-									<Input
-										id='email'
-										type='email'
-										name='email'
-										placeholder='البريد الإلكتروني'
-										value={email}
-										onChange={(e) => {
-											setEmail(e.target.value);
-										}}
-										mt={5}
-									/>
-								</FormControl>
-
-								<FormControl
-									id='submit'
-									display={"flex"}
-									flexDirection={"column"}
-									justifyContent={"center"}
-									alignItems={"center"}
-								>
-									<Button
-										_hover={{
-											bg: "yellowgreen",
-											color: "#000",
-											transform: "scale(1.01)",
-										}}
-										_active={{
-											transform: "scale(0.99)",
-											opacity: "0.5",
-										}}
-										onClick={handleSearch}
-										rightIcon={<Icon as={IoMdSearch} />}
-										width={"50%"}
-										mt={10}
-									>
-										بحث
-									</Button>
-								</FormControl>
-							</Box>
-						</Card>
-					</Box>
-					<Footer />
-				</>
-			)}
-		</>
+						بحث
+					</Button>
+				</VStack>
+			</Box>
+		</Box>
 	);
 }

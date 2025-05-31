@@ -31,6 +31,13 @@ import {
 	FaHome,
 	FaUser,
 	FaSignOutAlt,
+	FaSearch,
+	FaUsersCog,
+	FaUserPlus,
+	FaPaw,
+	FaCheckCircle,
+	FaFolderOpen,
+	FaClipboardCheck,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -40,6 +47,7 @@ const PageLayout = ({ children }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { colorMode, toggleColorMode } = useColorMode();
 	const boxColor = useColorModeValue("gray.50", "gray.900");
+	const userRole = localStorage.getItem("userRole");
 	const navigate = useNavigate();
 	const toast = useToast();
 
@@ -141,6 +149,7 @@ const PageLayout = ({ children }) => {
 								.post(`${api}/user/logout`, {}, { withCredentials: true })
 								.then(() => {
 									localStorage.clear();
+									sessionStorage.clear();
 									navigate("/login");
 								})
 								.catch((err) => {
@@ -174,7 +183,7 @@ const PageLayout = ({ children }) => {
 								الصفحة الرئيسية
 							</Button>
 							<Button
-								leftIcon={<FaUser />}
+								leftIcon={<FaSearch />}
 								justifyContent='flex-start'
 								onClick={() => {
 									navigate("/search-owner");
@@ -183,6 +192,109 @@ const PageLayout = ({ children }) => {
 							>
 								البحث عن مالك
 							</Button>
+							<Button
+								leftIcon={<FaSearch />}
+								justifyContent='flex-start'
+								onClick={() => {
+									navigate("/search-pet");
+									onClose();
+								}}
+							>
+								البحث عن حيوان
+							</Button>
+
+							{userRole === "admin" ? (
+								<>
+									<Button
+										leftIcon={<FaUsersCog />}
+										justifyContent='flex-start'
+										onClick={() => {
+											navigate("/admin/search-users");
+											onClose();
+										}}
+									>
+										إدارة المستخدمين
+									</Button>
+									<Button
+										leftIcon={<FaUserPlus />}
+										justifyContent='flex-start'
+										onClick={() => {
+											navigate("/admin/create-user");
+											onClose();
+										}}
+									>
+										إنشاء مستخدم جديد
+									</Button>
+								</>
+							) : userRole === "secretary" ? (
+								<>
+									<Button
+										leftIcon={<FaUserPlus />}
+										justifyContent='flex-start'
+										onClick={() => {
+											navigate("/add-owner");
+											onClose();
+										}}
+									>
+										إضافة مالك
+									</Button>
+									<Button
+										leftIcon={<FaPaw />}
+										justifyContent='flex-start'
+										onClick={() => {
+											navigate("/add-pet");
+											onClose();
+										}}
+									>
+										إضافة حيوان
+									</Button>
+									<Button
+										leftIcon={<FaCheckCircle />}
+										justifyContent='flex-start'
+										onClick={() => {
+											navigate("/completed-cases");
+											onClose();
+										}}
+									>
+										الحالات المكتملة
+									</Button>
+									<Button
+										leftIcon={<FaFolderOpen />}
+										justifyContent='flex-start'
+										onClick={() => {
+											navigate("/view-cases");
+											onClose();
+										}}
+									>
+										عرض الحالات
+									</Button>
+								</>
+							) : userRole === "vet" ? (
+								<>
+									<Button
+										leftIcon={<FaFolderOpen />}
+										justifyContent='flex-start'
+										onClick={() => {
+											navigate("/view-cases");
+											onClose();
+										}}
+									>
+										عرض الحالات
+									</Button>
+									<Button
+										leftIcon={<FaClipboardCheck />}
+										justifyContent='flex-start'
+										onClick={() => {
+											navigate("/assigned-cases");
+											onClose();
+										}}
+									>
+										الحالات المسندة
+									</Button>
+								</>
+							) : (
+								<></>
+							)}
 						</VStack>
 					</DrawerBody>
 				</DrawerContent>

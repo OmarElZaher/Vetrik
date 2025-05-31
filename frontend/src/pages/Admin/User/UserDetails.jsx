@@ -6,8 +6,8 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { VET_NAME as vet_name } from "../../../utils/constants";
 
 // Custom Component Imports
-import AdminHeader from "../../../components/Admin/General/AdminHeader";
 import UserDetails from "../../../components/Admin/User/UserDetails";
+import PageLayout from "../../../components/Layout/PageLayout";
 
 export default function UserDetailsPage() {
 	return (
@@ -18,8 +18,9 @@ export default function UserDetailsPage() {
 				</Helmet>
 			</HelmetProvider>
 
-			<AdminHeader />
-			<UserDetails />
+			<PageLayout>
+				<UserDetails />
+			</PageLayout>
 		</>
 	);
 }

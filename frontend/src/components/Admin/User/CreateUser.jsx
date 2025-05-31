@@ -19,14 +19,24 @@ import {
 	Text,
 	Select,
 	useToast,
+	useColorModeValue,
+	VStack,
+	InputGroup,
+	InputRightAddon,
+	Divider,
 } from "@chakra-ui/react";
 
 // React Icons Imports
-import { FaUserAlt } from "react-icons/fa";
+import {
+	FaUserAlt,
+	FaUser,
+	FaUserTag,
+	FaLock,
+	FaEnvelope,
+} from "react-icons/fa";
 import { IoIosAdd } from "react-icons/io";
 
 // Custom Components Imports
-import Footer from "../General/Footer";
 import Spinner from "../General/Spinner";
 
 export default function CreateUser() {
@@ -44,6 +54,15 @@ export default function CreateUser() {
 
 	// Misc useStates
 	const [isLoading, setIsLoading] = React.useState(false);
+
+	// Color mode values
+	const cardBg = useColorModeValue(
+		"rgba(255,255,255,0.85)",
+		"rgba(45,55,72,0.85)"
+	);
+	const pageBg = useColorModeValue("gray.50", "gray.900");
+	const iconColor = useColorModeValue("#2F80ED", "#56CCF2");
+	const hintBg = useColorModeValue("blue.50", "blue.900");
 
 	const handleAdd = async () => {
 		try {
@@ -93,205 +112,137 @@ export default function CreateUser() {
 		}
 	};
 
-	return (
-		<>
-			{isLoading ? (
-				<Spinner />
-			) : (
-				<>
-					<Box
-						dir='rtl'
-						display={"flex"}
-						justifyContent={"center"}
-						alignItems={"center"}
-						bg={"#F3F3F3"}
-						height={"87vh"}
-					>
-						<Card
-							display={"flex"}
-							justify={"center"}
-							alignItems={"center"}
-							width={"80%"}
-							height={"90%"}
+	return isLoading ? (
+		<Spinner />
+	) : (
+		<Box bg={pageBg} p={6}>
+			<Box
+				bg={cardBg}
+				rounded='xl'
+				boxShadow='md'
+				p={10}
+				maxW='65vw'
+				mx='auto'
+				mt={12}
+				dir='rtl'
+			>
+				<Box textAlign='center' mb={4}>
+					<Icon as={FaUserAlt} boxSize={12} color={iconColor} mb={2} />
+					<Text fontSize='2xl' fontWeight='bold'>
+						إضافة مستخدم
+					</Text>
+				</Box>
+
+				<Box
+					textAlign='right'
+					fontSize='sm'
+					mb={6}
+					bg={hintBg}
+					p={3}
+					rounded='md'
+				>
+					<Text>📝 أدخل بيانات المستخدم الجديد بدقة.</Text>
+				</Box>
+
+				<Divider />
+				<Box h={6} />
+
+				<VStack spacing={4} align='stretch'>
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<FaUser />} />
+							<Input
+								placeholder='الاسم الأول'
+								value={firstName}
+								onChange={(e) => setFirstName(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<FaUserTag />} />
+							<Input
+								placeholder='اسم العائلة'
+								value={lastName}
+								onChange={(e) => setLastName(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<FaEnvelope />} />
+							<Input
+								placeholder='البريد الإلكتروني'
+								type='email'
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<FaUser />} />
+							<Input
+								placeholder='اسم المستخدم'
+								value={username}
+								onChange={(e) => setUsername(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<FaLock />} />
+							<Input
+								placeholder='كلمة السر'
+								type='password'
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<InputGroup>
+							<InputRightAddon children={<FaLock />} />
+							<Input
+								placeholder='تأكيد كلمة السر'
+								type='password'
+								value={confirmPassword}
+								onChange={(e) => setConfirmPassword(e.target.value)}
+							/>
+						</InputGroup>
+					</FormControl>
+
+					<FormControl>
+						<Select
+							placeholder='اختر الدور'
+							iconColor='transparent'
+							cursor={"pointer"}
+							value={role}
+							onChange={(e) => setRole(e.target.value)}
 						>
-							<Box
-								display={"flex"}
-								flexDirection={"column"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								width={"90%"}
-							>
-								<Box
-									display={"flex"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									height={"5%"}
-									mb={10}
-								>
-									<Icon as={FaUserAlt} fontSize={"60px"} />
-								</Box>
-								<Box
-									display={"flex"}
-									justifyContent={"center"}
-									alignItems={"center"}
-									height={"10%"}
-									mt={5}
-								>
-									<Text fontSize={"3xl"} fontWeight={"bold"}>
-										إضافة مستخدم
-									</Text>
-								</Box>
-							</Box>
+							<option value='vet'>طبيب بيطرى</option>
+							<option value='secretary'>سكرتير</option>
+							<option value='admin'>أدمن</option>
+						</Select>
+					</FormControl>
 
-							<Box
-								display={"flex"}
-								flexDirection={"column"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								height={"50%"}
-								width={"90%"}
-							>
-								<FormControl
-									id='name'
-									display={"flex"}
-									justifyContent={"space-evenly"}
-									mb={5}
-								>
-									<Input
-										id='firstName'
-										type='text'
-										name='firstName'
-										placeholder='الاسم الأول'
-										value={firstName}
-										onChange={(e) => {
-											setFirstName(e.target.value);
-										}}
-										ml={2.5}
-									/>
-
-									<Input
-										id='lastName'
-										type='text'
-										name='lastName'
-										placeholder='اسم العائلة'
-										value={lastName}
-										onChange={(e) => {
-											setLastName(e.target.value);
-										}}
-										mr={2.5}
-									/>
-								</FormControl>
-
-								<FormControl id='email' mb={5}>
-									<Input
-										id='email'
-										type='email'
-										name='email'
-										placeholder='البريد الإلكتروني'
-										value={email}
-										onChange={(e) => {
-											setEmail(e.target.value);
-										}}
-									/>
-								</FormControl>
-
-								<FormControl id='username' mb={5}>
-									<Input
-										id='username'
-										type='text'
-										name='username'
-										placeholder='اسم المستخدم'
-										value={username}
-										onChange={(e) => {
-											setUsername(e.target.value);
-										}}
-									/>
-								</FormControl>
-
-								<FormControl
-									id='password'
-									display={"flex"}
-									justifyContent={"space-evenly"}
-									mb={5}
-								>
-									<Input
-										id='password'
-										type='password'
-										name='password'
-										placeholder='كلمة السر'
-										value={password}
-										onChange={(e) => {
-											setPassword(e.target.value);
-										}}
-										ml={2.5}
-									/>
-									<Input
-										id='confirmPassword'
-										type='password'
-										name='confirmPassword'
-										placeholder='تأكيد كلمة السر'
-										value={confirmPassword}
-										onChange={(e) => {
-											setConfirmPassword(e.target.value);
-										}}
-										mr={2.5}
-									/>
-								</FormControl>
-
-								<FormControl
-									id='role'
-									display={"flex"}
-									justifyContent={"center"}
-									alignItems={"center"}
-								>
-									<Select
-										id='role'
-										name='role'
-										placeholder='اختر الدور'
-										iconColor='transparent'
-										cursor={"pointer"}
-										value={role}
-										onChange={(e) => {
-											setRole(e.target.value);
-										}}
-										ml={2.5}
-									>
-										<option value='vet'>Vet</option>
-										<option value='secretary'>Secretary</option>
-										<option value='admin'>Admin</option>
-									</Select>
-								</FormControl>
-							</Box>
-
-							<Box
-								display={"flex"}
-								justifyContent={"center"}
-								alignItems={"center"}
-								height={"15%"}
-								width={"90%"}
-							>
-								<Button
-									_hover={{
-										bg: "yellowgreen",
-										color: "#000",
-										transform: "scale(1.01)",
-									}}
-									_active={{
-										transform: "scale(0.99)",
-										opacity: "0.5",
-									}}
-									onClick={handleAdd}
-									rightIcon={<IoIosAdd />}
-									width={"25%"}
-								>
-									إضافة
-								</Button>
-							</Box>
-						</Card>
-					</Box>
-					<Footer />
-				</>
-			)}
-		</>
+					<Button
+						colorScheme='blue'
+						leftIcon={<IoIosAdd />}
+						onClick={handleAdd}
+						isLoading={isLoading}
+						mt={2}
+						w='100%'
+					>
+						إضافة
+					</Button>
+				</VStack>
+			</Box>
+		</Box>
 	);
 }

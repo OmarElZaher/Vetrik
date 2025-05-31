@@ -6,8 +6,8 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { VET_NAME as vet_name } from "../../../utils/constants";
 
 // Custom Component Imports
-import AdminHeader from "../../../components/Admin/General/AdminHeader";
 import UsersTable from "../../../components/Admin/User/UsersTable";
+import PageLayout from "../../../components/Layout/PageLayout";
 
 export default function UsersTablePage() {
 	return (
@@ -18,8 +18,9 @@ export default function UsersTablePage() {
 				</Helmet>
 			</HelmetProvider>
 
-			<AdminHeader />
-			<UsersTable />
+			<PageLayout>
+				<UsersTable />
+			</PageLayout>
 		</>
 	);
 }

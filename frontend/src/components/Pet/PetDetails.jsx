@@ -45,6 +45,7 @@ import {
 	IoMdTime,
 	IoMdDocument,
 	IoIosRemoveCircle,
+	IoMdAdd,
 } from "react-icons/io";
 
 import { TbTrashXFilled } from "react-icons/tb";
@@ -79,6 +80,7 @@ export default function PetDetails() {
 	const { petId } = useParams();
 	const navigate = useNavigate();
 	const toast = useToast();
+	const userRole = localStorage.getItem("userRole");
 
 	// Pet useStates
 	const [pet, setPet] = useState({});
@@ -1169,30 +1171,58 @@ export default function PetDetails() {
 						📌 الحالات الجارية
 					</Text>
 					{openCases.length > 0 ? (
-						<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-							{openCases.map((caseItem) => (
+						<>
+							<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+								{openCases.map((caseItem) => (
+									<Box
+										key={caseItem._id}
+										p={4}
+										border='1px solid'
+										borderColor={borderColor}
+										borderRadius='md'
+										bg={cardBg}
+										boxShadow='sm'
+									>
+										<Text fontWeight='bold' mb={1}>
+											📅 {formatDate(caseItem.updatedAt)}
+										</Text>
+										<Text>
+											<strong>🔍 السبب:</strong> {caseItem.reasonForVisit}
+										</Text>
+										<Text>
+											<strong>🧪 الإجراءات:</strong>{" "}
+											{caseItem.actionsTaken || "—"}
+										</Text>
+									</Box>
+								))}
+							</SimpleGrid>
+							{userRole === "secretary" ? (
 								<Box
-									key={caseItem._id}
-									p={4}
-									border='1px solid'
-									borderColor={borderColor}
-									borderRadius='md'
-									bg={cardBg}
-									boxShadow='sm'
+									justifyContent={"center"}
+									alignItems={"center"}
+									display={"flex"}
 								>
-									<Text fontWeight='bold' mb={1}>
-										📅 {formatDate(caseItem.updatedAt)}
-									</Text>
-									<Text>
-										<strong>🔍 السبب:</strong> {caseItem.reasonForVisit}
-									</Text>
-									<Text>
-										<strong>🧪 الإجراءات:</strong>{" "}
-										{caseItem.actionsTaken || "—"}
-									</Text>
+									<Button
+										colorScheme='blue'
+										size='md'
+										mt={4}
+										onClick={() => navigate(`/open-case/${pet._id}`)}
+										leftIcon={<Icon as={IoMdAdd} />}
+										_hover={{
+											transform: "translateY(-1px)",
+											boxShadow: "lg",
+										}}
+										_active={{
+											transform: "translateY(0)",
+										}}
+									>
+										فتح حالة جديدة
+									</Button>
 								</Box>
-							))}
-						</SimpleGrid>
+							) : (
+								<></>
+							)}
+						</>
 					) : (
 						<Text color='gray.500'>لا توجد حالات جارية حالياً.</Text>
 					)}
