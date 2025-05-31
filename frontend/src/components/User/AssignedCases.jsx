@@ -234,7 +234,7 @@ export default function AssignedCases() {
 											opacity={fadingRowId === caseItem._id ? 0.3 : 1}
 											transition='opacity 0.4s'
 											_hover={{ bg: tableColor }}
-											bg={activeRowId === caseItem._id ? "blue.50" : ""}
+											bg={activeRowId === caseItem._id ? "gray.600" : ""}
 										>
 											<Td textAlign={"center"}>
 												{titleCase(caseItem.petId?.name)}
@@ -243,7 +243,6 @@ export default function AssignedCases() {
 												{titleCase(caseItem.petId?.breed)}
 											</Td>
 											<Td textAlign={"center"}>
-												{/* {titleCase(caseItem.petId?.type)} */}
 												<Badge colorScheme='purple' borderRadius='5px'>
 													{titleCase(caseItem.petId?.type)}
 												</Badge>
@@ -382,7 +381,7 @@ export default function AssignedCases() {
 						<ModalContent dir='rtl'>
 							<ModalHeader>📋 سبب الزيارة</ModalHeader>
 							<ModalBody>
-								<Text textAlign='right' fontSize='md' color='gray.700'>
+								<Text textAlign='right' fontSize='md'>
 									{selectedReason || "لا يوجد سبب مسجل لهذه الحالة."}
 								</Text>
 							</ModalBody>
