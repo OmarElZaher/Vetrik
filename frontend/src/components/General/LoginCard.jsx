@@ -192,59 +192,66 @@ const LoginPage = () => {
 						/>
 					</Flex>
 
-					<VStack spacing={4}>
-						<InputGroup>
-							<InputRightElement>
-								<FaUser color='gray.400' />
-							</InputRightElement>
-							<Input
-								placeholder='اسم المستخدم'
-								size='md'
-								pl='2.5rem'
-								pr='2.5rem'
-								value={username}
-								onChange={(e) => setUsername(e.target.value)}
-							/>
-						</InputGroup>
-
-						<InputGroup>
-							<InputLeftElement>
-								<IconButton
-									variant='ghost'
-									size='sm'
-									icon={showPassword ? <FaEyeSlash /> : <FaEye />}
-									onClick={handleTogglePassword}
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+							handleLogin();
+						}}
+					>
+						<VStack spacing={4}>
+							<InputGroup>
+								<InputRightElement>
+									<FaUser color='gray.400' />
+								</InputRightElement>
+								<Input
+									placeholder='اسم المستخدم'
+									size='md'
+									pl='2.5rem'
+									pr='2.5rem'
+									value={username}
+									onChange={(e) => setUsername(e.target.value)}
 								/>
-							</InputLeftElement>
+							</InputGroup>
 
-							<InputRightElement pointerEvents='none'>
-								<FaLock color='gray.400' />
-							</InputRightElement>
+							<InputGroup>
+								<InputLeftElement>
+									<IconButton
+										variant='ghost'
+										size='sm'
+										icon={showPassword ? <FaEyeSlash /> : <FaEye />}
+										onClick={handleTogglePassword}
+									/>
+								</InputLeftElement>
 
-							<Input
-								placeholder='كلمة السر'
-								type={showPassword ? "text" : "password"}
-								size='md'
-								pr='2.5rem'
-								pl='2.5rem'
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-							/>
-						</InputGroup>
+								<InputRightElement pointerEvents='none'>
+									<FaLock color='gray.400' />
+								</InputRightElement>
 
-						<Button
-							colorScheme='blue'
-							width='100%'
-							mt={2}
-							onClick={handleLogin}
-							_active={{
-								transform: "scale(0.98)",
-								boxShadow: "sm",
-							}}
-						>
-							تسجيل الدخول
-						</Button>
-					</VStack>
+								<Input
+									placeholder='كلمة السر'
+									type={showPassword ? "text" : "password"}
+									size='md'
+									pr='2.5rem'
+									pl='2.5rem'
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+								/>
+							</InputGroup>
+
+							<Button
+								colorScheme='blue'
+								width='100%'
+								mt={2}
+								type='submit'
+								_active={{
+									transform: "scale(0.98)",
+									boxShadow: "sm",
+								}}
+							>
+								تسجيل الدخول
+							</Button>
+						</VStack>
+					</form>
 
 					<HStack justify='space-between' mt={4} fontSize='sm'>
 						<Link color='blue.400' href='/forgot-password'>
