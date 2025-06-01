@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import axios from "axios";
-
 import { API_URL as api } from "../../utils/constants";
-
-// Chakra UI Imports
 import {
 	Box,
 	Card,
-	Divider,
 	Button,
 	FormControl,
 	Text,
 	Textarea,
 	useToast,
+	useColorModeValue,
 } from "@chakra-ui/react";
-
 import Spinner from "../General/Spinner";
+import Footer from "../General/Footer";
 
 export default function OpenCase() {
 	const { petId } = useParams();
@@ -25,49 +21,46 @@ export default function OpenCase() {
 
 	const [pet, setPet] = useState(null);
 	const [petName, setPetName] = useState("");
-
 	const [isLoading, setIsLoading] = useState(false);
-
 	const [reasonForVisit, setReasonForVisit] = useState("");
-
 	const toast = useToast();
+
+	const bg = useColorModeValue("#F3F3F3", "gray.900");
+	const cardBg = useColorModeValue("white", "gray.800");
+	const borderColor = useColorModeValue("gray.200", "gray.700");
+	const titleColor = useColorModeValue("gray.900", "gray.100");
+	const textareaBg = useColorModeValue("gray.50", "gray.700");
 
 	useEffect(() => {
 		const fetchPetDetails = async () => {
 			try {
 				setIsLoading(true);
-
-				const response = await axios.get(
-					`${api}/user/getPetInfo/${petId}`,
-					{
-						withCredentials: true,
-					}
-				);
-
+				const response = await axios.get(`${api}/user/getPetInfo/${petId}`, {
+					withCredentials: true,
+				});
 				if (response.status === 200) {
 					setPet(response.data.pet);
 					setPetName(response.data.pet.name);
 				}
 			} catch (error) {
 				toast({
-					title: "Error",
-					description: "Internal Server Error",
+					title: "خطأ",
+					description: "حدث خطأ داخلي في الخادم",
 					status: "error",
 					duration: 3000,
 					isClosable: true,
+					position: "top",
 				});
 			} finally {
 				setIsLoading(false);
 			}
 		};
-
 		fetchPetDetails();
 	}, [toast, petId]);
 
 	const handleSubmit = async () => {
 		try {
 			setIsLoading(true);
-
 			const response = await axios.post(
 				`${api}/case/createCase`,
 				{
@@ -78,19 +71,19 @@ export default function OpenCase() {
 					withCredentials: true,
 				}
 			);
-
 			if (response.status === 200) {
 				toast({
-					title: "Success",
-					description: "Case opened successfully",
+					title: "تم فتح الحالة بنجاح",
+					description: "تم إرسال سبب الزيارة للطبيب بنجاح.",
 					status: "success",
 					duration: 3000,
 					isClosable: true,
 					position: "top",
 				});
+				navigate(`/pet-details/${petId}`);
 			} else {
 				toast({
-					title: response.data.message,
+					title: response.data.message || "فشل في فتح الحالة",
 					status: "error",
 					duration: 2500,
 					position: "top",
@@ -99,11 +92,12 @@ export default function OpenCase() {
 			}
 		} catch (error) {
 			toast({
-				title: "Error",
-				description: "Internal Server Error",
+				title: "خطأ",
+				description: "حدث خطأ داخلي في الخادم",
 				status: "error",
 				duration: 3000,
 				isClosable: true,
+				position: "top",
 			});
 		} finally {
 			setIsLoading(false);
@@ -111,26 +105,22 @@ export default function OpenCase() {
 	};
 
 	if (isLoading) {
-		return (
-			<Box
-				display={"flex"}
-				justifyContent={"center"}
-				alignItems={"center"}
-				height={"100vh"}
-			>
-				<Spinner />
-			</Box>
-		);
+		return <Spinner message='جارٍ التحميل...' />;
 	}
+
 	if (!pet) {
 		return (
 			<Box
-				display={"flex"}
-				justifyContent={"center"}
-				alignItems={"center"}
-				height={"100vh"}
+				dir='rtl'
+				display='flex'
+				justifyContent='center'
+				alignItems='center'
+				height='87vh'
+				bg={bg}
 			>
-				<Text fontSize={"xl"}>No pet found</Text>
+				<Text fontSize='2xl' color='red.500'>
+					لم يتم العثور على الحيوان
+				</Text>
 			</Box>
 		);
 	}
@@ -138,106 +128,94 @@ export default function OpenCase() {
 	return (
 		<>
 			<Box
-				display={"flex"}
-				justifyContent={"center"}
-				alignItems={"center"}
-				flexDir={"column"}
-				width={"100%"}
-				height={"87vh"}
+				dir='rtl'
+				display='flex'
+				justifyContent='center'
+				alignItems='center'
+				minH={"75vh"}
+				bg={bg}
 			>
-				<Box
-					display={"flex"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					height={"20%"}
-					width={"100%"}
-				>
-					<Text fontSize={"40px"} fontWeight={"bold"}>
-						Open A Case
-					</Text>
-				</Box>
-
-				<Box as={"hr"} />
-
 				<Card
-					display={"flex"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					flexDir={"column"}
-					height={"60%"}
-					width={"70%"}
-					mt={5}
+					bg={cardBg}
+					border='1px solid'
+					borderColor={borderColor}
+					borderRadius={"md"}
+					boxShadow='md'
+					width={{ base: "95%", md: "60%", lg: "40%" }}
+					display='flex'
+					flexDirection='column'
+					justifyContent='center'
+					alignItems='center'
+					p={{ base: 4, md: 8 }}
 				>
-					<FormControl
-						id="pet"
-						display={"flex"}
-						height={"20%"}
-						width={"50%"}
-						flexDir={"column"}
-						isDisabled={true}
-						justifyContent={"center"}
-						alignItems={"center"}
+					{/* Header */}
+					<Box
+						display='flex'
+						flexDirection='column'
+						justifyContent='center'
+						alignItems='center'
+						mb={6}
 					>
-						<Text fontSize={"md"} fontStyle={"italic"}>
-							Open case for {petName}.
+						<Text fontWeight='bold' fontSize='2xl' color={titleColor} mb={2}>
+							فتح حالة جديدة
 						</Text>
-						<br />
-						<Text>
-							enter why client has decided to visit to send to vet
-							to accept and start working on case
+						<Text fontSize='lg' color='gray.600'>
+							سيتم إرسال سبب الزيارة للطبيب ليتمكن من قبول الحالة وبدء العمل
+							عليها.
 						</Text>
-					</FormControl>
+					</Box>
 
-					<FormControl
-						id="reasonForVisit"
-						display={"flex"}
-						width={"50%"}
-						height={"80%"}
-						flexDir={"column"}
-						mt={2.5}
-						mb={2.5}
+					{/* Pet Info */}
+					<Box
+						display='flex'
+						flexDirection='column'
+						alignItems='center'
+						mb={4}
+						width='100%'
 					>
+						<Text fontSize='md' color='gray.700'>
+							فتح حالة للحيوان: <b>{petName}</b>
+						</Text>
+					</Box>
+
+					{/* Reason For Visit */}
+					<FormControl width='100%' mb={6}>
+						<Text mb={2} fontWeight='semibold'>
+							سبب الزيارة
+						</Text>
 						<Textarea
-							resize={"none"}
-							width={"100%"}
-							height={"100%"}
-							borderRadius={"5px"}
-							placeholder='Reason For Visit...'
-							p={5}
-							onChange={(e) => {
-								setReasonForVisit(e.target.value);
-							}}
+							resize='none'
+							height='120px'
+							borderRadius='md'
+							placeholder='اكتب سبب الزيارة هنا...'
+							value={reasonForVisit}
+							onChange={(e) => setReasonForVisit(e.target.value)}
+							p={4}
+							fontSize='md'
+							bg={textareaBg}
 						/>
 					</FormControl>
-				</Card>
 
-				<Box
-					display={"flex"}
-					justifyContent={"center"}
-					alignItems={"center"}
-					height={"20%"}
-				>
 					<Button
+						colorScheme='blue'
+						width='100%'
+						fontWeight='bold'
+						fontSize='lg'
+						isDisabled={!reasonForVisit.trim()}
 						_hover={{
 							bg: "#D4F500",
 							color: "#000",
-							transform: "scale(1.05)",
-							transition: "0.2s",
+							transform: "scale(1.01)",
 						}}
 						_active={{
-							bg: "#D4F500",
-							color: "#000",
-							transform: "scale(0.95)",
-							transition: "0.2s",
+							transform: "scale(0.98)",
+							opacity: 0.8,
 						}}
-						onClick={() => {
-							handleSubmit();
-							navigate(`/pet-details/${petId}`);
-						}}
+						onClick={handleSubmit}
 					>
-						Submit
+						إرسال
 					</Button>
-				</Box>
+				</Card>
 			</Box>
 		</>
 	);
